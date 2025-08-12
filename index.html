@@ -32,6 +32,9 @@
     @keyframes percentPulse { 0% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.4); opacity: 1; } 100% { transform: scale(1); opacity: 0.9; } }
     .progress-percent.animate { animation: percentPulse 0.4s ease forwards; }
 
+    .syndicate-group { background: rgba(0,212,255,0.08); border-radius: 8px; margin: 18px 0; border-left: 3px solid #00d4ff; padding: 13px 15px; }
+    .syndicate-title { font-weight: bold; color: #00d4ff; margin-bottom: 8px; font-size: 1.05em; }
+
     .footer { text-align: center; margin-top: 40px; padding: 20px; color: #888; font-size: 0.85em; }
     .footer .disclaimer { max-width: 800px; margin: 20px auto 0; padding: 10px 20px; line-height: 1.4em; text-align: center; }
 
@@ -106,6 +109,20 @@
 </div>
 
 <script>
+const syndicateTasks = [
+    { id: 'synd7', text: "Cephalon Simaris (Relais)", reward: "" },
+    { id: 'synd8', text: "Ostron (Cetus)", reward: "" },
+    { id: 'synd9', text: "Les Quills (Cetus)", reward: "" },
+    { id: 'synd10', text: "Solaris United (Fortuna)", reward: "" },
+    { id: 'synd11', text: "Vox Solaris (Fortuna)", reward: "" },
+    { id: 'synd12', text: "Ventkids (Fortuna)", reward: "" },
+    { id: 'synd13', text: "Entrati (Nécralisk)", reward: "" },
+    { id: 'synd14', text: "Nécroloïde (Nécralisk)", reward: "" },
+    { id: 'synd15', text: "The Holdfasts (Chrysalith)", reward: "" },
+    { id: 'synd16', text: "Cavia (Sanctum Anatomica)", reward: "" },
+    { id: 'synd17', text: "The Hex (Mall Central Hóllvania)", reward: "" }
+];
+
 const tasks = {
     daily: [
         { id: 'daily1', text: "Connexion : Récupérer la récompense quotidienne de connexion.", reward: "" },
@@ -113,18 +130,7 @@ const tasks = {
         { id: 'daily3', text: "Fabrication (Autre) : Fabriquer divers objets.", reward: "" },
         { id: 'daily4', text: "Syndicats (Orbiteur) : Atteindre le plafond de réputation.", reward: "" },
         { id: 'daily5', text: "Syndicats (Orbiteur - Dépense) : Dépenser la réputation max.", reward: "" },
-        { id: 'daily6', text: "Syndicats Mondiaux :", reward: "" },
-        { id: 'daily7', text: "Cephalon Simaris (Relais)", reward: "" },
-        { id: 'daily8', text: "Ostron (Cetus)", reward: "" },
-        { id: 'daily9', text: "Les Quills (Cetus)", reward: "" },
-        { id: 'daily10', text: "Solaris United (Fortuna)", reward: "" },
-        { id: 'daily11', text: "Vox Solaris (Fortuna)", reward: "" },
-        { id: 'daily12', text: "Ventkids (Fortuna)", reward: "" },
-        { id: 'daily13', text: "Entrati (Nécralisk)", reward: "" },
-        { id: 'daily14', text: "Nécroloïde (Nécralisk)", reward: "" },
-        { id: 'daily15', text: "The Holdfasts (Chrysalith)", reward: "" },
-        { id: 'daily16', text: "Cavia (Sanctum Anatomica)", reward: "" },
-        { id: 'daily17', text: "The Hex (Mall Central Hóllvania)", reward: "" },
+        // Bloc syndicats mondiaux vient ensuite
         { id: 'daily18', text: "Mission Secteur Sombre", reward: "" },
         { id: 'daily19', text: "Sortie : Terminer les 3 missions quotidiennes.", reward: "" },
         { id: 'daily20', text: "Focus : Atteindre la limite quotidienne.", reward: "" },
@@ -157,34 +163,67 @@ const tasks = {
     ]
 };
 
+// Affichage des tâches + syndicat groupé
 function loadTasks() {
+    const daily = document.getElementById("daily-tasks");
+    daily.innerHTML = "";
+
+    // Affiche les 5 premières tâches (avant syndicats mondiaux)
+    tasks.daily.slice(0, 5).forEach(task => daily.appendChild(taskHTML(task)));
+
+    // Bloc syndicats mondiaux
+    const syndBlock = document.createElement('div');
+    syndBlock.className = 'syndicate-group';
+    syndBlock.innerHTML = `<div class="syndicate-title">Syndicats mondiaux</div>`;
+    syndicateTasks.forEach(task => syndBlock.appendChild(taskHTML(task)));
+    daily.appendChild(syndBlock);
+
+    // Les tâches après (hors syndicats)
+    tasks.daily.slice(5).forEach(task => daily.appendChild(taskHTML(task)));
+
+    // Hebdo et autres
     Object.keys(tasks).forEach(section => {
+        if(section === "daily") return;
         const container = document.getElementById(`${section}-tasks`);
         container.innerHTML = '';
-        tasks[section].forEach(task => {
-            const div = document.createElement('div');
-            div.className = 'task-item';
-            const saved = localStorage.getItem(task.id) === 'true';
-            div.innerHTML = `<input type="checkbox" id="${task.id}" class="task-checkbox" ${saved ? 'checked':''} onchange="toggleTask('${task.id}')">
-            <label for="${task.id}" class="task-label ${saved ? 'task-completed':''}">${task.text}</label>
-            <span class="task-reward">${task.reward}</span>`;
-            container.appendChild(div);
-        });
-        updateProgress(section);
+        tasks[section].forEach(task => container.appendChild(taskHTML(task)));
     });
+
+    updateProgress("daily");
+    updateProgress("weekly");
+    updateProgress("other");
+}
+
+function taskHTML(task) {
+    const div = document.createElement('div');
+    div.className = 'task-item';
+    const saved = localStorage.getItem(task.id) === 'true';
+    div.innerHTML = `<input type="checkbox" id="${task.id}" class="task-checkbox" ${saved ? 'checked':''} onchange="toggleTask('${task.id}')">
+        <label for="${task.id}" class="task-label ${saved ? 'task-completed':''}">${task.text}</label>
+        <span class="task-reward">${task.reward||""}</span>`;
+    return div;
 }
 
 function toggleTask(id) {
     const cb = document.getElementById(id);
     cb.nextElementSibling.classList.toggle('task-completed', cb.checked);
     localStorage.setItem(id, cb.checked ? 'true':'false');
-    Object.keys(tasks).forEach(s => { if (tasks[s].some(t => t.id===id)) updateProgress(s); });
+    updateProgress("daily");
+    updateProgress("weekly");
+    updateProgress("other");
 }
 
 function updateProgress(section) {
-    const total = tasks[section].length;
-    const done = tasks[section].filter(t => localStorage.getItem(t.id) === 'true').length;
-    const pct = Math.round((done/total)*100);
+    let total, done;
+    if(section === "daily") {
+        total = tasks.daily.length + syndicateTasks.length;
+        done = tasks.daily.filter(t => localStorage.getItem(t.id) === 'true').length
+            + syndicateTasks.filter(t => localStorage.getItem(t.id) === 'true').length;
+    } else {
+        total = tasks[section].length;
+        done = tasks[section].filter(t => localStorage.getItem(t.id) === 'true').length;
+    }
+    const pct = Math.round((done/Math.max(1,total))*100);
     document.getElementById(`${section}-progress`).style.width = pct + '%';
     const pctEl = document.getElementById(`${section}-percent`);
     pctEl.textContent = pct + '%';
@@ -195,7 +234,12 @@ function updateProgress(section) {
 
 function resetSection(s) {
     if (confirm(`Réinitialiser toutes les tâches ${s} ?`)) {
-        tasks[s].forEach(t => localStorage.setItem(t.id,'false'));
+        if(s=="daily") {
+            tasks.daily.forEach(t => localStorage.setItem(t.id,'false'));
+            syndicateTasks.forEach(t => localStorage.setItem(t.id,'false'));
+        } else {
+            tasks[s].forEach(t => localStorage.setItem(t.id,'false'));
+        }
         loadTasks();
     }
 }
@@ -211,6 +255,7 @@ function checkResets() {
     const today = new Date().toDateString();
     if (localStorage.getItem('lastDailyReset') !== today) {
         tasks.daily.forEach(t => localStorage.setItem(t.id,'false'));
+        syndicateTasks.forEach(t => localStorage.setItem(t.id,'false'));
         localStorage.setItem('lastDailyReset', today);
     }
     const week = getWeekNumber(new Date());
