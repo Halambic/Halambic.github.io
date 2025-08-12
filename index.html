@@ -5,220 +5,250 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Liste de Tâches Warframe | Outils Warframe</title>
 <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Arial', sans-serif; background: linear-gradient(135deg,#0a0a0a,#1a1a2e); color: #fff; min-height: 100vh; }
-    .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
-    header { text-align: center; margin-bottom: 30px; padding: 20px; background: rgba(26,26,46,0.8); border-radius: 10px; border: 2px solid #00d4ff; }
-    h1 { color: #00d4ff; font-size: 2.5em; margin-bottom: 10px; text-shadow: 0 0 10px #00d4ff; }
-    .subtitle { color: #ccc; font-size: 1.1em; }
-    .progress-info { background: rgba(0,212,255,0.1); padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #00d4ff; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Arial', sans-serif; background: linear-gradient(135deg,#0a0a0a,#1a1a2e); color: #fff; min-height: 100vh; }
+.container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+header { text-align: center; margin-bottom: 30px; padding: 20px; background: rgba(26,26,46,0.8); border-radius: 10px; border: 2px solid #00d4ff; }
+h1 { color: #00d4ff; font-size: 2.5em; margin-bottom: 10px; text-shadow: 0 0 10px #00d4ff; }
+.subtitle { color: #ccc; font-size: 1.1em; }
+.progress-info { background: rgba(0,212,255,0.1); padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #00d4ff; }
 
-    .task-section { background: rgba(26,26,46,0.6); margin-bottom: 20px; border-radius: 10px; overflow: hidden; border: 1px solid #333; }
-    .section-header { background: #00d4ff; color: #000; padding: 15px 20px; font-weight: bold; font-size: 1.2em; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
-    .section-content { padding: 20px; }
-    .task-item { display: flex; align-items: center; padding: 10px 0; border-bottom: 1px solid #333; }
-    .task-item:last-child { border-bottom: none; }
-    .task-checkbox { margin-right: 15px; transform: scale(1.2); }
-    .task-label { flex-grow: 1; cursor: pointer; }
-    .task-completed { text-decoration: line-through; opacity: 0.6; }
-    .task-reward { color: #ffd700; font-size: 0.9em; margin-left: 10px; white-space: nowrap; }
-    .reset-btn { background: #ff4444; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin: 10px 5px; }
-    .reset-btn:hover { background: #ff6666; }
+.task-section { background: rgba(26,26,46,0.6); margin-bottom: 20px; border-radius: 10px; overflow: hidden; border: 1px solid #333; }
+.section-header { background: #00d4ff; color: #000; padding: 15px 20px; font-weight: bold; font-size: 1.2em; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+.section-content { padding: 20px; }
+.task-item { display: flex; align-items: center; padding: 8px 0; border-bottom: 1px solid #333; }
+.task-item:last-child { border-bottom: none; }
+.task-checkbox { margin-right: 15px; transform: scale(1.2); }
+.task-label { flex-grow: 1; cursor: pointer; }
+.task-completed { text-decoration: line-through; opacity: 0.6; }
+.star-icon { margin-left: 10px; font-size: 1.2em; cursor: pointer; color: #555; }
+.star-icon.favorited { color: #ffd700; }
+.empty-msg { color: #888; font-style: italic; text-align: center; padding: 10px 0; }
+.filter-container { text-align: right; margin-top: 10px; }
+.filter-container label { cursor: pointer; font-size: 0.9em; color: #ccc; }
 
-    .progress-bar { width: 100%; height: 20px; background: #333; border-radius: 10px; overflow: hidden; margin: 10px 0; position: relative; }
-    .progress-fill { height: 100%; background: linear-gradient(90deg, #00d4ff, #0099cc); transition: width 0.4s ease; }
-    .progress-percent { position: absolute; top: 0; left: 0; width: 100%; height: 100%; color: #fff; text-align: center; line-height: 20px; font-weight: bold; text-shadow: 0 0 6px #000,0 0 2px #00d4ff; pointer-events: none; font-size: 0.96em; z-index: 1; }
+.reset-btn { background: #ff4444; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin: 10px 5px; }
+.reset-btn:hover { background: #ff6666; }
 
-    @keyframes percentPulse { 0% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.4); opacity: 1; } 100% { transform: scale(1); opacity: 0.9; } }
-    .progress-percent.animate { animation: percentPulse 0.4s ease forwards; }
+.progress-bar { width: 100%; height: 20px; background: #333; border-radius: 10px; overflow: hidden; margin: 10px 0; position: relative; }
+.progress-fill { height: 100%; background: linear-gradient(90deg, #00d4ff, #0099cc); transition: width 0.4s ease; }
+.progress-percent { position: absolute; top: 0; left: 0; width: 100%; height: 100%; color: #fff; text-align: center; line-height: 20px; font-weight: bold; text-shadow: 0 0 6px #000,0 0 2px #00d4ff; pointer-events: none; font-size: 0.96em; z-index: 1; }
+@keyframes percentPulse { 0% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.4); opacity: 1; } 100% { transform: scale(1); opacity: 0.9; } }
+.progress-percent.animate { animation: percentPulse 0.4s ease forwards; }
 
-    .syndicate-group { background: rgba(0,212,255,0.08); border-radius: 8px; margin: 18px 0; border-left: 3px solid #00d4ff; padding: 13px 15px; }
-    .syndicate-title { font-weight: bold; color: #00d4ff; margin-bottom: 8px; font-size: 1.05em; }
+.syndicate-group { background: rgba(0,212,255,0.08); border-radius: 8px; border-left: 3px solid #00d4ff; padding: 13px 15px; margin: 18px 0; }
+.syndicate-title { font-weight: bold; color: #00d4ff; margin-bottom: 8px; font-size: 1.05em; }
 
-    .footer { text-align: center; margin-top: 40px; padding: 20px; color: #888; font-size: 0.85em; }
-    .footer .disclaimer { max-width: 800px; margin: 20px auto 0; padding: 10px 20px; line-height: 1.4em; text-align: center; }
+.footer { text-align: center; margin-top: 40px; padding: 20px; color: #888; font-size: 0.85em; }
+.footer .disclaimer { max-width: 800px; margin: 20px auto 0; padding: 10px 20px; line-height: 1.4em; text-align: center; }
 
-    .collapse-icon { transition: transform 0.3s ease; }
-    .collapsed .collapse-icon { transform: rotate(-90deg); }
-    .collapsed .section-content { display: none; }
+.collapse-icon { transition: transform 0.3s ease; }
+.collapsed .collapse-icon { transform: rotate(-90deg); }
+.collapsed .section-content { display: none; }
 </style>
 </head>
 <body>
 <div class="container">
-    <header>
-        <h1>Liste de Tâches Warframe</h1>
-        <p class="subtitle">Suivez vos tâches quotidiennes, hebdomadaires et autres dans Warframe</p>
-    </header>
+<header>
+<h1>Liste de Tâches Warframe</h1>
+<p class="subtitle">Suivez vos tâches quotidiennes, hebdomadaires et autres dans Warframe</p>
+</header>
 
-    <div class="progress-info">
-        <p><strong>Votre progression est sauvegardée localement.</strong></p>
-        <p><em>Rappel : vous n'êtes pas obligé de tout faire ! Priorisez selon vos objectifs.</em></p>
+<div class="progress-info">
+<p><strong>Si vous le souhaitez vous pouvez désormais indiquer des tâches comme étant prioritaires</strong></p>
+<div class="filter-container">
+  <label><input type="checkbox" id="hide-completed" onchange="loadTasks()"> Masquer les tâches complétées</label>
+</div>
+</div>
+
+<!-- Prioritaires -->
+<div class="task-section">
+  <div class="section-header" onclick="toggleSection('favorites')">
+    <span>Tâches prioritaires</span><span class="collapse-icon">▼</span>
+  </div>
+  <div class="section-content" id="favorites-content">
+    <div id="favorites-tasks"></div>
+  </div>
+</div>
+
+<!-- Quotidiennes -->
+<div class="task-section">
+  <div class="section-header" onclick="toggleSection('daily')">
+    <span>Tâches Quotidiennes</span><span class="collapse-icon">▼</span>
+  </div>
+  <div class="section-content" id="daily-content">
+    <div class="progress-bar">
+      <div class="progress-fill" id="daily-progress"></div>
+      <div class="progress-percent" id="daily-percent"></div>
     </div>
+    <div id="daily-tasks"></div>
+    <button class="reset-btn" onclick="resetSection('daily')">Réinitialiser Quotidien</button>
+  </div>
+</div>
 
-    <!-- Quotidiennes -->
-    <div class="task-section">
-        <div class="section-header" onclick="toggleSection('daily')">
-            <span>Tâches Quotidiennes</span><span class="collapse-icon">▼</span>
-        </div>
-        <div class="section-content" id="daily-content">
-            <div class="progress-bar">
-                <div class="progress-fill" id="daily-progress"></div>
-                <div class="progress-percent" id="daily-percent"></div>
-            </div>
-            <div id="daily-tasks"></div>
-            <button class="reset-btn" onclick="resetSection('daily')">Réinitialiser Quotidien</button>
-        </div>
+<!-- Hebdomadaires -->
+<div class="task-section">
+  <div class="section-header" onclick="toggleSection('weekly')">
+    <span>Tâches Hebdomadaires</span><span class="collapse-icon">▼</span>
+  </div>
+  <div class="section-content" id="weekly-content">
+    <div class="progress-bar">
+      <div class="progress-fill" id="weekly-progress"></div>
+      <div class="progress-percent" id="weekly-percent"></div>
     </div>
+    <div id="weekly-tasks"></div>
+    <button class="reset-btn" onclick="resetSection('weekly')">Réinitialiser Hebdo</button>
+  </div>
+</div>
 
-    <!-- Hebdomadaires -->
-    <div class="task-section">
-        <div class="section-header" onclick="toggleSection('weekly')">
-            <span>Tâches Hebdomadaires</span><span class="collapse-icon">▼</span>
-        </div>
-        <div class="section-content" id="weekly-content">
-            <div class="progress-bar">
-                <div class="progress-fill" id="weekly-progress"></div>
-                <div class="progress-percent" id="weekly-percent"></div>
-            </div>
-            <div id="weekly-tasks"></div>
-            <button class="reset-btn" onclick="resetSection('weekly')">Réinitialiser Hebdo</button>
-        </div>
+<!-- Autres -->
+<div class="task-section">
+  <div class="section-header" onclick="toggleSection('other')">
+    <span>Autres Tâches</span><span class="collapse-icon">▼</span>
+  </div>
+  <div class="section-content" id="other-content">
+    <div class="progress-bar">
+      <div class="progress-fill" id="other-progress"></div>
+      <div class="progress-percent" id="other-percent"></div>
     </div>
+    <div id="other-tasks"></div>
+    <button class="reset-btn" onclick="resetSection('other')">Réinitialiser Autres</button>
+  </div>
+</div>
 
-    <!-- Autres -->
-    <div class="task-section">
-        <div class="section-header" onclick="toggleSection('other')">
-            <span>Autres Tâches</span><span class="collapse-icon">▼</span>
-        </div>
-        <div class="section-content" id="other-content">
-            <div class="progress-bar">
-                <div class="progress-fill" id="other-progress"></div>
-                <div class="progress-percent" id="other-percent"></div>
-            </div>
-            <div id="other-tasks"></div>
-            <button class="reset-btn" onclick="resetSection('other')">Réinitialiser Autres</button>
-        </div>
-    </div>
-
-    <footer class="footer">
-        <p class="disclaimer">
-            This is an unofficial fan-made tool. Warframe and all related assets are the intellectual property of Digital Extremes Ltd. 
-            This project is not affiliated with, endorsed by, or sponsored by Digital Extremes Ltd.
-        </p>
-    </footer>
+<footer class="footer">
+<p class="disclaimer">This is an unofficial fan-made tool. Warframe and all related assets are the intellectual property of Digital Extremes Ltd. This project is not affiliated with, endorsed by, or sponsored by Digital Extremes Ltd.</p>
+</footer>
 </div>
 
 <script>
 const syndicateTasks = [
-    { id: 'synd7', text: "Cephalon Simaris (Relais)", reward: "" },
-    { id: 'synd8', text: "Ostron (Cetus)", reward: "" },
-    { id: 'synd9', text: "Les Quills (Cetus)", reward: "" },
-    { id: 'synd10', text: "Solaris United (Fortuna)", reward: "" },
-    { id: 'synd11', text: "Vox Solaris (Fortuna)", reward: "" },
-    { id: 'synd12', text: "Ventkids (Fortuna)", reward: "" },
-    { id: 'synd13', text: "Entrati (Nécralisk)", reward: "" },
-    { id: 'synd14', text: "Nécroloïde (Nécralisk)", reward: "" },
-    { id: 'synd15', text: "The Holdfasts (Chrysalith)", reward: "" },
-    { id: 'synd16', text: "Cavia (Sanctum Anatomica)", reward: "" },
-    { id: 'synd17', text: "The Hex (Mall Central Hóllvania)", reward: "" }
+    { id: 'synd7', text: "Cephalon Simaris (Relais)" },
+    { id: 'synd8', text: "Ostron (Cetus)" },
+    { id: 'synd9', text: "Les Quills (Cetus)" },
+    { id: 'synd10', text: "Solaris United (Fortuna)" },
+    { id: 'synd11', text: "Vox Solaris (Fortuna)" },
+    { id: 'synd12', text: "Ventkids (Fortuna)" },
+    { id: 'synd13', text: "Entrati (Nécralisk)" },
+    { id: 'synd14', text: "Nécroloïde (Nécralisk)" },
+    { id: 'synd15', text: "The Holdfasts (Chrysalith)" },
+    { id: 'synd16', text: "Cavia (Sanctum Anatomica)" },
+    { id: 'synd17', text: "The Hex (Mall Central Hóllvania)" }
 ];
 
 const tasks = {
     daily: [
-        { id: 'daily1', text: "Connexion : Récupérer la récompense quotidienne de connexion.", reward: "" },
-        { id: 'daily2', text: "Fabrication (Forma) : Lancer la fabrication d’un Forma.", reward: "" },
-        { id: 'daily3', text: "Fabrication (Autre) : Fabriquer divers objets.", reward: "" },
-        { id: 'daily4', text: "Syndicats (Orbiteur) : Atteindre le plafond de réputation.", reward: "" },
-        { id: 'daily5', text: "Syndicats (Orbiteur - Dépense) : Dépenser la réputation max.", reward: "" },
-        // Bloc syndicats mondiaux vient ensuite
-        { id: 'daily18', text: "Mission Secteur Sombre", reward: "" },
-        { id: 'daily19', text: "Sortie : Terminer les 3 missions quotidiennes.", reward: "" },
-        { id: 'daily20', text: "Focus : Atteindre la limite quotidienne.", reward: "" },
-        { id: 'daily21', text: "Incursions du Chemin d’Acier.", reward: "" }
+        { id: 'daily1', text: "Connexion : Récupérer la récompense quotidienne de connexion." },
+        { id: 'daily2', text: "Fabrication (Forma) : Lancer la fabrication d’un Forma." },
+        { id: 'daily3', text: "Fabrication (Autre) : Fabriquer divers objets." },
+        { id: 'daily4', text: "Syndicats (Orbiteur) : Atteindre le plafond de réputation." },
+        { id: 'daily5', text: "Syndicats (Orbiteur - Dépense) : Dépenser la réputation max." },
+        { id: 'daily18', text: "Mission Secteur Sombre" },
+        { id: 'daily19', text: "Sortie : Terminer les 3 missions quotidiennes." },
+        { id: 'daily20', text: "Focus : Atteindre la limite quotidienne." },
+        { id: 'daily21', text: "Incursions du Chemin d’Acier." }
     ],
     weekly: [
-        { id: 'weekly1', text: "Nightwave : Missions hebdomadaires.", reward: "" },
-        { id: 'weekly2', text: "Nightwave (Dépense) : Utiliser crédits NW.", reward: "" },
-        { id: 'weekly3', text: "Chasse au Trésor Ayatan : Maroo.", reward: "" },
-        { id: 'weekly4', text: "Aider Clem : Mission survie.", reward: "" },
-        { id: 'weekly5', text: "Rupture Narmer Hebdo : Kahl.", reward: "" },
-        { id: 'weekly6', text: "Iron Wake : Échanger Éclats Riven.", reward: "" },
-        { id: 'weekly7', text: "Yonta : Acheter Kuva hebdo.", reward: "" },
-        { id: 'weekly8', text: "Acridies : Dépenser Pinces Pathos.", reward: "" },
-        { id: 'weekly9', text: "Chasse à l’Archonte.", reward: "" },
-        { id: 'weekly10', text: "Circuit Duviri (Normal).", reward: "" },
-        { id: 'weekly11', text: "Circuit Duviri (Chemin d’Acier).", reward: "" },
-        { id: 'weekly12', text: "Teshin : Boutique Essence d’Acier.", reward: "" },
-        { id: 'weekly13', text: "Oiseau 3 : Éclat d’Archonte.", reward: "" },
-        { id: 'weekly14', text: "Netracells : Missions hebdo.", reward: "" },
-        { id: 'weekly15', text: "Archimedea Profonde Élite.", reward: "" },
-        { id: 'weekly16', text: "Archimedea Temporelle Élite.", reward: "" },
-        { id: 'weekly17', text: "Calendrier Hebdomadaire.", reward: "" }
+        { id: 'weekly1', text: "Nightwave : Missions hebdomadaires." },
+        { id: 'weekly2', text: "Nightwave (Dépense) : Utiliser crédits NW." },
+        { id: 'weekly3', text: "Chasse au Trésor Ayatan : Maroo." },
+        { id: 'weekly4', text: "Aider Clem : Mission survie." },
+        { id: 'weekly5', text: "Rupture Narmer Hebdo : Kahl." },
+        { id: 'weekly6', text: "Iron Wake : Échanger Éclats Riven." },
+        { id: 'weekly7', text: "Yonta : Acheter Kuva hebdo." },
+        { id: 'weekly8', text: "Acridies : Dépenser Pinces Pathos." },
+        { id: 'weekly9', text: "Chasse à l’Archonte." },
+        { id: 'weekly10', text: "Circuit Duviri (Normal)." },
+        { id: 'weekly11', text: "Circuit Duviri (Chemin d’Acier)." },
+        { id: 'weekly12', text: "Teshin : Boutique Essence d’Acier." },
+        { id: 'weekly13', text: "Oiseau 3 : Éclat d’Archonte." },
+        { id: 'weekly14', text: "Netracells : Missions hebdo." },
+        { id: 'weekly15', text: "Archimedea Profonde Élite." },
+        { id: 'weekly16', text: "Archimedea Temporelle Élite." },
+        { id: 'weekly17', text: "Calendrier Hebdomadaire." }
     ],
     other: [
-        { id: 'other1', text: "Baro Ki’Teer : Vérifier inventaire.", reward: "" },
-        { id: 'other2', text: "Rapprocher la Famille : Jetons.", reward: "" },
-        { id: 'other3', text: "Acheter Voidplumes (Yonta).", reward: "" },
-        { id: 'other4', text: "Acheter Voca (Loid).", reward: "" }
+        { id: 'other1', text: "Baro Ki’Teer : Vérifier inventaire." },
+        { id: 'other2', text: "Rapprocher la Famille : Jetons." },
+        { id: 'other3', text: "Acheter Voidplumes (Yonta)." },
+        { id: 'other4', text: "Acheter Voca (Loid)." }
     ]
 };
 
-// Affichage des tâches + syndicat groupé
-function loadTasks() {
-    const daily = document.getElementById("daily-tasks");
-    daily.innerHTML = "";
-
-    // Affiche les 5 premières tâches (avant syndicats mondiaux)
-    tasks.daily.slice(0, 5).forEach(task => daily.appendChild(taskHTML(task)));
-
-    // Bloc syndicats mondiaux
-    const syndBlock = document.createElement('div');
-    syndBlock.className = 'syndicate-group';
-    syndBlock.innerHTML = `<div class="syndicate-title">Syndicats mondiaux</div>`;
-    syndicateTasks.forEach(task => syndBlock.appendChild(taskHTML(task)));
-    daily.appendChild(syndBlock);
-
-    // Les tâches après (hors syndicats)
-    tasks.daily.slice(5).forEach(task => daily.appendChild(taskHTML(task)));
-
-    // Hebdo et autres
-    Object.keys(tasks).forEach(section => {
-        if(section === "daily") return;
-        const container = document.getElementById(`${section}-tasks`);
-        container.innerHTML = '';
-        tasks[section].forEach(task => container.appendChild(taskHTML(task)));
-    });
-
-    updateProgress("daily");
-    updateProgress("weekly");
-    updateProgress("other");
+function toggleFavorite(id) {
+    const key = 'fav_' + id;
+    const current = localStorage.getItem(key) === 'true';
+    localStorage.setItem(key, (!current).toString());
+    loadTasks();
 }
 
 function taskHTML(task) {
+    const hideCompleted = document.getElementById('hide-completed')?.checked;
+    const checked = localStorage.getItem(task.id) === 'true';
+    if (hideCompleted && checked) return null;
     const div = document.createElement('div');
     div.className = 'task-item';
-    const saved = localStorage.getItem(task.id) === 'true';
-    div.innerHTML = `<input type="checkbox" id="${task.id}" class="task-checkbox" ${saved ? 'checked':''} onchange="toggleTask('${task.id}')">
-        <label for="${task.id}" class="task-label ${saved ? 'task-completed':''}">${task.text}</label>
-        <span class="task-reward">${task.reward||""}</span>`;
+    const favorite = localStorage.getItem('fav_' + task.id) === 'true';
+    div.innerHTML = `
+        <input type="checkbox" id="${task.id}" class="task-checkbox" ${checked ? 'checked' : ''} onchange="toggleTask('${task.id}')">
+        <label for="${task.id}" class="task-label ${checked ? 'task-completed' : ''}">${task.text}</label>
+        <span class="star-icon ${favorite ? 'favorited' : ''}" onclick="toggleFavorite('${task.id}')">&#9733;</span>
+    `;
     return div;
+}
+
+function loadTasks() {
+    // Prioritaires
+    const favContainer = document.getElementById("favorites-tasks");
+    favContainer.innerHTML = "";
+    const allTasks = [...tasks.daily, ...syndicateTasks, ...tasks.weekly, ...tasks.other];
+    const favTasks = allTasks.filter(t => localStorage.getItem('fav_' + t.id) === 'true');
+    if (favTasks.length === 0) {
+        favContainer.innerHTML = `<div class="empty-msg">Rien ici pour le moment.</div>`;
+    } else {
+        favTasks.forEach(t => {
+            const el = taskHTML(t);
+            if (el) favContainer.appendChild(el);
+        });
+    }
+
+    // Quotidiennes avec syndicats
+    const dailyC = document.getElementById("daily-tasks");
+    dailyC.innerHTML = "";
+    tasks.daily.slice(0,5).forEach(t => { const el = taskHTML(t); if(el) dailyC.appendChild(el); });
+    const syndBlock = document.createElement('div');
+    syndBlock.className = 'syndicate-group';
+    syndBlock.innerHTML = `<div class="syndicate-title">Syndicats mondiaux</div>`;
+    syndicateTasks.forEach(t => { const el = taskHTML(t); if(el) syndBlock.appendChild(el); });
+    dailyC.appendChild(syndBlock);
+    tasks.daily.slice(5).forEach(t => { const el = taskHTML(t); if(el) dailyC.appendChild(el); });
+
+    // Hebdo / Autres
+    ['weekly', 'other'].forEach(section => {
+        const container = document.getElementById(`${section}-tasks`);
+        container.innerHTML = '';
+        tasks[section].forEach(t => { const el = taskHTML(t); if(el) container.appendChild(el); });
+    });
+
+    updateProgress('daily');
+    updateProgress('weekly');
+    updateProgress('other');
 }
 
 function toggleTask(id) {
     const cb = document.getElementById(id);
     cb.nextElementSibling.classList.toggle('task-completed', cb.checked);
     localStorage.setItem(id, cb.checked ? 'true':'false');
-    updateProgress("daily");
-    updateProgress("weekly");
-    updateProgress("other");
+    loadTasks();
 }
 
 function updateProgress(section) {
     let total, done;
     if(section === "daily") {
-        total = tasks.daily.length + syndicateTasks.length;
+        total = tasks.daily.length + syndicateTasks.length + tasks.daily.slice(5).length;
         done = tasks.daily.filter(t => localStorage.getItem(t.id) === 'true').length
-            + syndicateTasks.filter(t => localStorage.getItem(t.id) === 'true').length;
+             + syndicateTasks.filter(t => localStorage.getItem(t.id) === 'true').length
+             + tasks.daily.slice(5).filter(t => localStorage.getItem(t.id) === 'true').length;
     } else {
         total = tasks[section].length;
         done = tasks[section].filter(t => localStorage.getItem(t.id) === 'true').length;
@@ -226,19 +256,21 @@ function updateProgress(section) {
     const pct = Math.round((done/Math.max(1,total))*100);
     document.getElementById(`${section}-progress`).style.width = pct + '%';
     const pctEl = document.getElementById(`${section}-percent`);
-    pctEl.textContent = pct + '%';
-    pctEl.classList.remove('animate');
-    void pctEl.offsetWidth;
-    pctEl.classList.add('animate');
+    if (pctEl) {
+        pctEl.textContent = pct + '%';
+        pctEl.classList.remove('animate');
+        void pctEl.offsetWidth;
+        pctEl.classList.add('animate');
+    }
 }
 
 function resetSection(s) {
     if (confirm(`Réinitialiser toutes les tâches ${s} ?`)) {
-        if(s=="daily") {
-            tasks.daily.forEach(t => localStorage.setItem(t.id,'false'));
-            syndicateTasks.forEach(t => localStorage.setItem(t.id,'false'));
+        if(s == "daily") {
+            tasks.daily.forEach(t => localStorage.setItem(t.id, 'false'));
+            syndicateTasks.forEach(t => localStorage.setItem(t.id, 'false'));
         } else {
-            tasks[s].forEach(t => localStorage.setItem(t.id,'false'));
+            tasks[s].forEach(t => localStorage.setItem(t.id, 'false'));
         }
         loadTasks();
     }
@@ -247,33 +279,11 @@ function resetSection(s) {
 function toggleSection(s) {
     const content = document.getElementById(`${s}-content`);
     const header = content.previousElementSibling;
-    content.style.display = content.style.display==='none'?'block':'none';
+    content.style.display = content.style.display === 'none' ? 'block' : 'none';
     header.classList.toggle('collapsed');
 }
 
-function checkResets() {
-    const today = new Date().toDateString();
-    if (localStorage.getItem('lastDailyReset') !== today) {
-        tasks.daily.forEach(t => localStorage.setItem(t.id,'false'));
-        syndicateTasks.forEach(t => localStorage.setItem(t.id,'false'));
-        localStorage.setItem('lastDailyReset', today);
-    }
-    const week = getWeekNumber(new Date());
-    if (localStorage.getItem('lastWeeklyReset') !== week.toString()) {
-        tasks.weekly.forEach(t => localStorage.setItem(t.id,'false'));
-        localStorage.setItem('lastWeeklyReset', week.toString());
-    }
-}
-
-function getWeekNumber(d) {
-    const date = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
-    const day = date.getUTCDay() || 7;
-    date.setUTCDate(date.getUTCDate() + 4 - day);
-    const start = new Date(Date.UTC(date.getUTCFullYear(),0,1));
-    return Math.ceil((((date - start) / 86400000) + 1) / 7);
-}
-
-document.addEventListener('DOMContentLoaded', () => { loadTasks(); checkResets(); });
+document.addEventListener('DOMContentLoaded', () => { loadTasks(); });
 </script>
 </body>
 </html>
