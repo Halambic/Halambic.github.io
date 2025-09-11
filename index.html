@@ -1,289 +1,753 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Liste de Tâches Warframe | Outils Warframe</title>
-<style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: 'Arial', sans-serif; background: linear-gradient(135deg,#0a0a0a,#1a1a2e); color: #fff; min-height: 100vh; }
-.container { max-width: 1200px; margin: 0 auto; padding: 20px; }
-header { text-align: center; margin-bottom: 30px; padding: 20px; background: rgba(26,26,46,0.8); border-radius: 10px; border: 2px solid #00d4ff; }
-h1 { color: #00d4ff; font-size: 2.5em; margin-bottom: 10px; text-shadow: 0 0 10px #00d4ff; }
-.subtitle { color: #ccc; font-size: 1.1em; }
-.progress-info { background: rgba(0,212,255,0.1); padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #00d4ff; }
-
-.task-section { background: rgba(26,26,46,0.6); margin-bottom: 20px; border-radius: 10px; overflow: hidden; border: 1px solid #333; }
-.section-header { background: #00d4ff; color: #000; padding: 15px 20px; font-weight: bold; font-size: 1.2em; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
-.section-content { padding: 20px; }
-.task-item { display: flex; align-items: center; padding: 8px 0; border-bottom: 1px solid #333; }
-.task-item:last-child { border-bottom: none; }
-.task-checkbox { margin-right: 15px; transform: scale(1.2); }
-.task-label { flex-grow: 1; cursor: pointer; }
-.task-completed { text-decoration: line-through; opacity: 0.6; }
-.star-icon { margin-left: 10px; font-size: 1.2em; cursor: pointer; color: #555; }
-.star-icon.favorited { color: #ffd700; }
-.empty-msg { color: #888; font-style: italic; text-align: center; padding: 10px 0; }
-.filter-container { text-align: right; margin-top: 10px; }
-.filter-container label { cursor: pointer; font-size: 0.9em; color: #ccc; }
-
-.reset-btn { background: #ff4444; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin: 10px 5px; }
-.reset-btn:hover { background: #ff6666; }
-
-.progress-bar { width: 100%; height: 20px; background: #333; border-radius: 10px; overflow: hidden; margin: 10px 0; position: relative; }
-.progress-fill { height: 100%; background: linear-gradient(90deg, #00d4ff, #0099cc); transition: width 0.4s ease; }
-.progress-percent { position: absolute; top: 0; left: 0; width: 100%; height: 100%; color: #fff; text-align: center; line-height: 20px; font-weight: bold; text-shadow: 0 0 6px #000,0 0 2px #00d4ff; pointer-events: none; font-size: 0.96em; z-index: 1; }
-@keyframes percentPulse { 0% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.4); opacity: 1; } 100% { transform: scale(1); opacity: 0.9; } }
-.progress-percent.animate { animation: percentPulse 0.4s ease forwards; }
-
-.syndicate-group { background: rgba(0,212,255,0.08); border-radius: 8px; border-left: 3px solid #00d4ff; padding: 13px 15px; margin: 18px 0; }
-.syndicate-title { font-weight: bold; color: #00d4ff; margin-bottom: 8px; font-size: 1.05em; }
-
-.footer { text-align: center; margin-top: 40px; padding: 20px; color: #888; font-size: 0.85em; }
-.footer .disclaimer { max-width: 800px; margin: 20px auto 0; padding: 10px 20px; line-height: 1.4em; text-align: center; }
-
-.collapse-icon { transition: transform 0.3s ease; }
-.collapsed .collapse-icon { transform: rotate(-90deg); }
-.collapsed .section-content { display: none; }
-</style>
-</head>
-<body>
-<div class="container">
-<header>
-<h1>Liste de Tâches Warframe</h1>
-<p class="subtitle">Suivez vos tâches quotidiennes, hebdomadaires et autres dans Warframe</p>
-</header>
-
-<div class="progress-info">
-<p><strong>Si vous le souhaitez vous pouvez désormais indiquer des tâches comme étant prioritaires</strong></p>
-<div class="filter-container">
-  <label><input type="checkbox" id="hide-completed" onchange="loadTasks()"> Masquer les tâches complétées</label>
-</div>
-</div>
-
-<!-- Prioritaires -->
-<div class="task-section">
-  <div class="section-header" onclick="toggleSection('favorites')">
-    <span>Tâches prioritaires</span><span class="collapse-icon">▼</span>
-  </div>
-  <div class="section-content" id="favorites-content">
-    <div id="favorites-tasks"></div>
-  </div>
-</div>
-
-<!-- Quotidiennes -->
-<div class="task-section">
-  <div class="section-header" onclick="toggleSection('daily')">
-    <span>Tâches Quotidiennes</span><span class="collapse-icon">▼</span>
-  </div>
-  <div class="section-content" id="daily-content">
-    <div class="progress-bar">
-      <div class="progress-fill" id="daily-progress"></div>
-      <div class="progress-percent" id="daily-percent"></div>
-    </div>
-    <div id="daily-tasks"></div>
-    <button class="reset-btn" onclick="resetSection('daily')">Réinitialiser Quotidien</button>
-  </div>
-</div>
-
-<!-- Hebdomadaires -->
-<div class="task-section">
-  <div class="section-header" onclick="toggleSection('weekly')">
-    <span>Tâches Hebdomadaires</span><span class="collapse-icon">▼</span>
-  </div>
-  <div class="section-content" id="weekly-content">
-    <div class="progress-bar">
-      <div class="progress-fill" id="weekly-progress"></div>
-      <div class="progress-percent" id="weekly-percent"></div>
-    </div>
-    <div id="weekly-tasks"></div>
-    <button class="reset-btn" onclick="resetSection('weekly')">Réinitialiser Hebdo</button>
-  </div>
-</div>
-
-<!-- Autres -->
-<div class="task-section">
-  <div class="section-header" onclick="toggleSection('other')">
-    <span>Autres Tâches</span><span class="collapse-icon">▼</span>
-  </div>
-  <div class="section-content" id="other-content">
-    <div class="progress-bar">
-      <div class="progress-fill" id="other-progress"></div>
-      <div class="progress-percent" id="other-percent"></div>
-    </div>
-    <div id="other-tasks"></div>
-    <button class="reset-btn" onclick="resetSection('other')">Réinitialiser Autres</button>
-  </div>
-</div>
-
-<footer class="footer">
-<p class="disclaimer">This is an unofficial fan-made tool. Warframe and all related assets are the intellectual property of Digital Extremes Ltd. This project is not affiliated with, endorsed by, or sponsored by Digital Extremes Ltd.</p>
-</footer>
-</div>
-
-<script>
-const syndicateTasks = [
-    { id: 'synd7', text: "Cephalon Simaris (Relais)" },
-    { id: 'synd8', text: "Ostron (Cetus)" },
-    { id: 'synd9', text: "Les Quills (Cetus)" },
-    { id: 'synd10', text: "Solaris United (Fortuna)" },
-    { id: 'synd11', text: "Vox Solaris (Fortuna)" },
-    { id: 'synd12', text: "Ventkids (Fortuna)" },
-    { id: 'synd13', text: "Entrati (Nécralisk)" },
-    { id: 'synd14', text: "Nécroloïde (Nécralisk)" },
-    { id: 'synd15', text: "The Holdfasts (Chrysalith)" },
-    { id: 'synd16', text: "Cavia (Sanctum Anatomica)" },
-    { id: 'synd17', text: "The Hex (Mall Central Hóllvania)" }
-];
-
-const tasks = {
-    daily: [
-        { id: 'daily1', text: "Connexion : Récupérer la récompense quotidienne de connexion." },
-        { id: 'daily2', text: "Fabrication (Forma) : Lancer la fabrication d’un Forma." },
-        { id: 'daily3', text: "Fabrication (Autre) : Fabriquer divers objets." },
-        { id: 'daily4', text: "Syndicats (Orbiteur) : Atteindre le plafond de réputation." },
-        { id: 'daily5', text: "Syndicats (Orbiteur - Dépense) : Dépenser la réputation max." },
-        { id: 'daily18', text: "Mission Secteur Sombre" },
-        { id: 'daily19', text: "Sortie : Terminer les 3 missions quotidiennes." },
-        { id: 'daily20', text: "Focus : Atteindre la limite quotidienne." },
-        { id: 'daily21', text: "Incursions du Chemin d’Acier." }
-    ],
-    weekly: [
-        { id: 'weekly1', text: "Nightwave : Missions hebdomadaires." },
-        { id: 'weekly2', text: "Nightwave (Dépense) : Utiliser crédits NW." },
-        { id: 'weekly3', text: "Chasse au Trésor Ayatan : Maroo." },
-        { id: 'weekly4', text: "Aider Clem : Mission survie." },
-        { id: 'weekly5', text: "Rupture Narmer Hebdo : Kahl." },
-        { id: 'weekly6', text: "Iron Wake : Échanger Éclats Riven." },
-        { id: 'weekly7', text: "Yonta : Acheter Kuva hebdo." },
-        { id: 'weekly8', text: "Acridies : Dépenser Pinces Pathos." },
-        { id: 'weekly9', text: "Chasse à l’Archonte." },
-        { id: 'weekly10', text: "Circuit Duviri (Normal)." },
-        { id: 'weekly11', text: "Circuit Duviri (Chemin d’Acier)." },
-        { id: 'weekly12', text: "Teshin : Boutique Essence d’Acier." },
-        { id: 'weekly13', text: "Oiseau 3 : Éclat d’Archonte." },
-        { id: 'weekly14', text: "Netracells : Missions hebdo." },
-        { id: 'weekly15', text: "Archimedea Profonde Élite." },
-        { id: 'weekly16', text: "Archimedea Temporelle Élite." },
-        { id: 'weekly17', text: "Calendrier Hebdomadaire." }
-    ],
-    other: [
-        { id: 'other1', text: "Baro Ki’Teer : Vérifier inventaire." },
-        { id: 'other2', text: "Rapprocher la Famille : Jetons." },
-        { id: 'other3', text: "Acheter Voidplumes (Yonta)." },
-        { id: 'other4', text: "Acheter Voca (Loid)." }
-    ]
-};
-
-function toggleFavorite(id) {
-    const key = 'fav_' + id;
-    const current = localStorage.getItem(key) === 'true';
-    localStorage.setItem(key, (!current).toString());
-    loadTasks();
-}
-
-function taskHTML(task) {
-    const hideCompleted = document.getElementById('hide-completed')?.checked;
-    const checked = localStorage.getItem(task.id) === 'true';
-    if (hideCompleted && checked) return null;
-    const div = document.createElement('div');
-    div.className = 'task-item';
-    const favorite = localStorage.getItem('fav_' + task.id) === 'true';
-    div.innerHTML = `
-        <input type="checkbox" id="${task.id}" class="task-checkbox" ${checked ? 'checked' : ''} onchange="toggleTask('${task.id}')">
-        <label for="${task.id}" class="task-label ${checked ? 'task-completed' : ''}">${task.text}</label>
-        <span class="star-icon ${favorite ? 'favorited' : ''}" onclick="toggleFavorite('${task.id}')">&#9733;</span>
-    `;
-    return div;
-}
-
-function loadTasks() {
-    // Prioritaires
-    const favContainer = document.getElementById("favorites-tasks");
-    favContainer.innerHTML = "";
-    const allTasks = [...tasks.daily, ...syndicateTasks, ...tasks.weekly, ...tasks.other];
-    const favTasks = allTasks.filter(t => localStorage.getItem('fav_' + t.id) === 'true');
-    if (favTasks.length === 0) {
-        favContainer.innerHTML = `<div class="empty-msg">Rien ici pour le moment.</div>`;
-    } else {
-        favTasks.forEach(t => {
-            const el = taskHTML(t);
-            if (el) favContainer.appendChild(el);
-        });
-    }
-
-    // Quotidiennes avec syndicats
-    const dailyC = document.getElementById("daily-tasks");
-    dailyC.innerHTML = "";
-    tasks.daily.slice(0,5).forEach(t => { const el = taskHTML(t); if(el) dailyC.appendChild(el); });
-    const syndBlock = document.createElement('div');
-    syndBlock.className = 'syndicate-group';
-    syndBlock.innerHTML = `<div class="syndicate-title">Syndicats mondiaux</div>`;
-    syndicateTasks.forEach(t => { const el = taskHTML(t); if(el) syndBlock.appendChild(el); });
-    dailyC.appendChild(syndBlock);
-    tasks.daily.slice(5).forEach(t => { const el = taskHTML(t); if(el) dailyC.appendChild(el); });
-
-    // Hebdo / Autres
-    ['weekly', 'other'].forEach(section => {
-        const container = document.getElementById(`${section}-tasks`);
-        container.innerHTML = '';
-        tasks[section].forEach(t => { const el = taskHTML(t); if(el) container.appendChild(el); });
-    });
-
-    updateProgress('daily');
-    updateProgress('weekly');
-    updateProgress('other');
-}
-
-function toggleTask(id) {
-    const cb = document.getElementById(id);
-    cb.nextElementSibling.classList.toggle('task-completed', cb.checked);
-    localStorage.setItem(id, cb.checked ? 'true':'false');
-    loadTasks();
-}
-
-function updateProgress(section) {
-    let total, done;
-    if(section === "daily") {
-        total = tasks.daily.length + syndicateTasks.length + tasks.daily.slice(5).length;
-        done = tasks.daily.filter(t => localStorage.getItem(t.id) === 'true').length
-             + syndicateTasks.filter(t => localStorage.getItem(t.id) === 'true').length
-             + tasks.daily.slice(5).filter(t => localStorage.getItem(t.id) === 'true').length;
-    } else {
-        total = tasks[section].length;
-        done = tasks[section].filter(t => localStorage.getItem(t.id) === 'true').length;
-    }
-    const pct = Math.round((done/Math.max(1,total))*100);
-    document.getElementById(`${section}-progress`).style.width = pct + '%';
-    const pctEl = document.getElementById(`${section}-percent`);
-    if (pctEl) {
-        pctEl.textContent = pct + '%';
-        pctEl.classList.remove('animate');
-        void pctEl.offsetWidth;
-        pctEl.classList.add('animate');
-    }
-}
-
-function resetSection(s) {
-    if (confirm(`Réinitialiser toutes les tâches ${s} ?`)) {
-        if(s == "daily") {
-            tasks.daily.forEach(t => localStorage.setItem(t.id, 'false'));
-            syndicateTasks.forEach(t => localStorage.setItem(t.id, 'false'));
-        } else {
-            tasks[s].forEach(t => localStorage.setItem(t.id, 'false'));
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Inceptio Ticket</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1d2633 0%, #2f3e53 100%);
+            min-height: 100vh;
+            color: #d1d5db;
         }
-        loadTasks();
-    }
-}
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 2rem;
+        }
+        .card {
+            background-color: #2a3447;
+            border-radius: 1.5rem;
+            padding: 2rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid #3d4a60;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+        }
+        .btn-primary {
+            background-color: #4f46e5;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            transition: background-color 0.3s, transform 0.2s;
+            box-shadow: 0 4px 10px rgba(79, 70, 229, 0.3);
+        }
+        .btn-primary:hover {
+            background-color: #4338ca;
+            transform: translateY(-2px);
+        }
+        .badge {
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            text-transform: uppercase;
+        }
+        .ticket-card {
+            background-color: #313c51;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s, background-color 0.2s;
+            border: 1px solid transparent;
+        }
+        .ticket-card:hover {
+            transform: translateY(-3px);
+            background-color: #3e4a63;
+        }
+        .input-field {
+            background-color: #3e4a63;
+            border: 1px solid #5a647a;
+            color: #e5e7eb;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .input-field:focus {
+            outline: none;
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.5);
+        }
+        .notification {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 60;
+            background-color: #22c55e;
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+        }
+        .notification.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .announcement-card p {
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+        /* New CSS for wrapping text */
+        .text-wrap-balance {
+            text-wrap: balance;
+            word-break: break-word;
+            overflow-wrap: break-word;
+        }
+        /* Custom styles for filter buttons on small screens */
+        @media (max-width: 640px) {
+            .filter-controls-container {
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+            }
+            .filter-buttons-group {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+    <script type="module">
+        // Firebase services import
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, addDoc, updateDoc, onSnapshot, collection, query, where, getDocs, setDoc, deleteDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        
+        // Firebase configuration and initialization
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
 
-function toggleSection(s) {
-    const content = document.getElementById(`${s}-content`);
-    const header = content.previousElementSibling;
-    content.style.display = content.style.display === 'none' ? 'block' : 'none';
-    header.classList.toggle('collapsed');
-}
+        let app;
+        let db;
+        let auth;
+        let userId = null;
+        let unsubscribeTickets = null;
 
-document.addEventListener('DOMContentLoaded', () => { loadTasks(); });
-</script>
+        const reportForm = document.getElementById('report-form');
+        const problemList = document.getElementById('problem-list');
+        const statusMessage = document.getElementById('status-message');
+        const userIdDisplay = document.getElementById('user-id-display');
+        const solvedModal = document.getElementById('solved-modal');
+        const commentsModal = document.getElementById('comments-modal');
+        const commentsList = document.getElementById('comments-list');
+        const commentsForm = document.getElementById('comments-form');
+        const closeCommentsModalButton = document.getElementById('close-comments-modal');
+        const confirmSolveButton = document.getElementById('confirm-solve-button');
+        const cancelSolveButton = document.getElementById('cancel-solve-button');
+        const statusFilterButtons = document.querySelectorAll('.status-filter-btn');
+        const typeFilterSelect = document.getElementById('type-filter-select');
+        const searchInput = document.getElementById('search-input');
+        const deleteModal = document.getElementById('delete-modal');
+        const confirmDeleteButton = document.getElementById('confirm-delete-button');
+        const cancelDeleteButton = document.getElementById('cancel-delete-button');
+        const editModal = document.getElementById('edit-modal');
+        const editForm = document.getElementById('edit-form');
+        const closeEditModalButton = document.getElementById('close-edit-modal');
+        const notification = document.getElementById('notification');
+        const paginationContainer = document.getElementById('pagination-container');
+        const ticketsPerPage = 5;
+        let currentPage = 1;
+        
+        let ticketToSolveId = null;
+        let ticketToDeleteId = null;
+        let ticketToEditId = null;
+        let currentTicketId = null;
+        let currentStatusFilter = 'all';
+        let currentSearchQuery = '';
+        let unsubscribeNotifications = null;
+        let allTickets = [];
+
+        // Fonction pour obtenir la couleur et l'icône du type de ticket
+        const getTypeVisuals = (type) => {
+            switch(type) {
+                case 'materiel': return { name: 'Matériel', color: 'border-red-500', icon: 'fa-computer-mouse', text: 'text-red-500' };
+                case 'logiciel': return { name: 'Logiciel', color: 'border-blue-500', icon: 'fa-code', text: 'text-blue-500' };
+                case 'reseau': return { name: 'Réseau', color: 'border-yellow-500', icon: 'fa-wifi', text: 'text-yellow-500' };
+                case 'imprimante': return { name: 'Imprimante', color: 'border-green-500', icon: 'fa-print', text: 'text-green-500' };
+                case 'autre': return { name: 'Autre', color: 'border-gray-500', icon: 'fa-circle-exclamation', text: 'text-gray-500' };
+                default: return { name: 'Autre', color: 'border-gray-500', icon: 'fa-circle-exclamation', text: 'text-gray-500' };
+            }
+        };
+
+        // Render the list of tickets from Firestore
+        const renderProblems = (tickets) => {
+            // Apply all filters and sorting on the client side
+            const filteredTickets = tickets
+                .filter(ticket => {
+                    const statusMatch = (currentStatusFilter === 'all') || 
+                                        (currentStatusFilter === 'mine' && ticket.userId === userId) ||
+                                        (currentStatusFilter !== 'mine' && ticket.status === currentStatusFilter);
+                    const searchMatch = (currentSearchQuery === '') || ticket.description.toLowerCase().includes(currentSearchQuery.toLowerCase());
+                    return statusMatch && searchMatch;
+                })
+                .sort((a, b) => b.timestamp - a.timestamp); // Sort tickets by timestamp, newest first
+
+            allTickets = filteredTickets;
+            currentPage = 1; // Reset to first page after new filter
+            renderTicketsForPage(currentPage);
+            renderPaginationControls();
+        };
+
+        const renderTicketsForPage = (page) => {
+            problemList.innerHTML = '';
+            const startIndex = (page - 1) * ticketsPerPage;
+            const endIndex = startIndex + ticketsPerPage;
+            const ticketsToDisplay = allTickets.slice(startIndex, endIndex);
+            
+            if (ticketsToDisplay.length === 0) {
+                problemList.innerHTML = '<p class="text-center text-gray-400 font-medium text-wrap-balance">Aucun ticket correspondant aux filtres ou à la recherche.</p>';
+            }
+
+            ticketsToDisplay.forEach((data) => {
+                const isResolved = data.status === 'resolved';
+                const typeVisuals = getTypeVisuals(data.type);
+                const problemEl = document.createElement('div');
+                problemEl.className = `ticket-card flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-6 transition-all duration-300 ${isResolved ? 'opacity-70 border-gray-600' : 'border-l-4 ' + typeVisuals.color}`;
+                
+                const date = new Date(data.timestamp).toLocaleString('fr-FR');
+                
+                problemEl.innerHTML = `
+                    <div class="flex-1 w-full">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-sm font-semibold flex items-center space-x-2 ${typeVisuals.text}">
+                                <i class="fa-solid ${typeVisuals.icon} text-lg"></i>
+                                <span>${typeVisuals.name}</span>
+                            </span>
+                        </div>
+                        <p class="text-gray-200 font-medium text-lg mt-1">${data.description}</p>
+                        <p class="text-xs text-gray-400 mt-3">
+                            Signalé par: <span class="font-mono text-xs">${data.userId.substring(0, 8)}...</span> le: ${date}
+                        </p>
+                    </div>
+                    <div class="flex flex-wrap justify-end sm:justify-start space-x-2 w-full sm:w-auto mt-4 sm:mt-0">
+                        <button class="comments-btn bg-gray-600 text-white px-3 py-1 rounded-full font-semibold text-xs hover:bg-gray-700 transition-colors duration-200" data-ticket-id="${data.id}" data-ticket-desc="${data.description}">
+                            <i class="fa-solid fa-comment-dots mr-1"></i> Commentaires
+                        </button>
+                        ${isResolved ? `
+                        <div class="text-green-500 text-sm font-semibold flex items-center space-x-1">
+                            <i class="fa-solid fa-circle-check text-lg"></i>
+                            <span>Résolu</span>
+                        </div>
+                        ` : `
+                        <button class="solve-btn bg-blue-600 text-white px-3 py-1 rounded-full font-semibold text-xs hover:bg-blue-700 transition-colors duration-200" data-ticket-id="${data.id}">
+                            <i class="fa-solid fa-check mr-1"></i> Résolu
+                        </button>
+                        `}
+                        ${data.userId === userId ? `
+                        <button class="edit-btn bg-yellow-600 text-white px-3 py-1 rounded-full font-semibold text-xs hover:bg-yellow-700 transition-colors duration-200" data-ticket-id="${data.id}">
+                            <i class="fa-solid fa-edit mr-1"></i> Modifier
+                        </button>
+                        <button class="delete-btn bg-red-600 text-white px-3 py-1 rounded-full font-semibold text-xs hover:bg-red-700 transition-colors duration-200" data-ticket-id="${data.id}">
+                            <i class="fa-solid fa-trash mr-1"></i> Supprimer
+                        </button>
+                        ` : ''}
+                    </div>
+                `;
+                
+                const solveButton = problemEl.querySelector('.solve-btn');
+                if (solveButton) {
+                    solveButton.addEventListener('click', () => {
+                        ticketToSolveId = data.id;
+                        solvedModal.classList.remove('hidden');
+                    });
+                }
+                
+                const commentsButton = problemEl.querySelector('.comments-btn');
+                commentsButton.addEventListener('click', () => {
+                    showCommentsModal(data.id, data.description);
+                });
+
+                const deleteButton = problemEl.querySelector('.delete-btn');
+                if (deleteButton) {
+                    deleteButton.addEventListener('click', () => {
+                        ticketToDeleteId = data.id;
+                        deleteModal.classList.remove('hidden');
+                    });
+                }
+
+                const editButton = problemEl.querySelector('.edit-btn');
+                if (editButton) {
+                    editButton.addEventListener('click', async () => {
+                        ticketToEditId = data.id;
+                        const ticketRef = doc(db, `artifacts/${appId}/public/data/tickets`, ticketToEditId);
+                        const ticketSnap = await getDoc(ticketRef);
+                        if (ticketSnap.exists()) {
+                            const ticketData = ticketSnap.data();
+                            document.getElementById('edit-type').value = ticketData.type;
+                            document.getElementById('edit-description').value = ticketData.description;
+                            editModal.classList.remove('hidden');
+                        }
+                    });
+                }
+
+                problemList.appendChild(problemEl);
+            });
+        };
+
+        const renderPaginationControls = () => {
+            paginationContainer.innerHTML = '';
+            const totalPages = Math.ceil(allTickets.length / ticketsPerPage);
+            if (totalPages <= 1) {
+                return;
+            }
+
+            const createPageButton = (text, pageNumber, isActive = false, isDisabled = false) => {
+                const button = document.createElement('button');
+                button.textContent = text;
+                button.dataset.page = pageNumber;
+                button.className = `px-4 py-2 mx-1 rounded-lg text-sm font-semibold ${isActive ? 'bg-blue-600 text-white' : 'bg-gray-600 text-gray-200 hover:bg-gray-500'} ${isDisabled ? 'opacity-50 cursor-not-allowed' : ''}`;
+                button.disabled = isDisabled;
+                button.addEventListener('click', () => {
+                    currentPage = pageNumber;
+                    renderTicketsForPage(currentPage);
+                    renderPaginationControls();
+                });
+                return button;
+            };
+
+            // Previous button
+            paginationContainer.appendChild(createPageButton('Précédent', currentPage - 1, false, currentPage === 1));
+
+            // Page numbers
+            for (let i = 1; i <= totalPages; i++) {
+                paginationContainer.appendChild(createPageButton(i, i, i === currentPage));
+            }
+
+            // Next button
+            paginationContainer.appendChild(createPageButton('Suivant', currentPage + 1, false, currentPage === totalPages));
+        };
+
+        // Handles data fetching and filtering from Firestore
+        const fetchAndRenderTickets = () => {
+            if (!db || !userId) return;
+            
+            if (unsubscribeTickets) {
+                unsubscribeTickets();
+            }
+
+            if (unsubscribeNotifications) {
+                unsubscribeNotifications();
+            }
+
+            const ticketsRef = collection(db, `artifacts/${appId}/public/data/tickets`);
+            let ticketsQuery = query(ticketsRef);
+
+            // Fetch ALL tickets and apply filters client-side
+            unsubscribeTickets = onSnapshot(ticketsQuery, (snapshot) => {
+                const tickets = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                renderProblems(tickets);
+            }, (error) => {
+                console.error("Error fetching tickets: ", error);
+            });
+
+            // Listener for notifications (only for the current user's tickets)
+            const myTicketsQuery = query(ticketsRef, where('userId', '==', userId));
+            unsubscribeNotifications = onSnapshot(myTicketsQuery, (snapshot) => {
+                snapshot.docChanges().forEach((change) => {
+                    if (change.type === "modified") {
+                        const ticketData = change.doc.data();
+                        if (ticketData.status === 'resolved') {
+                            showNotification(`Votre ticket "${ticketData.description.substring(0, 30)}..." a été résolu !`);
+                        }
+                    }
+                });
+            }, (error) => {
+                console.error("Error fetching notifications: ", error);
+            });
+        };
+
+        // Fonction pour afficher une notification temporaire
+        const showNotification = (message) => {
+            notification.textContent = message;
+            notification.classList.add('show');
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 5000);
+        };
+
+        // Event listeners for filters
+        statusFilterButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                statusFilterButtons.forEach(btn => {
+                    btn.classList.remove('bg-blue-600', 'text-white');
+                    btn.classList.add('bg-gray-600', 'text-gray-200', 'hover:bg-gray-500');
+                });
+                e.target.classList.remove('bg-gray-600', 'text-gray-200', 'hover:bg-gray-500');
+                e.target.classList.add('bg-blue-600', 'text-white');
+                currentStatusFilter = e.target.dataset.status;
+                fetchAndRenderTickets();
+            });
+        });
+
+        searchInput.addEventListener('input', (e) => {
+            currentSearchQuery = e.target.value;
+            fetchAndRenderTickets();
+        });
+
+        // Handle form submission
+        reportForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            statusMessage.textContent = 'Envoi en cours...';
+            statusMessage.classList.remove('hidden');
+            statusMessage.classList.remove('text-green-400', 'text-red-400');
+
+            const type = document.getElementById('report-type').value;
+            const description = document.getElementById('report-description').value;
+            
+            try {
+                await addDoc(collection(db, `artifacts/${appId}/public/data/tickets`), {
+                    type,
+                    description,
+                    timestamp: Date.now(),
+                    userId: userId,
+                    status: 'open'
+                });
+
+                reportForm.reset();
+                statusMessage.textContent = 'Ticket soumis avec succès !';
+                statusMessage.classList.add('text-green-400');
+            } catch (error) {
+                console.error("Erreur lors de l'envoi du ticket: ", error);
+                statusMessage.textContent = 'Erreur lors de la soumission du ticket.';
+                statusMessage.classList.add('text-red-400');
+            } finally {
+                setTimeout(() => {
+                    statusMessage.classList.add('hidden');
+                    statusMessage.classList.remove('text-green-400', 'text-red-400');
+                }, 5000);
+            }
+        });
+
+        // Handle ticket editing
+        editForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const type = document.getElementById('edit-type').value;
+            const description = document.getElementById('edit-description').value;
+            
+            if (ticketToEditId) {
+                try {
+                    const ticketRef = doc(db, `artifacts/${appId}/public/data/tickets`, ticketToEditId);
+                    await updateDoc(ticketRef, {
+                        type,
+                        description
+                    });
+                    editModal.classList.add('hidden');
+                    ticketToEditId = null;
+                } catch (error) {
+                    console.error("Erreur lors de la mise à jour du ticket: ", error);
+                }
+            }
+        });
+
+        closeEditModalButton.addEventListener('click', () => {
+            editModal.classList.add('hidden');
+            ticketToEditId = null;
+        });
+
+        // Handle ticket resolution
+        confirmSolveButton.addEventListener('click', async () => {
+            if (ticketToSolveId) {
+                try {
+                    const ticketRef = doc(db, `artifacts/${appId}/public/data/tickets`, ticketToSolveId);
+                    await updateDoc(ticketRef, {
+                        status: 'resolved'
+                    });
+                    solvedModal.classList.add('hidden');
+                    ticketToSolveId = null;
+                } catch (error) {
+                    console.error("Erreur lors de la mise à jour du ticket: ", error);
+                }
+            }
+        });
+
+        cancelSolveButton.addEventListener('click', () => {
+            solvedModal.classList.add('hidden');
+            ticketToSolveId = null;
+        });
+
+        // Handle ticket deletion
+        confirmDeleteButton.addEventListener('click', async () => {
+            if (ticketToDeleteId) {
+                try {
+                    const ticketRef = doc(db, `artifacts/${appId}/public/data/tickets`, ticketToDeleteId);
+                    await deleteDoc(ticketRef);
+                    deleteModal.classList.add('hidden');
+                    ticketToDeleteId = null;
+                } catch (error) {
+                    console.error("Erreur lors de la suppression du ticket: ", error);
+                }
+            }
+        });
+
+        cancelDeleteButton.addEventListener('click', () => {
+            deleteModal.classList.add('hidden');
+            ticketToDeleteId = null;
+        });
+
+        // Handle comments logic
+        const showCommentsModal = (ticketId, description) => {
+            currentTicketId = ticketId;
+            commentsModal.classList.remove('hidden');
+            document.getElementById('comments-ticket-desc').textContent = `Commentaires pour : "${description}"`;
+
+            const commentsRef = collection(db, `artifacts/${appId}/public/data/tickets/${ticketId}/comments`);
+            onSnapshot(commentsRef, (snapshot) => {
+                const comments = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                renderComments(comments);
+            }, (error) => {
+                console.error("Error fetching comments: ", error);
+            });
+        };
+
+        const renderComments = (comments) => {
+            comments.sort((a, b) => b.timestamp - a.timestamp); // Sort by newest first
+            commentsList.innerHTML = '';
+            if (comments.length === 0) {
+                commentsList.innerHTML = '<p class="text-center text-gray-400">Aucun commentaire pour le moment.</p>';
+                return;
+            }
+
+            comments.forEach(comment => {
+                const commentEl = document.createElement('div');
+                commentEl.className = 'bg-gray-600 p-4 rounded-lg space-y-1 mb-2';
+                const date = new Date(comment.timestamp).toLocaleString('fr-FR');
+                commentEl.innerHTML = `
+                    <p class="text-gray-200">${comment.text}</p>
+                    <p class="text-xs text-gray-400">
+                        Par: <span class="font-mono">${comment.userId.substring(0, 8)}...</span> le: ${date}
+                    </p>
+                `;
+                commentsList.appendChild(commentEl);
+            });
+            commentsList.scrollTop = commentsList.scrollHeight;
+        };
+
+        commentsForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const commentText = document.getElementById('comment-text').value;
+
+            if (commentText.trim() === '' || !currentTicketId) {
+                return;
+            }
+            
+            try {
+                await addDoc(collection(db, `artifacts/${appId}/public/data/tickets/${currentTicketId}/comments`), {
+                    text: commentText,
+                    timestamp: Date.now(),
+                    userId: userId,
+                });
+                document.getElementById('comment-text').value = '';
+            } catch (error) {
+                console.error("Erreur lors de l'ajout du commentaire: ", error);
+            }
+        });
+
+        closeCommentsModalButton.addEventListener('click', () => {
+            commentsModal.classList.add('hidden');
+        });
+
+        // Firebase initialization on window load
+        window.onload = async () => {
+            try {
+                app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+                auth = getAuth(app);
+                
+                // Sign in anonymously or with the initial token
+                if (typeof __initial_auth_token !== 'undefined') {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+
+                // Get user ID after sign-in
+                onAuthStateChanged(auth, (user) => {
+                    if (user) {
+                        userId = user.uid;
+                        userIdDisplay.textContent = `Votre ID: ${userId}`;
+                        fetchAndRenderTickets();
+                    } else {
+                        // Handle cases where the user is not signed in
+                        console.log("User not signed in.");
+                        userId = null;
+                    }
+                });
+
+            } catch (e) {
+                console.error("Firebase initialization error: ", e);
+            }
+        };
+    </script>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans">
+    <div class="notification" id="notification"></div>
+    <div class="container mx-auto px-4 py-12">
+        <header class="text-center mb-12">
+            <h1 class="text-5xl font-extrabold text-gray-200 mb-2">Data Inceptio Ticket</h1>
+            <p class="text-gray-400 text-lg">Votre portail de services et d'assistance en temps réel.</p>
+        </header>
+
+        <div class="text-center text-sm mb-8 text-gray-500">
+            <p id="user-id-display" class="font-mono text-xs text-center break-all text-gray-400"></p>
+        </div>
+
+        <div class="grid lg:grid-cols-2 gap-8">
+            <!-- Ticket submission section -->
+            <div class="card">
+                <h2 class="text-2xl font-bold mb-6 text-center text-gray-200">Créer un ticket d'assistance</h2>
+                <form id="report-form" class="space-y-6">
+                    <div>
+                        <label for="report-type" class="block text-sm font-medium text-gray-400 mb-1">Type de problème :</label>
+                        <select id="report-type" name="type" required class="block w-full rounded-lg input-field px-3 py-2">
+                            <option value="">Sélectionnez un type</option>
+                            <option value="materiel">Matériel</option>
+                            <option value="logiciel">Logiciel</option>
+                            <option value="reseau">Réseau</option>
+                            <option value="imprimante">Imprimante</option>
+                            <option value="autre">Autre</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="report-description" class="block text-sm font-medium text-gray-400 mb-1">Description détaillée :</label>
+                        <textarea id="report-description" name="description" rows="4" required class="block w-full rounded-lg input-field px-3 py-2"></textarea>
+                    </div>
+                    <button type="submit" class="w-full btn-primary">Soumettre le ticket</button>
+                </form>
+                <div id="status-message" class="mt-4 text-center text-sm font-semibold text-gray-400 hidden"></div>
+            </div>
+
+            <!-- Open tickets section -->
+            <div class="card">
+                <h2 class="text-2xl font-bold mb-6 text-center text-gray-200">Tickets</h2>
+                
+                <!-- Filter controls -->
+                <div class="filter-controls-container flex flex-col sm:flex-row items-center justify-between space-y-4 sm:space-y-0 sm:space-x-4">
+                    <div class="relative w-full sm:w-auto flex-1">
+                        <input type="text" id="search-input" placeholder="Rechercher" class="w-full pl-10 pr-4 py-2 rounded-lg input-field">
+                        <div class="absolute inset-y-0 left-0 flex items-center pl-3">
+                            <i class="fa-solid fa-search text-gray-400"></i>
+                        </div>
+                    </div>
+                    <div class="filter-buttons-group flex flex-wrap justify-center sm:justify-start space-x-2 w-full sm:w-auto">
+                        <button class="status-filter-btn px-4 py-2 rounded-full text-sm font-semibold transition-colors duration-200 bg-blue-600 text-white" data-status="all">Tous</button>
+                        <button class="status-filter-btn px-4 py-2 rounded-full text-sm font-semibold transition-colors duration-200 bg-gray-600 text-gray-200 hover:bg-gray-500" data-status="open">Ouverts</button>
+                        <button class="status-filter-btn px-4 py-2 rounded-full text-sm font-semibold transition-colors duration-200 bg-gray-600 text-gray-200 hover:bg-gray-500" data-status="resolved">Résolus</button>
+                    </div>
+                </div>
+                
+
+                <div id="problem-list" class="space-y-4 mt-6">
+                    <!-- Tickets will be displayed here by JavaScript -->
+                </div>
+                
+                <!-- Pagination controls -->
+                <div id="pagination-container" class="flex justify-center items-center mt-6">
+                    <!-- Pagination buttons will be added here by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Announcements section -->
+        <div class="card mt-8">
+            <h2 class="text-2xl font-bold mb-6 text-center text-gray-200">Annonces de service</h2>
+            <div id="announcement-list" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="bg-gray-600 p-4 rounded-lg announcement-card">
+                    <p class="text-sm font-medium text-gray-400">15 septembre</p>
+                    <h3 class="font-bold text-lg text-gray-200 mt-1">Maintenance réseau planifiée</h3>
+                    <p class="text-gray-300 text-sm mt-1">Une maintenance du réseau aura lieu ce soir de 22h à minuit. Des coupures temporaires sont possibles.</p>
+                </div>
+                <div class="bg-gray-600 p-4 rounded-lg announcement-card">
+                    <p class="text-sm font-medium text-gray-400">22 septembre</p>
+                    <h3 class="font-bold text-lg text-gray-200 mt-1">Mise à jour logicielle obligatoire</h3>
+                    <p class="text-gray-300 text-sm mt-1">Une nouvelle version du logiciel de comptabilité sera déployée. Veuillez redémarrer votre poste.</p>
+                </div>
+                <div class="bg-gray-600 p-4 rounded-lg announcement-card">
+                    <p class="text-sm font-medium text-gray-400">30 septembre</p>
+                    <h3 class="font-bold text-lg text-gray-200 mt-1">Formations de sécurité informatique</h3>
+                    <p class="text-gray-300 text-sm mt-1">Des sessions de formation sur la sécurité informatique sont prévues la semaine prochaine. Contactez l'IT pour vous inscrire.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="solved-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50 transition-opacity duration-300">
+        <div class="bg-gray-800 p-8 rounded-xl shadow-xl text-center max-w-sm w-full transform scale-95 transition-transform duration-300 border border-gray-700">
+            <p class="text-xl font-bold text-gray-200 mb-6">Confirmer la résolution du ticket ?</p>
+            <div class="flex justify-center space-x-4">
+                <button id="confirm-solve-button" class="bg-green-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-green-700 transition-colors">Confirmer</button>
+                <button id="cancel-solve-button" class="bg-gray-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-gray-700 transition-colors">Annuler</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="delete-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50 transition-opacity duration-300">
+        <div class="bg-gray-800 p-8 rounded-xl shadow-xl text-center max-w-sm w-full transform scale-95 transition-transform duration-300 border border-gray-700">
+            <p class="text-xl font-bold text-gray-200 mb-6">Êtes-vous sûr de vouloir supprimer ce ticket ?</p>
+            <div class="flex justify-center space-x-4">
+                <button id="confirm-delete-button" class="bg-red-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-red-700 transition-colors">Oui, supprimer</button>
+                <button id="cancel-delete-button" class="bg-gray-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-gray-700 transition-colors">Annuler</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div id="edit-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50 transition-opacity duration-300">
+        <div class="bg-gray-800 p-8 rounded-xl shadow-xl max-w-lg w-full transform scale-95 transition-transform duration-300 border border-gray-700">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-bold text-gray-200">Modifier le ticket</h2>
+                <button id="close-edit-modal" class="text-gray-400 hover:text-gray-200 text-2xl">&times;</button>
+            </div>
+            
+            <form id="edit-form" class="space-y-6">
+                <div>
+                    <label for="edit-type" class="block text-sm font-medium text-gray-400 mb-1">Type de problème :</label>
+                    <select id="edit-type" name="type" required class="block w-full rounded-lg input-field px-3 py-2">
+                        <option value="materiel">Matériel</option>
+                        <option value="logiciel">Logiciel</option>
+                        <option value="reseau">Réseau</option>
+                        <option value="imprimante">Imprimante</option>
+                        <option value="autre">Autre</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="edit-description" class="block text-sm font-medium text-gray-400 mb-1">Description détaillée :</label>
+                    <textarea id="edit-description" name="description" rows="4" required class="block w-full rounded-lg input-field px-3 py-2"></textarea>
+                </div>
+                <button type="submit" class="w-full btn-primary">Enregistrer les modifications</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Comments Modal -->
+    <div id="comments-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50 transition-opacity duration-300">
+        <div class="bg-gray-800 p-8 rounded-xl shadow-xl max-w-lg w-full transform scale-95 transition-transform duration-300 border border-gray-700">
+            <div class="flex justify-between items-center mb-6">
+                <h2 id="comments-ticket-desc" class="text-xl font-bold text-gray-200"></h2>
+                <button id="close-comments-modal" class="text-gray-400 hover:text-gray-200 text-2xl">&times;</button>
+            </div>
+            
+            <div id="comments-list" class="max-h-80 overflow-y-auto space-y-4 mb-6 pr-2">
+                <!-- Comments will be rendered here -->
+            </div>
+            
+            <form id="comments-form" class="space-y-4">
+                <textarea id="comment-text" class="w-full rounded-lg input-field px-4 py-2 resize-none" rows="3" placeholder="Ajouter un commentaire..." required></textarea>
+                <button type="submit" class="w-full btn-primary">
+                    <i class="fa-solid fa-paper-plane mr-2"></i> Envoyer
+                </button>
+            </form>
+        </div>
+    </div>
 </body>
 </html>
