@@ -12,7 +12,7 @@
         body {
             font-family: 'Inter', sans-serif;
             background: linear-gradient(135deg, #1d2633 0%, #2f3e53 100%);
-            min-height: 10vh;
+            min-height: 100vh;
             color: #d1d5db;
         }
         .container {
@@ -251,7 +251,7 @@
                         </div>
                         <p class="text-gray-200 font-medium text-lg mt-1">${data.description}</p>
                         <p class="text-xs text-gray-400 mt-3">
-                            Signalé par: <span class="font-mono text-xs">${data.userId.substring(0, 8)}...</span> le: ${date}
+                            Signalé par: <span class="font-mono text-xs">${data.userId}</span> le: ${date}
                         </p>
                     </div>
                     <div class="flex flex-wrap justify-end sm:justify-start space-x-2 w-full sm:w-auto mt-4 sm:mt-0">
@@ -587,7 +587,7 @@
                 commentEl.innerHTML = `
                     <p class="text-gray-200">${comment.text}</p>
                     <p class="text-xs text-gray-400">
-                        Par: <span class="font-mono">${comment.userId.substring(0, 8)}...</span> le: ${date}
+                        Par: <span class="font-mono">${comment.userId}</span> le: ${date}
                     </p>
                 `;
                 commentsList.appendChild(commentEl);
