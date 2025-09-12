@@ -180,6 +180,7 @@
         let ticketToEditId = null;
         let currentTicketId = null;
         let currentStatusFilter = 'all';
+        let currentTypeFilter = 'all';
         let currentSearchQuery = '';
         let allTickets = [];
 
@@ -203,8 +204,9 @@
                     const statusMatch = (currentStatusFilter === 'all') || 
                                         (currentStatusFilter === 'mine' && ticket.userId === userId) ||
                                         (currentStatusFilter !== 'mine' && ticket.status === currentStatusFilter);
+                    const typeMatch = (currentTypeFilter === 'all') || (ticket.type === currentTypeFilter);
                     const searchMatch = (currentSearchQuery === '') || ticket.description.toLowerCase().includes(currentSearchQuery.toLowerCase());
-                    return statusMatch && searchMatch;
+                    return statusMatch && typeMatch && searchMatch;
                 })
                 .sort((a, b) => b.timestamp - a.timestamp); // Sort tickets by timestamp, newest first
 
@@ -453,6 +455,11 @@
                 currentStatusFilter = e.target.dataset.status;
                 fetchAndRenderTickets();
             });
+        });
+        
+        typeFilterSelect.addEventListener('change', (e) => {
+            currentTypeFilter = e.target.value;
+            fetchAndRenderTickets();
         });
 
         searchInput.addEventListener('input', (e) => {
@@ -707,7 +714,7 @@
                 <!-- Filter controls -->
                 <div class="filter-controls-container flex flex-col sm:flex-row items-center justify-between space-y-4 sm:space-y-0 sm:space-x-4">
                     <div class="relative w-full sm:w-auto flex-1">
-                        <input type="text" id="search-input" placeholder="Rechercher" class="w-full pl-10 pr-4 py-2 rounded-lg input-field">
+                        <input type="text" id="search-input" placeholder="Rechercher par mot-clé..." class="w-full pl-10 pr-4 py-2 rounded-lg input-field">
                         <div class="absolute inset-y-0 left-0 flex items-center pl-3">
                             <i class="fa-solid fa-search text-gray-400"></i>
                         </div>
@@ -717,6 +724,14 @@
                         <button class="status-filter-btn px-4 py-2 rounded-full text-sm font-semibold transition-colors duration-200 bg-gray-600 text-gray-200 hover:bg-gray-500" data-status="mine">Mes tickets</button>
                         <button class="status-filter-btn px-4 py-2 rounded-full text-sm font-semibold transition-colors duration-200 bg-gray-600 text-gray-200 hover:bg-gray-500" data-status="open">Ouverts</button>
                         <button class="status-filter-btn px-4 py-2 rounded-full text-sm font-semibold transition-colors duration-200 bg-gray-600 text-gray-200 hover:bg-gray-500" data-status="resolved">Résolus</button>
+                        <select id="type-filter-select" class="block rounded-full input-field px-3 py-2 text-sm font-semibold bg-gray-600 text-gray-200 hover:bg-gray-500">
+                            <option value="all">Tous les types</option>
+                            <option value="materiel">Matériel</option>
+                            <option value="logiciel">Logiciel</option>
+                            <option value="reseau">Réseau</option>
+                            <option value="imprimante">Imprimante</option>
+                            <option value="autre">Autre</option>
+                        </select>
                     </div>
                 </div>
                 
