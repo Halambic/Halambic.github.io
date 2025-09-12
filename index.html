@@ -479,7 +479,7 @@
                 showNotification('Ticket soumis avec succès !');
             } catch (error) {
                 console.error("Erreur lors de l'envoi du ticket: ", error);
-                statusMessage.textContent = 'Erreur lors de la soumission du ticket.';
+                statusMessage.textContent = 'Erreur lors de la soumission du ticket. Veuillez vérifier vos règles de sécurité Firebase.';
                 statusMessage.classList.add('text-red-400');
                 statusMessage.classList.remove('hidden');
             } finally {
