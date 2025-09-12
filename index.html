@@ -3,1374 +3,811 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tableau de Bord Financier</title>
+    <title>Data Inceptio Ticket</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #1a202c;
-            color: #e2e8f0;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1d2633 0%, #2f3e53 100%);
+            min-height: 10vh;
+            color: #d1d5db;
         }
         .container {
             max-width: 1200px;
+            margin: auto;
+            padding: 2rem;
         }
         .card {
-            background-color: #2d3748;
-            border-radius: 1rem;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
+            background-color: #2a3447;
+            border-radius: 1.5rem;
+            padding: 2rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid #3d4a60;
         }
-        .text-3xl {
-            font-size: 1.875rem;
-        }
-        .form-input {
-            background-color: #4a5568;
-            border: 1px solid #4a5568;
-            color: #e2e8f0;
-        }
-        .form-input:focus {
-            border-color: #63b3ed;
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5);
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
         }
         .btn-primary {
-            background-color: #63b3ed;
+            background-color: #4f46e5;
             color: white;
-            transition: all 0.3s ease;
+            padding: 1rem 2rem;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            transition: background-color 0.3s, transform 0.2s;
+            box-shadow: 0 4px 10px rgba(79, 70, 229, 0.3);
         }
         .btn-primary:hover {
-            background-color: #4299e1;
+            background-color: #4338ca;
+            transform: translateY(-2px);
         }
-        .btn-secondary {
-            background-color: #718096;
-            color: white;
-            transition: all 0.3s ease;
-        }
-        .btn-secondary:hover {
-            background-color: #4a5568;
-        }
-        .btn-delete {
-            background-color: #e53e3e;
-            color: white;
-            transition: all 0.3s ease;
-        }
-        .btn-delete:hover {
-            background-color: #c53030;
-        }
-        .btn-export {
-            background-color: #38a169;
-            color: white;
-            transition: all 0.3s ease;
-        }
-        .btn-export:hover {
-            background-color: #2f855a;
-        }
-        .budget-alert {
-            background-color: #c53030;
-            color: white;
-            padding: 0.5rem;
-            border-radius: 0.5rem;
-            margin-top: 0.5rem;
-            font-size: 0.875rem;
-        }
-        .tab-button {
-            padding: 0.75rem 1.5rem;
+        .badge {
+            font-size: 0.75rem;
             font-weight: 600;
-            border-radius: 0.5rem 0.5rem 0 0;
-            border-bottom: 3px solid transparent;
-            transition: all 0.3s ease;
-        }
-        .tab-button.active {
-            background-color: #2d3748;
-            border-bottom-color: #63b3ed;
-            color: #e2e8f0;
-        }
-        .tab-content {
-            display: none;
-        }
-        .tab-content.active {
-            display: block;
-        }
-        .progress-bar-container {
-            width: 100%;
-            background-color: #4a5568;
+            padding: 0.25rem 0.75rem;
             border-radius: 9999px;
-            height: 1rem;
+            text-transform: uppercase;
         }
-        .progress-bar {
-            background-color: #48bb78;
-            height: 100%;
-            border-radius: 9999px;
-            transition: width 0.5s ease-in-out;
+        .ticket-card {
+            background-color: #313c51;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s, background-color 0.2s;
+            border: 1px solid transparent;
         }
-        .share-link-container {
-            background-color: #2d3748;
-            padding: 1rem;
-            border-radius: 0.5rem;
-            border: 1px dashed #4a5568;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+        .ticket-card:hover {
+            transform: translateY(-3px);
+            background-color: #3e4a63;
+        }
+        .input-field {
+            background-color: #3e4a63;
+            border: 1px solid #5a647a;
+            color: #e5e7eb;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .input-field:focus {
+            outline: none;
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.5);
+        }
+        .notification {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 60;
+            background-color: #22c55e;
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+        }
+        .notification.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .announcement-card p {
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+        /* New CSS for wrapping text */
+        .text-wrap-balance {
+            text-wrap: balance;
+            word-break: break-word;
+            overflow-wrap: break-word;
+        }
+        /* Modal animation */
+        .modal {
+            transition: opacity 0.3s ease-in-out;
+        }
+        .modal-content {
+            transition: transform 0.3s ease-in-out;
+        }
+        .modal.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .modal.hidden .modal-content {
+            transform: scale(0.95);
+        }
+        /* Custom styles for filter buttons on small screens */
+        @media (max-width: 640px) {
+            .filter-controls-container {
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+            }
+            .filter-buttons-group {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 0.5rem;
+            }
         }
     </style>
-</head>
-<body class="bg-gray-900 text-gray-200 min-h-screen p-4 sm:p-8">
-    <div class="container mx-auto">
-        <header class="text-center my-8">
-            <h1 class="text-4xl font-bold text-gray-100">Tableau de Bord Financier</h1>
-            <p id="user-id-display" class="mt-2 text-sm text-gray-400"></p>
-        </header>
-
-        <!-- Sélecteur de compte -->
-        <div class="card p-4 flex flex-col sm:flex-row items-center justify-between mb-8">
-            <div class="flex items-center space-x-4 mb-4 sm:mb-0">
-                <h2 class="text-xl font-semibold text-gray-300">Compte</h2>
-                <select id="account-selector" class="block rounded-md shadow-sm p-2 form-input">
-                    <!-- Les options de compte seront ajoutées par JS -->
-                </select>
-            </div>
-            <div class="flex space-x-2">
-                <button id="add-account-btn" class="py-1 px-3 text-sm rounded-md font-semibold btn-secondary">Ajouter Compte</button>
-                <button id="delete-account-btn" class="py-1 px-3 text-sm rounded-md font-semibold btn-delete">Supprimer Compte</button>
-            </div>
-        </div>
-
-        <!-- Onglets de navigation -->
-        <div class="flex justify-center mb-8">
-            <button id="tab-dashboard" class="tab-button active bg-gray-800">Vue d'ensemble</button>
-            <button id="tab-transactions" class="tab-button bg-gray-800">Transactions</button>
-            <button id="tab-budgets" class="tab-button bg-gray-800">Budgets</button>
-            <button id="tab-recurring" class="tab-button bg-gray-800">Récurrent</button>
-            <button id="tab-goals" class="tab-button bg-gray-800">Objectifs</button>
-        </div>
-
-        <!-- Contenu des onglets -->
-        <div id="tab-content-container" class="card p-6">
-            <!-- Onglet "Vue d'ensemble" -->
-            <div id="content-dashboard" class="tab-content active">
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-                    <div class="card p-6">
-                        <h2 class="text-xl font-semibold text-gray-300">Solde Total</h2>
-                        <p id="total-balance" class="mt-2 text-3xl font-bold text-teal-400">0.00€</p>
-                    </div>
-                    <div class="card p-6">
-                        <h2 class="text-xl font-semibold text-gray-300">Total des Revenus</h2>
-                        <p id="total-income" class="mt-2 text-3xl font-bold text-green-400">0.00€</p>
-                    </div>
-                    <div class="card p-6">
-                        <h2 class="text-xl font-semibold text-gray-300">Total des Dépenses</h2>
-                        <p id="total-expense" class="mt-2 text-3xl font-bold text-red-400">0.00€</p>
-                    </div>
-                </div>
-                
-                <div class="mb-8">
-                    <h3 class="text-2xl font-semibold text-gray-100 mb-4">Prévision des Dépenses</h3>
-                    <div class="card p-6">
-                        <p id="prediction-text" class="text-lg text-gray-300"></p>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <div class="card p-6 flex flex-col items-center">
-                        <h2 class="text-2xl font-semibold text-gray-100 mb-4">Analyse des Dépenses</h2>
-                        <div id="expenses-chart-container" class="w-full h-80 flex flex-col items-center">
-                            <h3 class="text-lg font-medium text-gray-300 mb-2">Dépenses par Catégorie</h3>
-                            <canvas id="expenses-chart" class="p-2"></canvas>
-                        </div>
-                    </div>
-                    <div class="card p-6 flex flex-col items-center">
-                        <h2 class="text-2xl font-semibold text-gray-100 mb-4">Évolution du Solde</h2>
-                        <div id="balance-chart-container" class="w-full h-80 flex flex-col items-center">
-                            <h3 class="text-lg font-medium text-gray-300 mb-2">Solde Total au fil du temps</h3>
-                            <canvas id="balance-chart" class="p-2"></canvas>
-                        </div>
-                    </div>
-                    <div class="card p-6 lg:col-span-2 flex flex-col items-center">
-                        <h2 class="text-2xl font-semibold text-gray-100 mb-4">Revenus vs Dépenses</h2>
-                        <div id="income-expense-chart-container" class="w-full h-80 flex flex-col items-center">
-                            <h3 class="text-lg font-medium text-gray-300 mb-2">Revenus vs Dépenses (Mois)</h3>
-                            <canvas id="income-expense-chart" class="p-2"></canvas>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Onglet "Transactions" -->
-            <div id="content-transactions" class="tab-content">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <div class="card p-6">
-                        <h2 id="form-title" class="text-2xl font-semibold text-gray-100 mb-4">Ajouter une Transaction</h2>
-                        <form id="transaction-form" class="space-y-4">
-                            <div>
-                                <label for="description" class="block text-gray-400">Description</label>
-                                <input type="text" id="description" required class="mt-1 block w-full rounded-md shadow-sm p-2 form-input">
-                            </div>
-                            <div>
-                                <label for="amount" class="block text-gray-400">Montant</label>
-                                <input type="number" id="amount" required class="mt-1 block w-full rounded-md shadow-sm p-2 form-input">
-                            </div>
-                            <div>
-                                <label for="type" class="block text-gray-400">Type</label>
-                                <select id="type" required class="mt-1 block w-full rounded-md shadow-sm p-2 form-input">
-                                    <option value="income">Revenu</option>
-                                    <option value="expense">Dépense</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label for="category" class="block text-gray-400">Catégorie</label>
-                                <input list="categories" id="category" required class="mt-1 block w-full rounded-md shadow-sm p-2 form-input">
-                                <datalist id="categories">
-                                    <option value="Courses"></option>
-                                    <option value="Restaurant"></option>
-                                    <option value="Loisirs"></option>
-                                    <option value="Transport"></option>
-                                    <option value="Factures"></option>
-                                    <option value="Santé"></option>
-                                    <option value="Salaire"></option>
-                                    <option value="Cadeau"></option>
-                                    <option value="Autres"></option>
-                                </datalist>
-                            </div>
-                            <div>
-                                <label for="date" class="block text-gray-400">Date</label>
-                                <input type="date" id="date" required class="mt-1 block w-full rounded-md shadow-sm p-2 form-input">
-                            </div>
-                            <div class="flex space-x-2">
-                                <button type="submit" id="submit-btn" class="flex-1 py-2 px-4 rounded-md font-semibold btn-primary">Ajouter</button>
-                                <button type="button" id="cancel-btn" class="flex-1 py-2 px-4 rounded-md font-semibold hidden btn-secondary">Annuler</button>
-                            </div>
-                        </form>
-                    </div>
-
-                    <div class="card p-6">
-                        <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
-                            <h2 class="text-2xl font-semibold text-gray-100">Liste des Transactions</h2>
-                            <div class="flex items-center space-x-2">
-                                <select id="month-filter" class="rounded-md shadow-sm p-2 text-sm form-input"></select>
-                                <select id="type-filter" class="rounded-md shadow-sm p-2 text-sm form-input">
-                                    <option value="all">Tous les types</option>
-                                    <option value="income">Revenus</option>
-                                    <option value="expense">Dépenses</option>
-                                </select>
-                                <button id="export-btn" class="py-2 px-4 rounded-md font-semibold text-sm btn-export">Exporter</button>
-                            </div>
-                        </div>
-                        <ul id="transactions-list" class="space-y-3"></ul>
-                        <p id="no-transactions-message" class="text-center text-gray-500 hidden mt-4">Aucune transaction pour l'instant.</p>
-                        <button id="clear-data-btn" class="w-full mt-4 py-2 px-4 rounded-md font-semibold btn-delete">Effacer toutes les transactions</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Onglet "Budgets" -->
-            <div id="content-budgets" class="tab-content">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <div class="card p-6">
-                        <h2 class="text-2xl font-semibold text-gray-100 mb-4">Définir un Budget</h2>
-                        <form id="budget-form" class="space-y-4 mb-4">
-                            <div>
-                                <label for="budget-amount" class="block text-gray-400">Montant du budget</label>
-                                <input type="number" id="budget-amount" placeholder="Entrez un montant" required class="mt-1 block w-full rounded-md shadow-sm p-2 form-input">
-                            </div>
-                            <div>
-                                <label for="budget-category" class="block text-gray-400">Catégorie</label>
-                                <input list="categories" id="budget-category" placeholder="Choisissez une catégorie" required class="mt-1 block w-full rounded-md shadow-sm p-2 form-input">
-                            </div>
-                            <button type="submit" class="w-full py-2 px-4 rounded-md font-semibold btn-primary">Définir le budget</button>
-                        </form>
-                    </div>
-                    <div class="card p-6">
-                        <h2 class="text-2xl font-semibold text-gray-100 mb-4">Budgets mensuels</h2>
-                        <ul id="budgets-list" class="space-y-4"></ul>
-                        <p id="no-budgets-message" class="text-center text-gray-500 hidden mt-4">Aucun budget défini pour ce mois.</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Onglet "Récurrent" -->
-            <div id="content-recurring" class="tab-content">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <div class="card p-6">
-                        <h2 class="text-2xl font-semibold text-gray-100 mb-4">Ajouter une Transaction Récurrente</h2>
-                        <form id="recurring-transaction-form" class="space-y-4">
-                            <div>
-                                <label for="recurring-description" class="block text-gray-400">Description</label>
-                                <input type="text" id="recurring-description" required class="mt-1 block w-full rounded-md shadow-sm p-2 form-input">
-                            </div>
-                            <div>
-                                <label for="recurring-amount" class="block text-gray-400">Montant</label>
-                                <input type="number" id="recurring-amount" required class="mt-1 block w-full rounded-md shadow-sm p-2 form-input">
-                            </div>
-                            <div>
-                                <label for="recurring-type" class="block text-gray-400">Type</label>
-                                <select id="recurring-type" required class="mt-1 block w-full rounded-md shadow-sm p-2 form-input">
-                                    <option value="income">Revenu</option>
-                                    <option value="expense">Dépense</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label for="recurring-category" class="block text-gray-400">Catégorie</label>
-                                <input list="categories" id="recurring-category" required class="mt-1 block w-full rounded-md shadow-sm p-2 form-input">
-                            </div>
-                            <div>
-                                <label for="recurring-day" class="block text-gray-400">Jour du mois</label>
-                                <input type="number" id="recurring-day" min="1" max="31" required class="mt-1 block w-full rounded-md shadow-sm p-2 form-input">
-                            </div>
-                            <button type="submit" class="w-full py-2 px-4 rounded-md font-semibold btn-primary">Ajouter la Transaction Récurrente</button>
-                        </form>
-                    </div>
-                    <div class="card p-6">
-                        <h2 class="text-2xl font-semibold text-gray-100 mb-4">Liste des Transactions Récurrentes</h2>
-                        <ul id="recurring-list" class="space-y-4"></ul>
-                        <p id="no-recurring-message" class="text-center text-gray-500 hidden mt-4">Aucune transaction récurrente définie.</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Onglet "Objectifs" -->
-            <div id="content-goals" class="tab-content">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <div class="card p-6">
-                        <h2 class="text-2xl font-semibold text-gray-100 mb-4">Définir un Objectif d'Épargne</h2>
-                        <form id="goal-form" class="space-y-4">
-                            <div>
-                                <label for="goal-name" class="block text-gray-400">Nom de l'objectif</label>
-                                <input type="text" id="goal-name" required class="mt-1 block w-full rounded-md shadow-sm p-2 form-input">
-                            </div>
-                            <div>
-                                <label for="goal-target" class="block text-gray-400">Montant cible</label>
-                                <input type="number" id="goal-target" required class="mt-1 block w-full rounded-md shadow-sm p-2 form-input">
-                            </div>
-                            <div>
-                                <label for="goal-current" class="block text-gray-400">Montant actuel</label>
-                                <input type="number" id="goal-current" required class="mt-1 block w-full rounded-md shadow-sm p-2 form-input">
-                            </div>
-                            <button type="submit" class="w-full py-2 px-4 rounded-md font-semibold btn-primary">Créer l'objectif</button>
-                        </form>
-                    </div>
-                    <div class="card p-6">
-                        <h2 class="text-2xl font-semibold text-gray-100 mb-4">Mes Objectifs</h2>
-                        <ul id="goals-list" class="space-y-4"></ul>
-                        <p id="no-goals-message" class="text-center text-gray-500 hidden mt-4">Aucun objectif défini.</p>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Section de partage -->
-            <div class="mt-8 card p-6">
-                <h2 class="text-2xl font-semibold text-gray-100 mb-4">Partager Mes Données</h2>
-                <div class="share-link-container">
-                    <input type="text" id="share-link-input" class="flex-1 rounded-md bg-gray-700 p-2 text-sm text-gray-300 mr-4" readonly>
-                    <button id="generate-share-link-btn" class="btn-primary py-2 px-4 rounded-md">Générer le lien</button>
-                    <button id="copy-share-link-btn" class="btn-secondary py-2 px-4 rounded-md hidden">Copier le lien</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modals -->
-    <div id="message-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 hidden flex items-center justify-center p-4">
-        <div class="bg-gray-800 rounded-lg shadow-xl p-6 max-w-sm w-full text-center">
-            <p id="modal-message" class="text-gray-200 mb-4"></p>
-            <button onclick="closeModal()" class="btn-primary py-2 px-4 rounded-md">Fermer</button>
-        </div>
-    </div>
-    
-    <div id="confirmation-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 hidden flex items-center justify-center p-4">
-        <div class="bg-gray-800 rounded-lg shadow-xl p-6 max-w-sm w-full text-center">
-            <p id="confirmation-message" class="text-gray-200 mb-4">Êtes-vous sûr de vouloir effacer toutes les transactions ? Cette action est irréversible.</p>
-            <div class="flex justify-center space-x-4">
-                <button id="confirm-clear-btn" class="py-2 px-4 rounded-md btn-delete font-semibold">Oui, effacer</button>
-                <button onclick="closeConfirmationModal()" class="py-2 px-4 rounded-md btn-secondary font-semibold">Annuler</button>
-            </div>
-        </div>
-    </div>
-    
-    <div id="account-name-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 hidden flex items-center justify-center p-4">
-        <div class="bg-gray-800 rounded-lg shadow-xl p-6 max-w-sm w-full text-center">
-            <p class="text-gray-200 mb-4">Nom du nouveau compte :</p>
-            <input type="text" id="new-account-name" class="block w-full rounded-md shadow-sm p-2 form-input mb-4" placeholder="Ex: Épargne">
-            <div class="flex justify-center space-x-4">
-                <button id="submit-account-name-btn" class="py-2 px-4 rounded-md btn-primary font-semibold">Ajouter</button>
-                <button onclick="closeAccountNameModal()" class="py-2 px-4 rounded-md btn-secondary font-semibold">Annuler</button>
-            </div>
-        </div>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <script type="module">
+        // Firebase services import
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, addDoc, setDoc, updateDoc, deleteDoc, onSnapshot, collection, query, where, getDocs, writeBatch } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, addDoc, updateDoc, onSnapshot, collection, query, where, getDocs, setDoc, deleteDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         
-        // S'assurer que Chart.js est chargé
-        const { Chart } = window;
-
-        // Configuration et initialisation de Firebase
+        // Firebase configuration and initialization
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-        let firebaseConfig = {};
-        try {
-            firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
-        } catch (e) {
-            console.error("Échec de l'analyse de la configuration firebase:", e);
-        }
-        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
-        
-        let app, db, auth;
+        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+
+        let app;
+        let db;
+        let auth;
         let userId = null;
-        let editingTransactionId = null;
-        let currentAccount = 'default';
+        let unsubscribeTickets = null;
+        let unsubscribeAnnouncements = null;
+        let unsubscribeNotifications = null;
 
-        // Éléments DOM
-        let transactionForm, totalBalanceEl, totalIncomeEl, totalExpenseEl, transactionsListEl, expensesChartCanvas, userIdDisplay, messageModal, modalMessage, noTransactionsMessageEl, monthFilterEl, typeFilterEl, clearDataBtn, confirmationModal, confirmClearBtn, incomeExpenseChartCanvas, submitBtn, cancelBtn, formTitle, budgetsListEl, budgetForm, accountSelectorEl, addAccountBtn, deleteAccountBtn, accountNameModal, newAccountNameInput, submitAccountNameBtn, balanceChartCanvas, exportBtn, recurringTransactionForm, recurringListEl, noBudgetsMessageEl, noRecurringMessageEl, goalsListEl, goalForm, noGoalsMessageEl, generateShareLinkBtn, shareLinkInput, copyShareLinkBtn, predictionTextEl;
-        let tabButtons, tabContents;
-
-        // Tableaux de données
-        let allTransactions = [];
-        let allBudgets = [];
-        let allAccounts = [];
-        let allRecurring = [];
-        let allGoals = [];
-
-        // Instances de graphiques
-        let expensesChart, incomeExpenseChart, balanceChart;
+        const reportForm = document.getElementById('report-form');
+        const problemList = document.getElementById('problem-list');
+        const statusMessage = document.getElementById('status-message');
+        const userIdDisplay = document.getElementById('user-id-display');
+        const solvedModal = document.getElementById('solved-modal');
+        const commentsModal = document.getElementById('comments-modal');
+        const commentsList = document.getElementById('comments-list');
+        const commentsForm = document.getElementById('comments-form');
+        const closeCommentsModalButton = document.getElementById('close-comments-modal');
+        const confirmSolveButton = document.getElementById('confirm-solve-button');
+        const cancelSolveButton = document.getElementById('cancel-solve-button');
+        const statusFilterButtons = document.querySelectorAll('.status-filter-btn');
+        const typeFilterSelect = document.getElementById('type-filter-select');
+        const searchInput = document.getElementById('search-input');
+        const deleteModal = document.getElementById('delete-modal');
+        const confirmDeleteButton = document.getElementById('confirm-delete-button');
+        const cancelDeleteButton = document.getElementById('cancel-delete-button');
+        const editModal = document.getElementById('edit-modal');
+        const editForm = document.getElementById('edit-form');
+        const closeEditModalButton = document.getElementById('close-edit-modal');
+        const notification = document.getElementById('notification');
+        const paginationContainer = document.getElementById('pagination-container');
+        const announcementList = document.getElementById('announcement-list');
+        const ticketsPerPage = 5;
+        let currentPage = 1;
         
-        // --- Fonctions Modales ---
-        function showModal(message) {
-            if (modalMessage && messageModal) {
-                modalMessage.textContent = message;
-                modalMessage.classList.add('text-lg', 'font-semibold');
-                messageModal.classList.remove('hidden');
-            }
-        }
-        window.closeModal = function() {
-            if (messageModal) {
-                messageModal.classList.add('hidden');
-            }
-        }
-        
-        function showConfirmationModal() {
-            if (confirmationModal) {
-                confirmationModal.classList.remove('hidden');
-            }
-        }
-        window.closeConfirmationModal = function() {
-            if (confirmationModal) {
-                confirmationModal.classList.add('hidden');
-            }
-        }
-        
-        function showAccountNameModal() {
-            if (accountNameModal) {
-                accountNameModal.classList.remove('hidden');
-                newAccountNameInput.focus();
-            }
-        }
-        window.closeAccountNameModal = function() {
-            if (accountNameModal) {
-                accountNameModal.classList.add('hidden');
-                newAccountNameInput.value = '';
-            }
-        }
+        let ticketToSolveId = null;
+        let ticketToDeleteId = null;
+        let ticketToEditId = null;
+        let currentTicketId = null;
+        let currentStatusFilter = 'all';
+        let currentSearchQuery = '';
+        let allTickets = [];
 
-        // --- Initialisation de Firebase et Écouteurs ---
-        async function initFirebase() {
-            if (Object.keys(firebaseConfig).length > 0) {
+        // Fonction pour obtenir la couleur et l'icône du type de ticket
+        const getTypeVisuals = (type) => {
+            switch(type) {
+                case 'materiel': return { name: 'Matériel', color: 'border-red-500', icon: 'fa-computer-mouse', text: 'text-red-500' };
+                case 'logiciel': return { name: 'Logiciel', color: 'border-blue-500', icon: 'fa-code', text: 'text-blue-500' };
+                case 'reseau': return { name: 'Réseau', color: 'border-yellow-500', icon: 'fa-wifi', text: 'text-yellow-500' };
+                case 'imprimante': return { name: 'Imprimante', color: 'border-green-500', icon: 'fa-print', text: 'text-green-500' };
+                case 'autre': return { name: 'Autre', color: 'border-gray-500', icon: 'fa-circle-exclamation', text: 'text-gray-500' };
+                default: return { name: 'Autre', color: 'border-gray-500', icon: 'fa-circle-exclamation', text: 'text-gray-500' };
+            }
+        };
+
+        // Render the list of tickets from Firestore
+        const renderProblems = (tickets) => {
+            // Apply all filters and sorting on the client side
+            const filteredTickets = tickets
+                .filter(ticket => {
+                    const statusMatch = (currentStatusFilter === 'all') || 
+                                        (currentStatusFilter === 'mine' && ticket.userId === userId) ||
+                                        (currentStatusFilter !== 'mine' && ticket.status === currentStatusFilter);
+                    const searchMatch = (currentSearchQuery === '') || ticket.description.toLowerCase().includes(currentSearchQuery.toLowerCase());
+                    return statusMatch && searchMatch;
+                })
+                .sort((a, b) => b.timestamp - a.timestamp); // Sort tickets by timestamp, newest first
+
+            allTickets = filteredTickets;
+            currentPage = 1; // Reset to first page after new filter
+            renderTicketsForPage(currentPage);
+            renderPaginationControls();
+        };
+
+        const renderTicketsForPage = (page) => {
+            problemList.innerHTML = '';
+            const startIndex = (page - 1) * ticketsPerPage;
+            const endIndex = startIndex + ticketsPerPage;
+            const ticketsToDisplay = allTickets.slice(startIndex, endIndex);
+            
+            if (ticketsToDisplay.length === 0) {
+                problemList.innerHTML = '<p class="text-center text-gray-400 font-medium text-wrap-balance">Aucun ticket correspondant aux filtres ou à la recherche.</p>';
+            }
+
+            ticketsToDisplay.forEach((data) => {
+                const isResolved = data.status === 'resolved';
+                const typeVisuals = getTypeVisuals(data.type);
+                const problemEl = document.createElement('div');
+                problemEl.className = `ticket-card flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-6 transition-all duration-300 ${isResolved ? 'opacity-70 border-gray-600' : 'border-l-4 ' + typeVisuals.color}`;
+                
+                const date = new Date(data.timestamp).toLocaleString('fr-FR');
+                
+                problemEl.innerHTML = `
+                    <div class="flex-1 w-full">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-sm font-semibold flex items-center space-x-2 ${typeVisuals.text}">
+                                <i class="fa-solid ${typeVisuals.icon} text-lg"></i>
+                                <span>${typeVisuals.name}</span>
+                            </span>
+                            <div class="flex items-center space-x-2">
+                                <span class="text-xs font-semibold px-2 py-1 rounded-full ${isResolved ? 'bg-green-600' : 'bg-red-600'} text-white">
+                                    ${isResolved ? 'Résolu' : 'Ouvert'}
+                                </span>
+                                <span class="bg-gray-600 text-gray-200 px-2 py-1 rounded-full text-xs font-semibold">
+                                    <i class="fa-solid fa-comment-dots mr-1"></i>
+                                    <span class="comment-count-badge" data-ticket-id="${data.id}">0</span>
+                                </span>
+                            </div>
+                        </div>
+                        <p class="text-gray-200 font-medium text-lg mt-1">${data.description}</p>
+                        <p class="text-xs text-gray-400 mt-3">
+                            Signalé par: <span class="font-mono text-xs">${data.userId.substring(0, 8)}...</span> le: ${date}
+                        </p>
+                    </div>
+                    <div class="flex flex-wrap justify-end sm:justify-start space-x-2 w-full sm:w-auto mt-4 sm:mt-0">
+                        <button class="comments-btn bg-gray-600 text-white px-3 py-1 rounded-full font-semibold text-xs hover:bg-gray-700 transition-colors duration-200" data-ticket-id="${data.id}" data-ticket-desc="${data.description}">
+                            <i class="fa-solid fa-comment-dots mr-1"></i> Commentaires
+                        </button>
+                        ${isResolved ? `
+                        ` : `
+                        <button class="solve-btn bg-blue-600 text-white px-3 py-1 rounded-full font-semibold text-xs hover:bg-blue-700 transition-colors duration-200" data-ticket-id="${data.id}">
+                            <i class="fa-solid fa-check mr-1"></i> Résolu
+                        </button>
+                        `}
+                        ${data.userId === userId ? `
+                        <button class="edit-btn bg-yellow-600 text-white px-3 py-1 rounded-full font-semibold text-xs hover:bg-yellow-700 transition-colors duration-200" data-ticket-id="${data.id}">
+                            <i class="fa-solid fa-edit mr-1"></i> Modifier
+                        </button>
+                        <button class="delete-btn bg-red-600 text-white px-3 py-1 rounded-full font-semibold text-xs hover:bg-red-700 transition-colors duration-200" data-ticket-id="${data.id}">
+                            <i class="fa-solid fa-trash mr-1"></i> Supprimer
+                        </button>
+                        ` : ''}
+                    </div>
+                `;
+                
+                const solveButton = problemEl.querySelector('.solve-btn');
+                if (solveButton) {
+                    solveButton.addEventListener('click', () => {
+                        ticketToSolveId = data.id;
+                        solvedModal.classList.remove('hidden');
+                    });
+                }
+                
+                const commentsButton = problemEl.querySelector('.comments-btn');
+                commentsButton.addEventListener('click', () => {
+                    showCommentsModal(data.id, data.description);
+                });
+
+                const deleteButton = problemEl.querySelector('.delete-btn');
+                if (deleteButton) {
+                    deleteButton.addEventListener('click', () => {
+                        ticketToDeleteId = data.id;
+                        deleteModal.classList.remove('hidden');
+                    });
+                }
+
+                const editButton = problemEl.querySelector('.edit-btn');
+                if (editButton) {
+                    editButton.addEventListener('click', async () => {
+                        ticketToEditId = data.id;
+                        const ticketRef = doc(db, `artifacts/${appId}/public/data/tickets`, ticketToEditId);
+                        const ticketSnap = await getDoc(ticketRef);
+                        if (ticketSnap.exists()) {
+                            const ticketData = ticketSnap.data();
+                            document.getElementById('edit-type').value = ticketData.type;
+                            document.getElementById('edit-description').value = ticketData.description;
+                            editModal.classList.remove('hidden');
+                        }
+                    });
+                }
+
+                problemList.appendChild(problemEl);
+                
+                // Add a real-time listener for comment count
+                const commentsRef = collection(db, `artifacts/${appId}/public/data/tickets/${data.id}/comments`);
+                onSnapshot(commentsRef, (snapshot) => {
+                    const count = snapshot.size;
+                    const commentCountBadge = problemEl.querySelector('.comment-count-badge');
+                    if (commentCountBadge) {
+                        commentCountBadge.textContent = count;
+                    }
+                });
+            });
+        };
+
+        const renderPaginationControls = () => {
+            paginationContainer.innerHTML = '';
+            const totalPages = Math.ceil(allTickets.length / ticketsPerPage);
+            if (totalPages <= 1) {
+                return;
+            }
+
+            const createPageButton = (text, pageNumber, isActive = false, isDisabled = false) => {
+                const button = document.createElement('button');
+                button.textContent = text;
+                button.dataset.page = pageNumber;
+                button.className = `px-4 py-2 mx-1 rounded-lg text-sm font-semibold transition-colors duration-200 ${isActive ? 'bg-blue-600 text-white' : 'bg-gray-600 text-gray-200 hover:bg-gray-500'} ${isDisabled ? 'opacity-50 cursor-not-allowed' : ''}`;
+                button.disabled = isDisabled;
+                button.addEventListener('click', () => {
+                    currentPage = pageNumber;
+                    renderTicketsForPage(currentPage);
+                    renderPaginationControls();
+                });
+                return button;
+            };
+
+            // Previous button
+            paginationContainer.appendChild(createPageButton('Précédent', currentPage - 1, false, currentPage === 1));
+
+            // Page numbers
+            for (let i = 1; i <= totalPages; i++) {
+                paginationContainer.appendChild(createPageButton(i, i, i === currentPage));
+            }
+
+            // Next button
+            paginationContainer.appendChild(createPageButton('Suivant', currentPage + 1, false, currentPage === totalPages));
+        };
+
+        const renderAnnouncements = (announcements) => {
+            announcementList.innerHTML = '';
+            announcements.forEach(announcement => {
+                const date = new Date(announcement.timestamp).toLocaleDateString('fr-FR', {
+                    day: 'numeric', month: 'long'
+                });
+                const announcementEl = document.createElement('div');
+                announcementEl.className = 'bg-gray-600 p-4 rounded-lg announcement-card';
+                announcementEl.innerHTML = `
+                    <p class="text-sm font-medium text-gray-400">${date}</p>
+                    <h3 class="font-bold text-lg text-gray-200 mt-1">${announcement.title}</h3>
+                    <p class="text-gray-300 text-sm mt-1">${announcement.content}</p>
+                `;
+                announcementList.appendChild(announcementEl);
+            });
+        };
+
+        // Handles data fetching and filtering from Firestore
+        const fetchAndRenderTickets = () => {
+            if (!db || !userId) return;
+            
+            if (unsubscribeTickets) {
+                unsubscribeTickets();
+            }
+            if (unsubscribeNotifications) {
+                unsubscribeNotifications();
+            }
+
+            const ticketsRef = collection(db, `artifacts/${appId}/public/data/tickets`);
+            let ticketsQuery = query(ticketsRef);
+
+            // Fetch ALL tickets and apply filters client-side
+            unsubscribeTickets = onSnapshot(ticketsQuery, (snapshot) => {
+                const tickets = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                renderProblems(tickets);
+            }, (error) => {
+                console.error("Error fetching tickets: ", error);
+            });
+
+            // Listener for notifications (only for the current user's tickets)
+            const myTicketsQuery = query(ticketsRef, where('userId', '==', userId));
+            unsubscribeNotifications = onSnapshot(myTicketsQuery, (snapshot) => {
+                snapshot.docChanges().forEach((change) => {
+                    if (change.type === "modified") {
+                        const ticketData = change.doc.data();
+                        if (ticketData.status === 'resolved') {
+                            showNotification(`Votre ticket "${ticketData.description.substring(0, 30)}..." a été résolu !`);
+                        }
+                    }
+                });
+            }, (error) => {
+                console.error("Error fetching notifications: ", error);
+            });
+        };
+
+        const fetchAnnouncements = () => {
+            if (!db) return;
+
+            if (unsubscribeAnnouncements) {
+                unsubscribeAnnouncements();
+            }
+
+            const announcementsRef = collection(db, `artifacts/${appId}/public/data/announcements`);
+            const announcementsQuery = query(announcementsRef);
+
+            unsubscribeAnnouncements = onSnapshot(announcementsQuery, (snapshot) => {
+                const announcements = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                announcements.sort((a, b) => b.timestamp - a.timestamp); // Sort by newest first
+                renderAnnouncements(announcements);
+            }, (error) => {
+                console.error("Error fetching announcements: ", error);
+            });
+        };
+
+        // Fonction pour afficher une notification temporaire
+        const showNotification = (message) => {
+            notification.textContent = message;
+            notification.classList.add('show');
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 5000);
+        };
+
+        // Event listeners for filters
+        statusFilterButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                statusFilterButtons.forEach(btn => {
+                    btn.classList.remove('bg-blue-600', 'text-white');
+                    btn.classList.add('bg-gray-600', 'text-gray-200', 'hover:bg-gray-500');
+                });
+                e.target.classList.remove('bg-gray-600', 'text-gray-200', 'hover:bg-gray-500');
+                e.target.classList.add('bg-blue-600', 'text-white');
+                currentStatusFilter = e.target.dataset.status;
+                fetchAndRenderTickets();
+            });
+        });
+
+        searchInput.addEventListener('input', (e) => {
+            currentSearchQuery = e.target.value;
+            fetchAndRenderTickets();
+        });
+
+        // Handle form submission
+        reportForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const type = document.getElementById('report-type').value;
+            const description = document.getElementById('report-description').value;
+            
+            try {
+                await addDoc(collection(db, `artifacts/${appId}/public/data/tickets`), {
+                    type,
+                    description,
+                    timestamp: Date.now(),
+                    userId: userId,
+                    status: 'open'
+                });
+
+                reportForm.reset();
+                showNotification('Ticket soumis avec succès !');
+            } catch (error) {
+                console.error("Erreur lors de l'envoi du ticket: ", error);
+                statusMessage.textContent = 'Erreur lors de la soumission du ticket.';
+                statusMessage.classList.add('text-red-400');
+                statusMessage.classList.remove('hidden');
+            } finally {
+                setTimeout(() => {
+                    statusMessage.classList.add('hidden');
+                    statusMessage.classList.remove('text-red-400');
+                }, 5000);
+            }
+        });
+
+        // Handle ticket editing
+        editForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const type = document.getElementById('edit-type').value;
+            const description = document.getElementById('edit-description').value;
+            
+            if (ticketToEditId) {
                 try {
-                    app = initializeApp(firebaseConfig);
-                    db = getFirestore(app);
-                    auth = getAuth(app);
-
-                    if (initialAuthToken) {
-                        await signInWithCustomToken(auth, initialAuthToken);
-                    } else {
-                        await signInAnonymously(auth);
-                    }
-                    userId = auth.currentUser.uid;
-                    if(userIdDisplay) {
-                        userIdDisplay.textContent = `ID Utilisateur: ${userId}`;
-                    }
-                    showModal("Authentification réussie. Les données sont sauvegardées.");
-                    listenForAccounts();
+                    const ticketRef = doc(db, `artifacts/${appId}/public/data/tickets`, ticketToEditId);
+                    await updateDoc(ticketRef, {
+                        type,
+                        description
+                    });
+                    editModal.classList.add('hidden');
+                    ticketToEditId = null;
                 } catch (error) {
-                    console.error("Échec de l'initialisation de Firebase:", error);
-                    showModal("Échec de l'initialisation de Firebase. Les données ne seront pas sauvegardées.");
-                }
-            } else {
-                console.error("La configuration Firebase est vide.");
-                showModal("Erreur: La configuration Firebase est manquante. Les données ne seront pas sauvegardées.");
-            }
-        }
-
-        function listenForAccounts() {
-            if (!userId || !db) return;
-            onSnapshot(collection(db, `artifacts/${appId}/users/${userId}/accounts`), (snapshot) => {
-                allAccounts = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                updateAccountSelector();
-                if (accountSelectorEl.value !== currentAccount) {
-                    currentAccount = accountSelectorEl.value;
-                }
-                listenForTransactions();
-                listenForBudgets();
-                listenForRecurring();
-                listenForGoals();
-            }, (error) => {
-                console.error("Erreur de récupération des comptes:", error);
-            });
-        }
-        
-        function listenForTransactions() {
-            if (!userId || !db) return;
-            const transactionsRef = collection(db, `artifacts/${appId}/users/${userId}/accounts/${currentAccount}/transactions`);
-            onSnapshot(transactionsRef, (snapshot) => {
-                allTransactions = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                allTransactions.sort((a, b) => new Date(b.date) - new Date(a.date));
-                populateMonthFilter();
-                updateDashboard();
-                filterAndDisplayTransactions();
-                updateGoalsList(); // Mettre à jour les objectifs après chaque transaction
-            }, (error) => {
-                console.error("Erreur de récupération des transactions:", error);
-                showModal("Erreur de récupération des données.");
-            });
-        }
-        
-        function listenForBudgets() {
-            if (!userId || !db) return;
-            onSnapshot(collection(db, `artifacts/${appId}/users/${userId}/budgets`), (snapshot) => {
-                allBudgets = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                updateDashboard();
-                updateBudgetsList();
-            }, (error) => {
-                console.error("Erreur de récupération des budgets:", error);
-            });
-        }
-
-        function listenForRecurring() {
-            if (!userId || !db) return;
-            onSnapshot(collection(db, `artifacts/${appId}/users/${userId}/recurring-transactions`), (snapshot) => {
-                allRecurring = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                updateRecurringList();
-            }, (error) => {
-                console.error("Erreur de récupération des transactions récurrentes:", error);
-            });
-        }
-
-        function listenForGoals() {
-            if (!userId || !db) return;
-            onSnapshot(collection(db, `artifacts/${appId}/users/${userId}/goals`), (snapshot) => {
-                allGoals = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                updateGoalsList();
-            }, (error) => {
-                console.error("Erreur de récupération des objectifs:", error);
-            });
-        }
-        
-        // --- Fonctions de mise à jour de l'interface utilisateur ---
-        function updateAccountSelector() {
-            if (!accountSelectorEl) return;
-            accountSelectorEl.innerHTML = '';
-            
-            if (!allAccounts.some(acc => acc.id === 'default')) {
-                allAccounts.unshift({ id: 'default', name: 'Principal' });
-            }
-            allAccounts.forEach(account => {
-                const option = document.createElement('option');
-                option.value = account.id;
-                option.textContent = account.name;
-                accountSelectorEl.appendChild(option);
-            });
-            accountSelectorEl.value = currentAccount;
-        }
-
-        function updateDashboard() {
-            let totalBalance = 0;
-            let totalIncome = 0;
-            let totalExpense = 0;
-            const expensesByCategory = {};
-            const monthlyData = {};
-            const dailyBalance = {};
-            
-            const sortedTransactions = [...allTransactions].sort((a, b) => new Date(a.date) - new Date(b.date));
-            const firstDate = sortedTransactions.length > 0 ? new Date(sortedTransactions[0].date) : new Date();
-
-            const today = new Date();
-            const lastDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-
-            // Initialiser les soldes quotidiens
-            for (let d = new Date(firstDate); d <= lastDate; d.setDate(d.getDate() + 1)) {
-                const dateStr = d.toISOString().slice(0, 10);
-                dailyBalance[dateStr] = 0;
-            }
-
-            let cumulativeBalance = 0;
-            sortedTransactions.forEach(t => {
-                const amount = parseFloat(t.amount);
-                if (t.type === 'income') {
-                    totalIncome += amount;
-                    cumulativeBalance += amount;
-                } else {
-                    totalExpense += amount;
-                    cumulativeBalance -= amount;
-                }
-                const dateStr = t.date;
-                dailyBalance[dateStr] = cumulativeBalance;
-
-                const monthYear = new Date(t.date).toLocaleString('fr-FR', { month: 'short', year: 'numeric' });
-                if (!monthlyData[monthYear]) { monthlyData[monthYear] = { income: 0, expense: 0 }; }
-                if (t.type === 'income') { monthlyData[monthYear].income += amount; } else { monthlyData[monthYear].expense += amount; }
-                const category = t.category.toLowerCase().trim();
-                if (t.type === 'expense') { expensesByCategory[category] = (expensesByCategory[category] || 0) + amount; }
-            });
-            
-            // Calculer le solde quotidien
-            const allDates = Object.keys(dailyBalance).sort();
-            for (let i = 1; i < allDates.length; i++) {
-                if (dailyBalance[allDates[i]] === 0) {
-                    dailyBalance[allDates[i]] = dailyBalance[allDates[i-1]];
+                    console.error("Erreur lors de la mise à jour du ticket: ", error);
                 }
             }
-            totalBalance = cumulativeBalance;
+        });
 
-            if(totalBalanceEl) totalBalanceEl.textContent = `${totalBalance.toFixed(2)}€`;
-            if(totalIncomeEl) totalIncomeEl.textContent = `${totalIncome.toFixed(2)}€`;
-            if(totalExpenseEl) totalExpenseEl.textContent = `${totalExpense.toFixed(2)}€`;
-            
-            updateExpensesChart(expensesByCategory);
-            updateIncomeExpenseChart(monthlyData);
-            updateBalanceChart(dailyBalance);
-            updatePredictionText();
-        }
+        closeEditModalButton.addEventListener('click', () => {
+            editModal.classList.add('hidden');
+            ticketToEditId = null;
+        });
 
-        function updatePredictionText() {
-            if (!predictionTextEl) return;
-            const monthlyExpenses = allTransactions.reduce((acc, t) => {
-                if (t.type === 'expense') {
-                    const month = t.date.slice(0, 7);
-                    acc[month] = (acc[month] || 0) + parseFloat(t.amount);
+        // Handle ticket resolution
+        confirmSolveButton.addEventListener('click', async () => {
+            if (ticketToSolveId) {
+                try {
+                    const ticketRef = doc(db, `artifacts/${appId}/public/data/tickets`, ticketToSolveId);
+                    await updateDoc(ticketRef, {
+                        status: 'resolved'
+                    });
+                    solvedModal.classList.add('hidden');
+                    ticketToSolveId = null;
+                } catch (error) {
+                    console.error("Erreur lors de la mise à jour du ticket: ", error);
                 }
-                return acc;
-            }, {});
+            }
+        });
 
-            const months = Object.keys(monthlyExpenses);
-            if (months.length < 3) {
-                predictionTextEl.textContent = "Continuez à enregistrer vos transactions pour obtenir une prévision !";
+        cancelSolveButton.addEventListener('click', () => {
+            solvedModal.classList.add('hidden');
+            ticketToSolveId = null;
+        });
+
+        // Handle ticket deletion
+        confirmDeleteButton.addEventListener('click', async () => {
+            if (ticketToDeleteId) {
+                try {
+                    const ticketRef = doc(db, `artifacts/${appId}/public/data/tickets`, ticketToDeleteId);
+                    await deleteDoc(ticketRef);
+                    deleteModal.classList.add('hidden');
+                    ticketToDeleteId = null;
+                } catch (error) {
+                    console.error("Erreur lors de la suppression du ticket: ", error);
+                }
+            }
+        });
+
+        cancelDeleteButton.addEventListener('click', () => {
+            deleteModal.classList.add('hidden');
+            ticketToDeleteId = null;
+        });
+
+        // Handle comments logic
+        const showCommentsModal = (ticketId, description) => {
+            currentTicketId = ticketId;
+            commentsModal.classList.remove('hidden');
+            document.getElementById('comments-ticket-desc').textContent = `Commentaires pour : "${description}"`;
+
+            const commentsRef = collection(db, `artifacts/${appId}/public/data/tickets/${ticketId}/comments`);
+            onSnapshot(commentsRef, (snapshot) => {
+                const comments = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                renderComments(comments);
+            }, (error) => {
+                console.error("Error fetching comments: ", error);
+            });
+        };
+
+        const renderComments = (comments) => {
+            comments.sort((a, b) => b.timestamp - a.timestamp); // Sort by newest first
+            commentsList.innerHTML = '';
+            if (comments.length === 0) {
+                commentsList.innerHTML = '<p class="text-center text-gray-400">Aucun commentaire pour le moment.</p>';
+                return;
+            }
+
+            comments.forEach(comment => {
+                const commentEl = document.createElement('div');
+                commentEl.className = 'bg-gray-600 p-4 rounded-lg space-y-1 mb-2';
+                const date = new Date(comment.timestamp).toLocaleString('fr-FR');
+                commentEl.innerHTML = `
+                    <p class="text-gray-200">${comment.text}</p>
+                    <p class="text-xs text-gray-400">
+                        Par: <span class="font-mono">${comment.userId.substring(0, 8)}...</span> le: ${date}
+                    </p>
+                `;
+                commentsList.appendChild(commentEl);
+            });
+            commentsList.scrollTop = commentsList.scrollHeight;
+        };
+
+        commentsForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const commentText = document.getElementById('comment-text').value;
+
+            if (commentText.trim() === '' || !currentTicketId) {
                 return;
             }
             
-            const expenseData = months.sort().map(month => monthlyExpenses[month]);
-            const averageExpense = expenseData.reduce((sum, val) => sum + val, 0) / expenseData.length;
-            const prediction = averageExpense;
-            
-            predictionTextEl.textContent = `D'après vos habitudes de dépenses, vos dépenses mensuelles prévues sont d'environ ${prediction.toFixed(2)}€.`;
-        }
-        
-        function populateMonthFilter() {
-            const months = ['Tous les mois', 'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
-            const transactionsMonths = new Set();
-            allTransactions.forEach(t => {
-                const date = new Date(t.date);
-                transactionsMonths.add(date.getMonth() + 1);
-            });
-            
-            monthFilterEl.innerHTML = '';
-            months.forEach((month, index) => {
-                if (index === 0 || transactionsMonths.has(index)) {
-                    const option = document.createElement('option');
-                    option.value = index.toString();
-                    option.textContent = month;
-                    monthFilterEl.appendChild(option);
-                }
-            });
-
-            const today = new Date();
-            const currentMonth = today.getMonth() + 1;
-            if (transactionsMonths.has(currentMonth)) {
-                monthFilterEl.value = currentMonth.toString();
-            } else {
-                monthFilterEl.value = '0';
-            }
-        }
-        
-        function filterAndDisplayTransactions() {
-            const selectedMonth = parseInt(monthFilterEl.value, 10);
-            const selectedType = typeFilterEl.value;
-            
-            let filteredTransactions = allTransactions;
-            
-            if (selectedMonth !== 0) {
-                filteredTransactions = filteredTransactions.filter(t => new Date(t.date).getMonth() + 1 === selectedMonth);
-            }
-            
-            if (selectedType !== 'all') {
-                filteredTransactions = filteredTransactions.filter(t => t.type === selectedType);
-            }
-            
-            transactionsListEl.innerHTML = '';
-            if (filteredTransactions.length === 0) {
-                noTransactionsMessageEl.classList.remove('hidden');
-            } else {
-                noTransactionsMessageEl.classList.add('hidden');
-                filteredTransactions.forEach(t => {
-                    const newLi = createTransactionElement(t);
-                    transactionsListEl.appendChild(newLi);
-                });
-            }
-        }
-
-        function createTransactionElement(t) {
-            const li = document.createElement('li');
-            li.className = 'flex items-center justify-between p-4 bg-gray-800 rounded-lg shadow-sm hover:bg-gray-700 transition duration-300';
-            li.setAttribute('data-id', t.id);
-            const formattedDate = new Date(t.date).toLocaleDateString('fr-FR', { year: 'numeric', month: 'short', day: 'numeric' });
-            const isIncome = t.type === 'income';
-
-            li.innerHTML = `
-                <div class="flex items-center space-x-3">
-                    <div class="bg-gray-600 rounded-full w-10 h-10 flex items-center justify-center ${isIncome ? 'text-green-400' : 'text-red-400'}">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${isIncome ? 'M12 6v6m0 0v6m0-6h6m-6 0H6' : 'M18 12H6'}" />
-                        </svg>
-                    </div>
-                    <div>
-                        <p class="font-semibold text-gray-100">${t.description}</p>
-                        <p class="text-sm text-gray-400">${formattedDate} - ${t.category}</p>
-                    </div>
-                </div>
-                <div class="flex items-center space-x-4">
-                    <p class="font-bold text-lg ${isIncome ? 'text-green-400' : 'text-red-400'}">
-                        ${isIncome ? '+' : '-'}${parseFloat(t.amount).toFixed(2)}€
-                    </p>
-                    <button class="add-recurring-btn text-teal-400 hover:text-teal-500 transition duration-300" data-id="${t.id}" title="Ajouter aux transactions récurrentes">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" />
-                        </svg>
-                    </button>
-                    <button class="edit-btn text-blue-400 hover:text-blue-500 transition duration-300" data-id="${t.id}">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                            <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
-                            <path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" />
-                        </svg>
-                    </button>
-                    <button class="delete-btn text-red-400 hover:text-red-500 transition duration-300" data-id="${t.id}">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M9 2a1 1 00-.894.553L7.382 4H4a1 1 000 2v10a2 2 002 2h8a2 2 002-2V6a1 1 000-2h-3.382l-.724-1.447A1 1 0011 2H9zM7 8a1 1 012 0v6a1 1 011-2 0V8zm6 0a1 1 011 1v5a1 1 01-2 0V9a1 1 011-1z" clip-rule="evenodd" />
-                        </svg>
-                    </button>
-                </div>
-            `;
-            return li;
-        }
-        
-        function updateBudgetsList() {
-            if (!budgetsListEl) return;
-            budgetsListEl.innerHTML = '';
-            
-            const expensesByCategory = allTransactions.reduce((acc, t) => {
-                if (t.type === 'expense') {
-                    const category = t.category.toLowerCase().trim();
-                    acc[category] = (acc[category] || 0) + parseFloat(t.amount);
-                }
-                return acc;
-            }, {});
-            
-            const currentMonthYear = new Date().toLocaleString('fr-FR', { month: 'short', year: 'numeric' }).toLowerCase();
-            const monthlyBudgets = allBudgets.filter(b => {
-                const budgetMonthYear = new Date(b.timestamp).toLocaleString('fr-FR', { month: 'short', year: 'numeric' }).toLowerCase();
-                return budgetMonthYear === currentMonthYear;
-            });
-            
-            if (monthlyBudgets.length === 0) {
-                noBudgetsMessageEl.classList.remove('hidden');
-            } else {
-                noBudgetsMessageEl.classList.add('hidden');
-                monthlyBudgets.forEach(budget => {
-                    const category = budget.category.toLowerCase().trim();
-                    const spent = expensesByCategory[category] || 0;
-                    const remaining = budget.amount - spent;
-                    const percentageSpent = (spent / budget.amount) * 100;
-                    
-                    const li = document.createElement('li');
-                    li.className = 'bg-gray-700 p-4 rounded-lg shadow-sm';
-                    let alertDiv = '';
-                    if (percentageSpent >= 100) {
-                        alertDiv = `<div class="budget-alert mt-2">Budget dépassé ! Vous avez dépensé ${spent.toFixed(2)}€ sur ${parseFloat(budget.amount).toFixed(2)}€.</div>`;
-                    }
-                    li.innerHTML = `
-                        <div class="flex items-center justify-between mb-2">
-                            <h4 class="font-semibold text-gray-100">${budget.category}</h4>
-                            <p class="text-sm font-bold ${remaining < 0 ? 'text-red-400' : 'text-green-400'}">${remaining.toFixed(2)}€ restants</p>
-                        </div>
-                        <div class="w-full bg-gray-600 rounded-full h-2.5">
-                            <div class="h-2.5 rounded-full ${percentageSpent >= 100 ? 'bg-red-500' : (percentageSpent > 75 ? 'bg-yellow-500' : 'bg-green-500')}" style="width: ${Math.min(percentageSpent, 100)}%"></div>
-                        </div>
-                        <p class="text-right text-xs mt-1 text-gray-400">${spent.toFixed(2)}€ / ${parseFloat(budget.amount).toFixed(2)}€</p>
-                        ${alertDiv}
-                    `;
-                    budgetsListEl.appendChild(li);
-                });
-            }
-        }
-        
-        function updateRecurringList() {
-            if (!recurringListEl) return;
-            recurringListEl.innerHTML = '';
-            
-            if (allRecurring.length === 0) {
-                noRecurringMessageEl.classList.remove('hidden');
-            } else {
-                noRecurringMessageEl.classList.add('hidden');
-                allRecurring.forEach(r => {
-                    const li = document.createElement('li');
-                    li.className = 'flex items-center justify-between p-4 bg-gray-800 rounded-lg shadow-sm';
-                    li.innerHTML = `
-                        <div>
-                            <p class="font-semibold">${r.description}</p>
-                            <p class="text-sm text-gray-400">${r.category} - ${r.type}</p>
-                        </div>
-                        <div class="flex items-center space-x-4">
-                            <p class="font-bold text-lg">${r.amount}€</p>
-                            <button class="delete-recurring-btn text-red-400 hover:text-red-500 transition duration-300" data-id="${r.id}">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd" d="M9 2a1 1 00-.894.553L7.382 4H4a1 1 000 2v10a2 2 002 2h8a2 2 002-2V6a1 1 000-2h-3.382l-.724-1.447A1 1 0011 2H9zM7 8a1 1 012 0v6a1 1 011-2 0V8zm6 0a1 1 011 1v5a1 1 01-2 0V9a1 1 011-1z" clip-rule="evenodd" />
-                                </svg>
-                            </button>
-                        </div>
-                    `;
-                    recurringListEl.appendChild(li);
-                });
-            }
-        }
-
-        function updateGoalsList() {
-            if (!goalsListEl) return;
-            goalsListEl.innerHTML = '';
-            
-            if (allGoals.length === 0) {
-                noGoalsMessageEl.classList.remove('hidden');
-            } else {
-                noGoalsMessageEl.classList.add('hidden');
-                allGoals.forEach(goal => {
-                    const progress = parseFloat(goal.currentAmount) / parseFloat(goal.targetAmount);
-                    const progressPercentage = Math.min(progress * 100, 100);
-                    const isCompleted = progressPercentage >= 100;
-                    
-                    const li = document.createElement('li');
-                    li.className = 'bg-gray-700 p-4 rounded-lg shadow-sm';
-                    li.innerHTML = `
-                        <div class="flex items-center justify-between mb-2">
-                            <h4 class="font-semibold text-gray-100">${goal.name}</h4>
-                            <p class="text-sm font-bold text-gray-400">${parseFloat(goal.currentAmount).toFixed(2)}€ / ${parseFloat(goal.targetAmount).toFixed(2)}€</p>
-                        </div>
-                        <div class="progress-bar-container">
-                            <div class="progress-bar" style="width: ${progressPercentage}%"></div>
-                        </div>
-                        <p class="text-right text-xs mt-1 text-gray-400">${progressPercentage.toFixed(0)}% complété</p>
-                        <div class="flex justify-end mt-2">
-                            <button class="delete-goal-btn text-red-400 hover:text-red-500 transition duration-300" data-id="${goal.id}">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd" d="M9 2a1 1 00-.894.553L7.382 4H4a1 1 000 2v10a2 2 002 2h8a2 2 002-2V6a1 1 000-2h-3.382l-.724-1.447A1 1 0011 2H9zM7 8a1 1 012 0v6a1 1 011-2 0V8zm6 0a1 1 011 1v5a1 1 01-2 0V9a1 1 011-1z" clip-rule="evenodd" />
-                                </svg>
-                            </button>
-                        </div>
-                    `;
-                    goalsListEl.appendChild(li);
-                });
-            }
-        }
-        
-        function updateExpensesChart(data) {
-            const categories = Object.keys(data);
-            const amounts = Object.values(data);
-            const dynamicColors = categories.map(() => `hsl(${Math.random() * 360}, 70%, 50%)`);
-
-            if (expensesChart) {
-                expensesChart.data.labels = categories;
-                expensesChart.data.datasets[0].data = amounts;
-                expensesChart.data.datasets[0].backgroundColor = dynamicColors;
-                expensesChart.update();
-            } else if (expensesChartCanvas && typeof Chart !== 'undefined') {
-                expensesChart = new Chart(expensesChartCanvas.getContext('2d'), {
-                    type: 'doughnut', data: { labels: categories, datasets: [{ data: amounts, backgroundColor: dynamicColors, hoverOffset: 10 }] },
-                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top', align: 'center', labels: { color: '#e2e8f0' } }, tooltip: { callbacks: { label: c => `${c.label}: ${c.parsed.toFixed(2)}€` } } } }
-                });
-            }
-        }
-        
-        function updateIncomeExpenseChart(data) {
-            const sortedMonths = Object.keys(data).sort((a, b) => new Date(a) - new Date(b));
-            const incomeData = sortedMonths.map(month => data[month].income);
-            const expenseData = sortedMonths.map(month => data[month].expense);
-
-            if (incomeExpenseChart) {
-                incomeExpenseChart.data.labels = sortedMonths;
-                incomeExpenseChart.data.datasets[0].data = incomeData;
-                incomeExpenseChart.data.datasets[1].data = expenseData;
-                incomeExpenseChart.update();
-            } else if (incomeExpenseChartCanvas && typeof Chart !== 'undefined') {
-                incomeExpenseChart = new Chart(incomeExpenseChartCanvas.getContext('2d'), {
-                    type: 'bar', data: { labels: sortedMonths, datasets: [{ label: 'Revenus', data: incomeData, backgroundColor: '#38a169', borderRadius: 5 }, { label: 'Dépenses', data: expenseData, backgroundColor: '#e53e3e', borderRadius: 5 }] },
-                    options: { responsive: true, maintainAspectRatio: false, scales: { x: { grid: { color: 'rgba(255, 255, 255, 0.1)' }, ticks: { color: '#e2e8f0' } }, y: { beginAtZero: true, grid: { color: 'rgba(255, 255, 255, 0.1)' }, ticks: { color: '#e2e8f0', callback: v => `${v}€` } } }, plugins: { legend: { labels: { color: '#e2e8f0' } } } }
-                });
-            }
-        }
-        
-        function updateBalanceChart(data) {
-            const sortedDates = Object.keys(data).sort();
-            const amounts = sortedDates.map(date => data[date]);
-
-            if (balanceChart) {
-                balanceChart.data.labels = sortedDates;
-                balanceChart.data.datasets[0].data = amounts;
-                balanceChart.update();
-            } else if (balanceChartCanvas && typeof Chart !== 'undefined') {
-                balanceChart = new Chart(balanceChartCanvas.getContext('2d'), {
-                    type: 'line', data: { labels: sortedDates, datasets: [{ label: 'Solde Total', data: amounts, borderColor: '#63b3ed', borderWidth: 2, fill: true, tension: 0.1 }] },
-                    options: { responsive: true, maintainAspectRatio: false, scales: { x: { grid: { color: 'rgba(255, 255, 255, 0.1)' }, ticks: { color: '#e2e8f0' } }, y: { beginAtZero: false, grid: { color: 'rgba(255, 255, 255, 0.1)' }, ticks: { color: '#e2e8f0', callback: v => `${v}€` } } }, plugins: { legend: { labels: { color: '#e2e8f0' } } } }
-                });
-            }
-        }
-
-        // --- Gestion des événements et logique métier ---
-        async function handleFormSubmit(e) {
-            e.preventDefault();
-            if (!userId) { showModal("Veuillez attendre la connexion de l'utilisateur."); return; }
-            const description = document.getElementById('description').value;
-            const amount = parseFloat(document.getElementById('amount').value);
-            const type = document.getElementById('type').value;
-            const category = document.getElementById('category').value;
-            const date = document.getElementById('date').value;
-            if (isNaN(amount) || amount <= 0) { showModal("Veuillez entrer un montant valide."); return; }
-            
-            const transactionData = { description, amount, type, category, date, timestamp: new Date().getTime() };
             try {
-                const transactionsRef = collection(db, `artifacts/${appId}/users/${userId}/accounts/${currentAccount}/transactions`);
-                if (editingTransactionId) {
-                    await updateDoc(doc(transactionsRef, editingTransactionId), transactionData);
-                    resetForm();
-                    showModal("Transaction mise à jour avec succès.");
-                } else {
-                    await addDoc(transactionsRef, transactionData);
-                    if(transactionForm) transactionForm.reset();
-                    document.getElementById('date').valueAsDate = new Date();
-                }
-            } catch (error) {
-                console.error("Erreur lors de l'ajout/mise à jour:", error);
-                showModal("Erreur. Veuillez réessayer.");
-            }
-        }
-        
-        async function handleBudgetSubmit(e) {
-            e.preventDefault();
-            if (!userId) { showModal("Veuillez attendre la connexion de l'utilisateur."); return; }
-            const amount = parseFloat(document.getElementById('budget-amount').value);
-            const category = document.getElementById('budget-category').value;
-            const monthYear = new Date().toLocaleString('fr-FR', { month: 'short', year: 'numeric' }).toLowerCase();
-            if (isNaN(amount) || amount <= 0) { showModal("Veuillez entrer un montant valide pour le budget."); return; }
-            
-            const budgetData = { amount, category, month: monthYear, timestamp: new Date().getTime() };
-            try {
-                const budgetDocId = `${category.replace(/\s/g, '').toLowerCase()}-${monthYear.replace(/\s/g, '').toLowerCase()}`;
-                await setDoc(doc(db, `artifacts/${appId}/users/${userId}/budgets`, budgetDocId), budgetData);
-                if(budgetForm) budgetForm.reset();
-                showModal("Budget défini avec succès.");
-            } catch (error) {
-                console.error("Erreur lors de la définition du budget:", error);
-                showModal("Erreur. Veuillez réessayer.");
-            }
-        }
-
-        async function handleRecurringTransactionSubmit(e) {
-            e.preventDefault();
-            if (!userId) { showModal("Veuillez attendre la connexion de l'utilisateur."); return; }
-            const description = document.getElementById('recurring-description').value;
-            const amount = parseFloat(document.getElementById('recurring-amount').value);
-            const type = document.getElementById('recurring-type').value;
-            const category = document.getElementById('recurring-category').value;
-            const day = parseInt(document.getElementById('recurring-day').value, 10);
-            if (isNaN(amount) || amount <= 0 || isNaN(day) || day < 1 || day > 31) { showModal("Veuillez entrer un montant et un jour valides."); return; }
-            
-            const recurringData = { description, amount, type, category, dayOfMonth: day };
-            try {
-                await addDoc(collection(db, `artifacts/${appId}/users/${userId}/recurring-transactions`), recurringData);
-                if(recurringTransactionForm) recurringTransactionForm.reset();
-                showModal("Transaction récurrente ajoutée avec succès.");
-            } catch (error) {
-                console.error("Erreur lors de l'ajout de la transaction récurrente:", error);
-                showModal("Erreur. Veuillez réessayer.");
-            }
-        }
-        
-        async function runRecurringTransactions() {
-            if (!userId || !db) return;
-            const today = new Date();
-            const currentDay = today.getDate();
-            const todayDateString = today.toISOString().slice(0, 10);
-
-            const recurringRef = collection(db, `artifacts/${appId}/users/${userId}/recurring-transactions`);
-            const transactionRef = collection(db, `artifacts/${appId}/users/${userId}/accounts/${currentAccount}/transactions`);
-            
-            const recurringSnapshot = await getDocs(recurringRef);
-            
-            recurringSnapshot.forEach(async docSnapshot => {
-                const recurring = docSnapshot.data();
-                if (recurring.dayOfMonth === currentDay) {
-                    const q = query(transactionRef, where('description', '==', recurring.description), where('date', '==', todayDateString));
-                    const existingTransactions = await getDocs(q);
-                    
-                    if (existingTransactions.empty) {
-                        const newTransaction = { description: recurring.description, amount: recurring.amount, type: recurring.type, category: recurring.category, date: todayDateString, timestamp: new Date().getTime() };
-                        await addDoc(transactionRef, newTransaction);
-                        console.log(`Transaction récurrente ajoutée pour le ${todayDateString}`);
-                    }
-                }
-            });
-        }
-        
-        async function handleGoalSubmit(e) {
-            e.preventDefault();
-            if (!userId) { showModal("Veuillez attendre la connexion de l'utilisateur."); return; }
-            const name = document.getElementById('goal-name').value;
-            const target = parseFloat(document.getElementById('goal-target').value);
-            const current = parseFloat(document.getElementById('goal-current').value);
-            if (isNaN(target) || isNaN(current) || target <= 0 || current < 0) { showModal("Veuillez entrer des montants valides."); return; }
-
-            const goalData = { name, targetAmount: target, currentAmount: current, timestamp: new Date().getTime() };
-            try {
-                await addDoc(collection(db, `artifacts/${appId}/users/${userId}/goals`), goalData);
-                if(goalForm) goalForm.reset();
-                showModal("Objectif d'épargne créé avec succès.");
-            } catch (error) {
-                console.error("Erreur lors de la création de l'objectif:", error);
-                showModal("Erreur lors de la création de l'objectif. Veuillez réessayer.");
-            }
-        }
-
-        function handleDelete(e) {
-            const deleteBtn = e.target.closest('.delete-btn');
-            if (!deleteBtn) return;
-            const transactionId = deleteBtn.getAttribute('data-id');
-            if (!transactionId || !userId) { showModal("Impossible de supprimer. ID manquant."); return; }
-            try {
-                deleteDoc(doc(db, `artifacts/${appId}/users/${userId}/accounts/${currentAccount}/transactions`, transactionId));
-            } catch (error) {
-                console.error("Erreur de suppression:", error);
-                showModal("Erreur lors de la suppression. Veuillez réessayer.");
-            }
-        }
-        
-        function handleEdit(e) {
-            const editBtn = e.target.closest('.edit-btn');
-            if (!editBtn) return;
-            editingTransactionId = editBtn.getAttribute('data-id');
-            const transactionToEdit = allTransactions.find(t => t.id === editingTransactionId);
-            if (transactionToEdit) {
-                document.getElementById('description').value = transactionToEdit.description;
-                document.getElementById('amount').value = transactionToEdit.amount;
-                document.getElementById('type').value = transactionToEdit.type;
-                document.getElementById('category').value = transactionToEdit.category;
-                document.getElementById('date').value = transactionToEdit.date;
-                submitBtn.textContent = 'Mettre à jour';
-                submitBtn.classList.remove('btn-primary');
-                submitBtn.classList.add('bg-green-600', 'hover:bg-green-700');
-                cancelBtn.classList.remove('hidden');
-                formTitle.textContent = 'Modifier une Transaction';
-                showTab('transactions');
-            }
-        }
-        
-        function handleAddRecurring(e) {
-            const addRecurringBtn = e.target.closest('.add-recurring-btn');
-            if (!addRecurringBtn) return;
-            const transactionId = addRecurringBtn.getAttribute('data-id');
-            const transactionToAdd = allTransactions.find(t => t.id === transactionId);
-            if (transactionToAdd) {
-                const today = new Date();
-                document.getElementById('recurring-description').value = transactionToAdd.description;
-                document.getElementById('recurring-amount').value = transactionToAdd.amount;
-                document.getElementById('recurring-type').value = transactionToAdd.type;
-                document.getElementById('recurring-category').value = transactionToAdd.category;
-                document.getElementById('recurring-day').value = today.getDate();
-                showTab('recurring');
-            }
-        }
-
-        function resetForm() {
-            editingTransactionId = null;
-            transactionForm.reset();
-            document.getElementById('date').valueAsDate = new Date();
-            submitBtn.textContent = 'Ajouter';
-            submitBtn.classList.remove('bg-green-600', 'hover:bg-green-700');
-            submitBtn.classList.add('btn-primary');
-            cancelBtn.classList.add('hidden');
-            formTitle.textContent = 'Ajouter une Transaction';
-        }
-        
-        async function clearAllData() {
-            closeConfirmationModal();
-            if (!userId) { showModal("Utilisateur non authentifié."); return; }
-            const transactionsRef = collection(db, `artifacts/${appId}/users/${userId}/accounts/${currentAccount}/transactions`);
-            try {
-                const snapshot = await getDocs(transactionsRef);
-                if (snapshot.empty) { showModal("Il n'y a aucune transaction à effacer."); return; }
-                const batch = writeBatch(db);
-                snapshot.docs.forEach(doc => { batch.delete(doc.ref); });
-                await batch.commit();
-                showModal("Toutes les transactions ont été effacées avec succès.");
-            } catch (error) {
-                console.error("Erreur lors de l'effacement des données:", error);
-                showModal("Erreur lors de l'effacement des données. Veuillez réessayer.");
-            }
-        }
-
-        async function handleAddAccount() {
-            showAccountNameModal();
-        }
-
-        async function handleSubmitAccountName() {
-            const accountName = newAccountNameInput.value.trim();
-            if (!accountName) { showModal("Le nom du compte ne peut pas être vide."); return; }
-            const accountId = accountName.replace(/\s/g, '').toLowerCase();
-            try {
-                await setDoc(doc(db, `artifacts/${appId}/users/${userId}/accounts`, accountId), { name: accountName });
-                closeAccountNameModal();
-                showModal("Compte ajouté avec succès.");
-            } catch (error) {
-                console.error("Erreur lors de l'ajout du compte:", error);
-                showModal("Erreur lors de l'ajout du compte. Veuillez réessayer.");
-            }
-        }
-
-        async function handleDeleteAccount() {
-            const selectedAccount = accountSelectorEl.value;
-            if (selectedAccount === 'default') { showModal("Vous ne pouvez pas supprimer le compte principal."); return; }
-            // Remplacer window.confirm par une modale personnalisée
-            showModal("Cette fonctionnalité n'est pas encore disponible. Veuillez recharger la page et supprimer le compte manuellement.");
-        }
-        
-        function exportToCSV() {
-            const filteredTransactions = allTransactions.filter(t => {
-                const selectedMonth = parseInt(monthFilterEl.value, 10);
-                const selectedType = typeFilterEl.value;
-                const matchesMonth = selectedMonth === 0 || new Date(t.date).getMonth() + 1 === selectedMonth;
-                const matchesType = selectedType === 'all' || t.type === selectedType;
-                return matchesMonth && matchesType;
-            });
-            if (filteredTransactions.length === 0) { showModal("Il n'y a aucune transaction à exporter."); return; }
-            let csvContent = "data:text/csv;charset=utf-8,";
-            const headers = ["Description", "Montant", "Type", "Catégorie", "Date"];
-            csvContent += headers.join(";") + "\n";
-            filteredTransactions.forEach(t => {
-                const row = [t.description, t.amount, t.type, t.category, t.date];
-                csvContent += row.join(";") + "\n";
-            });
-            const encodedUri = encodeURI(csvContent);
-            const link = document.createElement("a");
-            link.setAttribute("href", encodedUri);
-            link.setAttribute("download", "transactions.csv");
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
-
-        async function generateShareLink() {
-            if (!userId) { showModal("Veuillez vous authentifier pour générer un lien de partage."); return; }
-            const shareId = crypto.randomUUID();
-            const shareDocRef = doc(db, `artifacts/${appId}/public/data/shared`, shareId);
-            try {
-                // Stocker les données publiques
-                await setDoc(shareDocRef, { 
-                    userId: userId, 
-                    createdAt: new Date(),
-                    transactions: JSON.stringify(allTransactions),
-                    budgets: JSON.stringify(allBudgets),
-                    accounts: JSON.stringify(allAccounts)
+                await addDoc(collection(db, `artifacts/${appId}/public/data/tickets/${currentTicketId}/comments`), {
+                    text: commentText,
+                    timestamp: Date.now(),
+                    userId: userId,
                 });
-                const shareLink = `${window.location.origin}${window.location.pathname}?shareId=${shareId}`;
-                shareLinkInput.value = shareLink;
-                generateShareLinkBtn.classList.add('hidden');
-                copyShareLinkBtn.classList.remove('hidden');
+                document.getElementById('comment-text').value = '';
             } catch (error) {
-                console.error("Erreur lors de la génération du lien de partage:", error);
-                showModal("Erreur lors de la génération du lien de partage. Veuillez réessayer.");
-            }
-        }
-
-        function copyShareLink() {
-            shareLinkInput.select();
-            document.execCommand('copy');
-            showModal("Lien de partage copié dans le presse-papiers !");
-        }
-
-        async function loadSharedData(shareId) {
-            const shareDocRef = doc(db, `artifacts/${appId}/public/data/shared`, shareId);
-            const shareDoc = await getDoc(shareDocRef);
-            if (shareDoc.exists()) {
-                const data = shareDoc.data();
-                showModal("Affichage des données partagées. Vous ne pouvez pas les modifier.");
-                
-                // Parse les données de la chaîne JSON
-                allTransactions = JSON.parse(data.transactions);
-                allBudgets = JSON.parse(data.budgets);
-                allAccounts = JSON.parse(data.accounts);
-
-                // Désactiver les fonctionnalités de modification
-                transactionForm.style.display = 'none';
-                budgetForm.style.display = 'none';
-                recurringTransactionForm.style.display = 'none';
-                goalForm.style.display = 'none';
-                clearDataBtn.style.display = 'none';
-                document.querySelectorAll('.edit-btn, .delete-btn, .add-recurring-btn, .delete-recurring-btn').forEach(btn => btn.style.display = 'none');
-                
-                // Mettre à jour l'interface avec les données partagées
-                updateDashboard();
-                updateBudgetsList();
-                updateRecurringList();
-                updateGoalsList();
-                filterAndDisplayTransactions();
-
-            } else {
-                showModal("Lien de partage invalide.");
-            }
-        }
-
-        function showTab(tabId) {
-            tabContents.forEach(content => content.classList.remove('active'));
-            tabButtons.forEach(button => button.classList.remove('active'));
-            document.getElementById(`content-${tabId}`).classList.add('active');
-            document.getElementById(`tab-${tabId}`).classList.add('active');
-        }
-
-        // --- Initialisation principale ---
-        document.addEventListener('DOMContentLoaded', () => {
-            transactionForm = document.getElementById('transaction-form');
-            totalBalanceEl = document.getElementById('total-balance');
-            totalIncomeEl = document.getElementById('total-income');
-            totalExpenseEl = document.getElementById('total-expense');
-            transactionsListEl = document.getElementById('transactions-list');
-            expensesChartCanvas = document.getElementById('expenses-chart');
-            incomeExpenseChartCanvas = document.getElementById('income-expense-chart');
-            balanceChartCanvas = document.getElementById('balance-chart');
-            userIdDisplay = document.getElementById('user-id-display');
-            messageModal = document.getElementById('message-modal');
-            modalMessage = document.getElementById('modal-message');
-            noTransactionsMessageEl = document.getElementById('no-transactions-message');
-            monthFilterEl = document.getElementById('month-filter');
-            typeFilterEl = document.getElementById('type-filter');
-            clearDataBtn = document.getElementById('clear-data-btn');
-            confirmationModal = document.getElementById('confirmation-modal');
-            confirmClearBtn = document.getElementById('confirm-clear-btn');
-            submitBtn = document.getElementById('submit-btn');
-            cancelBtn = document.getElementById('cancel-btn');
-            formTitle = document.getElementById('form-title');
-            budgetsListEl = document.getElementById('budgets-list');
-            budgetForm = document.getElementById('budget-form');
-            accountSelectorEl = document.getElementById('account-selector');
-            addAccountBtn = document.getElementById('add-account-btn');
-            deleteAccountBtn = document.getElementById('delete-account-btn');
-            accountNameModal = document.getElementById('account-name-modal');
-            newAccountNameInput = document.getElementById('new-account-name');
-            submitAccountNameBtn = document.getElementById('submit-account-name-btn');
-            exportBtn = document.getElementById('export-btn');
-            recurringTransactionForm = document.getElementById('recurring-transaction-form');
-            recurringListEl = document.getElementById('recurring-list');
-            noBudgetsMessageEl = document.getElementById('no-budgets-message');
-            noRecurringMessageEl = document.getElementById('no-recurring-message');
-            goalsListEl = document.getElementById('goals-list');
-            goalForm = document.getElementById('goal-form');
-            noGoalsMessageEl = document.getElementById('no-goals-message');
-            generateShareLinkBtn = document.getElementById('generate-share-link-btn');
-            shareLinkInput = document.getElementById('share-link-input');
-            copyShareLinkBtn = document.getElementById('copy-share-link-btn');
-            predictionTextEl = document.getElementById('prediction-text');
-
-            tabButtons = document.querySelectorAll('.tab-button');
-            tabContents = document.querySelectorAll('.tab-content');
-            
-            document.getElementById('date').valueAsDate = new Date();
-
-            tabButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    const tabId = button.id.replace('tab-', '');
-                    showTab(tabId);
-                });
-            });
-
-            if (transactionForm) transactionForm.addEventListener('submit', handleFormSubmit);
-            if (budgetForm) budgetForm.addEventListener('submit', handleBudgetSubmit);
-            if (transactionsListEl) {
-                transactionsListEl.addEventListener('click', handleDelete);
-                transactionsListEl.addEventListener('click', handleEdit);
-                transactionsListEl.addEventListener('click', handleAddRecurring);
-            }
-            if (monthFilterEl) monthFilterEl.addEventListener('change', filterAndDisplayTransactions);
-            if (typeFilterEl) typeFilterEl.addEventListener('change', filterAndDisplayTransactions);
-            if (clearDataBtn) clearDataBtn.addEventListener('click', showConfirmationModal);
-            if (confirmClearBtn) confirmClearBtn.addEventListener('click', clearAllData);
-            if (cancelBtn) cancelBtn.addEventListener('click', resetForm);
-            if (addAccountBtn) addAccountBtn.addEventListener('click', handleAddAccount);
-            if (deleteAccountBtn) deleteAccountBtn.addEventListener('click', handleDeleteAccount);
-            if (submitAccountNameBtn) submitAccountNameBtn.addEventListener('click', handleSubmitAccountName);
-            if (accountSelectorEl) accountSelectorEl.addEventListener('change', (e) => {
-                currentAccount = e.target.value;
-                listenForTransactions();
-            });
-            if (exportBtn) exportBtn.addEventListener('click', exportToCSV);
-            if (recurringTransactionForm) recurringTransactionForm.addEventListener('submit', handleRecurringTransactionSubmit);
-            if (recurringListEl) recurringListEl.addEventListener('click', async (e) => {
-                const deleteBtn = e.target.closest('.delete-recurring-btn');
-                if (!deleteBtn) return;
-                const recurringId = deleteBtn.getAttribute('data-id');
-                if (!recurringId) return;
-                try {
-                    await deleteDoc(doc(db, `artifacts/${appId}/users/${userId}/recurring-transactions`, recurringId));
-                    showModal("Transaction récurrente supprimée.");
-                } catch (error) {
-                    console.error("Erreur lors de la suppression de la transaction récurrente:", error);
-                    showModal("Erreur lors de la suppression. Veuillez réessayer.");
-                }
-            });
-            if (goalForm) goalForm.addEventListener('submit', handleGoalSubmit);
-            if (goalsListEl) goalsListEl.addEventListener('click', async (e) => {
-                const deleteBtn = e.target.closest('.delete-goal-btn');
-                if (!deleteBtn) return;
-                const goalId = deleteBtn.getAttribute('data-id');
-                if (!goalId) return;
-                try {
-                    await deleteDoc(doc(db, `artifacts/${appId}/users/${userId}/goals`, goalId));
-                    showModal("Objectif d'épargne supprimé.");
-                } catch (error) {
-                    console.error("Erreur lors de la suppression de l'objectif:", error);
-                    showModal("Erreur lors de la suppression. Veuillez réessayer.");
-                }
-            });
-            if (generateShareLinkBtn) generateShareLinkBtn.addEventListener('click', generateShareLink);
-            if (copyShareLinkBtn) copyShareLinkBtn.addEventListener('click', copyShareLink);
-
-            // Gérer le redimensionnement de la fenêtre pour les graphiques
-            const resizeObserver = new ResizeObserver(() => {
-                if (expensesChart) expensesChart.resize();
-                if (incomeExpenseChart) incomeExpenseChart.resize();
-                if (balanceChart) balanceChart.resize();
-            });
-            
-            if (expensesChartCanvas) resizeObserver.observe(expensesChartCanvas);
-            if (incomeExpenseChartCanvas) resizeObserver.observe(incomeExpenseChartCanvas);
-            if (balanceChartCanvas) resizeObserver.observe(balanceChartCanvas);
-
-            // Vérifier si un lien de partage est présent dans l'URL
-            const urlParams = new URLSearchParams(window.location.search);
-            const shareId = urlParams.get('shareId');
-            if (shareId) {
-                loadSharedData(shareId);
-            } else {
-                runRecurringTransactions();
-                setInterval(runRecurringTransactions, 86400000); // Toutes les 24 heures
-                initFirebase();
+                console.error("Erreur lors de l'ajout du commentaire: ", error);
             }
         });
+
+        closeCommentsModalButton.addEventListener('click', () => {
+            commentsModal.classList.add('hidden');
+        });
+
+        // Close modal with ESC key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                solvedModal.classList.add('hidden');
+                deleteModal.classList.add('hidden');
+                editModal.classList.add('hidden');
+                commentsModal.classList.add('hidden');
+            }
+        });
+
+        // Firebase initialization on window load
+        window.onload = async () => {
+            try {
+                app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+                auth = getAuth(app);
+                
+                // Sign in anonymously or with the initial token
+                if (typeof __initial_auth_token !== 'undefined') {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+
+                // Get user ID after sign-in
+                onAuthStateChanged(auth, (user) => {
+                    if (user) {
+                        userId = user.uid;
+                        userIdDisplay.textContent = `Votre ID: ${userId}`;
+                        fetchAndRenderTickets();
+                        fetchAnnouncements();
+                    } else {
+                        // Handle cases where the user is not signed in
+                        console.log("User not signed in.");
+                        userId = null;
+                    }
+                });
+
+            } catch (e) {
+                console.error("Firebase initialization error: ", e);
+            }
+        };
     </script>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans">
+    <div class="notification" id="notification"></div>
+    <div class="container mx-auto px-4 py-12">
+        <header class="text-center mb-12">
+            <h1 class="text-5xl font-extrabold text-gray-200 mb-2">Data Inceptio Ticket</h1>
+            <p class="text-gray-400 text-lg">Votre portail de services et d'assistance en temps réel.</p>
+        </header>
+
+        <div class="text-center text-sm mb-8 text-gray-500">
+            <p id="user-id-display" class="font-mono text-xs text-center break-all text-gray-400"></p>
+        </div>
+
+        <div class="grid lg:grid-cols-2 gap-8">
+            <!-- Ticket submission section -->
+            <div class="card">
+                <h2 class="text-2xl font-bold mb-6 text-center text-gray-200">Créer un ticket d'assistance</h2>
+                <form id="report-form" class="space-y-6">
+                    <div>
+                        <label for="report-type" class="block text-sm font-medium text-gray-400 mb-1">Type de problème :</label>
+                        <select id="report-type" name="type" required class="block w-full rounded-lg input-field px-3 py-2">
+                            <option value="">Sélectionnez un type</option>
+                            <option value="materiel">Matériel</option>
+                            <option value="logiciel">Logiciel</option>
+                            <option value="reseau">Réseau</option>
+                            <option value="imprimante">Imprimante</option>
+                            <option value="autre">Autre</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="report-description" class="block text-sm font-medium text-gray-400 mb-1">Description détaillée :</label>
+                        <textarea id="report-description" name="description" rows="4" required class="block w-full rounded-lg input-field px-3 py-2"></textarea>
+                    </div>
+                    <button type="submit" class="w-full btn-primary">Soumettre le ticket</button>
+                </form>
+                <div id="status-message" class="mt-4 text-center text-sm font-semibold text-gray-400 hidden"></div>
+            </div>
+
+            <!-- Open tickets section -->
+            <div class="card">
+                <h2 class="text-2xl font-bold mb-6 text-center text-gray-200">Tickets</h2>
+                
+                <!-- Filter controls -->
+                <div class="filter-controls-container flex flex-col sm:flex-row items-center justify-between space-y-4 sm:space-y-0 sm:space-x-4">
+                    <div class="relative w-full sm:w-auto flex-1">
+                        <input type="text" id="search-input" placeholder="Rechercher" class="w-full pl-10 pr-4 py-2 rounded-lg input-field">
+                        <div class="absolute inset-y-0 left-0 flex items-center pl-3">
+                            <i class="fa-solid fa-search text-gray-400"></i>
+                        </div>
+                    </div>
+                    <div class="filter-buttons-group flex flex-wrap justify-center sm:justify-start gap-x-2 w-full sm:w-auto">
+                        <button class="status-filter-btn px-4 py-2 rounded-full text-sm font-semibold transition-colors duration-200 bg-blue-600 text-white" data-status="all">Tous</button>
+                        <button class="status-filter-btn px-4 py-2 rounded-full text-sm font-semibold transition-colors duration-200 bg-gray-600 text-gray-200 hover:bg-gray-500" data-status="open">Ouverts</button>
+                        <button class="status-filter-btn px-4 py-2 rounded-full text-sm font-semibold transition-colors duration-200 bg-gray-600 text-gray-200 hover:bg-gray-500" data-status="resolved">Résolus</button>
+                    </div>
+                </div>
+                
+
+                <div id="problem-list" class="space-y-4 mt-6">
+                    <!-- Tickets will be displayed here by JavaScript -->
+                </div>
+                
+                <!-- Pagination controls -->
+                <div id="pagination-container" class="flex justify-center items-center mt-6">
+                    <!-- Pagination buttons will be added here by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Announcements section -->
+        <div class="card mt-8">
+            <h2 class="text-2xl font-bold mb-6 text-center text-gray-200">Annonces de service</h2>
+            <div id="announcement-list" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <!-- Announcements will be dynamically loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="solved-modal" class="modal hidden fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50">
+        <div class="modal-content bg-gray-800 p-8 rounded-xl shadow-xl text-center max-w-sm w-full border border-gray-700">
+            <p class="text-xl font-bold text-gray-200 mb-6">Confirmer la résolution du ticket ?</p>
+            <div class="flex justify-center space-x-4">
+                <button id="confirm-solve-button" class="bg-green-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-green-700 transition-colors">Confirmer</button>
+                <button id="cancel-solve-button" class="bg-gray-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-gray-700 transition-colors">Annuler</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="delete-modal" class="modal hidden fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50">
+        <div class="modal-content bg-gray-800 p-8 rounded-xl shadow-xl text-center max-w-sm w-full border border-gray-700">
+            <p class="text-xl font-bold text-gray-200 mb-6">Êtes-vous sûr de vouloir supprimer ce ticket ?</p>
+            <div class="flex justify-center space-x-4">
+                <button id="confirm-delete-button" class="bg-red-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-red-700 transition-colors">Oui, supprimer</button>
+                <button id="cancel-delete-button" class="bg-gray-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-gray-700 transition-colors">Annuler</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div id="edit-modal" class="modal hidden fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50">
+        <div class="modal-content bg-gray-800 p-8 rounded-xl shadow-xl max-w-lg w-full border border-gray-700">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-bold text-gray-200">Modifier le ticket</h2>
+                <button id="close-edit-modal" class="text-gray-400 hover:text-gray-200 text-2xl">&times;</button>
+            </div>
+            
+            <form id="edit-form" class="space-y-6">
+                <div>
+                    <label for="edit-type" class="block text-sm font-medium text-gray-400 mb-1">Type de problème :</label>
+                    <select id="edit-type" name="type" required class="block w-full rounded-lg input-field px-3 py-2">
+                        <option value="materiel">Matériel</option>
+                        <option value="logiciel">Logiciel</option>
+                        <option value="reseau">Réseau</option>
+                        <option value="imprimante">Imprimante</option>
+                        <option value="autre">Autre</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="edit-description" class="block text-sm font-medium text-gray-400 mb-1">Description détaillée :</label>
+                    <textarea id="edit-description" name="description" rows="4" required class="block w-full rounded-lg input-field px-3 py-2"></textarea>
+                </div>
+                <button type="submit" class="w-full btn-primary">Enregistrer les modifications</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Comments Modal -->
+    <div id="comments-modal" class="modal hidden fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50">
+        <div class="modal-content bg-gray-800 p-8 rounded-xl shadow-xl max-w-lg w-full border border-gray-700">
+            <div class="flex justify-between items-center mb-6">
+                <h2 id="comments-ticket-desc" class="text-xl font-bold text-gray-200"></h2>
+                <button id="close-comments-modal" class="text-gray-400 hover:text-gray-200 text-2xl">&times;</button>
+            </div>
+            
+            <div id="comments-list" class="max-h-80 overflow-y-auto space-y-4 mb-6 pr-2">
+                <!-- Comments will be rendered here -->
+            </div>
+            
+            <form id="comments-form" class="space-y-4">
+                <textarea id="comment-text" class="w-full rounded-lg input-field px-4 py-2 resize-none" rows="3" placeholder="Ajouter un commentaire..." required></textarea>
+                <button type="submit" class="w-full btn-primary">
+                    <i class="fa-solid fa-paper-plane mr-2"></i> Envoyer
+                </button>
+            </form>
+        </div>
+    </div>
 </body>
 </html>
