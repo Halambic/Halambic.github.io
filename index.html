@@ -85,6 +85,38 @@
             opacity: 1;
         }
 
+        /* --- Style for the new navigation links with animation --- */
+        .nav-link {
+            position: relative;
+            font-weight: 500;
+            color: var(--text-color);
+            transition: color 0.3s ease-in-out;
+            padding: 0.5rem 1rem; /* Adjust padding for better look */
+        }
+        
+        /* Correction de la barre d'animation */
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%; /* La barre s'étend sur toute la largeur */
+            height: 2px;
+            background-color: white; /* La barre est maintenant blanche */
+            transform: scaleX(0);
+            transform-origin: center; /* La barre grandit depuis le centre */
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .nav-link:hover {
+            color: var(--accent-color);
+        }
+
+        .nav-link:hover::after {
+            transform: scaleX(1);
+        }
+        /* -------------------------------------------------------- */
+
         .gallery-item {
             position: relative;
             overflow: hidden;
@@ -237,10 +269,10 @@
             <button id="mobile-menu-btn" class="md:hidden text-white focus:outline-none" aria-label="Ouvrir le menu mobile">
                 <i class="fas fa-bars text-2xl"></i>
             </button>
-            <div id="nav-links" class="hidden md:flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-8 text-lg text-center mt-4 md:mt-0">
-                <a href="#portfolio" class="font-medium hover:text-accent-color transition-colors duration-300">Portfolio</a>
-                <a href="#services" class="font-medium hover:text-accent-color transition-colors duration-300">Services</a>
-                <a href="#contact" class="font-medium hover:text-accent-color transition-colors duration-300">Contact</a>
+            <div id="nav-links" class="hidden md:flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 text-lg text-center mt-4 md:mt-0">
+                <a href="#portfolio" class="nav-link">Portfolio</a>
+                <a href="#services" class="nav-link">Services</a>
+                <a href="#contact" class="nav-link">Contact</a>
             </div>
         </div>
     </nav>
@@ -401,9 +433,9 @@
     <footer class="bg-secondary-bg text-gray-500 text-center p-8">
         <p class="mb-4">&copy; 2025 Lecomte Fotos. Tous droits réservés.</p>
         <div class="flex flex-wrap justify-center space-x-4">
-            <a href="#" class="text-gray-400 hover:text-accent-color transition-colors" aria-label="Suivez-moi sur Instagram"><i class="fab fa-instagram text-2xl"></i></a>
-            <a href="#" class="text-gray-400 hover:text-accent-color transition-colors" aria-label="Suivez-moi sur Twitter"><i class="fab fa-twitter text-2xl"></i></a>
-            <a href="#" class="text-gray-400 hover:text-accent-color transition-colors" aria-label="Suivez-moi sur LinkedIn"><i class="fab fa-linkedin-in text-2xl"></i></a>
+            <a href="https://www.instagram.com/lecomte_fotos/" class="text-gray-400 hover:text-accent-color transition-colors" aria-label="Suivez-moi sur Instagram" target="_blank"><i class="fab fa-instagram text-2xl"></i></a>
+            <a href="https://www.linkedin.com/in/lecomte-delphine-571554334/" class="text-gray-400 hover:text-accent-color transition-colors" aria-label="Suivez-moi sur LinkedIn" target="_blank"><i class="fab fa-linkedin-in text-2xl"></i></a>
+            <a href="https://www.tiktok.com/@lecomtefotos" class="text-gray-400 hover:text-accent-color transition-colors" aria-label="Suivez-moi sur TikTok" target="_blank"><i class="fab fa-tiktok text-2xl"></i></a>
         </div>
     </footer>
 
@@ -480,10 +512,16 @@
                 }
             });
 
-            // Gère la fermeture de la modale avec la touche 'Esc'
+            // Gère la fermeture de la modale avec la touche 'Esc' et la navigation avec les flèches
             document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
-                    modal.classList.add('hidden');
+                if (!modal.classList.contains('hidden')) {
+                    if (e.key === 'Escape') {
+                        modal.classList.add('hidden');
+                    } else if (e.key === 'ArrowLeft') {
+                        prevBtn.click();
+                    } else if (e.key === 'ArrowRight') {
+                        nextBtn.click();
+                    }
                 }
             });
 
