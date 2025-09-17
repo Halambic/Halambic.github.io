@@ -1,830 +1,381 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <base href="/">
-    <title>Data Inceptio Ticket</title>
+    <title>Lecomte Fotos - L'Art Culinaire en Images</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary-bg: #141414;
+            --secondary-bg: #1F1F1F;
+            --text-color: #E0E0E0;
+            --accent-color: #C17D6E;
+        }
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #1d2633 0%, #2f3e53 100%);
-            min-height: 100vh;
-            color: #d1d5db;
+            background-color: var(--primary-bg);
+            color: var(--text-color);
+            line-height: 1.6;
         }
-        .container {
-            max-width: 1200px;
-            margin: auto;
-            padding: 2rem;
+        .playfair {
+            font-family: 'Playfair Display', serif;
+        }
+        .hero-section {
+            background-image: url('https://picsum.photos/1920/1080?random=1');
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+        }
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 0.75rem;
+            transition: transform 0.5s ease-in-out, box-shadow 0.3s ease-in-out;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+        }
+        .gallery-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        .gallery-item img {
+            transition: transform 0.5s ease;
+        }
+        .gallery-item:hover img {
+            transform: scale(1.05);
+        }
+        .gallery-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        .gallery-item:hover .gallery-overlay {
+            opacity: 1;
         }
         .card {
-            background-color: #2a3447;
-            border-radius: 1.5rem;
-            padding: 2rem;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-            transition: transform 0.3s, box-shadow 0.3s;
-            border: 1px solid #3d4a60;
+            background-color: var(--secondary-bg);
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
         }
         .card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
         }
         .btn-primary {
-            background-color: #4f46e5;
+            background-color: var(--accent-color);
             color: white;
-            padding: 1rem 2rem;
-            border-radius: 0.75rem;
-            font-weight: 600;
-            transition: background-color 0.3s, transform 0.2s;
-            box-shadow: 0 4px 10px rgba(79, 70, 229, 0.3);
+            transition: background-color 0.3s;
         }
         .btn-primary:hover {
-            background-color: #4338ca;
-            transform: translateY(-2px);
+            background-color: #a3665a;
         }
-        .badge {
-            font-size: 0.75rem;
-            font-weight: 600;
-            padding: 0.25rem 0.75rem;
-            border-radius: 9999px;
-            text-transform: uppercase;
-        }
-        .ticket-card {
-            background-color: #313c51;
-            border-radius: 1rem;
-            padding: 1.5rem;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            transition: transform 0.2s, background-color 0.2s;
-            border: 1px solid transparent;
-        }
-        .ticket-card:hover {
-            transform: translateY(-3px);
-            background-color: #3e4a63;
-        }
-        .input-field {
-            background-color: #3e4a63;
-            border: 1px solid #5a647a;
-            color: #e5e7eb;
-            transition: border-color 0.2s, box-shadow 0.2s;
-        }
-        .input-field:focus {
-            outline: none;
-            border-color: #4f46e5;
-            box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.5);
-        }
-        .notification {
-            position: fixed;
-            top: 1rem;
-            right: 1rem;
-            z-index: 60;
-            background-color: #22c55e;
+        .nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(0, 0, 0, 0.5);
             color: white;
-            padding: 1rem 1.5rem;
-            border-radius: 0.75rem;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            opacity: 0;
-            transform: translateY(-20px);
-            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+            border: none;
+            padding: 1rem;
+            cursor: pointer;
+            z-index: 110;
+            font-size: 2rem;
+            line-height: 1;
+            transition: background-color 0.3s;
+            border-radius: 9999px;
+            width: 3rem;
+            height: 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        .notification.show {
-            opacity: 1;
-            transform: translateY(0);
+        .nav-btn:hover {
+            background-color: rgba(0, 0, 0, 0.8);
         }
-        .announcement-card p {
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-        }
-        /* New CSS for wrapping text */
-        .text-wrap-balance {
-            text-wrap: balance;
-            word-break: break-word;
-            overflow-wrap: break-word;
-        }
-        /* Modal animation */
-        .modal {
-            transition: opacity 0.3s ease-in-out;
-        }
-        .modal-content {
-            transition: transform 0.3s ease-in-out;
-        }
-        .modal.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
-        .modal.hidden .modal-content {
-            transform: scale(0.95);
-        }
-        /* Custom styles for filter buttons on small screens */
-        @media (max-width: 640px) {
-            .filter-controls-container {
-                flex-direction: column;
-                align-items: center;
-                gap: 1rem;
+        @keyframes fadeInMoveUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
             }
-            .filter-buttons-group {
-                flex-wrap: wrap;
-                justify-content: center;
-                gap: 0.5rem;
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
         }
+        .animate-fade-in-up {
+            animation: fadeInMoveUp 1s ease-out forwards;
+        }
+        .animation-delay-300 { animation-delay: 0.3s; }
+        .animation-delay-600 { animation-delay: 0.6s; }
     </style>
-    <script type="module">
-        // Firebase services import
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, addDoc, updateDoc, onSnapshot, collection, query, where, getDocs, setDoc, deleteDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-        
-        // Firebase configuration and initialization
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
-
-        let app;
-        let db;
-        let auth;
-        let userId = null;
-        let unsubscribeTickets = null;
-        let unsubscribeAnnouncements = null;
-        let unsubscribeNotifications = null;
-
-        const reportForm = document.getElementById('report-form');
-        const problemList = document.getElementById('problem-list');
-        const statusMessage = document.getElementById('status-message');
-        const userIdDisplay = document.getElementById('user-id-display');
-        const solvedModal = document.getElementById('solved-modal');
-        const commentsModal = document.getElementById('comments-modal');
-        const commentsList = document.getElementById('comments-list');
-        const commentsForm = document.getElementById('comments-form');
-        const closeCommentsModalButton = document.getElementById('close-comments-modal');
-        const confirmSolveButton = document.getElementById('confirm-solve-button');
-        const cancelSolveButton = document.getElementById('cancel-solve-button');
-        const statusFilterButtons = document.querySelectorAll('.status-filter-btn');
-        const typeFilterSelect = document.getElementById('type-filter-select');
-        const searchInput = document.getElementById('search-input');
-        const deleteModal = document.getElementById('delete-modal');
-        const confirmDeleteButton = document.getElementById('confirm-delete-button');
-        const cancelDeleteButton = document.getElementById('cancel-delete-button');
-        const editModal = document.getElementById('edit-modal');
-        const editForm = document.getElementById('edit-form');
-        const closeEditModalButton = document.getElementById('close-edit-modal');
-        const notification = document.getElementById('notification');
-        const paginationContainer = document.getElementById('pagination-container');
-        const announcementList = document.getElementById('announcement-list');
-        const ticketsPerPage = 5;
-        let currentPage = 1;
-        
-        let ticketToSolveId = null;
-        let ticketToDeleteId = null;
-        let ticketToEditId = null;
-        let currentTicketId = null;
-        let currentStatusFilter = 'all';
-        let currentTypeFilter = 'all';
-        let currentSearchQuery = '';
-        let allTickets = [];
-
-        // Fonction pour obtenir la couleur et l'icône du type de ticket
-        const getTypeVisuals = (type) => {
-            switch(type) {
-                case 'materiel': return { name: 'Matériel', color: 'border-red-500', icon: 'fa-computer-mouse', text: 'text-red-500' };
-                case 'logiciel': return { name: 'Logiciel', color: 'border-blue-500', icon: 'fa-code', text: 'text-blue-500' };
-                case 'reseau': return { name: 'Réseau', color: 'border-yellow-500', icon: 'fa-wifi', text: 'text-yellow-500' };
-                case 'imprimante': return { name: 'Imprimante', color: 'border-green-500', icon: 'fa-print', text: 'text-green-500' };
-                case 'autre': return { name: 'Autre', color: 'border-gray-500', icon: 'fa-circle-exclamation', text: 'text-gray-500' };
-                default: return { name: 'Autre', color: 'border-gray-500', icon: 'fa-circle-exclamation', text: 'text-gray-500' };
-            }
-        };
-
-        // Render the list of tickets from Firestore
-        const renderProblems = (tickets) => {
-            // Apply all filters and sorting on the client side
-            const filteredTickets = tickets
-                .filter(ticket => {
-                    const statusMatch = (currentStatusFilter === 'all') || 
-                                        (currentStatusFilter === 'mine' && ticket.userId === userId) ||
-                                        (currentStatusFilter !== 'mine' && ticket.status === currentStatusFilter);
-                    const typeMatch = (currentTypeFilter === 'all') || (ticket.type === currentTypeFilter);
-                    const searchMatch = (currentSearchQuery === '') || ticket.description.toLowerCase().includes(currentSearchQuery.toLowerCase());
-                    return statusMatch && typeMatch && searchMatch;
-                })
-                .sort((a, b) => b.timestamp - a.timestamp); // Sort tickets by timestamp, newest first
-
-            allTickets = filteredTickets;
-            currentPage = 1; // Reset to first page after new filter
-            renderTicketsForPage(currentPage);
-            renderPaginationControls();
-        };
-
-        const renderTicketsForPage = (page) => {
-            problemList.innerHTML = '';
-            const startIndex = (page - 1) * ticketsPerPage;
-            const endIndex = startIndex + ticketsPerPage;
-            const ticketsToDisplay = allTickets.slice(startIndex, endIndex);
-            
-            if (ticketsToDisplay.length === 0) {
-                problemList.innerHTML = '<p class="text-center text-gray-400 font-medium text-wrap-balance">Aucun ticket correspondant aux filtres ou à la recherche.</p>';
-            }
-
-            ticketsToDisplay.forEach((data) => {
-                const isResolved = data.status === 'resolved';
-                const typeVisuals = getTypeVisuals(data.type);
-                const problemEl = document.createElement('div');
-                problemEl.className = `ticket-card flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-6 transition-all duration-300 ${isResolved ? 'opacity-70 border-gray-600' : 'border-l-4 ' + typeVisuals.color}`;
-                
-                const date = new Date(data.timestamp).toLocaleString('fr-FR');
-                
-                problemEl.innerHTML = `
-                    <div class="flex-1 w-full">
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="text-sm font-semibold flex items-center space-x-2 ${typeVisuals.text}">
-                                <i class="fa-solid ${typeVisuals.icon} text-lg"></i>
-                                <span>${typeVisuals.name}</span>
-                            </span>
-                            <div class="flex items-center space-x-2">
-                                <span class="text-xs font-semibold px-2 py-1 rounded-full ${isResolved ? 'bg-green-600' : 'bg-red-600'} text-white">
-                                    ${isResolved ? 'Résolu' : 'Ouvert'}
-                                </span>
-                                <span class="bg-gray-600 text-gray-200 px-2 py-1 rounded-full text-xs font-semibold">
-                                    <i class="fa-solid fa-comment-dots mr-1"></i>
-                                    <span class="comment-count-badge" data-ticket-id="${data.id}">0</span>
-                                </span>
-                            </div>
-                        </div>
-                        <p class="text-gray-200 font-medium text-lg mt-1">${data.description}</p>
-                        <p class="text-xs text-gray-400 mt-3">
-                            Signalé par: <span class="font-mono text-xs">${data.userId}</span> le: ${date}
-                        </p>
-                    </div>
-                    <div class="flex flex-wrap justify-end sm:justify-start space-x-2 w-full sm:w-auto mt-4 sm:mt-0">
-                        <button class="comments-btn bg-gray-600 text-white px-3 py-1 rounded-full font-semibold text-xs hover:bg-gray-700 transition-colors duration-200" data-ticket-id="${data.id}" data-ticket-desc="${data.description}">
-                            <i class="fa-solid fa-comment-dots mr-1"></i> Commentaires
-                        </button>
-                        ${isResolved ? `
-                        ` : `
-                        <button class="solve-btn bg-blue-600 text-white px-3 py-1 rounded-full font-semibold text-xs hover:bg-blue-700 transition-colors duration-200" data-ticket-id="${data.id}">
-                            <i class="fa-solid fa-check mr-1"></i> Résolu
-                        </button>
-                        `}
-                        ${data.userId === userId ? `
-                        <button class="edit-btn bg-yellow-600 text-white px-3 py-1 rounded-full font-semibold text-xs hover:bg-yellow-700 transition-colors duration-200" data-ticket-id="${data.id}">
-                            <i class="fa-solid fa-edit mr-1"></i> Modifier
-                        </button>
-                        <button class="delete-btn bg-red-600 text-white px-3 py-1 rounded-full font-semibold text-xs hover:bg-red-700 transition-colors duration-200" data-ticket-id="${data.id}">
-                            <i class="fa-solid fa-trash mr-1"></i> Supprimer
-                        </button>
-                        ` : ''}
-                    </div>
-                `;
-                
-                const solveButton = problemEl.querySelector('.solve-btn');
-                if (solveButton) {
-                    solveButton.addEventListener('click', () => {
-                        ticketToSolveId = data.id;
-                        solvedModal.classList.remove('hidden');
-                    });
-                }
-                
-                const commentsButton = problemEl.querySelector('.comments-btn');
-                commentsButton.addEventListener('click', () => {
-                    showCommentsModal(data.id, data.description);
-                });
-
-                const deleteButton = problemEl.querySelector('.delete-btn');
-                if (deleteButton) {
-                    deleteButton.addEventListener('click', () => {
-                        ticketToDeleteId = data.id;
-                        deleteModal.classList.remove('hidden');
-                    });
-                }
-
-                const editButton = problemEl.querySelector('.edit-btn');
-                if (editButton) {
-                    editButton.addEventListener('click', async () => {
-                        ticketToEditId = data.id;
-                        const ticketRef = doc(db, `artifacts/${appId}/public/data/tickets`, ticketToEditId);
-                        const ticketSnap = await getDoc(ticketRef);
-                        if (ticketSnap.exists()) {
-                            const ticketData = ticketSnap.data();
-                            document.getElementById('edit-type').value = ticketData.type;
-                            document.getElementById('edit-description').value = ticketData.description;
-                            editModal.classList.remove('hidden');
-                        }
-                    });
-                }
-
-                problemList.appendChild(problemEl);
-                
-                // Add a real-time listener for comment count
-                const commentsRef = collection(db, `artifacts/${appId}/public/data/tickets/${data.id}/comments`);
-                onSnapshot(commentsRef, (snapshot) => {
-                    const count = snapshot.size;
-                    const commentCountBadge = problemEl.querySelector('.comment-count-badge');
-                    if (commentCountBadge) {
-                        commentCountBadge.textContent = count;
-                    }
-                });
-            });
-        };
-
-        const renderPaginationControls = () => {
-            paginationContainer.innerHTML = '';
-            const totalPages = Math.ceil(allTickets.length / ticketsPerPage);
-            if (totalPages <= 1) {
-                return;
-            }
-
-            const createPageButton = (text, pageNumber, isActive = false, isDisabled = false) => {
-                const button = document.createElement('button');
-                button.textContent = text;
-                button.dataset.page = pageNumber;
-                button.className = `px-4 py-2 mx-1 rounded-lg text-sm font-semibold transition-colors duration-200 ${isActive ? 'bg-blue-600 text-white' : 'bg-gray-600 text-gray-200 hover:bg-gray-500'} ${isDisabled ? 'opacity-50 cursor-not-allowed' : ''}`;
-                button.disabled = isDisabled;
-                button.addEventListener('click', () => {
-                    currentPage = pageNumber;
-                    renderTicketsForPage(currentPage);
-                    renderPaginationControls();
-                });
-                return button;
-            };
-
-            // Previous button
-            paginationContainer.appendChild(createPageButton('Précédent', currentPage - 1, false, currentPage === 1));
-
-            // Page numbers
-            for (let i = 1; i <= totalPages; i++) {
-                paginationContainer.appendChild(createPageButton(i, i, i === currentPage));
-            }
-
-            // Next button
-            paginationContainer.appendChild(createPageButton('Suivant', currentPage + 1, false, currentPage === totalPages));
-        };
-
-        const renderAnnouncements = (announcements) => {
-            announcementList.innerHTML = '';
-            announcements.forEach(announcement => {
-                const date = new Date(announcement.timestamp).toLocaleDateString('fr-FR', {
-                    day: 'numeric', month: 'long'
-                });
-                const announcementEl = document.createElement('div');
-                announcementEl.className = 'bg-gray-600 p-4 rounded-lg announcement-card';
-                announcementEl.innerHTML = `
-                    <p class="text-sm font-medium text-gray-400">${date}</p>
-                    <h3 class="font-bold text-lg text-gray-200 mt-1">${announcement.title}</h3>
-                    <p class="text-gray-300 text-sm mt-1">${announcement.content}</p>
-                `;
-                announcementList.appendChild(announcementEl);
-            });
-        };
-
-        // Handles data fetching and filtering from Firestore
-        const fetchAndRenderTickets = () => {
-            if (!db || !userId) return;
-            
-            if (unsubscribeTickets) {
-                unsubscribeTickets();
-            }
-            if (unsubscribeNotifications) {
-                unsubscribeNotifications();
-            }
-
-            const ticketsRef = collection(db, `artifacts/${appId}/public/data/tickets`);
-            let ticketsQuery = query(ticketsRef);
-
-            // Fetch ALL tickets and apply filters client-side
-            unsubscribeTickets = onSnapshot(ticketsQuery, (snapshot) => {
-                const tickets = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                renderProblems(tickets);
-            }, (error) => {
-                console.error("Error fetching tickets: ", error);
-            });
-
-            // Listener for notifications (only for the current user's tickets)
-            const myTicketsQuery = query(ticketsRef, where('userId', '==', userId));
-            unsubscribeNotifications = onSnapshot(myTicketsQuery, (snapshot) => {
-                snapshot.docChanges().forEach((change) => {
-                    if (change.type === "modified") {
-                        const ticketData = change.doc.data();
-                        if (ticketData.status === 'resolved') {
-                            showNotification(`Votre ticket "${ticketData.description.substring(0, 30)}..." a été résolu !`);
-                        }
-                    }
-                });
-            }, (error) => {
-                console.error("Error fetching notifications: ", error);
-            });
-        };
-
-        const fetchAnnouncements = () => {
-            if (!db) return;
-
-            if (unsubscribeAnnouncements) {
-                unsubscribeAnnouncements();
-            }
-
-            const announcementsRef = collection(db, `artifacts/${appId}/public/data/announcements`);
-            const announcementsQuery = query(announcementsRef);
-
-            unsubscribeAnnouncements = onSnapshot(announcementsQuery, (snapshot) => {
-                const announcements = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                announcements.sort((a, b) => b.timestamp - a.timestamp); // Sort by newest first
-                renderAnnouncements(announcements);
-            }, (error) => {
-                console.error("Error fetching announcements: ", error);
-            });
-        };
-
-        // Fonction pour afficher une notification temporaire
-        const showNotification = (message) => {
-            notification.textContent = message;
-            notification.classList.add('show');
-            setTimeout(() => {
-                notification.classList.remove('show');
-            }, 5000);
-        };
-
-        // Event listeners for filters
-        statusFilterButtons.forEach(button => {
-            button.addEventListener('click', (e) => {
-                statusFilterButtons.forEach(btn => {
-                    btn.classList.remove('bg-blue-600', 'text-white');
-                    btn.classList.add('bg-gray-600', 'text-gray-200', 'hover:bg-gray-500');
-                });
-                e.target.classList.remove('bg-gray-600', 'text-gray-200', 'hover:bg-gray-500');
-                e.target.classList.add('bg-blue-600', 'text-white');
-                currentStatusFilter = e.target.dataset.status;
-                fetchAndRenderTickets();
-            });
-        });
-        
-        typeFilterSelect.addEventListener('change', (e) => {
-            currentTypeFilter = e.target.value;
-            fetchAndRenderTickets();
-        });
-
-        searchInput.addEventListener('input', (e) => {
-            currentSearchQuery = e.target.value;
-            fetchAndRenderTickets();
-        });
-
-        // Handle form submission
-        reportForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const type = document.getElementById('report-type').value;
-            const description = document.getElementById('report-description').value;
-            
-            try {
-                await addDoc(collection(db, `artifacts/${appId}/public/data/tickets`), {
-                    type,
-                    description,
-                    timestamp: Date.now(),
-                    userId: userId,
-                    status: 'open'
-                });
-
-                reportForm.reset();
-                showNotification('Ticket soumis avec succès !');
-            } catch (error) {
-                console.error("Erreur lors de l'envoi du ticket: ", error);
-                statusMessage.textContent = 'Erreur lors de la soumission du ticket. Veuillez vérifier vos règles de sécurité Firebase.';
-                statusMessage.classList.add('text-red-400');
-                statusMessage.classList.remove('hidden');
-            } finally {
-                setTimeout(() => {
-                    statusMessage.classList.add('hidden');
-                    statusMessage.classList.remove('text-red-400');
-                }, 5000);
-            }
-        });
-
-        // Handle ticket editing
-        editForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const type = document.getElementById('edit-type').value;
-            const description = document.getElementById('edit-description').value;
-            
-            if (ticketToEditId) {
-                try {
-                    const ticketRef = doc(db, `artifacts/${appId}/public/data/tickets`, ticketToEditId);
-                    await updateDoc(ticketRef, {
-                        type,
-                        description
-                    });
-                    editModal.classList.add('hidden');
-                    ticketToEditId = null;
-                } catch (error) {
-                    console.error("Erreur lors de la mise à jour du ticket: ", error);
-                }
-            }
-        });
-
-        closeEditModalButton.addEventListener('click', () => {
-            editModal.classList.add('hidden');
-            ticketToEditId = null;
-        });
-
-        // Handle ticket resolution
-        confirmSolveButton.addEventListener('click', async () => {
-            if (ticketToSolveId) {
-                try {
-                    const ticketRef = doc(db, `artifacts/${appId}/public/data/tickets`, ticketToSolveId);
-                    await updateDoc(ticketRef, {
-                        status: 'resolved'
-                    });
-                    solvedModal.classList.add('hidden');
-                    ticketToSolveId = null;
-                } catch (error) {
-                    console.error("Erreur lors de la mise à jour du ticket: ", error);
-                }
-            }
-        });
-
-        cancelSolveButton.addEventListener('click', () => {
-            solvedModal.classList.add('hidden');
-            ticketToSolveId = null;
-        });
-
-        // Handle ticket deletion
-        confirmDeleteButton.addEventListener('click', async () => {
-            if (ticketToDeleteId) {
-                try {
-                    const ticketRef = doc(db, `artifacts/${appId}/public/data/tickets`, ticketToDeleteId);
-                    await deleteDoc(ticketRef);
-                    deleteModal.classList.add('hidden');
-                    ticketToDeleteId = null;
-                } catch (error) {
-                    console.error("Erreur lors de la suppression du ticket: ", error);
-                }
-            }
-        });
-
-        cancelDeleteButton.addEventListener('click', () => {
-            deleteModal.classList.add('hidden');
-            ticketToDeleteId = null;
-        });
-
-        // Handle comments logic
-        const showCommentsModal = (ticketId, description) => {
-            currentTicketId = ticketId;
-            commentsModal.classList.remove('hidden');
-            document.getElementById('comments-ticket-desc').textContent = `Commentaires pour : "${description}"`;
-
-            const commentsRef = collection(db, `artifacts/${appId}/public/data/tickets/${ticketId}/comments`);
-            onSnapshot(commentsRef, (snapshot) => {
-                const comments = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                renderComments(comments);
-            }, (error) => {
-                console.error("Error fetching comments: ", error);
-            });
-        };
-
-        const renderComments = (comments) => {
-            comments.sort((a, b) => b.timestamp - a.timestamp); // Sort by newest first
-            commentsList.innerHTML = '';
-            if (comments.length === 0) {
-                commentsList.innerHTML = '<p class="text-center text-gray-400">Aucun commentaire pour le moment.</p>';
-                return;
-            }
-
-            comments.forEach(comment => {
-                const commentEl = document.createElement('div');
-                commentEl.className = 'bg-gray-600 p-4 rounded-lg space-y-1 mb-2';
-                const date = new Date(comment.timestamp).toLocaleString('fr-FR');
-                commentEl.innerHTML = `
-                    <p class="text-gray-200">${comment.text}</p>
-                    <p class="text-xs text-gray-400">
-                        Par: <span class="font-mono">${comment.userId}</span> le: ${date}
-                    </p>
-                `;
-                commentsList.appendChild(commentEl);
-            });
-            commentsList.scrollTop = commentsList.scrollHeight;
-        };
-
-        commentsForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const commentText = document.getElementById('comment-text').value;
-
-            if (commentText.trim() === '' || !currentTicketId) {
-                return;
-            }
-            
-            try {
-                await addDoc(collection(db, `artifacts/${appId}/public/data/tickets/${currentTicketId}/comments`), {
-                    text: commentText,
-                    timestamp: Date.now(),
-                    userId: userId,
-                });
-                document.getElementById('comment-text').value = '';
-            } catch (error) {
-                console.error("Erreur lors de l'ajout du commentaire: ", error);
-            }
-        });
-
-        closeCommentsModalButton.addEventListener('click', () => {
-            commentsModal.classList.add('hidden');
-        });
-
-        // Close modal with ESC key
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                solvedModal.classList.add('hidden');
-                deleteModal.classList.add('hidden');
-                editModal.classList.add('hidden');
-                commentsModal.classList.add('hidden');
-            }
-        });
-
-        // Firebase initialization on window load
-        window.onload = async () => {
-            try {
-                app = initializeApp(firebaseConfig);
-                db = getFirestore(app);
-                auth = getAuth(app);
-                
-                // Sign in anonymously or with the initial token
-                if (typeof __initial_auth_token !== 'undefined') {
-                    await signInWithCustomToken(auth, __initial_auth_token);
-                } else {
-                    await signInAnonymously(auth);
-                }
-
-                // Get user ID after sign-in
-                onAuthStateChanged(auth, (user) => {
-                    if (user) {
-                        userId = user.uid;
-                        userIdDisplay.textContent = `Votre ID: ${userId}`;
-                        fetchAndRenderTickets();
-                        fetchAnnouncements();
-                    } else {
-                        // Handle cases where the user is not signed in
-                        console.log("User not signed in.");
-                        userId = null;
-                    }
-                });
-
-            } catch (e) {
-                console.error("Firebase initialization error: ", e);
-            }
-        };
-    </script>
 </head>
-<body class="bg-gray-50 text-gray-800 font-sans">
-    <div class="notification" id="notification"></div>
-    <div class="container mx-auto px-4 py-12">
-        <header class="text-center mb-12">
-            <h1 class="text-5xl font-extrabold text-gray-200 mb-2">Data Inceptio Ticket</h1>
-            <p class="text-gray-400 text-lg">Votre portail de services et d'assistance en temps réel.</p>
-        </header>
+<body>
 
-        <div class="text-center text-sm mb-8 text-gray-500">
-            <p id="user-id-display" class="font-mono text-xs text-center break-all text-gray-400"></p>
-        </div>
-
-        <div class="grid lg:grid-cols-2 gap-8">
-            <!-- Ticket submission section -->
-            <div class="card">
-                <h2 class="text-2xl font-bold mb-6 text-center text-gray-200">Créer un ticket d'assistance</h2>
-                <form id="report-form" class="space-y-6">
-                    <div>
-                        <label for="report-type" class="block text-sm font-medium text-gray-400 mb-1">Type de problème :</label>
-                        <select id="report-type" name="type" required class="block w-full rounded-lg input-field px-3 py-2">
-                            <option value="">Sélectionnez un type</option>
-                            <option value="materiel">Matériel</option>
-                            <option value="logiciel">Logiciel</option>
-                            <option value="reseau">Réseau</option>
-                            <option value="imprimante">Imprimante</option>
-                            <option value="autre">Autre</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label for="report-description" class="block text-sm font-medium text-gray-400 mb-1">Description détaillée :</label>
-                        <textarea id="report-description" name="description" rows="4" required class="block w-full rounded-lg input-field px-3 py-2"></textarea>
-                    </div>
-                    <button type="submit" class="w-full btn-primary">Soumettre le ticket</button>
-                </form>
-                <div id="status-message" class="mt-4 text-center text-sm font-semibold text-gray-400 hidden"></div>
+    <!-- Barre de navigation -->
+    <nav id="navbar" class="fixed top-0 left-0 w-full z-50 p-6 transition-all duration-500 backdrop-blur-sm bg-primary-bg bg-opacity-70">
+        <div class="container mx-auto flex flex-col md:flex-row justify-between items-center">
+            <a href="#hero" class="mb-4 md:mb-0">
+                <!-- Utilisation d'un filtre CSS pour rendre le logo noir visible sur le fond sombre -->
+                <img src="téléchargement.webp" alt="Logo de l'entreprise" class="h-10 w-auto filter invert" style="border: 2px solid white;">
+            </a>
+            <div class="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-8 text-lg text-center">
+                <a href="#portfolio" class="font-medium hover:text-accent-color transition-colors duration-300">Portfolio</a>
+                <a href="#services" class="font-medium hover:text-accent-color transition-colors duration-300">Services</a>
+                <a href="#contact" class="font-medium hover:text-accent-color transition-colors duration-300">Contact</a>
             </div>
+        </div>
+    </nav>
 
-            <!-- Open tickets section -->
-            <div class="card">
-                <h2 class="text-2xl font-bold mb-6 text-center text-gray-200">Tickets</h2>
-                
-                <!-- Filter controls -->
-                <div class="filter-controls-container flex flex-col sm:flex-row items-center justify-between space-y-4 sm:space-y-0 sm:space-x-4">
-                    <div class="relative w-full sm:w-auto flex-1">
-                        <input type="text" id="search-input" placeholder="Rechercher par mot-clé..." class="w-full pl-10 pr-4 py-2 rounded-lg input-field">
-                        <div class="absolute inset-y-0 left-0 flex items-center pl-3">
-                            <i class="fa-solid fa-search text-gray-400"></i>
-                        </div>
-                    </div>
-                    <div class="filter-buttons-group flex flex-wrap justify-center sm:justify-start gap-x-2 w-full sm:w-auto">
-                        <button class="status-filter-btn px-4 py-2 rounded-full text-sm font-semibold transition-colors duration-200 bg-blue-600 text-white" data-status="all">Tous</button>
-                        <button class="status-filter-btn px-4 py-2 rounded-full text-sm font-semibold transition-colors duration-200 bg-gray-600 text-gray-200 hover:bg-gray-500" data-status="mine">Mes tickets</button>
-                        <button class="status-filter-btn px-4 py-2 rounded-full text-sm font-semibold transition-colors duration-200 bg-gray-600 text-gray-200 hover:bg-gray-500" data-status="open">Ouverts</button>
-                        <button class="status-filter-btn px-4 py-2 rounded-full text-sm font-semibold transition-colors duration-200 bg-gray-600 text-gray-200 hover:bg-gray-500" data-status="resolved">Résolus</button>
-                        <select id="type-filter-select" class="block rounded-full input-field px-3 py-2 text-sm font-semibold bg-gray-600 text-gray-200 hover:bg-gray-500">
-                            <option value="all">Tous les types</option>
-                            <option value="materiel">Matériel</option>
-                            <option value="logiciel">Logiciel</option>
-                            <option value="reseau">Réseau</option>
-                            <option value="imprimante">Imprimante</option>
-                            <option value="autre">Autre</option>
-                        </select>
-                    </div>
-                </div>
-                
+    <!-- Section Héros -->
+    <header id="hero" class="hero-section flex flex-col justify-center items-center text-center min-h-screen px-4 pt-24 pb-12">
+        <h1 class="text-5xl md:text-8xl playfair font-bold tracking-tight leading-tight drop-shadow-lg animate-fade-in-up">
+            L'Art de la Table en Images
+        </h1>
+        <p class="mt-4 text-lg md:text-2xl font-light max-w-2xl drop-shadow-lg animate-fade-in-up animation-delay-300">
+            Des photographies culinaires élégantes qui célèbrent le goût et le style.
+        </p>
+        <a href="#portfolio" class="mt-8 px-8 py-3 btn-primary font-semibold rounded-full shadow-lg animate-fade-in-up animation-delay-600">
+            Découvrir le Portfolio
+        </a>
+    </header>
 
-                <div id="problem-list" class="space-y-4 mt-6">
-                    <!-- Tickets will be displayed here by JavaScript -->
-                </div>
-                
-                <!-- Pagination controls -->
-                <div id="pagination-container" class="flex justify-center items-center mt-6">
-                    <!-- Pagination buttons will be added here by JavaScript -->
+    <main class="container mx-auto px-4 py-16">
+        
+        <!-- Section À Propos -->
+        <section id="about" class="mb-24 animate-fade-in-up">
+            <h2 class="text-4xl md:text-5xl playfair font-bold text-center mb-12">À Propos</h2>
+            <div class="grid md:grid-cols-2 gap-12 items-center card p-8">
+                <img src="https://picsum.photos/800/600?random=2" alt="Photographe culinaire au travail" class="w-full h-auto rounded-xl shadow-md object-cover">
+                <div class="text-center md:text-left">
+                    <p class="text-lg text-gray-400 leading-relaxed">
+                        Je m'appelle [Votre Nom] et je suis photographe culinaire, passionné par la mise en lumière de la gastronomie. Mon approche allie créativité et précision technique pour capturer l'essence de chaque plat, de la matière première au chef-d'œuvre final. Je crois que la nourriture est une histoire, et mon travail est de la raconter.
+                    </p>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <!-- Announcements section -->
-        <div class="card mt-8">
-            <h2 class="text-2xl font-bold mb-6 text-center text-gray-200">Annonces de service</h2>
-            <div id="announcement-list" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                <!-- Announcements will be dynamically loaded here -->
-            </div>
-        </div>
-    </div>
-
-    <!-- Confirmation Modal -->
-    <div id="solved-modal" class="modal hidden fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50">
-        <div class="modal-content bg-gray-800 p-8 rounded-xl shadow-xl text-center max-w-sm w-full border border-gray-700">
-            <p class="text-xl font-bold text-gray-200 mb-6">Confirmer la résolution du ticket ?</p>
-            <div class="flex justify-center space-x-4">
-                <button id="confirm-solve-button" class="bg-green-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-green-700 transition-colors">Confirmer</button>
-                <button id="cancel-solve-button" class="bg-gray-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-gray-700 transition-colors">Annuler</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Delete Confirmation Modal -->
-    <div id="delete-modal" class="modal hidden fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50">
-        <div class="modal-content bg-gray-800 p-8 rounded-xl shadow-xl text-center max-w-sm w-full border border-gray-700">
-            <p class="text-xl font-bold text-gray-200 mb-6">Êtes-vous sûr de vouloir supprimer ce ticket ?</p>
-            <div class="flex justify-center space-x-4">
-                <button id="confirm-delete-button" class="bg-red-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-red-700 transition-colors">Oui, supprimer</button>
-                <button id="cancel-delete-button" class="bg-gray-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-gray-700 transition-colors">Annuler</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Edit Modal -->
-    <div id="edit-modal" class="modal hidden fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50">
-        <div class="modal-content bg-gray-800 p-8 rounded-xl shadow-xl max-w-lg w-full border border-gray-700">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-xl font-bold text-gray-200">Modifier le ticket</h2>
-                <button id="close-edit-modal" class="text-gray-400 hover:text-gray-200 text-2xl">&times;</button>
-            </div>
+        <!-- Section Portfolio -->
+        <section id="portfolio" class="mb-24 animate-fade-in-up">
+            <h2 class="text-4xl md:text-5xl playfair font-bold text-center mb-16">Mon Portfolio</h2>
+            <p class="text-center text-gray-500 mb-8">Découvrez mon travail ci-dessous.</p>
             
-            <form id="edit-form" class="space-y-6">
-                <div>
-                    <label for="edit-type" class="block text-sm font-medium text-gray-400 mb-1">Type de problème :</label>
-                    <select id="edit-type" name="type" required class="block w-full rounded-lg input-field px-3 py-2">
-                        <option value="materiel">Matériel</option>
-                        <option value="logiciel">Logiciel</option>
-                        <option value="reseau">Réseau</option>
-                        <option value="imprimante">Imprimante</option>
-                        <option value="autre">Autre</option>
-                    </select>
+            <div id="image-gallery" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Images de portfolio -->
+                <div class="gallery-item">
+                    <img src="https://picsum.photos/600/400?image=1015" data-large-src="https://picsum.photos/1200/800?image=1015" alt="Image de portfolio 1" class="w-full h-full object-cover">
+                    <div class="gallery-overlay">
+                        <span class="text-white text-xl playfair font-bold">Douceurs</span>
+                    </div>
                 </div>
-                <div>
-                    <label for="edit-description" class="block text-sm font-medium text-gray-400 mb-1">Description détaillée :</label>
-                    <textarea id="edit-description" name="description" rows="4" required class="block w-full rounded-lg input-field px-3 py-2"></textarea>
+                <div class="gallery-item">
+                    <img src="https://picsum.photos/600/400?image=1025" data-large-src="https://picsum.photos/1200/800?image=1025" alt="Image de portfolio 2" class="w-full h-full object-cover">
+                    <div class="gallery-overlay">
+                        <span class="text-white text-xl playfair font-bold">Cuisine Italienne</span>
+                    </div>
                 </div>
-                <button type="submit" class="w-full btn-primary">Enregistrer les modifications</button>
-            </form>
-        </div>
-    </div>
+                <div class="gallery-item">
+                    <img src="https://picsum.photos/600/400?image=1027" data-large-src="https://picsum.photos/1200/800?image=1027" alt="Image de portfolio 3" class="w-full h-full object-cover">
+                    <div class="gallery-overlay">
+                        <span class="text-white text-xl playfair font-bold">Cuisine Japonaise</span>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://picsum.photos/600/400?image=1033" data-large-src="https://picsum.photos/1200/800?image=1033" alt="Image de portfolio 4" class="w-full h-full object-cover">
+                    <div class="gallery-overlay">
+                        <span class="text-white text-xl playfair font-bold">Plats Sains</span>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://picsum.photos/600/400?image=1045" data-large-src="https://picsum.photos/1200/800?image=1045" alt="Image de portfolio 5" class="w-full h-full object-cover">
+                    <div class="gallery-overlay">
+                        <span class="text-white text-xl playfair font-bold">Burgers Gourmets</span>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://picsum.photos/600/400?image=1055" data-large-src="https://picsum.photos/1200/800?image=1055" alt="Image de portfolio 6" class="w-full h-full object-cover">
+                    <div class="gallery-overlay">
+                        <span class="text-white text-xl playfair font-bold">Cocktails</span>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://picsum.photos/600/400?image=1058" data-large-src="https://picsum.photos/1200/800?image=1058" alt="Image de portfolio 7" class="w-full h-full object-cover">
+                    <div class="gallery-overlay">
+                        <span class="text-white text-xl playfair font-bold">Café et Boissons</span>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://picsum.photos/600/400?image=1062" data-large-src="https://picsum.photos/1200/800?image=1062" alt="Image de portfolio 8" class="w-full h-full object-cover">
+                    <div class="gallery-overlay">
+                        <span class="text-white text-xl playfair font-bold">Ingrédients</span>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://picsum.photos/600/400?image=1073" data-large-src="https://picsum.photos/1200/800?image=1073" alt="Image de portfolio 9" class="w-full h-full object-cover">
+                    <div class="gallery-overlay">
+                        <span class="text-white text-xl playfair font-bold">Desserts</span>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://picsum.photos/600/400?image=1075" data-large-src="https://picsum.photos/1200/800?image=1075" alt="Image de portfolio 10" class="w-full h-full object-cover">
+                    <div class="gallery-overlay">
+                        <span class="text-white text-xl playfair font-bold">Vins</span>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://picsum.photos/600/400?image=1078" data-large-src="https://picsum.photos/1200/800?image=1078" alt="Image de portfolio 11" class="w-full h-full object-cover">
+                    <div class="gallery-overlay">
+                        <span class="text-white text-xl playfair font-bold">Pâtisseries</span>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://picsum.photos/600/400?image=1080" data-large-src="https://picsum.photos/1200/800?image=1080" alt="Image de portfolio 12" class="w-full h-full object-cover">
+                    <div class="gallery-overlay">
+                        <span class="text-white text-xl playfair font-bold">Plats Gourmands</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Section Services -->
+        <section id="services" class="mb-24 animate-fade-in-up">
+            <h2 class="text-4xl md:text-5xl playfair font-bold text-center mb-12">Mes Services</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                <div class="card p-8">
+                    <h3 class="text-2xl font-bold mb-4 text-accent-color">Restaurants & Chefs</h3>
+                    <p class="text-gray-400">Création de menus visuels, portraits de chefs et reportages photo pour mettre en valeur votre cuisine.</p>
+                </div>
+                <div class="card p-8">
+                    <h3 class="text-2xl font-bold mb-4 text-accent-color">Marques & Agences</h3>
+                    <p class="text-gray-400">Photographie de produits, stylisme culinaire et création de contenu pour vos campagnes marketing.</p>
+                </div>
+                <div class="card p-8">
+                    <h3 class="text-2xl font-bold mb-4 text-accent-color">Livres & Magazines</h3>
+                    <p class="text-gray-400">Collaboration pour la réalisation de livres de recettes, magazines spécialisés et articles de blog.</p>
+                </div>
+            </div>
+        </section>
 
-    <!-- Comments Modal -->
-    <div id="comments-modal" class="modal hidden fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50">
-        <div class="modal-content bg-gray-800 p-8 rounded-xl shadow-xl max-w-lg w-full border border-gray-700">
-            <div class="flex justify-between items-center mb-6">
-                <h2 id="comments-ticket-desc" class="text-xl font-bold text-gray-200"></h2>
-                <button id="close-comments-modal" class="text-gray-400 hover:text-gray-200 text-2xl">&times;</button>
-            </div>
-            
-            <div id="comments-list" class="max-h-80 overflow-y-auto space-y-4 mb-6 pr-2">
-                <!-- Comments will be rendered here -->
-            </div>
-            
-            <form id="comments-form" class="space-y-4">
-                <textarea id="comment-text" class="w-full rounded-lg input-field px-4 py-2 resize-none" rows="3" placeholder="Ajouter un commentaire..." required></textarea>
-                <button type="submit" class="w-full btn-primary">
-                    <i class="fa-solid fa-paper-plane mr-2"></i> Envoyer
+        <!-- Section Contact -->
+        <section id="contact" class="mb-16 animate-fade-in-up">
+            <h2 class="text-4xl md:text-5xl playfair font-bold text-center mb-8">Contactez-moi</h2>
+            <form class="max-w-xl mx-auto card p-8">
+                <p class="text-center text-gray-400 mb-6">Parlons de votre projet. Je serais ravi de collaborer avec vous.</p>
+                <div class="mb-4">
+                    <label for="name" class="block text-gray-400 mb-2 font-medium">Nom</label>
+                    <input type="text" id="name" name="name" class="w-full p-3 bg-gray-800 border-2 border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent-color" required>
+                </div>
+                <div class="mb-4">
+                    <label for="email" class="block text-gray-400 mb-2 font-medium">Email</label>
+                    <input type="email" id="email" name="email" class="w-full p-3 bg-gray-800 border-2 border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent-color" required>
+                </div>
+                <div class="mb-6">
+                    <label for="message" class="block text-gray-400 mb-2 font-medium">Message</label>
+                    <textarea id="message" name="message" rows="4" class="w-full p-3 bg-gray-800 border-2 border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent-color" required></textarea>
+                </div>
+                <button type="submit" class="w-full btn-primary font-semibold py-3 px-6 rounded-lg shadow-md">
+                    Envoyer le Message
                 </button>
             </form>
+        </section>
+    </main>
+
+    <footer class="bg-secondary-bg text-gray-500 text-center p-8">
+        <p>&copy; 2025 Lecomte Fotos. Tous droits réservés.</p>
+    </footer>
+
+    <!-- Fenêtre modale pour l'affichage de la grande image -->
+    <div id="lightbox-modal" class="fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-90 hidden">
+        <div class="relative max-w-5xl max-h-5xl p-4">
+            <!-- Boutons de navigation -->
+            <button id="prev-btn" class="nav-btn left-4 opacity-50 hover:opacity-100 transition-opacity">&lt;</button>
+            <button id="next-btn" class="nav-btn right-4 opacity-50 hover:opacity-100 transition-opacity">&gt;</button>
+            <button id="close-modal-btn" class="absolute top-4 right-4 text-white text-3xl font-bold hover:text-gray-400">&times;</button>
+            <img id="lightbox-image" src="" alt="Grande image du portfolio" class="max-w-full max-h-[90vh] rounded-lg">
         </div>
     </div>
+
+    <script>
+        // Script pour la barre de navigation qui change de couleur au défilement
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('bg-opacity-90', 'shadow-lg');
+            } else {
+                navbar.classList.remove('bg-opacity-90', 'shadow-lg');
+            }
+        });
+
+        // Logique pour la fenêtre modale (lightbox)
+        document.addEventListener('DOMContentLoaded', () => {
+            const galleryItems = Array.from(document.querySelectorAll('.gallery-item'));
+            const modal = document.getElementById('lightbox-modal');
+            const modalImage = document.getElementById('lightbox-image');
+            const closeModalBtn = document.getElementById('close-modal-btn');
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document = document.getElementById('next-btn');
+            let currentIndex = 0;
+
+            // Ouvre la fenêtre modale au clic sur une image
+            galleryItems.forEach((item, index) => {
+                item.addEventListener('click', () => {
+                    currentIndex = index;
+                    updateModalImage();
+                    modal.classList.remove('hidden');
+                });
+            });
+
+            // Met à jour l'image de la fenêtre modale
+            function updateModalImage() {
+                const largeImgSrc = galleryItems[currentIndex].querySelector('img').dataset.largeSrc;
+                modalImage.src = largeImgSrc;
+            }
+
+            // Navigation vers l'image précédente
+            prevBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                currentIndex = (currentIndex - 1 + galleryItems.length) % galleryItems.length;
+                updateModalImage();
+            });
+
+            // Navigation vers l'image suivante
+            nextBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                currentIndex = (currentIndex + 1) % galleryItems.length;
+                updateModalImage();
+            });
+
+            // Ferme la fenêtre modale au clic sur le bouton ou sur le fond
+            closeModalBtn.addEventListener('click', () => {
+                modal.classList.add('hidden');
+            });
+
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.add('hidden');
+                }
+            });
+        });
+    </script>
 </body>
 </html>
