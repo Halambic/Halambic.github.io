@@ -33,12 +33,12 @@
             font-family: 'Playfair Display', serif;
         }
 
+        /* Hero section with dynamic background from JavaScript */
         .hero-section {
-            /* Updated image to a more suitable one from Picsum.photos */
-            background-image: url('https://picsum.photos/1920/1080?random=1&blur=5&grayscale');
             background-size: cover;
             background-position: center;
             position: relative;
+            transition: background-image 2s ease-in-out; /* Smooth transition for the background image */
         }
 
         .hero-section::before {
@@ -139,25 +139,6 @@
             transform: scale(1.05);
         }
 
-        .gallery-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.6);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            transition: opacity 0.5s ease;
-            text-align: center;
-        }
-
-        .gallery-item:hover .gallery-overlay {
-            opacity: 1;
-        }
-
         .card {
             background-color: var(--secondary-bg);
             border-radius: 0.75rem;
@@ -250,7 +231,12 @@
             opacity: 1;
             transform: translateX(0);
         }
-
+        
+        .about-image {
+            object-fit: cover;
+            width: 100%;
+            height: 400px;
+        }
     </style>
 </head>
 <body>
@@ -297,7 +283,7 @@
         <section id="about" class="mb-24 animate-fade-in-up">
             <h2 class="text-4xl md:text-5xl playfair font-bold text-center mb-12">À Propos</h2>
             <div class="grid md:grid-cols-2 gap-12 items-center card p-8">
-                <img src="https://picsum.photos/800/600?random=2" alt="Photographe culinaire au travail" class="w-full h-auto rounded-xl shadow-md object-cover">
+                <img src="https://i.imgur.com/5F9gMl1.jpeg" alt="Portrait de la photographe Delphine Lecomte" class="rounded-xl shadow-md about-image">
                 <div class="text-center md:text-left">
                     <p class="text-lg text-gray-400 leading-relaxed">
                         Je m'appelle Delphine Lecomte et je suis photographe culinaire, passionnée par la mise en lumière de la gastronomie. Mon approche allie créativité et précision technique pour capturer l'essence de chaque plat, de la matière première au chef-d'œuvre final. Je crois que la nourriture est une histoire, et mon travail est de vous la raconter.
@@ -312,78 +298,126 @@
             <p class="text-center text-gray-500 mb-8">Découvrez une sélection de mes créations culinaires.</p>
             
             <div id="image-gallery" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Images de portfolio -->
+                <!-- Images de portfolio mises à jour -->
                 <div class="gallery-item">
-                    <img src="https://picsum.photos/600/400?image=1015" data-large-src="https://picsum.photos/1200/800?image=1015" alt="Image de portfolio 1" class="w-full h-full object-cover">
-                    <div class="gallery-overlay">
-                        <span class="text-white text-xl playfair font-bold">Douceurs</span>
-                    </div>
+                    <img src="https://i.imgur.com/eQE6IfD.jpeg" data-large-src="https://i.imgur.com/eQE6IfD.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
                 </div>
                 <div class="gallery-item">
-                    <img src="https://picsum.photos/600/400?image=1025" data-large-src="https://picsum.photos/1200/800?image=1025" alt="Image de portfolio 2" class="w-full h-full object-cover">
-                    <div class="gallery-overlay">
-                        <span class="text-white text-xl playfair font-bold">Cuisine Italienne</span>
-                    </div>
+                    <img src="https://i.imgur.com/HZNDruE.jpeg" data-large-src="https://i.imgur.com/HZNDruE.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
                 </div>
                 <div class="gallery-item">
-                    <img src="https://picsum.photos/600/400?image=1027" data-large-src="https://picsum.photos/1200/800?image=1027" alt="Image de portfolio 3" class="w-full h-full object-cover">
-                    <div class="gallery-overlay">
-                        <span class="text-white text-xl playfair font-bold">Cuisine Japonaise</span>
-                    </div>
+                    <img src="https://i.imgur.com/Ida39bD.jpeg" data-large-src="https://i.imgur.com/Ida39bD.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
                 </div>
                 <div class="gallery-item">
-                    <img src="https://picsum.photos/600/400?image=1033" data-large-src="https://picsum.photos/1200/800?image=1033" alt="Image de portfolio 4" class="w-full h-full object-cover">
-                    <div class="gallery-overlay">
-                        <span class="text-white text-xl playfair font-bold">Plats Sains</span>
-                    </div>
+                    <img src="https://i.imgur.com/LB5Wf6Z.jpeg" data-large-src="https://i.imgur.com/LB5Wf6Z.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
                 </div>
                 <div class="gallery-item">
-                    <img src="https://picsum.photos/600/400?image=1045" data-large-src="https://picsum.photos/1200/800?image=1045" alt="Image de portfolio 5" class="w-full h-full object-cover">
-                    <div class="gallery-overlay">
-                        <span class="text-white text-xl playfair font-bold">Burgers Gourmets</span>
-                    </div>
+                    <img src="https://i.imgur.com/oF4tE7h.jpeg" data-large-src="https://i.imgur.com/oF4tE7h.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
                 </div>
                 <div class="gallery-item">
-                    <img src="https://picsum.photos/600/400?image=1055" data-large-src="https://picsum.photos/1200/800?image=1055" alt="Image de portfolio 6" class="w-full h-full object-cover">
-                    <div class="gallery-overlay">
-                        <span class="text-white text-xl playfair font-bold">Cocktails</span>
-                    </div>
+                    <img src="https://i.imgur.com/6XsIHhK.jpeg" data-large-src="https://i.imgur.com/6XsIHhK.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
                 </div>
                 <div class="gallery-item">
-                    <img src="https://picsum.photos/600/400?image=1058" data-large-src="https://picsum.photos/1200/800?image=1058" alt="Image de portfolio 7" class="w-full h-full object-cover">
-                    <div class="gallery-overlay">
-                        <span class="text-white text-xl playfair font-bold">Café et Boissons</span>
-                    </div>
+                    <img src="https://i.imgur.com/xz5muTB.jpeg" data-large-src="https://i.imgur.com/xz5muTB.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
                 </div>
                 <div class="gallery-item">
-                    <img src="https://picsum.photos/600/400?image=1062" data-large-src="https://picsum.photos/1200/800?image=1062" alt="Image de portfolio 8" class="w-full h-full object-cover">
-                    <div class="gallery-overlay">
-                        <span class="text-white text-xl playfair font-bold">Ingrédients</span>
-                    </div>
+                    <img src="https://i.imgur.com/JbOAqro.jpeg" data-large-src="https://i.imgur.com/JbOAqro.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
                 </div>
                 <div class="gallery-item">
-                    <img src="https://picsum.photos/600/400?image=1073" data-large-src="https://picsum.photos/1200/800?image=1073" alt="Image de portfolio 9" class="w-full h-full object-cover">
-                    <div class="gallery-overlay">
-                        <span class="text-white text-xl playfair font-bold">Desserts</span>
-                    </div>
+                    <img src="https://i.imgur.com/c1FAH78.jpeg" data-large-src="https://i.imgur.com/c1FAH78.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
                 </div>
                 <div class="gallery-item">
-                    <img src="https://picsum.photos/600/400?image=1075" data-large-src="https://picsum.photos/1200/800?image=1075" alt="Image de portfolio 10" class="w-full h-full object-cover">
-                    <div class="gallery-overlay">
-                        <span class="text-white text-xl playfair font-bold">Vins</span>
-                    </div>
+                    <img src="https://i.imgur.com/MWkKfDZ.jpeg" data-large-src="https://i.imgur.com/MWkKfDZ.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
                 </div>
                 <div class="gallery-item">
-                    <img src="https://picsum.photos/600/400?image=1078" data-large-src="https://picsum.photos/1200/800?image=1078" alt="Image de portfolio 11" class="w-full h-full object-cover">
-                    <div class="gallery-overlay">
-                        <span class="text-white text-xl playfair font-bold">Pâtisseries</span>
-                    </div>
+                    <img src="https://i.imgur.com/rMfjYlr.jpeg" data-large-src="https://i.imgur.com/rMfjYlr.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
                 </div>
                 <div class="gallery-item">
-                    <img src="https://picsum.photos/600/400?image=1080" data-large-src="https://picsum.photos/1200/800?image=1080" alt="Image de portfolio 12" class="w-full h-full object-cover">
-                    <div class="gallery-overlay">
-                        <span class="text-white text-xl playfair font-bold">Plats Gourmands</span>
-                    </div>
+                    <img src="https://i.imgur.com/WJh4O2N.jpeg" data-large-src="https://i.imgur.com/WJh4O2N.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://i.imgur.com/l2Y6vdS.jpeg" data-large-src="https://i.imgur.com/l2Y6vdS.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://i.imgur.com/OoBtWY6.jpeg" data-large-src="https://i.imgur.com/OoBtWY6.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://i.imgur.com/zPmcJxH.jpeg" data-large-src="https://i.imgur.com/zPmcJxH.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://i.imgur.com/kooPort.jpeg" data-large-src="https://i.imgur.com/kooPort.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://i.imgur.com/1fFilAc.jpeg" data-large-src="https://i.imgur.com/1fFilAc.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://i.imgur.com/fHtksC2.jpeg" data-large-src="https://i.imgur.com/fHtksC2.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://i.imgur.com/A16ySaw.jpeg" data-large-src="https://i.imgur.com/A16ySaw.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://i.imgur.com/Caab01r.jpeg" data-large-src="https://i.imgur.com/Caab01r.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://i.imgur.com/DUBMybb.jpeg" data-large-src="https://i.imgur.com/DUBMybb.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://i.imgur.com/oqYqL79.jpeg" data-large-src="https://i.imgur.com/oqYqL79.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://i.imgur.com/kdTF18R.jpeg" data-large-src="https://i.imgur.com/kdTF18R.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://i.imgur.com/GHOAwPi.jpeg" data-large-src="https://i.imgur.com/GHOAwPi.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://i.imgur.com/LV0XTDT.jpeg" data-large-src="https://i.imgur.com/LV0XTDT.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://i.imgur.com/vSq8Yrg.jpeg" data-large-src="https://i.imgur.com/vSq8Yrg.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://i.imgur.com/f3jdRVu.jpeg" data-large-src="https://i.imgur.com/f3jdRVu.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://i.imgur.com/AjvMVDK.jpeg" data-large-src="https://i.imgur.com/AjvMVDK.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://i.imgur.com/HDb074v.jpeg" data-large-src="https://i.imgur.com/HDb074v.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://i.imgur.com/jJ3CD1v.jpeg" data-large-src="https://i.imgur.com/jJ3CD1v.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://i.imgur.com/3GAyhxc.jpeg" data-large-src="https://i.imgur.com/3GAyhxc.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://i.imgur.com/t8xLXXR.jpeg" data-large-src="https://i.imgur.com/t8xLXXR.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://i.imgur.com/mwEYSzH.jpeg" data-large-src="https://i.imgur.com/mwEYSzH.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://i.imgur.com/MnB6CIh.jpeg" data-large-src="https://i.imgur.com/MnB6CIh.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://i.imgur.com/ra7MUWM.jpeg" data-large-src="https://i.imgur.com/ra7MUWM.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://i.imgur.com/ZYzLuFX.jpeg" data-large-src="https://i.imgur.com/ZYzLuFX.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://i.imgur.com/mIQOp2B.jpeg" data-large-src="https://i.imgur.com/mIQOp2B.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://i.imgur.com/9dRjrSZ.jpeg" data-large-src="https://i.imgur.com/9dRjrSZ.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://i.imgur.com/mobrvSX.jpeg" data-large-src="https://i.imgur.com/mobrvSX.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://i.imgur.com/j65pGkN.jpeg" data-large-src="https://i.imgur.com/j65pGkN.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
                 </div>
             </div>
         </section>
@@ -438,6 +472,11 @@
             <a href="https://www.linkedin.com/in/lecomte-delphine-571554334/" class="text-gray-400 hover:text-accent-color transition-colors" aria-label="Suivez-moi sur LinkedIn" target="_blank"><i class="fab fa-linkedin-in text-2xl"></i></a>
             <a href="https://www.tiktok.com/@lecomtefotos" class="text-gray-400 hover:text-accent-color transition-colors" aria-label="Suivez-moi sur TikTok" target="_blank"><i class="fab fa-tiktok text-2xl"></i></a>
         </div>
+        <div class="flex flex-wrap justify-center space-x-4 mt-4 text-sm md:text-base">
+            <a href="cgu-cgv.html" class="hover:text-white transition-colors" target="_blank">CGU/CGV</a>
+            <a href="politique-de-confidentialite.html" class="hover:text-white transition-colors" target="_blank">Politique de confidentialité</a>
+            <a href="mentions-legales.html" class="hover:text-white transition-colors" target="_blank">Mentions légales</a>
+        </div>
     </footer>
 
     <!-- Fenêtre modale pour l'affichage de la grande image -->
@@ -452,6 +491,57 @@
     </div>
 
     <script>
+        // Array of landscape images from the portfolio to use in the carousel
+        const heroImages = [
+            'https://i.imgur.com/eQE6IfD.jpeg',
+            'https://i.imgur.com/HZNDruE.jpeg',
+            'https://i.imgur.com/LB5Wf6Z.jpeg',
+            'https://i.imgur.com/oF4tE7h.jpeg',
+            'https://i.imgur.com/xz5muTB.jpeg',
+            'https://i.imgur.com/JbOAqro.jpeg',
+            'https://i.imgur.com/c1FAH78.jpeg',
+            'https://i.imgur.com/MWkKfDZ.jpeg',
+            'https://i.imgur.com/WJh4O2N.jpeg',
+            'https://i.imgur.com/l2Y6vdS.jpeg',
+            'https://i.imgur.com/OoBtWY6.jpeg',
+            'https://i.imgur.com/1fFilAc.jpeg',
+            'https://i.imgur.com/Caab01r.jpeg',
+            'https://i.imgur.com/DUBMybb.jpeg',
+            'https://i.imgur.com/oqYqL79.jpeg',
+            'https://i.imgur.com/GHOAwPi.jpeg',
+            'https://i.imgur.com/LV0XTDT.jpeg',
+            'https://i.imgur.com/f3jdRVu.jpeg',
+            'https://i.imgur.com/AjvMVDK.jpeg',
+            'https://i.imgur.com/HDb074v.jpeg',
+            'https://i.imgur.com/3GAyhxc.jpeg',
+            'https://i.imgur.com/t8xLXXR.jpeg',
+            'https://i.imgur.com/mwEYSzH.jpeg',
+            'https://i.imgur.com/MnB6CIh.jpeg',
+            'https://i.imgur.com/ZYzLuFX.jpeg',
+            'https://i.imgur.com/mIQOp2B.jpeg',
+            'https://i.imgur.com/9dRjrSZ.jpeg',
+            'https://i.imgur.com/mobrvSX.jpeg',
+        ];
+
+        let currentHeroIndex = 0;
+        const heroSection = document.getElementById('hero');
+
+        function changeHeroBackground() {
+            currentHeroIndex = (currentHeroIndex + 1) % heroImages.length;
+            const imageUrl = heroImages[currentHeroIndex];
+            heroSection.style.backgroundImage = `url('${imageUrl}')`;
+        }
+
+        // Pre-load images to avoid flickering
+        heroImages.forEach(src => {
+            const img = new Image();
+            img.src = src;
+        });
+
+        // Set the initial background and start the carousel
+        heroSection.style.backgroundImage = `url('${heroImages[0]}')`;
+        setInterval(changeHeroBackground, 7000); // Change image every 7 seconds
+
         // Script pour la barre de navigation qui change de couleur au défilement
         window.addEventListener('scroll', () => {
             const navbar = document.getElementById('navbar');
