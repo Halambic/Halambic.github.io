@@ -10,7 +10,7 @@
     <meta name="description" content="Photographe culinaire professionnelle basée à Lyon, Delphine Lecomte capture l'art de la table pour les restaurants, chefs et marques. Création de menus visuels et reportages photo de haute qualité.">
     
     <!-- MOTS-CLÉS POUR LE RÉFÉRENCEMENT (MOINS IMPORTANTS POUR GOOGLE MAIS TOUJOURS UTILISÉS PAR D'AUTRES MOTEURS) -->
-    <meta name="keywords" content="photographe culinaire, photographie, photographie culinaire, photographe gastronomie, photographe lyon, food photography, food stylist, shooting photo, food, cuisine, restaurant, chef, recettes, stylisme culinaire">
+    <meta name="keywords" content="photographe culinaire, photographie, photographie culinaire, photographe gastronomie, photographe lyon, food photography, Delphine Lecomte, food stylist, shooting photo, food, cuisine, restaurant, chef, recettes, stylisme culinaire">
 
     <!-- BALISES OPEN GRAPH POUR LE PARTAGE SUR LES RÉSEAUX SOCIAUX -->
     <meta property="og:title" content="Lecomte Fotos - Photographie Culinaire Professionnelle">
@@ -563,6 +563,7 @@
             <a href="politique-de-confidentialite.html" class="hover:text-white transition-colors" target="_blank">Politique de confidentialité</a>
             <a href="mentions-legales.html" class="hover:text-white transition-colors" target="_blank">Mentions légales</a>
         </div>
+        <div id="user-info" class="text-gray-600 text-sm mt-4"></div>
     </footer>
 
     <!-- Fenêtre modale pour l'affichage de la grande image -->
@@ -607,9 +608,11 @@
                 onAuthStateChanged(auth, (user) => {
                     if (user) {
                         userId = user.uid;
+                        document.getElementById('user-info').textContent = 'Votre ID utilisateur: ' + userId;
                         console.log('Utilisateur authentifié:', user.uid);
                     } else {
                         console.log('Utilisateur non authentifié');
+                        document.getElementById('user-info').textContent = 'Authentification anonyme.';
                     }
                 });
 
@@ -618,6 +621,7 @@
                 
             } catch (error) {
                 console.error("Erreur d'initialisation de Firebase ou d'authentification:", error);
+                document.getElementById('user-info').textContent = 'Erreur d\'authentification.';
             }
         };
 
