@@ -235,13 +235,16 @@
             opacity: 1;
             transform: translateX(0);
         }
-        
-        .about-image {
+
+        /* Styling for the new circular image */
+        .circular-image {
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
             object-fit: cover;
-            width: 100%;
-            height: 400px;
-            /* L'ajustement ici pour positionner l'image et ne pas couper le visage */
-            object-position: top;
+            object-position: 50% 20%; /* Adjusted to center the head and bust */
+            border: 4px solid var(--accent-color);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
         }
         
         .logo-lecomte {
@@ -292,9 +295,11 @@
         <!-- Section À Propos -->
         <section id="about" class="mb-24 animate-fade-in-up">
             <h2 class="text-4xl md:text-5xl playfair font-bold text-center mb-12">À Propos</h2>
-            <div class="grid md:grid-cols-2 gap-12 items-center card p-8">
-                <!-- Image mise à jour avec object-position pour ne pas couper le visage -->
-                <img src="https://imgur.com/5F9gMl1.jpeg" alt="Portrait de la photographe Delphine Lecomte" class="rounded-xl shadow-md about-image">
+            <div class="flex flex-col md:flex-row gap-12 items-center card p-8">
+                <!-- Image circulaire -->
+                <div class="flex-shrink-0 mb-6 md:mb-0 md:mr-6">
+                    <img src="https://imgur.com/5F9gMl1.jpeg" alt="Portrait de la photographe Delphine Lecomte" class="circular-image">
+                </div>
                 <div class="text-center md:text-left">
                     <p class="text-lg text-gray-400 leading-relaxed">
                         Je m'appelle Delphine Lecomte et je suis photographe culinaire, passionnée par la mise en lumière de la gastronomie. Mon approche allie créativité et précision technique pour capturer l'essence de chaque plat, de la matière première au chef-d'œuvre final. Je crois que la nourriture est une histoire, et mon travail est de vous la raconter.
