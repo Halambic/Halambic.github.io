@@ -19,6 +19,7 @@
             --secondary-bg: #1A1A1A;
             --text-color: #EFEFEF;
             --accent-color: #A66E5A;
+            --nav-height: 144px; /* Logo (120px) + py-3 (12px top + 12px bottom) = 144px */
         }
 
         body {
@@ -32,13 +33,17 @@
         .playfair {
             font-family: 'Playfair Display', serif;
         }
+        
+        section {
+            scroll-margin-top: var(--nav-height);
+        }
 
         /* Hero section with dynamic background from JavaScript */
         .hero-section {
             background-size: cover;
             background-position: center;
             position: relative;
-            transition: background-image 2s ease-in-out; /* Smooth transition for the background image */
+            transition: background-image 2s ease-in-out;
         }
 
         .hero-section::before {
@@ -91,20 +96,19 @@
             font-weight: 500;
             color: var(--text-color);
             transition: color 0.3s ease-in-out;
-            padding: 0.5rem 1rem; /* Adjust padding for better look */
+            padding: 0.5rem 1rem;
         }
         
-        /* Correction de la barre d'animation */
         .nav-link::after {
             content: '';
             position: absolute;
             bottom: -2px;
             left: 0;
-            width: 100%; /* La barre s'étend sur toute la largeur */
+            width: 100%;
             height: 2px;
-            background-color: white; /* La barre est maintenant blanche */
+            background-color: white;
             transform: scaleX(0);
-            transform-origin: center; /* La barre grandit depuis le centre */
+            transform-origin: center;
             transition: transform 0.3s ease-in-out;
         }
 
@@ -199,7 +203,7 @@
 
         .animate-fade-in-up {
             animation: fadeInMoveUp 1s ease-out forwards;
-            opacity: 0; /* Ensures elements are hidden before animation */
+            opacity: 0;
         }
 
         .animation-delay-300 {
@@ -237,6 +241,11 @@
             width: 100%;
             height: 400px;
         }
+        
+        .logo-lecomte {
+            height: 120px;
+            width: auto;
+        }
     </style>
 </head>
 <body>
@@ -245,12 +254,11 @@
     <div id="message-box" class="message-box hidden"></div>
 
     <!-- Barre de navigation -->
-    <nav id="navbar" class="fixed top-0 left-0 w-full z-50 py-6 transition-all duration-500 backdrop-blur-sm bg-primary-bg bg-opacity-70">
+    <nav id="navbar" class="fixed top-0 left-0 w-full z-50 py-3 transition-all duration-500 backdrop-blur-sm bg-primary-bg bg-opacity-70">
         <div class="container mx-auto flex justify-between items-center px-4">
             <!-- Logo with a link to the hero section -->
             <a href="#hero" class="mb-4 md:mb-0" aria-label="Retour à l'accueil">
-                <!-- Remplacement du SVG par l'image PNG d'origine -->
-                <img src="https://res.cloudinary.com/dulmuirvj/image/upload/v1758197756/t%C3%A9l%C3%A9chargement_xaatmg.svg" alt="Logo Lecomte Fotos" class="h-16 md:h-24 w-auto">
+                <img src="https://res.cloudinary.com/dulmuirvj/image/upload/v1758229739/logomaman_wxv78s.svg" alt="Logo Lecomte Fotos" class="logo-lecomte">
             </a>
             <!-- Mobile Menu Button -->
             <button id="mobile-menu-btn" class="md:hidden text-white focus:outline-none" aria-label="Ouvrir le menu mobile">
@@ -283,7 +291,8 @@
         <section id="about" class="mb-24 animate-fade-in-up">
             <h2 class="text-4xl md:text-5xl playfair font-bold text-center mb-12">À Propos</h2>
             <div class="grid md:grid-cols-2 gap-12 items-center card p-8">
-                <img src="https://i.imgur.com/5F9gMl1.jpeg" alt="Portrait de la photographe Delphine Lecomte" class="rounded-xl shadow-md about-image">
+                <!-- Image mise à jour avec object-position pour ne pas couper le visage -->
+                <img src="https://imgur.com/5F9gMl1.jpeg" alt="Portrait de la photographe Delphine Lecomte" class="rounded-xl shadow-md about-image object-top">
                 <div class="text-center md:text-left">
                     <p class="text-lg text-gray-400 leading-relaxed">
                         Je m'appelle Delphine Lecomte et je suis photographe culinaire, passionnée par la mise en lumière de la gastronomie. Mon approche allie créativité et précision technique pour capturer l'essence de chaque plat, de la matière première au chef-d'œuvre final. Je crois que la nourriture est une histoire, et mon travail est de vous la raconter.
@@ -521,10 +530,12 @@
             'https://i.imgur.com/mIQOp2B.jpeg',
             'https://i.imgur.com/9dRjrSZ.jpeg',
             'https://i.imgur.com/mobrvSX.jpeg',
+            'https://i.imgur.com/j65pGkN.jpeg',
         ];
 
         let currentHeroIndex = 0;
         const heroSection = document.getElementById('hero');
+        const isMobile = window.innerWidth <= 768;
 
         function changeHeroBackground() {
             currentHeroIndex = (currentHeroIndex + 1) % heroImages.length;
