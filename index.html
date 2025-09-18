@@ -138,16 +138,6 @@
         .gallery-item:hover img {
             transform: scale(1.05);
         }
-        
-        /* Styles pour le lazy loading des images de la galerie */
-        .lazy-load-image {
-            opacity: 0;
-            transition: opacity 1s ease-in-out;
-        }
-        
-        .lazy-load-image.loaded {
-            opacity: 1;
-        }
 
         .card {
             background-color: var(--secondary-bg);
@@ -308,126 +298,126 @@
             <p class="text-center text-gray-500 mb-8">Découvrez une sélection de mes créations culinaires.</p>
             
             <div id="image-gallery" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Images de portfolio mises à jour avec lazy loading -->
+                <!-- Images de portfolio mises à jour -->
                 <div class="gallery-item">
-                    <img class="w-full h-full object-cover lazy-load-image" src="https://placehold.co/1200x600/0A0A0A/EFEFEF?text=Loading..." data-src="https://i.imgur.com/eQE6IfD.jpeg" alt="Photographie culinaire">
+                    <img src="https://i.imgur.com/eQE6IfD.jpeg" data-large-src="https://i.imgur.com/eQE6IfD.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
                 </div>
                 <div class="gallery-item">
-                    <img class="w-full h-full object-cover lazy-load-image" src="https://placehold.co/1200x600/0A0A0A/EFEFEF?text=Loading..." data-src="https://i.imgur.com/HZNDruE.jpeg" alt="Photographie culinaire">
+                    <img src="https://i.imgur.com/HZNDruE.jpeg" data-large-src="https://i.imgur.com/HZNDruE.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
                 </div>
                 <div class="gallery-item">
-                    <img class="w-full h-full object-cover lazy-load-image" src="https://placehold.co/1200x600/0A0A0A/EFEFEF?text=Loading..." data-src="https://i.imgur.com/Ida39bD.jpeg" alt="Photographie culinaire">
+                    <img src="https://i.imgur.com/Ida39bD.jpeg" data-large-src="https://i.imgur.com/Ida39bD.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
                 </div>
                 <div class="gallery-item">
-                    <img class="w-full h-full object-cover lazy-load-image" src="https://placehold.co/1200x600/0A0A0A/EFEFEF?text=Loading..." data-src="https://i.imgur.com/LB5Wf6Z.jpeg" alt="Photographie culinaire">
+                    <img src="https://i.imgur.com/LB5Wf6Z.jpeg" data-large-src="https://i.imgur.com/LB5Wf6Z.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
                 </div>
                 <div class="gallery-item">
-                    <img class="w-full h-full object-cover lazy-load-image" src="https://placehold.co/1200x600/0A0A0A/EFEFEF?text=Loading..." data-src="https://i.imgur.com/oF4tE7h.jpeg" alt="Photographie culinaire">
+                    <img src="https://i.imgur.com/oF4tE7h.jpeg" data-large-src="https://i.imgur.com/oF4tE7h.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
                 </div>
                 <div class="gallery-item">
-                    <img class="w-full h-full object-cover lazy-load-image" src="https://placehold.co/1200x600/0A0A0A/EFEFEF?text=Loading..." data-src="https://i.imgur.com/6XsIHhK.jpeg" alt="Photographie culinaire">
+                    <img src="https://i.imgur.com/6XsIHhK.jpeg" data-large-src="https://i.imgur.com/6XsIHhK.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
                 </div>
                 <div class="gallery-item">
-                    <img class="w-full h-full object-cover lazy-load-image" src="https://placehold.co/1200x600/0A0A0A/EFEFEF?text=Loading..." data-src="https://i.imgur.com/xz5muTB.jpeg" alt="Photographie culinaire">
+                    <img src="https://i.imgur.com/xz5muTB.jpeg" data-large-src="https://i.imgur.com/xz5muTB.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
                 </div>
                 <div class="gallery-item">
-                    <img class="w-full h-full object-cover lazy-load-image" src="https://placehold.co/1200x600/0A0A0A/EFEFEF?text=Loading..." data-src="https://i.imgur.com/JbOAqro.jpeg" alt="Photographie culinaire">
+                    <img src="https://i.imgur.com/JbOAqro.jpeg" data-large-src="https://i.imgur.com/JbOAqro.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
                 </div>
                 <div class="gallery-item">
-                    <img class="w-full h-full object-cover lazy-load-image" src="https://placehold.co/1200x600/0A0A0A/EFEFEF?text=Loading..." data-src="https://i.imgur.com/c1FAH78.jpeg" alt="Photographie culinaire">
+                    <img src="https://i.imgur.com/c1FAH78.jpeg" data-large-src="https://i.imgur.com/c1FAH78.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
                 </div>
                 <div class="gallery-item">
-                    <img class="w-full h-full object-cover lazy-load-image" src="https://placehold.co/1200x600/0A0A0A/EFEFEF?text=Loading..." data-src="https://i.imgur.com/MWkKfDZ.jpeg" alt="Photographie culinaire">
+                    <img src="https://i.imgur.com/MWkKfDZ.jpeg" data-large-src="https://i.imgur.com/MWkKfDZ.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
                 </div>
                 <div class="gallery-item">
-                    <img class="w-full h-full object-cover lazy-load-image" src="https://placehold.co/1200x600/0A0A0A/EFEFEF?text=Loading..." data-src="https://i.imgur.com/rMfjYlr.jpeg" alt="Photographie culinaire">
+                    <img src="https://i.imgur.com/rMfjYlr.jpeg" data-large-src="https://i.imgur.com/rMfjYlr.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
                 </div>
                 <div class="gallery-item">
-                    <img class="w-full h-full object-cover lazy-load-image" src="https://placehold.co/1200x600/0A0A0A/EFEFEF?text=Loading..." data-src="https://i.imgur.com/WJh4O2N.jpeg" alt="Photographie culinaire">
+                    <img src="https://i.imgur.com/WJh4O2N.jpeg" data-large-src="https://i.imgur.com/WJh4O2N.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
                 </div>
                 <div class="gallery-item">
-                    <img class="w-full h-full object-cover lazy-load-image" src="https://placehold.co/1200x600/0A0A0A/EFEFEF?text=Loading..." data-src="https://i.imgur.com/l2Y6vdS.jpeg" alt="Photographie culinaire">
+                    <img src="https://i.imgur.com/l2Y6vdS.jpeg" data-large-src="https://i.imgur.com/l2Y6vdS.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
                 </div>
                 <div class="gallery-item">
-                    <img class="w-full h-full object-cover lazy-load-image" src="https://placehold.co/1200x600/0A0A0A/EFEFEF?text=Loading..." data-src="https://i.imgur.com/OoBtWY6.jpeg" alt="Photographie culinaire">
+                    <img src="https://i.imgur.com/OoBtWY6.jpeg" data-large-src="https://i.imgur.com/OoBtWY6.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
                 </div>
                 <div class="gallery-item">
-                    <img class="w-full h-full object-cover lazy-load-image" src="https://placehold.co/1200x600/0A0A0A/EFEFEF?text=Loading..." data-src="https://i.imgur.com/zPmcJxH.jpeg" alt="Photographie culinaire">
+                    <img src="https://i.imgur.com/zPmcJxH.jpeg" data-large-src="https://i.imgur.com/zPmcJxH.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
                 </div>
                 <div class="gallery-item">
-                    <img class="w-full h-full object-cover lazy-load-image" src="https://placehold.co/1200x600/0A0A0A/EFEFEF?text=Loading..." data-src="https://i.imgur.com/kooPort.jpeg" alt="Photographie culinaire">
+                    <img src="https://i.imgur.com/kooPort.jpeg" data-large-src="https://i.imgur.com/kooPort.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
                 </div>
                 <div class="gallery-item">
-                    <img class="w-full h-full object-cover lazy-load-image" src="https://placehold.co/1200x600/0A0A0A/EFEFEF?text=Loading..." data-src="https://i.imgur.com/1fFilAc.jpeg" alt="Photographie culinaire">
+                    <img src="https://i.imgur.com/1fFilAc.jpeg" data-large-src="https://i.imgur.com/1fFilAc.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
                 </div>
                 <div class="gallery-item">
-                    <img class="w-full h-full object-cover lazy-load-image" src="https://placehold.co/1200x600/0A0A0A/EFEFEF?text=Loading..." data-src="https://i.imgur.com/fHtksC2.jpeg" alt="Photographie culinaire">
+                    <img src="https://i.imgur.com/fHtksC2.jpeg" data-large-src="https://i.imgur.com/fHtksC2.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
                 </div>
                 <div class="gallery-item">
-                    <img class="w-full h-full object-cover lazy-load-image" src="https://placehold.co/1200x600/0A0A0A/EFEFEF?text=Loading..." data-src="https://i.imgur.com/A16ySaw.jpeg" alt="Photographie culinaire">
+                    <img src="https://i.imgur.com/A16ySaw.jpeg" data-large-src="https://i.imgur.com/A16ySaw.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
                 </div>
                 <div class="gallery-item">
-                    <img class="w-full h-full object-cover lazy-load-image" src="https://placehold.co/1200x600/0A0A0A/EFEFEF?text=Loading..." data-src="https://i.imgur.com/Caab01r.jpeg" alt="Photographie culinaire">
+                    <img src="https://i.imgur.com/Caab01r.jpeg" data-large-src="https://i.imgur.com/Caab01r.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
                 </div>
                 <div class="gallery-item">
-                    <img class="w-full h-full object-cover lazy-load-image" src="https://placehold.co/1200x600/0A0A0A/EFEFEF?text=Loading..." data-src="https://i.imgur.com/DUBMybb.jpeg" alt="Photographie culinaire">
+                    <img src="https://i.imgur.com/DUBMybb.jpeg" data-large-src="https://i.imgur.com/DUBMybb.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
                 </div>
                 <div class="gallery-item">
-                    <img class="w-full h-full object-cover lazy-load-image" src="https://placehold.co/1200x600/0A0A0A/EFEFEF?text=Loading..." data-src="https://i.imgur.com/oqYqL79.jpeg" alt="Photographie culinaire">
+                    <img src="https://i.imgur.com/oqYqL79.jpeg" data-large-src="https://i.imgur.com/oqYqL79.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
                 </div>
                 <div class="gallery-item">
-                    <img class="w-full h-full object-cover lazy-load-image" src="https://placehold.co/1200x600/0A0A0A/EFEFEF?text=Loading..." data-src="https://i.imgur.com/kdTF18R.jpeg" alt="Photographie culinaire">
+                    <img src="https://i.imgur.com/kdTF18R.jpeg" data-large-src="https://i.imgur.com/kdTF18R.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
                 </div>
                 <div class="gallery-item">
-                    <img class="w-full h-full object-cover lazy-load-image" src="https://placehold.co/1200x600/0A0A0A/EFEFEF?text=Loading..." data-src="https://i.imgur.com/GHOAwPi.jpeg" alt="Photographie culinaire">
+                    <img src="https://i.imgur.com/GHOAwPi.jpeg" data-large-src="https://i.imgur.com/GHOAwPi.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
                 </div>
                 <div class="gallery-item">
-                    <img class="w-full h-full object-cover lazy-load-image" src="https://placehold.co/1200x600/0A0A0A/EFEFEF?text=Loading..." data-src="https://i.imgur.com/LV0XTDT.jpeg" alt="Photographie culinaire">
+                    <img src="https://i.imgur.com/LV0XTDT.jpeg" data-large-src="https://i.imgur.com/LV0XTDT.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
                 </div>
                 <div class="gallery-item">
-                    <img class="w-full h-full object-cover lazy-load-image" src="https://placehold.co/1200x600/0A0A0A/EFEFEF?text=Loading..." data-src="https://i.imgur.com/vSq8Yrg.jpeg" alt="Photographie culinaire">
+                    <img src="https://i.imgur.com/vSq8Yrg.jpeg" data-large-src="https://i.imgur.com/vSq8Yrg.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
                 </div>
                 <div class="gallery-item">
-                    <img class="w-full h-full object-cover lazy-load-image" src="https://placehold.co/1200x600/0A0A0A/EFEFEF?text=Loading..." data-src="https://i.imgur.com/f3jdRVu.jpeg" alt="Photographie culinaire">
+                    <img src="https://i.imgur.com/f3jdRVu.jpeg" data-large-src="https://i.imgur.com/f3jdRVu.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
                 </div>
                 <div class="gallery-item">
-                    <img class="w-full h-full object-cover lazy-load-image" src="https://placehold.co/1200x600/0A0A0A/EFEFEF?text=Loading..." data-src="https://i.imgur.com/AjvMVDK.jpeg" alt="Photographie culinaire">
+                    <img src="https://i.imgur.com/AjvMVDK.jpeg" data-large-src="https://i.imgur.com/AjvMVDK.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
                 </div>
                 <div class="gallery-item">
-                    <img class="w-full h-full object-cover lazy-load-image" src="https://placehold.co/1200x600/0A0A0A/EFEFEF?text=Loading..." data-src="https://i.imgur.com/HDb074v.jpeg" alt="Photographie culinaire">
+                    <img src="https://i.imgur.com/HDb074v.jpeg" data-large-src="https://i.imgur.com/HDb074v.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
                 </div>
                 <div class="gallery-item">
-                    <img class="w-full h-full object-cover lazy-load-image" src="https://placehold.co/1200x600/0A0A0A/EFEFEF?text=Loading..." data-src="https://i.imgur.com/jJ3CD1v.jpeg" alt="Photographie culinaire">
+                    <img src="https://i.imgur.com/jJ3CD1v.jpeg" data-large-src="https://i.imgur.com/jJ3CD1v.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
                 </div>
                 <div class="gallery-item">
-                    <img class="w-full h-full object-cover lazy-load-image" src="https://placehold.co/1200x600/0A0A0A/EFEFEF?text=Loading..." data-src="https://i.imgur.com/3GAyhxc.jpeg" alt="Photographie culinaire">
+                    <img src="https://i.imgur.com/3GAyhxc.jpeg" data-large-src="https://i.imgur.com/3GAyhxc.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
                 </div>
                 <div class="gallery-item">
-                    <img class="w-full h-full object-cover lazy-load-image" src="https://placehold.co/1200x600/0A0A0A/EFEFEF?text=Loading..." data-src="https://i.imgur.com/t8xLXXR.jpeg" alt="Photographie culinaire">
+                    <img src="https://i.imgur.com/t8xLXXR.jpeg" data-large-src="https://i.imgur.com/t8xLXXR.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
                 </div>
                 <div class="gallery-item">
-                    <img class="w-full h-full object-cover lazy-load-image" src="https://placehold.co/1200x600/0A0A0A/EFEFEF?text=Loading..." data-src="https://i.imgur.com/mwEYSzH.jpeg" alt="Photographie culinaire">
+                    <img src="https://i.imgur.com/mwEYSzH.jpeg" data-large-src="https://i.imgur.com/mwEYSzH.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
                 </div>
                 <div class="gallery-item">
-                    <img class="w-full h-full object-cover lazy-load-image" src="https://placehold.co/1200x600/0A0A0A/EFEFEF?text=Loading..." data-src="https://i.imgur.com/MnB6CIh.jpeg" alt="Photographie culinaire">
+                    <img src="https://i.imgur.com/MnB6CIh.jpeg" data-large-src="https://i.imgur.com/MnB6CIh.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
                 </div>
                 <div class="gallery-item">
-                    <img class="w-full h-full object-cover lazy-load-image" src="https://placehold.co/1200x600/0A0A0A/EFEFEF?text=Loading..." data-src="https://i.imgur.com/ra7MUWM.jpeg" alt="Photographie culinaire">
+                    <img src="https://i.imgur.com/ra7MUWM.jpeg" data-large-src="https://i.imgur.com/ra7MUWM.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
                 </div>
                 <div class="gallery-item">
-                    <img class="w-full h-full object-cover lazy-load-image" src="https://placehold.co/1200x600/0A0A0A/EFEFEF?text=Loading..." data-src="https://i.imgur.com/ZYzLuFX.jpeg" alt="Photographie culinaire">
+                    <img src="https://i.imgur.com/ZYzLuFX.jpeg" data-large-src="https://i.imgur.com/ZYzLuFX.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
                 </div>
                 <div class="gallery-item">
-                    <img class="w-full h-full object-cover lazy-load-image" src="https://placehold.co/1200x600/0A0A0A/EFEFEF?text=Loading..." data-src="https://i.imgur.com/mIQOp2B.jpeg" alt="Photographie culinaire">
+                    <img src="https://i.imgur.com/mIQOp2B.jpeg" data-large-src="https://i.imgur.com/mIQOp2B.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
                 </div>
                 <div class="gallery-item">
-                    <img class="w-full h-full object-cover lazy-load-image" src="https://placehold.co/1200x600/0A0A0A/EFEFEF?text=Loading..." data-src="https://i.imgur.com/9dRjrSZ.jpeg" alt="Photographie culinaire">
+                    <img src="https://i.imgur.com/9dRjrSZ.jpeg" data-large-src="https://i.imgur.com/9dRjrSZ.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
                 </div>
                 <div class="gallery-item">
-                    <img class="w-full h-full object-cover lazy-load-image" src="https://placehold.co/1200x600/0A0A0A/EFEFEF?text=Loading..." data-src="https://i.imgur.com/mobrvSX.jpeg" alt="Photographie culinaire">
+                    <img src="https://i.imgur.com/mobrvSX.jpeg" data-large-src="https://i.imgur.com/mobrvSX.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
                 </div>
                 <div class="gallery-item">
-                    <img class="w-full h-full object-cover lazy-load-image" src="https://placehold.co/1200x600/0A0A0A/EFEFEF?text=Loading..." data-src="https://i.imgur.com/j65pGkN.jpeg" alt="Photographie culinaire">
+                    <img src="https://i.imgur.com/j65pGkN.jpeg" data-large-src="https://i.imgur.com/j65pGkN.jpeg" alt="Photographie culinaire" class="w-full h-full object-cover">
                 </div>
             </div>
         </section>
@@ -569,13 +559,11 @@
                 'https://i.imgur.com/Caab01r.jpeg',
                 'https://i.imgur.com/DUBMybb.jpeg',
                 'https://i.imgur.com/oqYqL79.jpeg',
-                'https://i.imgur.com/kdTF18R.jpeg',
                 'https://i.imgur.com/GHOAwPi.jpeg',
                 'https://i.imgur.com/LV0XTDT.jpeg',
                 'https://i.imgur.com/f3jdRVu.jpeg',
                 'https://i.imgur.com/AjvMVDK.jpeg',
                 'https://i.imgur.com/HDb074v.jpeg',
-                'https://i.imgur.com/jJ3CD1v.jpeg',
                 'https://i.imgur.com/3GAyhxc.jpeg',
                 'https://i.imgur.com/t8xLXXR.jpeg',
                 'https://i.imgur.com/mwEYSzH.jpeg',
@@ -625,42 +613,18 @@
             const nextBtn = document.getElementById('next-btn');
             let currentIndex = 0;
             
-            // --- NOUVEAU CODE POUR LE LAZY LOADING ET LE PRÉCHARGEMENT DES IMAGES DE LA GALERIE ---
-            const imagesToLazyLoad = document.querySelectorAll('#image-gallery img');
-
-            const observer = new IntersectionObserver((entries, observer) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const image = entry.target;
-                        const src = image.getAttribute('data-src');
-                        const largeSrc = image.getAttribute('data-large-src');
-
-                        // Déplacer l'URL vers l'attribut `src` pour lancer le chargement
-                        image.src = src;
-                        
-                        // Précharger l'image en grande taille en arrière-plan
-                        if (largeSrc) {
-                            const largeImagePreload = new Image();
-                            largeImagePreload.src = largeSrc;
-                        }
-
-                        // Une fois l'image chargée, on ajoute la classe 'loaded' pour la transition
-                        image.onload = () => {
-                            image.classList.add('loaded');
-                        };
-
-                        // On cesse d'observer cet élément pour économiser des ressources
-                        observer.unobserve(image);
-                    }
+            // --- NOUVEAU CODE POUR LE PRÉCHARGEMENT DES IMAGES ---
+            function preloadPortfolioImages() {
+                galleryItems.forEach(item => {
+                    const largeSrc = item.querySelector('img').dataset.largeSrc;
+                    // Crée un nouvel objet Image pour démarrer le chargement en arrière-plan
+                    const img = new Image();
+                    img.src = largeSrc;
                 });
-            }, {
-                // Charger les images 300px avant qu'elles n'entrent dans le viewport
-                rootMargin: '300px'
-            });
+            }
             
-            imagesToLazyLoad.forEach(image => {
-                observer.observe(image);
-            });
+            // On lance le préchargement dès que le DOM est prêt
+            preloadPortfolioImages();
             // --- FIN DU NOUVEAU CODE ---
 
             // Open the modal on image click
