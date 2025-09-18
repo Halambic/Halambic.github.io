@@ -690,6 +690,16 @@
                 navLinks.classList.toggle('hidden');
                 navLinks.classList.toggle('flex');
             });
+
+            // NEW: Force the page to scroll to the top on refresh
+            window.addEventListener('beforeunload', () => {
+                // Scroll to the top before the page unloads
+                window.scrollTo(0, 0);
+            });
+            window.onload = function() {
+                // This ensures the scroll to top happens on page load, even after a hard refresh.
+                window.scrollTo(0, 0);
+            };
         });
     </script>
 </body>
