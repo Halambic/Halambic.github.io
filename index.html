@@ -132,6 +132,7 @@
             border-radius: 0.75rem;
             transition: transform 0.5s ease-in-out, box-shadow 0.3s ease-in-out;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            will-change: transform, box-shadow;
         }
 
         .gallery-item:hover {
@@ -258,13 +259,13 @@
 
         /* CSS for lazy loading placeholders and smooth fade-in */
         .lazy-img {
-            filter: blur(10px);
+            background-color: var(--secondary-bg);
             opacity: 0;
-            transition: filter 0.5s ease-out, opacity 0.5s ease-in;
+            transition: opacity 0.5s ease-in;
+            will-change: opacity;
         }
 
         .lazy-img.loaded {
-            filter: blur(0);
             opacity: 1;
         }
 
