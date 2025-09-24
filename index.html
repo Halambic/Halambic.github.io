@@ -1,737 +1,1331 @@
 <!DOCTYPE html>
-<html lang="fr" class="scroll-smooth">
+
+<html lang="fr">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lecomte Fotos - L'Art Culinaire en Images</title>
-    <!-- Tailwind CSS CDN for modern styling -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Playfair Display for headings and Inter for body text -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-    <!-- Font Awesome for icons, loaded asynchronously for better performance -->
-    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
-    
-    <style>
-        /* Custom CSS variables for a consistent dark theme */
-        :root {
-            --primary-bg: #0A0A0A;
-            --secondary-bg: #1A1A1A;
-            --text-color: #EFEFEF;
-            --accent-color: #A66E5A;
-            --nav-height: 144px;
-        }
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--primary-bg);
-            color: var(--text-color);
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
+<meta charset="UTF-8">
 
-        .playfair {
-            font-family: 'Playfair Display', serif;
-        }
-        
-        section {
-            scroll-margin-top: var(--nav-height);
-        }
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        /* Hero section with dynamic background and parallax effect */
-        .hero-section {
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            position: relative;
-            transition: background-image 2s ease-in-out;
-        }
+<title>Vista • Test Notion connecté Baserow</title>
 
-        .hero-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.8) 100%);
-        }
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 
-        /* Styling for the new animated text */
-        .culinary-text {
-            position: relative;
-            z-index: 10;
-            cursor: pointer;
-            -webkit-mask-image: radial-gradient(circle at var(--mouse-x, 0) var(--mouse-y, 0), black 0%, black 20%, transparent 40%);
-            mask-image: radial-gradient(circle at var(--mouse-x, 0) var(--mouse-y, 0), black 0%, black 20%, transparent 40%);
-            transition: mask-image 0.2s ease-out;
-        }
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-        .culinary-text::after {
-            content: "Photographie culinaire";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: -webkit-linear-gradient(45deg, var(--accent-color), white, var(--accent-color));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            opacity: 0;
-            transition: opacity 0.5s ease-in-out;
-            pointer-events: none;
-            text-shadow: 0 0 10px rgba(166, 110, 90, 0.8), 0 0 20px rgba(166, 110, 90, 0.5);
-        }
+<style>
 
-        .culinary-text:hover::after {
-            opacity: 1;
-        }
+:root {
 
-        /* Style for navigation links with animation */
-        .nav-link, .gallery-item, .card, .btn-primary, .contact-form-animation, .contact-form-animation input, .contact-form-animation textarea {
-            cursor: pointer;
-        }
-        .nav-link {
-            position: relative;
-            font-weight: 500;
-            color: var(--text-color);
-            transition: color 0.3s ease-in-out;
-            padding: 0.5rem 1rem;
-        }
-        
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background-color: white;
-            transform: scaleX(0);
-            transform-origin: center;
-            transition: transform 0.3s ease-in-out;
-        }
+--vista-blue: #402c7c;
 
-        .nav-link:hover {
-            color: var(--accent-color);
-        }
+--bg: #f8f9fa;
 
-        .nav-link:hover::after {
-            transform: scaleX(1);
-        }
+--ok: #28a745;
 
-        .gallery-item {
-            position: relative;
-            overflow: hidden;
-            border-radius: 0.75rem;
-            transition: transform 0.5s ease-in-out, box-shadow 0.3s ease-in-out;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            will-change: transform, box-shadow;
-        }
+--warn: #ff9800;
 
-        .gallery-item:hover {
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
-        }
+--danger: #dc3545;
 
-        .gallery-item img {
-            transition: transform 0.5s ease, opacity 0.5s ease;
-        }
+--muted: #6c757d;
 
-        .gallery-item:hover img {
-            transform: scale(1.05);
-        }
+}
 
-        .card {
-            background-color: var(--secondary-bg);
-            border-radius: 0.75rem;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
+- { box-sizing: border-box; }
 
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
-        }
+body { font-family: 'Poppins', sans-serif; background: var(--bg); color: #333; margin: 0; }
 
-        .btn-primary {
-            background-color: var(--accent-color);
-            color: white;
-            transition: background-color 0.3s, transform 0.2s ease-in-out;
-        }
+.header { background:#fff; padding: 12px 18px; box-shadow: 0 2px 10px rgba(64,44,124,.08); position: sticky; top:0; z-index: 10; }
 
-        .btn-primary:hover {
-            background-color: #8C5C4D;
-            transform: translateY(-2px);
-        }
+.header-inner { max-width: 1280px; margin: 0 auto; display:flex; align-items:center; gap:16px; justify-content: space-between; }
 
-        .nav-btn {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background-color: rgba(0, 0, 0, 0.5);
-            color: white;
-            border: none;
-            cursor: pointer;
-            z-index: 110;
-            font-size: 2rem;
-            line-height: 1;
-            transition: background-color 0.3s;
-            border-radius: 9999px;
-            width: 3rem;
-            height: 3rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+.logo img { height: 44px; }
 
-        .nav-btn:hover {
-            background-color: rgba(0, 0, 0, 0.8);
-        }
+.nav a { color:#fff; text-decoration:none; background: var(--vista-blue); padding:10px 14px; border-radius:8px; font-weight:500; }
 
-        @keyframes fadeInMoveUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+.container { max-width: 1280px; margin: 0 auto; padding: 24px 18px; }
 
-        .animate-fade-in-up {
-            animation: fadeInMoveUp 1s ease-out forwards;
-            opacity: 0;
-        }
+.h1 { font-size: 1.8rem; font-weight:600; color: var(--vista-blue); margin: 8px 0 18px; }
 
-        .animation-delay-300 {
-            animation-delay: 0.3s;
-        }
+.card { background:#fff; border-radius:14px; box-shadow: 0 6px 24px rgba(0,0,0,.08); padding: 18px; margin-bottom: 18px; }
 
-        .animation-delay-600 {
-            animation-delay: 0.6s;
-        }
+.row { display:grid; gap: 18px; grid-template-columns: 1fr; }
 
-        .contact-form-animation {
-            animation: fadeInMoveUp 1s ease-out forwards;
-        }
-        
-        .message-box {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 1000;
-            padding: 1rem;
-            border-radius: 0.5rem;
-            color: white;
-            opacity: 0;
-            transform: translateX(100%);
-            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
-        }
-        
-        .message-box.show {
-            opacity: 1;
-            transform: translateX(0);
-        }
+@media(min-width: 1024px) { .row { grid-template-columns: 2fr 1fr; } }
 
-        /* Styling for the new circular image */
-        .circular-image {
-            width: 250px;
-            height: 250px;
-            border-radius: 50%;
-            object-fit: cover;
-            object-position: 50% 20%;
-            border: 4px solid var(--accent-color);
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-        }
-        
-        .logo-lecomte {
-            height: 120px;
-            width: auto;
-        }
+.tabs { display:flex; flex-wrap:wrap; gap: 10px; margin-bottom: 12px; }
 
-        /* CSS for lazy loading placeholders and smooth fade-in */
-        .lazy-img {
-            background-color: var(--secondary-bg);
-            opacity: 0;
-            transition: opacity 0.5s ease-in;
-            will-change: opacity;
-        }
+.tab { border:2px solid #e5e5e5; background:#f7f7fb; color:#333; padding:10px 14px; border-radius:8px; cursor:pointer; display:flex; gap:8px; align-items:center; }
 
-        .lazy-img.loaded {
-            opacity: 1;
-        }
+.tab.active { background: var(--vista-blue); color:#fff; border-color: var(--vista-blue); }
 
-        /* Style for the horizontal-scrolling gallery on mobile */
-        @media (max-width: 767px) {
-            #image-gallery-container {
-                -webkit-overflow-scrolling: touch;
-                scrollbar-width: none;
-            }
+.tab.add { background:#2f9e44; border-color:#2f9e44; color:#fff; }
 
-            #image-gallery-container::-webkit-scrollbar {
-                display: none;
-            }
+.grid { display:grid; gap: 4px; }
 
-            .gallery-item {
-                flex-shrink: 0;
-                width: 75vw;
-                margin-right: 1.5rem;
-            }
-            .scroll-snap-x {
-                scroll-snap-type: x mandatory;
-            }
-            .snap-center {
-                scroll-snap-align: center;
-            }
-        }
-    </style>
+.grid--w1 { grid-template-columns: 40px repeat(6, 1fr); grid-template-rows: 40px repeat(3, 1fr); }
+
+.grid--w2 { grid-template-columns: 40px repeat(2, 1fr); grid-template-rows: 40px repeat(1, 1fr); }
+
+.cell, .head { border-radius:8px; display:flex; align-items:center; justify-content:center; text-align:center; }
+
+.head { background: var(--vista-blue); color:#fff; font-weight:600; }
+
+.cell { position:relative; border:2px solid #e0e0e0; min-height: 120px; padding: 8px; cursor:pointer; transition: .2s; }
+
+.cell:hover { transform: translateY(-2px); box-shadow: 0 4px 14px rgba(0,0,0,.12); }
+
+.[cell.free](http://cell.free) { background:#e8f5e8; border-color:#4caf50; color:#2e7d32; }
+
+.cell.busy { background:#e3f2fd; border-color:#2196f3; color:#1565c0; }
+
+.cell.res { background:#fff3e0; border-color:#ff9800; color:#e65100; }
+
+.cell.inactive { background:#f5f5f5; border-color:#bdbdbd; color:#757575; filter: grayscale(40%); opacity:.8; }
+
+.badge { position:absolute; top:6px; left:6px; background: rgba(64,44,124,.9); color:#fff; padding: 2px 8px; border-radius: 10px; font-size:.72rem; font-weight:600; }
+
+.zone { position:absolute; bottom:6px; right:6px; padding: 2px 8px; border-radius: 10px; font-weight:600; font-size:.72rem; }
+
+.zone--on { background:#4caf50; color:#fff; }
+
+.zone--off { background:#f44336; color:#fff; }
+
+.cell-icons { position:absolute; top:6px; right:6px; font-size:.8rem; }
+
+.cell-code { font-weight:700; }
+
+.cell-title { font-size:.85rem; margin-top: 4px; font-weight:600; }
+
+.cell-status { font-size:.78rem; margin-top: 4px; }
+
+.input, select, textarea { width:100%; padding:10px 12px; border:2px solid #e5e5e5; border-radius:8px; font-family:inherit; font-size: 1rem; }
+
+.input:focus, select:focus, textarea:focus { outline:none; border-color: var(--vista-blue); }
+
+.btn { background: var(--vista-blue); color:#fff; border:none; padding:10px 14px; border-radius:8px; cursor:pointer; font-weight:500; transition:.2s; }
+
+.btn:hover { transform: translateY(-1px); filter: brightness(1.05); }
+
+.btn--muted { background: var(--muted); }
+
+.btn--ok { background: var(--ok); }
+
+.btn--warn { background: var(--warn); color:#333; }
+
+.btn--danger { background: var(--danger); }
+
+.legend { display:flex; flex-wrap:wrap; gap: 16px; align-items:center; }
+
+.legend .dot { width:18px; height:18px; border-radius:4px; border:2px solid #ccc; margin-right:6px; display:inline-block; vertical-align: middle; }
+
+.modal { display:none; position:fixed; inset:0; background: rgba(0,0,0,.45); padding: 24px; z-index: 50; }
+
+.modal__inner { max-width: 900px; margin: auto; background:#fff; border-radius: 14px; overflow: hidden; }
+
+.modal__header { display:flex; align-items:center; justify-content: space-between; padding: 16px 18px; border-bottom: 1px solid #eee; }
+
+.modal__title { font-weight:600; color: var(--vista-blue); }
+
+.modal__body { padding: 18px; max-height: 75vh; overflow:auto; }
+
+.toast { position: fixed; top: 16px; right: 16px; background:#d4edda; border:1px solid #c3e6cb; color:#155724; padding: 10px 14px; border-radius: 10px; transform: translateX(360px); transition: .25s; z-index: 60; }
+
+.[toast.show](http://toast.show) { transform: translateX(0); }
+
+.err { background:#f8d7da; border-color:#f5c6cb; color:#721c24; }
+
+.small { font-size:.9rem; color:#666; }
+
+</style>
+
 </head>
+
 <body>
 
-    <!-- Message Box (hidden by default as we don't use it) -->
-    <div id="message-box" class="message-box hidden"></div>
+<header class="header">
 
-    <!-- Barre de navigation -->
-    <nav id="navbar" class="fixed top-0 left-0 w-full z-50 py-3 transition-all duration-500 backdrop-blur-sm bg-primary-bg bg-opacity-70">
-        <div class="container mx-auto flex justify-between items-center px-4">
-            <!-- Logo with a link to the hero section -->
-            <a href="#hero" class="mb-4 md:mb-0" aria-label="Retour à l'accueil">
-                <img src="https://res.cloudinary.com/dulmuirvj/image/upload/v1758229739/logomaman_wxv78s.svg" alt="Logo Lecomte Fotos" class="logo-lecomte" width="200" height="120">
-            </a>
-            <!-- Mobile Menu Button -->
-            <button id="mobile-menu-btn" class="md:hidden text-white focus:outline-none" aria-label="Ouvrir le menu mobile">
-                <i class="fas fa-bars text-2xl"></i>
-            </button>
-            <div id="nav-links" class="hidden md:flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 text-lg text-center mt-4 md:mt-0">
-                <a href="#portfolio" class="nav-link">Portfolio</a>
-                <a href="#services" class="nav-link">Services</a>
-                <a href="#contact" class="nav-link">Contact</a>
-            </div>
-        </div>
-    </nav>
+<div class="header-inner">
 
-    <!-- Section Héros -->
-    <header id="hero" class="hero-section flex flex-col justify-center items-center text-center min-h-screen px-4 pt-24 pb-12">
-        <h1 class="text-5xl md:text-8xl playfair font-bold tracking-tight leading-tight drop-shadow-lg animate-fade-in-up">
-            L'Art de la table en images
-        </h1>
-        <p class="mt-4 text-lg md:text-2xl font-light max-w-2xl drop-shadow-lg animate-fade-in-up animation-delay-300 culinary-text">
-            Photographie culinaire
-        </p>
-        <a href="#portfolio" class="mt-8 px-8 py-3 btn-primary font-semibold rounded-full shadow-lg animate-fade-in-up animation-delay-600">
-            Découvrir le Portfolio
-        </a>
-    </header>
+<a class="logo" href="https://associationvista.fr" target="_blank">
 
-    <main class="container mx-auto px-4 py-16">
-        
-        <!-- Section À Propos -->
-        <section id="about" class="mb-24 animate-fade-in-up">
-            <h2 class="text-4xl md:text-5xl playfair font-bold text-center mb-12">À Propos</h2>
-            <div class="flex flex-col md:flex-row gap-12 items-center card p-8">
-                <!-- Image circulaire -->
-                <div class="flex-shrink-0 mb-6 md:mb-0 md:mr-6">
-                    <img src="https://i.imgur.com/5F9gMl1.jpeg" alt="Portrait de la photographe Delphine Lecomte" class="circular-image" width="250" height="250">
-                </div>
-                <div class="text-center md:text-left">
-                    <p class="text-lg text-gray-400 leading-relaxed">
-                        Je m'appelle Delphine Lecomte et je suis photographe culinaire, passionnée par la mise en lumière de la gastronomie. Mon approche allie créativité et précision technique pour capturer l'essence de chaque plat, de la matière première au chef-d'œuvre final. Je crois que la nourriture est une histoire, et mon travail est de vous la raconter.
-                    </p>
-                </div>
-            </div>
-        </section>
+<img src="https://swiftask-prod-files.s3.eu-west-3.amazonaws.com/vista_logo.png" alt="Vista">
 
-        <!-- Section Portfolio -->
-        <section id="portfolio" class="mb-24 animate-fade-in-up">
-            <h2 class="text-4xl md:text-5xl playfair font-bold text-center mb-16">Mon Portfolio</h2>
-            <p class="text-center text-gray-500 mb-8">Découvrez une sélection de mes créations culinaires.</p>
-            
-            <!-- Conteneur pour la galerie d'images -->
-            <div id="image-gallery-container" class="md:grid md:grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 overflow-x-auto flex flex-nowrap md:overflow-x-visible md:flex-wrap md:space-x-0 space-x-6 scroll-snap-x overscroll-x-contain">
-                <!-- Images de portfolio mises à jour avec lazy loading et alt text optimisé -->
-                <div class="gallery-item snap-center">
-                    <img data-src="https://i.imgur.com/eQE6IfD.jpeg" data-large-src="https://i.imgur.com/eQE6IfD.jpeg" alt="Bouteille de vin et verre, ambiance tamisée" class="w-full h-full object-cover lazy-img rounded-lg" width="1000" height="1500">
-                </div>
-                <div class="gallery-item snap-center">
-                    <img data-src="https://i.imgur.com/HZNDruE.jpeg" data-large-src="https://i.imgur.com/HZNDruE.jpeg" alt="Délicieux gâteau au chocolat fondant" class="w-full h-full object-cover lazy-img rounded-lg" width="1000" height="1500">
-                </div>
-                <div class="gallery-item snap-center">
-                    <img data-src="https://i.imgur.com/Ida39bD.jpeg" data-large-src="https://i.imgur.com/Ida39bD.jpeg" alt="Planche de charcuterie et fromages" class="w-full h-full object-cover lazy-img rounded-lg" width="1000" height="1500">
-                </div>
-                <div class="gallery-item snap-center">
-                    <img data-src="https://i.imgur.com/LB5Wf6Z.jpeg" data-large-src="https://i.imgur.com/LB5Wf6Z.jpeg" alt="Tarte aux fraises et crème fraîche" class="w-full h-full object-cover lazy-img rounded-lg" width="1000" height="1500">
-                </div>
-                <div class="gallery-item snap-center">
-                    <img data-src="https://i.imgur.com/oF4tE7h.jpeg" data-large-src="https://i.imgur.com/oF4tE7h.jpeg" alt="Verres à cocktail avec de la menthe" class="w-full h-full object-cover lazy-img rounded-lg" width="1000" height="1500">
-                </div>
-                <div class="gallery-item snap-center">
-                    <img data-src="https://i.imgur.com/6XsIHhK.jpeg" data-large-src="https://i.imgur.com/6XsIHhK.jpeg" alt="Tarte au citron meringuée en gros plan" class="w-full h-full object-cover lazy-img rounded-lg" width="1000" height="1500">
-                </div>
-                <div class="gallery-item snap-center">
-                    <img data-src="https://i.imgur.com/xz5muTB.jpeg" data-large-src="https://i.imgur.com/xz5muTB.jpeg" alt="Salade de fruits frais dans un bol en bois" class="w-full h-full object-cover lazy-img rounded-lg" width="1000" height="1500">
-                </div>
-                <div class="gallery-item snap-center">
-                    <img data-src="https://i.imgur.com/JbOAqro.jpeg" data-large-src="https://i.imgur.com/JbOAqro.jpeg" alt="Assiette de risotto garnie de légumes" class="w-full h-full object-cover lazy-img rounded-lg" width="1000" height="1500">
-                </div>
-                <div class="gallery-item snap-center">
-                    <img data-src="https://i.imgur.com/c1FAH78.jpeg" data-large-src="https://i.imgur.com/c1FAH78.jpeg" alt="Détail d'un dessert à la crème glacée" class="w-full h-full object-cover lazy-img rounded-lg" width="1000" height="1500">
-                </div>
-                <div class="gallery-item snap-center">
-                    <img data-src="https://i.imgur.com/MWkKfDZ.jpeg" data-large-src="https://i.imgur.com/MWkKfDZ.jpeg" alt="Tacos garnis de viande et d'avocat" class="w-full h-full object-cover lazy-img rounded-lg" width="1000" height="1500">
-                </div>
-                <div class="gallery-item snap-center">
-                    <img data-src="https://i.imgur.com/ra7MUWM.jpeg" data-large-src="https://i.imgur.com/ra7MUWM.jpeg" alt="Plateau de fromages et raisins" class="w-full h-full object-cover lazy-img rounded-lg" width="1000" height="1500">
-                </div>
-                <div class="gallery-item snap-center">
-                    <img data-src="https://i.imgur.com/ZYzLuFX.jpeg" data-large-src="https://i.imgur.com/ZYzLuFX.jpeg" alt="Verre de vin rouge avec une bouteille" class="w-full h-full object-cover lazy-img rounded-lg" width="1000" height="1500">
-                </div>
-                <div class="gallery-item snap-center">
-                    <img data-src="https://i.imgur.com/mIQOp2B.jpeg" data-large-src="https://i.imgur.com/mIQOp2B.jpeg" alt="Bol de crème glacée aux fruits rouges" class="w-full h-full object-cover lazy-img rounded-lg" width="1000" height="1500">
-                </div>
-                <div class="gallery-item snap-center">
-                    <img data-src="https://i.imgur.com/9dRjrSZ.jpeg" data-large-src="https://i.imgur.com/9dRjrSZ.jpeg" alt="Plat de pâtes aux tomates cerises" class="w-full h-full object-cover lazy-img rounded-lg" width="1000" height="1500">
-                </div>
-                <div class="gallery-item snap-center">
-                    <img data-src="https://i.imgur.com/mobrvSX.jpeg" data-large-src="https://i.imgur.com/mobrvSX.jpeg" alt="Thé glacé à la pêche dans un verre" class="w-full h-full object-cover lazy-img rounded-lg" width="1000" height="1500">
-                </div>
-                <div class="gallery-item snap-center">
-                    <img data-src="https://i.imgur.com/j65pGkN.jpeg" data-large-src="https://i.imgur.com/j65pGkN.jpeg" alt="Pain grillé et confiture sur une table" class="w-full h-full object-cover lazy-img rounded-lg" width="1000" height="1500">
-                </div>
-                <div class="gallery-item snap-center">
-                    <img data-src="https://i.imgur.com/rMfjYlr.jpeg" data-large-src="https://i.imgur.com/rMfjYlr.jpeg" alt="Crêpes sucrées avec du sirop d'érable" class="w-full h-full object-cover lazy-img rounded-lg" width="1000" height="1500">
-                </div>
-                <div class="gallery-item snap-center">
-                    <img data-src="https://i.imgur.com/WJh4O2N.jpeg" data-large-src="https://i.imgur.com/WJh4O2N.jpeg" alt="Café chaud et lait dans une tasse" class="w-full h-full object-cover lazy-img rounded-lg" width="1000" height="1500">
-                </div>
-                <div class="gallery-item snap-center">
-                    <img data-src="https://i.imgur.com/l2Y6vdS.jpeg" data-large-src="https://i.imgur.com/l2Y6vdS.jpeg" alt="Gaufre croustillante avec des fruits frais" class="w-full h-full object-cover lazy-img rounded-lg" width="1000" height="1500">
-                </div>
-                <div class="gallery-item snap-center">
-                    <img data-src="https://i.imgur.com/OoBtWY6.jpeg" data-large-src="https://i.imgur.com/OoBtWY6.jpeg" alt="Soupe de légumes chaude dans un bol" class="w-full h-full object-cover lazy-img rounded-lg" width="1000" height="1500">
-                </div>
-                <div class="gallery-item snap-center">
-                    <img data-src="https://i.imgur.com/zPmcJxH.jpeg" data-large-src="https://i.imgur.com/zPmcJxH.jpeg" alt="Pâtisseries françaises sur une assiette" class="w-full h-full object-cover lazy-img rounded-lg" width="1000" height="1500">
-                </div>
-                <div class="gallery-item snap-center">
-                    <img data-src="https://i.imgur.com/kooPort.jpeg" data-large-src="https://i.imgur.com/kooPort.jpeg" alt="Plat de spaghetti à la bolognaise" class="w-full h-full object-cover lazy-img rounded-lg" width="1000" height="1500">
-                </div>
-                <div class="gallery-item snap-center">
-                    <img data-src="https://i.imgur.com/1fFilAc.jpeg" data-large-src="https://i.imgur.com/1fFilAc.jpeg" alt="Fajitas de poulet avec de la sauce" class="w-full h-full object-cover lazy-img rounded-lg" width="1000" height="1500">
-                </div>
-                <div class="gallery-item snap-center">
-                    <img data-src="https://i.imgur.com/fHtksC2.jpeg" data-large-src="https://i.imgur.com/fHtksC2.jpeg" alt="Délicieux tacos garnis de fromage" class="w-full h-full object-cover lazy-img rounded-lg" width="1000" height="1500">
-                </div>
-                <div class="gallery-item snap-center">
-                    <img data-src="https://i.imgur.com/A16ySaw.jpeg" data-large-src="https://i.imgur.com/A16ySaw.jpeg" alt="Pain grillé et oeufs pochés sur une assiette" class="w-full h-full object-cover lazy-img rounded-lg" width="1000" height="1500">
-                </div>
-                <div class="gallery-item snap-center">
-                    <img data-src="https://i.imgur.com/Caab01r.jpeg" data-large-src="https://i.imgur.com/Caab01r.jpeg" alt="Bouteille de bière fraiche et froide" class="w-full h-full object-cover lazy-img rounded-lg" width="1000" height="1500">
-                </div>
-                <div class="gallery-item snap-center">
-                    <img data-src="https://i.imgur.com/DUBMybb.jpeg" data-large-src="https://i.imgur.com/DUBMybb.jpeg" alt="Petit-déjeuner sain avec des fruits" class="w-full h-full object-cover lazy-img rounded-lg" width="1000" height="1500">
-                </div>
-                <div class="gallery-item snap-center">
-                    <img data-src="https://i.imgur.com/oqYqL79.jpeg" data-large-src="https://i.imgur.com/oqYqL79.jpeg" alt="Salade de fruits frais et colorés" class="w-full h-full object-cover lazy-img rounded-lg" width="1000" height="1500">
-                </div>
-                <div class="gallery-item snap-center">
-                    <img data-src="https://i.imgur.com/kdTF18R.jpeg" data-large-src="https://i.imgur.com/kdTF18R.jpeg" alt="Plateau de sushis avec de la sauce soja" class="w-full h-full object-cover lazy-img rounded-lg" width="1000" height="1500">
-                </div>
-                <div class="gallery-item snap-center">
-                    <img data-src="https://i.imgur.com/GHOAwPi.jpeg" data-large-src="https://i.imgur.com/GHOAwPi.jpeg" alt="Plat de risotto crémeux aux champignons" class="w-full h-full object-cover lazy-img rounded-lg" width="1000" height="1500">
-                </div>
-                <div class="gallery-item snap-center">
-                    <img data-src="https://i.imgur.com/LV0XTDT.jpeg" data-large-src="https://i.imgur.com/LV0XTDT.jpeg" alt="Bol de céréales avec des baies rouges" class="w-full h-full object-cover lazy-img rounded-lg" width="1000" height="1500">
-                </div>
-                <div class="gallery-item snap-center">
-                    <img data-src="https://i.imgur.com/vSq8Yrg.jpeg" data-large-src="https://i.imgur.com/vSq8Yrg.jpeg" alt="Délicieux sandwich au poulet grillé" class="w-full h-full object-cover lazy-img rounded-lg" width="1000" height="1500">
-                </div>
-                <div class="gallery-item snap-center">
-                    <img data-src="https://i.imgur.com/f3jdRVu.jpeg" data-large-src="https://i.imgur.com/f3jdRVu.jpeg" alt="Plat de pâtes fraîches aux légumes" class="w-full h-full object-cover lazy-img rounded-lg" width="1000" height="1500">
-                </div>
-                <div class="gallery-item snap-center">
-                    <img data-src="https://i.imgur.com/AjvMVDK.jpeg" data-large-src="https://i.imgur.com/AjvMVDK.jpeg" alt="Verrine de panna cotta aux fruits rouges" class="w-full h-full object-cover lazy-img rounded-lg" width="1000" height="1500">
-                </div>
-                <div class="gallery-item snap-center">
-                    <img data-src="https://i.imgur.com/HDb074v.jpeg" data-large-src="https://i.imgur.com/HDb074v.jpeg" alt="Smoothie vert avec des feuilles de menthe" class="w-full h-full object-cover lazy-img rounded-lg" width="1000" height="1500">
-                </div>
-                <div class="gallery-item snap-center">
-                    <img data-src="https://i.imgur.com/jJ3CD1v.jpeg" data-large-src="https://i.imgur.com/jJ3CD1v.jpeg" alt="Plat de fruits de mer avec du riz" class="w-full h-full object-cover lazy-img rounded-lg" width="1000" height="1500">
-                </div>
-                <div class="gallery-item snap-center">
-                    <img data-src="https://i.imgur.com/3GAyhxc.jpeg" data-large-src="https://i.imgur.com/3GAyhxc.jpeg" alt="Galette salée garnie de fromage" class="w-full h-full object-cover lazy-img rounded-lg" width="1000" height="1500">
-                </div>
-                <div class="gallery-item snap-center">
-                    <img data-src="https://i.imgur.com/t8xLXXR.jpeg" data-large-src="https://i.imgur.com/t8xLXXR.jpeg" alt="Verre de café glacé avec des grains de café" class="w-full h-full object-cover lazy-img rounded-lg" width="1000" height="1500">
-                </div>
-                <div class="gallery-item snap-center">
-                    <img data-src="https://i.imgur.com/mwEYSzH.jpeg" data-large-src="https://i.imgur.com/mwEYSzH.jpeg" alt="Petit déjeuner équilibré avec du pain" class="w-full h-full object-cover lazy-img rounded-lg" width="1000" height="1500">
-                </div>
-                <div class="gallery-item snap-center">
-                    <img data-src="https://i.imgur.com/MnB6CIh.jpeg" data-large-src="https://i.imgur.com/MnB6CIh.jpeg" alt="Salade verte avec des baies et des graines" class="w-full h-full object-cover lazy-img rounded-lg" width="1000" height="1500">
-                </div>
-            </div>
-        </section>
-        
-        <!-- Section Services -->
-        <section id="services" class="mb-24 animate-fade-in-up">
-            <h2 class="text-4xl md:text-5xl playfair font-bold text-center mb-12">Mes Services</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-                <div class="card p-8">
-                    <h3 class="text-2xl font-bold mb-4 text-accent-color">Restaurants & Chefs</h3>
-                    <p class="text-gray-400">Création de menus visuels, portraits de chefs et reportages photo pour mettre en valeur votre cuisine.</p>
-                </div>
-                <div class="card p-8">
-                    <h3 class="text-2xl font-bold mb-4 text-accent-color">Marques & Agences</h3>
-                    <p class="text-gray-400">Photographie de produits, stylisme culinaire et création de contenu pour vos campagnes marketing.</p>
-                </div>
-                <div class="card p-8">
-                    <h3 class="text-2xl font-bold mb-4 text-accent-color">Livres & Magazines</h3>
-                    <p class="text-gray-400">Collaboration pour la réalisation de livres de recettes, magazines spécialisés et articles de blog.</p>
-                </div>
-            </div>
-        </section>
+</a>
 
-        <!-- Section Contact -->
-        <section id="contact" class="mb-16 animate-fade-in-up">
-            <h2 class="text-4xl md:text-5xl playfair font-bold text-center mb-8">Contactez-moi</h2>
-            <div class="max-w-xl mx-auto card p-8 contact-form-animation">
-                <!-- Formulaire Formspree mis à jour -->
-                <form action="https://formspree.io/f/mjkenkgg" method="POST" class="space-y-6">
-                    <div>
-                        <label for="name" class="block text-gray-400 mb-2">Votre nom</label>
-                        <input type="text" id="name" name="name" required class="w-full p-3 rounded-md bg-gray-800 text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-accent-color">
-                    </div>
-                    <div>
-                        <label for="email" class="block text-gray-400 mb-2">Votre adresse e-mail</label>
-                        <input type="email" id="email" name="email" required class="w-full p-3 rounded-md bg-gray-800 text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-accent-color">
-                    </div>
-                    <div>
-                        <label for="message" class="block text-gray-400 mb-2">Votre message</label>
-                        <textarea id="message" name="message" rows="5" required class="w-full p-3 rounded-md bg-gray-800 text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-accent-color"></textarea>
-                    </div>
-                    <button type="submit" class="btn-primary w-full py-3 px-6 font-semibold rounded-lg shadow-md">Envoyer le message</button>
-                </form>
-            </div>
-        </section>
-    </main>
+<nav class="nav">
 
-    <footer class="bg-secondary-bg text-gray-500 text-center p-8">
-        <p class="mb-4">&copy; 2025 Lecomte Fotos. Tous droits réservés.</p>
-        <div class="flex flex-wrap justify-center space-x-4">
-            <a href="https://www.instagram.com/lecomte_fotos/" class="text-gray-400 hover:text-accent-color transition-colors" aria-label="Suivez-moi sur Instagram" target="_blank"><i class="fab fa-instagram text-2xl"></i></a>
-            <a href="https://www.linkedin.com/in/lecomte-delphine-571554334/" class="text-gray-400 hover:text-accent-color transition-colors" aria-label="Suivez-moi sur LinkedIn" target="_blank"><i class="fab fa-linkedin-in text-2xl"></i></a>
-            <a href="https://www.tiktok.com/@lecomtefotos" class="text-gray-400 hover:text-accent-color transition-colors" aria-label="Suivez-moi sur TikTok" target="_blank"><i class="fab fa-tiktok text-2xl"></i></a>
-        </div>
-        <div class="flex flex-wrap justify-center space-x-4 mt-4 text-sm md:text-base">
-            <a href="cgu-cgv.html" class="hover:text-white transition-colors" target="_blank">CGU/CGV</a>
-            <a href="politique-de-confidentialite.html" class="hover:text-white transition-colors" target="_blank">Politique de confidentialité</a>
-            <a href="mentions-legales.html" class="hover:text-white transition-colors" target="_blank">Mentions légales</a>
-        </div>
-    </footer>
+<a href="#" onclick="location.reload()"><i class="fa-solid fa-arrows-rotate"></i> Recharger</a>
 
-    <!-- Fenêtre modale pour l'affichage de la grande image -->
-    <div id="lightbox-modal" class="fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-90 hidden">
-        <div class="relative max-w-5xl max-h-5xl p-4">
-            <!-- Boutons de navigation -->
-            <button id="prev-btn" class="nav-btn left-4 opacity-50 hover:opacity-100 transition-opacity" aria-label="Image précédente">&lt;</button>
-            <button id="next-btn" class="nav-btn right-4 opacity-50 hover:opacity-100 transition-opacity" aria-label="Image suivante">&gt;</button>
-            <button id="close-modal-btn" class="absolute top-4 right-4 text-white text-3xl font-bold hover:text-gray-400" aria-label="Fermer le dialogue">&times;</button>
-            <img id="lightbox-image" src="" alt="Grande image du portfolio" class="max-w-full max-h-[90vh] rounded-lg">
-        </div>
-    </div>
+</nav>
 
-    <script>
-        // Array of landscape images from the portfolio to use in the carousel
-        const heroImages = [
-            'https://i.imgur.com/eQE6IfD.jpeg',
-            'https://i.imgur.com/HZNDruE.jpeg',
-            'https://i.imgur.com/LB5Wf6Z.jpeg',
-            'https://i.imgur.com/oF4tE7h.jpeg',
-            'https://i.imgur.com/xz5muTB.jpeg',
-            'https://i.imgur.com/JbOAqro.jpeg',
-            'https://i.imgur.com/c1FAH78.jpeg',
-            'https://i.imgur.com/MWkKfDZ.jpeg',
-            'https://i.imgur.com/WJh4O2N.jpeg',
-            'https://i.imgur.com/l2Y6vdS.jpeg',
-            'https://i.imgur.com/OoBtWY6.jpeg',
-            'https://i.imgur.com/1fFilAc.jpeg',
-            'https://i.imgur.com/Caab01r.jpeg',
-            'https://i.imgur.com/DUBMybb.jpeg',
-            'https://i.imgur.com/oqYqL79.jpeg',
-            'https://i.imgur.com/kdTF18R.jpeg',
-            'https://i.imgur.com/GHOAwPi.jpeg',
-            'https://i.imgur.com/LV0XTDT.jpeg',
-            'https://i.imgur.com/vSq8Yrg.jpeg',
-            'https://i.imgur.com/f3jdRVu.jpeg',
-            'https://i.imgur.com/AjvMVDK.jpeg',
-            'https://i.imgur.com/HDb074v.jpeg',
-            'https://i.imgur.com/jJ3CD1v.jpeg',
-            'https://i.imgur.com/3GAyhxc.jpeg',
-            'https://i.imgur.com/t8xLXXR.jpeg',
-            'https://i.imgur.com/mwEYSzH.jpeg',
-            'https://i.imgur.com/MnB6CIh.jpeg',
-            'https://i.imgur.com/ra7MUWM.jpeg',
-            'https://i.imgur.com/ZYzLuFX.jpeg',
-            'https://i.imgur.com/mIQOp2B.jpeg',
-            'https://i.imgur.com/9dRjrSZ.jpeg',
-            'https://i.imgur.com/mobrvSX.jpeg',
-            'https://i.imgur.com/j65pGkN.jpeg',
-        ];
+</div>
 
-        let currentHeroIndex = 0;
-        const heroSection = document.getElementById('hero');
+</header>
 
-        function changeHeroBackground() {
-            currentHeroIndex = (currentHeroIndex + 1) % heroImages.length;
-            const imageUrl = heroImages[currentHeroIndex];
-            heroSection.style.backgroundImage = `url('${imageUrl}')`;
-        }
+<div class="container">
 
-        // Pre-load images to avoid flickering
-        heroImages.forEach(src => {
-            const img = new Image();
-            img.src = src;
-        });
+<h1 class="h1">Plan des entrepôts • Contrôle des zones • Stock • Réservations</h1>
 
-        // Set the initial background and start the carousel
-        heroSection.style.backgroundImage = `url('${heroImages[0]}')`;
-        setInterval(changeHeroBackground, 7000); // Change image every 7 seconds
+<div class="card">
 
-        // Script for the navbar that changes color on scroll
-        window.addEventListener('scroll', () => {
-            const navbar = document.getElementById('navbar');
-            if (window.scrollY > 50) {
-                navbar.classList.add('bg-opacity-90', 'shadow-lg');
-            } else {
-                navbar.classList.remove('bg-opacity-90', 'shadow-lg');
-            }
-        });
+<div class="tabs" id="warehouseTabs">
 
-        // Logic for the modal window (lightbox)
-        document.addEventListener('DOMContentLoaded', () => {
-            const galleryItems = Array.from(document.querySelectorAll('.gallery-item'));
-            const modal = document.getElementById('lightbox-modal');
-            const modalImage = document.getElementById('lightbox-image');
-            const closeModalBtn = document.getElementById('close-modal-btn');
-            const prevBtn = document.getElementById('prev-btn');
-            const nextBtn = document.getElementById('next-btn');
-            let currentIndex = 0;
+<button class="tab active" data-warehouse="1" onclick="selectWarehouse(1)"><i class="fa-solid fa-warehouse"></i> Entrepôt 1 - Challans</button>
 
-            // Lazy loading with Intersection Observer
-            const lazyImages = document.querySelectorAll('img.lazy-img');
-            const imageObserver = new IntersectionObserver((entries, observer) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const lazyImage = entry.target;
-                        lazyImage.src = lazyImage.dataset.src;
-                        lazyImage.onload = () => {
-                            lazyImage.classList.add('loaded');
-                        };
-                        imageObserver.unobserve(lazyImage);
-                    }
-                });
-            });
+<button class="tab" data-warehouse="2" onclick="selectWarehouse(2)"><i class="fa-solid fa-boxes-stacked"></i> Entrepôt 2 - Sables d'Olonne</button>
 
-            lazyImages.forEach(image => {
-                imageObserver.observe(image);
-            });
+<button class="tab add" onclick="openAddWarehouse()"><i class="fa-solid fa-plus"></i> Ajouter un entrepôt</button>
 
-            // Open the modal on image click
-            galleryItems.forEach((item, index) => {
-                item.addEventListener('click', () => {
-                    currentIndex = index;
-                    updateModalImage();
-                    modal.classList.remove('hidden');
-                });
-            });
+</div>
 
-            // Update the modal image
-            function updateModalImage() {
-                const largeImgSrc = galleryItems[currentIndex].querySelector('img').dataset.largeSrc;
-                modalImage.src = largeImgSrc;
-                modalImage.alt = galleryItems[currentIndex].querySelector('img').alt;
-            }
+<div class="row">
 
-            // Navigate to the previous image
-            prevBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                currentIndex = (currentIndex - 1 + galleryItems.length) % galleryItems.length;
-                updateModalImage();
-            });
+<div>
 
-            // Navigate to the next image
-            nextBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                currentIndex = (currentIndex + 1) % galleryItems.length;
-                updateModalImage();
-            });
+<div class="card">
 
-            // Close the modal on button click or background click
-            closeModalBtn.addEventListener('click', () => {
-                modal.classList.add('hidden');
-            });
+<div class="small" style="margin-bottom:10px;">
 
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    modal.classList.add('hidden');
-                }
-            });
+<input class="input" id="searchInput" placeholder="Rechercher par article, catégorie, zone...">
 
-            // Handle modal close with 'Esc' key and navigation with arrow keys
-            document.addEventListener('keydown', (e) => {
-                if (!modal.classList.contains('hidden')) {
-                    if (e.key === 'Escape') {
-                        modal.classList.add('hidden');
-                    } else if (e.key === 'ArrowLeft') {
-                        prevBtn.click();
-                    } else if (e.key === 'ArrowRight') {
-                        nextBtn.click();
-                    }
-                }
-            });
-            
-            // Logic to animate the "Photographie culinaire" text
-            const culinaryText = document.querySelector('.culinary-text');
-            if (culinaryText) {
-                culinaryText.addEventListener('mousemove', (e) => {
-                    // Get the position of the mouse relative to the element
-                    const rect = e.target.getBoundingClientRect();
-                    const x = e.clientX - rect.left;
-                    const y = e.clientY - rect.top;
+</div>
 
-                    // Update CSS variables
-                    culinaryText.style.setProperty('--mouse-x', `${x}px`);
-                    culinaryText.style.setProperty('--mouse-y', `${y}px`);
-                });
-            }
+<div id="warehouse-1">
 
-            // Mobile menu toggle logic
-            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-            const navLinks = document.getElementById('nav-links');
+<div class="grid grid--w1">
 
-            mobileMenuBtn.addEventListener('click', () => {
-                navLinks.classList.toggle('hidden');
-                navLinks.classList.toggle('flex');
-            });
+<div class="head"></div>
 
-            // NEW: Force the page to scroll to the top on refresh
-            window.addEventListener('beforeunload', () => {
-                // Scroll to the top before the page unloads
-                window.scrollTo(0, 0);
-            });
-            window.onload = function() {
-                // This ensures the scroll to top happens on page load, even after a hard refresh.
-                window.scrollTo(0, 0);
-            };
-        });
-    </script>
+<div class="head">A</div><div class="head">B</div><div class="head">C</div><div class="head">D</div><div class="head">E</div><div class="head">F</div>
+
+<div class="head">1</div>
+
+<div class="cell inactive" style="grid-column: 2 / 4; grid-row: 2 / 5;">
+
+<div class="cell-title">Espace chantier d'insertion</div>
+
+<div class="cell-status">Zone non-disponible</div>
+
+</div>
+
+<div class="cell inactive" style="grid-column: 4 / 5; grid-row: 2 / 5;">
+
+<div class="cell-title">Espace logistique & bricolage</div>
+
+<div class="cell-status">Zone non-disponible</div>
+
+</div>
+
+<div class="cell free" data-location="D1" data-warehouse="1" onclick="openZone('D1',1)">
+
+<div class="cell-code">D1</div>
+
+<div class="cell-title">Jeux enfants</div>
+
+<div class="cell-status">Libre</div>
+
+<div class="cell-icons"></div>
+
+<div class="badge" style="display:none;">0</div>
+
+<div class="zone zone--on">Actif</div>
+
+</div>
+
+<div class="cell free" data-location="E1" data-warehouse="1" onclick="openZone('E1',1)">
+
+<div class="cell-code">E1</div>
+
+<div class="cell-title">Hygiène</div>
+
+<div class="cell-status">Libre</div>
+
+<div class="cell-icons"></div>
+
+<div class="badge" style="display:none;">0</div>
+
+<div class="zone zone--on">Actif</div>
+
+</div>
+
+<div class="cell free" data-location="F1" data-warehouse="1" onclick="openZone('F1',1)">
+
+<div class="cell-code">F1</div>
+
+<div class="cell-title">Vaisselle</div>
+
+<div class="cell-status">Libre</div>
+
+<div class="cell-icons"></div>
+
+<div class="badge" style="display:none;">0</div>
+
+<div class="zone zone--on">Actif</div>
+
+</div>
+
+<div class="head">2</div>
+
+<div class="cell free" data-location="F2" data-warehouse="1" onclick="openZone('F2',1)">
+
+<div class="cell-code">F2</div>
+
+<div class="cell-title">Lingerie</div>
+
+<div class="cell-status">Libre</div>
+
+<div class="badge" style="display:none;">0</div>
+
+<div class="zone zone--on">Actif</div>
+
+</div>
+
+<div class="head">3</div>
+
+<div class="cell free" data-location="D2-E3" data-warehouse="1" style="grid-column: 5 / 7; grid-row: 3 / 5;" onclick="openZone('D2-E3',1)">
+
+<div class="cell-code">D2-E3</div>
+
+<div class="cell-title">Stockage logistique</div>
+
+<div class="cell-status">Libre</div>
+
+<div class="badge" style="display:none;">0</div>
+
+<div class="zone zone--on">Actif</div>
+
+</div>
+
+<div class="cell free" data-location="F3" data-warehouse="1" onclick="openZone('F3',1)">
+
+<div class="cell-code">F3</div>
+
+<div class="cell-title">Fournitures, livres enfants</div>
+
+<div class="cell-status">Libre</div>
+
+<div class="badge" style="display:none;">0</div>
+
+<div class="zone zone--on">Actif</div>
+
+</div>
+
+</div>
+
+<div id="loading1" class="small" style="text-align:center; padding: 10px;">Chargement Baserow...</div>
+
+</div>
+
+<div id="warehouse-2" style="display:none;">
+
+<div class="grid grid--w2">
+
+<div class="head"></div>
+
+<div class="head">A</div><div class="head">B</div>
+
+<div class="head">1</div>
+
+<div class="cell free" data-location="A1" data-warehouse="2" onclick="openZone('A1',2)">
+
+<div class="cell-code">A1</div>
+
+<div class="cell-title">Étagère bas</div>
+
+<div class="cell-status">Libre</div>
+
+<div class="badge" style="display:none;">0</div>
+
+<div class="zone zone--on">Actif</div>
+
+</div>
+
+<div class="cell free" data-location="A2" data-warehouse="2" onclick="openZone('A2',2)">
+
+<div class="cell-code">A2</div>
+
+<div class="cell-title">Étagère haut</div>
+
+<div class="cell-status">Libre</div>
+
+<div class="badge" style="display:none;">0</div>
+
+<div class="zone zone--on">Actif</div>
+
+</div>
+
+</div>
+
+<div id="loading2" class="small" style="text-align:center; padding: 10px;">Chargement Baserow...</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div>
+
+<div class="card">
+
+<div class="h1" style="font-size:1.2rem;">Légende</div>
+
+<div class="legend">
+
+Zone libre</span>
+
+Zone occupée 📦</span>
+
+Avec réservations 📅</span>
+
+Zone non-disponible ⛔</span>
+
+</div>
+
+</div>
+
+<div class="card">
+
+<div class="h1" style="font-size:1.2rem;">Réservations en cours</div>
+
+<div id="reservationsPanel" class="small">Chargement...</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="modal" id="modal">
+
+<div class="modal__inner">
+
+<div class="modal__header">
+
+<div class="modal__title" id="modalTitle">Détails zone</div>
+
+<button class="btn btn--muted" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+
+</div>
+
+<div class="modal__body" id="modalBody"></div>
+
+</div>
+
+</div>
+
+<div class="toast" id="toast">Succès</div>
+
+<script>
+
+// CONFIG BASEROW
+
+const BASEROW_API_KEY = 'zYoz2ylTSe42E1CVXimBJR30WvLEFURv';
+
+const BASEROW_BASE_URL = 'https://api.baserow.io/api';
+
+const STOCK_TABLE_ID = 671322;
+
+const CATEGORIES_TABLE_ID = 671321;
+
+const ENTREPOTS_TABLE_ID = 671316;
+
+const PLAN_ENTREPOT_TABLE_ID = 671384;
+
+const RESERVATION_TABLE_ID = 671325;
+
+// ÉTAT LOCAL
+
+let currentWarehouse = 1;
+
+let categories = [];
+
+let zonePositions = {}; // { 'D1': { id: X, status: 'actif' } }
+
+let warehouseData = { 1: {}, 2: {} }; // données par zone
+
+// HELPERS
+
+function showToast(text, isError=false) {
+
+const t = document.getElementById('toast');
+
+t.textContent = text;
+
+t.classList.toggle('err', !!isError);
+
+t.classList.add('show');
+
+setTimeout(()=> t.classList.remove('show'), 2500);
+
+}
+
+function api(path, options={}) {
+
+return fetch(`${BASEROW_BASE_URL}${path}`, {
+
+...options,
+
+headers: {
+
+'Authorization': `Token ${BASEROW_API_KEY}`,
+
+'Content-Type': 'application/json',
+
+...(options.headers||{})
+
+}
+
+});
+
+}
+
+// INIT
+
+document.addEventListener('DOMContentLoaded', async () => {
+
+document.getElementById('searchInput').addEventListener('input', applySearch);
+
+await Promise.all([
+
+loadCategories(),
+
+loadZonePositions(),
+
+loadReservations()
+
+]);
+
+await loadStock();
+
+updateAllCells();
+
+document.getElementById('loading1').style.display = 'none';
+
+document.getElementById('loading2').style.display = 'none';
+
+});
+
+// CHARGEMENTS
+
+async function loadCategories() {
+
+const r = await api(`/database/rows/table/${CATEGORIES_TABLE_ID}/?user_field_names=false`);
+
+if (!r.ok) return;
+
+const data = await r.json();
+
+categories = [data.results.map](http://data.results.map)(it => ({ id: [it.id](http://it.id), nom: it.field_5527913 }));
+
+}
+
+async function loadZonePositions() {
+
+const r = await api(`/database/rows/table/${PLAN_ENTREPOT_TABLE_ID}/?user_field_names=false`);
+
+if (!r.ok) return;
+
+const data = await r.json();
+
+zonePositions = {};
+
+data.results.forEach(row => {
+
+const position = row.field_5528810; // Position
+
+let etat = 'actif';
+
+const raw = row.field_5542793; // multi-select
+
+if (raw) {
+
+if (Array.isArray(raw)) {
+
+etat = raw.includes('inactif') ? 'inactif' : 'actif';
+
+} else if (typeof raw === 'string') {
+
+etat = raw.toLowerCase() === 'inactif' ? 'inactif' : 'actif';
+
+}
+
+}
+
+if (position) zonePositions[position] = { id: [row.id](http://row.id), status: etat };
+
+});
+
+}
+
+async function loadStock() {
+
+const r = await api(`/database/rows/table/${STOCK_TABLE_ID}/?user_field_names=false`);
+
+if (!r.ok) return;
+
+const data = await r.json();
+
+warehouseData = { 1: {}, 2: {} };
+
+// Initialise zones connues pour conserver affichage
+
+['D1','E1','F1','D2-E3','F2','F3'].forEach(p => warehouseData[1][p] = { items: [], occupied:false, hasRes:false, zoneStatus: (zonePositions[p]?.status||'actif') });
+
+['A1','A2'].forEach(p => warehouseData[2][p] = { items: [], occupied:false, hasRes:false, zoneStatus: (zonePositions[p]?.status||'actif') });
+
+data.results.forEach(row => {
+
+const name = row.field_5527921 || 'Article';
+
+const quantity = +row.field_5527934 || 0;
+
+const reserved = +row.field_5532799 || 0;
+
+const price = +row.field_5529132 || 0;
+
+const type = row.field_5529130 || 'Don';
+
+const etat = row.field_5615747 || 'Bon état';
+
+let pos = null, w = 1;
+
+if (Array.isArray(row.field_5532813) && row.field_5532813.length) {
+
+const val = row.field_5532813[0].value;
+
+pos = val; w = (val === 'A1' || val === 'A2') ? 2 : 1;
+
+}
+
+if (!pos || !warehouseData[w] || !warehouseData[w][pos]) return;
+
+const catName = (()=>{
+
+if (Array.isArray(row.field_5529113) && row.field_5529113.length) {
+
+const id = row.field_5529113[0];
+
+const c = categories.find(x=>[x.id](http://x.id)===id); return c?c.nom:'Autre';
+
+}
+
+return 'Autre';
+
+})();
+
+warehouseData[w][pos].items.push({
+
+id: [row.id](http://row.id), name, quantity, reserved, price, type, etat, category: catName
+
+});
+
+warehouseData[w][pos].occupied = true;
+
+warehouseData[w][pos].hasRes = reserved>0;
+
+});
+
+}
+
+async function loadReservations() {
+
+const r = await api(`/database/rows/table/${RESERVATION_TABLE_ID}/?user_field_names=false`);
+
+if (!r.ok) { document.getElementById('reservationsPanel').textContent = 'Erreur de chargement'; return; }
+
+const data = await r.json();
+
+if (!data.results?.length) { document.getElementById('reservationsPanel').textContent = 'Aucune réservation'; return; }
+
+const lines = [data.results.map](http://data.results.map)(r=>{
+
+const nom = r.field_5527943 || 'Article';
+
+const q = r.field_5527944 || 0;
+
+const who = r.field_5527945 || `${r.field_5615909||''} ${r.field_5615908||''}`.trim();
+
+const etat = Array.isArray(r.field_5527990) ? r.field_5527990.join(', ') : (r.field_5527990||'');
+
+const id = [r.id](http://r.id);
+
+return `<div style="display:flex; justify-content:space-between; gap:8px; padding:8px 0; border-bottom:1px solid #eee;">
+
+<div><strong>${nom}</strong> • ${q} • ${who} • ${etat}</div>
+
+<div>
+
+<button class="btn btn--ok" onclick="editReservation(${id})">Modifier</button>
+
+<button class="btn btn--danger" onclick="deleteReservation(${id})">Supprimer</button>
+
+</div>
+
+</div>`
+
+}).join('');
+
+document.getElementById('reservationsPanel').innerHTML = lines;
+
+}
+
+// AFFICHAGE
+
+function selectWarehouse(id) {
+
+currentWarehouse = id;
+
+document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+
+document.querySelector(`.tab[data-warehouse="${id}"]`).classList.add('active');
+
+document.getElementById('warehouse-1').style.display = id===1? 'block':'none';
+
+document.getElementById('warehouse-2').style.display = id===2? 'block':'none';
+
+updateAllCells();
+
+}
+
+function updateAllCells() {
+
+document.querySelectorAll(`#warehouse-${currentWarehouse} .cell[data-location]`).forEach(cell => {
+
+const loc = cell.dataset.location; const w = +cell.dataset.warehouse;
+
+const d = warehouseData[w]?.[loc] || { items:[], occupied:false, hasRes:false, zoneStatus: (zonePositions[loc]?.status||'actif') };
+
+const badge = cell.querySelector('.badge');
+
+const status = cell.querySelector('.cell-status');
+
+const zone = cell.querySelector('.zone');
+
+const count = d.items.length;
+
+[badge.style](http://badge.style).display = count? 'block':'none';
+
+badge.textContent = count;
+
+cell.classList.remove('free','busy','res','inactive');
+
+if (d.zoneStatus === 'inactif') cell.classList.add('inactive');
+
+if (d.occupied) {
+
+if (d.hasRes) { cell.classList.add('res'); status.textContent = `${count} article(s)`; }
+
+else { cell.classList.add('busy'); status.textContent = `${count} article(s)`; }
+
+} else { cell.classList.add('free'); status.textContent = 'Libre'; }
+
+zone.textContent = d.zoneStatus === 'actif'? 'Actif':'Inactif';
+
+zone.className = `zone ${d.zoneStatus === 'actif' ? 'zone--on' : 'zone--off'}`;
+
+});
+
+}
+
+function applySearch(e) {
+
+const term = (e?.target?.value || document.getElementById('searchInput').value || '').toLowerCase();
+
+document.querySelectorAll(`#warehouse-${currentWarehouse} .cell[data-location]`).forEach(cell => {
+
+const loc = cell.dataset.location; const w = +cell.dataset.warehouse;
+
+const d = warehouseData[w]?.[loc] || { items:[] };
+
+const match = loc.toLowerCase().includes(term)
+
+|  | (cell.querySelector('.cell-title')?.textContent.toLowerCase().includes(term)) |
+| --- | --- |
+|  | d.items.some(it => ([it.name](http://it.name) |
+
+[cell.style](http://cell.style).display = match? 'flex':'none';
+
+});
+
+}
+
+// MODAL ZONE
+
+function openZone(location, warehouse) {
+
+const d = warehouseData[warehouse]?.[location] || { items:[], zoneStatus: (zonePositions[location]?.status||'actif') };
+
+document.getElementById('modalTitle').textContent = `Entrepôt ${warehouse} • Zone ${location}`;
+
+let html = '';
+
+html += `<div style="display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:12px;">
+
+Statut zone: <strong>${d.zoneStatus==='actif'?'🟢 Active':'🔴 Inactive'}</strong>
+
+<button class="btn btn--warn" onclick="openZoneStatus('${location}', ${warehouse})"><i class='fa-solid fa-toggle-on'></i> Gérer la zone</button>
+
+</div>`;
+
+if (!d.items.length) {
+
+html += `<div class="card small" style="background:#dff7e1;">Zone libre. Ajoutez un article pour commencer.</div>
+
+<button class="btn" onclick="openAddItem('${location}', ${warehouse})"><i class='fa-solid fa-plus'></i> Ajouter un article</button>`;
+
+} else {
+
+html += `<div class="h1" style="font-size:1.1rem;">Articles (${d.items.length})</div>`;
+
+d.items.forEach(it => {
+
+const avail = (it.quantity||0) - (it.reserved||0);
+
+html += `<div class="card">
+
+<div style="display:flex; justify-content:space-between; align-items:center;">
+
+<div><strong>${[it.name](http://it.name)}</strong> ${it.type==='Don'?'🎁':'💰'} • ${it.category}</div>
+
+<div class='small'>Stock ${it.quantity} • Réservé ${it.reserved} • Dispo <strong>${avail}</strong></div>
+
+</div>
+
+<div style="display:flex; gap:8px; margin-top:8px;">
+
+<button class="btn btn--warn" onclick="openEditItem(${[it.id](http://it.id)}, '${location}', ${warehouse})">Modifier</button>
+
+<button class="btn btn--ok" onclick="openReserve(${[it.id](http://it.id)}, '${location}', ${warehouse})">Réserver</button>
+
+<button class="btn btn--danger" onclick="deleteItem(${[it.id](http://it.id)}, '${location}', ${warehouse}, '${[it.name](http://it.name)}')">Supprimer</button>
+
+</div>
+
+</div>`;
+
+});
+
+html += `<div style="margin-top:10px;"><button class="btn" onclick="openAddItem('${location}', ${warehouse})"><i class='fa-solid fa-plus'></i> Ajouter un article</button></div>`;
+
+}
+
+document.getElementById('modalBody').innerHTML = html;
+
+document.getElementById('modal').style.display = 'block';
+
+}
+
+function closeModal(){ document.getElementById('modal').style.display = 'none'; }
+
+// GESTION STATUT ZONE
+
+function openZoneStatus(location, warehouse){
+
+const status = warehouseData[warehouse]?.[location]?.zoneStatus || (zonePositions[location]?.status||'actif');
+
+document.getElementById('modalBody').innerHTML = `
+
+<div class='h1' style='font-size:1.1rem;'>Changer le statut</div>
+
+<div class='small' style='margin:8px 0 12px;'>Zone ${location} • Entrepôt ${warehouse}</div>
+
+<label class='small'>Statut</label>
+
+<select id='zoneStatusSel' class='input'>
+
+<option value='actif' ${status==='actif'?'selected':''}>Actif</option>
+
+<option value='inactif' ${status==='inactif'?'selected':''}>Inactif</option>
+
+</select>
+
+<div style='margin-top:12px; display:flex; gap:8px;'>
+
+<button class='btn' onclick="saveZoneStatus('${location}', ${warehouse})">Enregistrer</button>
+
+<button class='btn btn--muted' onclick="openZone('${location}', ${warehouse})">Annuler</button>
+
+</div>
+
+`;
+
+}
+
+async function saveZoneStatus(location, warehouse){
+
+const newStatus = document.getElementById('zoneStatusSel').value;
+
+const info = zonePositions[location];
+
+if (!info) { showToast('Position inconnue', true); return; }
+
+const payload = { field_5542793: [newStatus] };
+
+const r = await api(`/database/rows/table/${PLAN_ENTREPOT_TABLE_ID}/${[info.id](http://info.id)}/`, { method:'PATCH', body: JSON.stringify(payload) });
+
+if (!r.ok) { const tx = await r.text(); showToast('Erreur maj zone', true); console.error(tx); return; }
+
+warehouseData[warehouse][location].zoneStatus = newStatus;
+
+zonePositions[location].status = newStatus;
+
+updateAllCells();
+
+showToast(`Zone ${location} → ${newStatus}`);
+
+openZone(location, warehouse);
+
+}
+
+// CRUD ARTICLES
+
+function openAddItem(location, warehouse){
+
+const opts = [categories.map](http://categories.map)(c=>`<option value='${[c.id](http://c.id)}'>${c.nom}</option>`).join('');
+
+document.getElementById('modalBody').innerHTML = `
+
+<div class='h1' style='font-size:1.1rem;'>Ajouter un article</div>
+
+<div class='row' style='grid-template-columns:1fr 1fr;'>
+
+<div><label class='small'>Nom *</label><input id='itName' class='input' required></div>
+
+<div><label class='small'>Quantité *</label><input id='itQty' type='number' min='1' value='1' class='input' required></div>
+
+<div><label class='small'>Prix unitaire (€)</label><input id='itPrice' type='number' step='0.01' min='0' value='0' class='input'></div>
+
+<div><label class='small'>Catégorie</label><select id='itCat' class='input'><option value=''>—</option>${opts}</select></div>
+
+<div><label class='small'>Type *</label><select id='itType' class='input'><option value='Don'>Don</option><option value='Achat'>Achat</option></select></div>
+
+<div><label class='small'>État *</label><select id='itEtat' class='input'><option value='Neuf'>Neuf</option><option value='Bon état'>Bon état</option></select></div>
+
+<div style='grid-column:1 / -1;'><label class='small'>Site fournisseur</label><input id='itSite' class='input' placeholder='https://...'></div>
+
+</div>
+
+<div style='margin-top:12px; display:flex; gap:8px;'>
+
+<button class='btn' onclick="saveNewItem('${location}', ${warehouse})">Ajouter</button>
+
+<button class='btn btn--muted' onclick="openZone('${location}', ${warehouse})">Annuler</button>
+
+</div>
+
+`;
+
+}
+
+async function saveNewItem(location, warehouse){
+
+const name = document.getElementById('itName').value.trim();
+
+const quantity = +document.getElementById('itQty').value;
+
+const price = +document.getElementById('itPrice').value;
+
+const cat = document.getElementById('itCat').value;
+
+const type = document.getElementById('itType').value;
+
+const etat = document.getElementById('itEtat').value;
+
+const site = document.getElementById('itSite').value.trim();
+
+if (!name || !quantity) { showToast('Champs requis manquants', true); return; }
+
+const posInfo = zonePositions[location]; if (!posInfo) { showToast('Position inconnue', true); return; }
+
+// Trouver l'entrepôt lié par ID_Entrepôt == warehouse
+
+let entrepotId = null;
+
+const ent = await api(`/database/rows/table/${ENTREPOTS_TABLE_ID}/?user_field_names=false`);
+
+if (ent.ok) { const ed = await ent.json(); const row = ed.results.find(e=> e.field_5527870 === warehouse); if (row) entrepotId = [row.id](http://row.id); }
+
+const payload = {
+
+field_5527921: name,
+
+field_5527934: quantity,
+
+field_5529132: price,
+
+field_5529130: type,
+
+field_5615747: etat,
+
+field_5615690: new Date().toISOString().split('T')[0],
+
+field_5532813: [[posInfo.id](http://posInfo.id)]
+
+};
+
+if (entrepotId) payload.field_5527922 = [entrepotId];
+
+if (cat) payload.field_5529113 = [parseInt(cat)];
+
+if (site) payload.field_5529271 = site;
+
+const r = await api(`/database/rows/table/${STOCK_TABLE_ID}/`, { method:'POST', body: JSON.stringify(payload) });
+
+if (!r.ok) { showToast('Erreur ajout', true); return; }
+
+await loadStock(); updateAllCells(); showToast('Article ajouté'); openZone(location, warehouse);
+
+}
+
+async function openEditItem(id, location, warehouse){
+
+const r = await api(`/database/rows/table/${STOCK_TABLE_ID}/${id}/?user_field_names=false`);
+
+if (!r.ok) { showToast('Article introuvable', true); return; }
+
+const it = await r.json();
+
+const opts = [categories.map](http://categories.map)(c=>`<option value='${[c.id](http://c.id)}' ${(it.field_5529113||[]).includes([c.id](http://c.id))?'selected':''}>${c.nom}</option>`).join('');
+
+document.getElementById('modalBody').innerHTML = `
+
+<div class='h1' style='font-size:1.1rem;'>Modifier l'article</div>
+
+<div class='row' style='grid-template-columns:1fr 1fr;'>
+
+<div><label class='small'>Nom *</label><input id='editName' class='input' value='${it.field_5527921||''}'></div>
+
+<div><label class='small'>Quantité *</label><input id='editQty' type='number' min='0' class='input' value='${it.field_5527934||0}'></div>
+
+<div><label class='small'>Prix unitaire</label><input id='editPrice' type='number' step='0.01' class='input' value='${it.field_5529132||0}'></div>
+
+<div><label class='small'>Catégorie</label><select id='editCat' class='input'><option value=''>—</option>${opts}</select></div>
+
+<div><label class='small'>Type</label><select id='editType' class='input'><option value='Don' ${it.field_5529130==='Don'?'selected':''}>Don</option><option value='Achat' ${it.field_5529130==='Achat'?'selected':''}>Achat</option></select></div>
+
+<div><label class='small'>État</label><select id='editEtat' class='input'><option value='Neuf' ${it.field_5615747==='Neuf'?'selected':''}>Neuf</option><option value='Bon état' ${it.field_5615747==='Bon état'?'selected':''}>Bon état</option></select></div>
+
+</div>
+
+<div style='margin-top:12px; display:flex; gap:8px;'>
+
+<button class='btn' onclick="saveEditItem(${id}, '${location}', ${warehouse})">Enregistrer</button>
+
+<button class='btn btn--muted' onclick="openZone('${location}', ${warehouse})">Annuler</button>
+
+</div>
+
+`;
+
+}
+
+async function saveEditItem(id, location, warehouse){
+
+const payload = {
+
+field_5527921: document.getElementById('editName').value.trim(),
+
+field_5527934: +document.getElementById('editQty').value,
+
+field_5529132: +document.getElementById('editPrice').value,
+
+field_5529130: document.getElementById('editType').value,
+
+field_5615747: document.getElementById('editEtat').value,
+
+field_5615692: new Date().toISOString().split('T')[0]
+
+};
+
+const cat = document.getElementById('editCat').value; payload.field_5529113 = cat? [parseInt(cat)] : [];
+
+const r = await api(`/database/rows/table/${STOCK_TABLE_ID}/${id}/`, { method:'PATCH', body: JSON.stringify(payload) });
+
+if (!r.ok) { showToast('Erreur modification', true); return; }
+
+await loadStock(); updateAllCells(); showToast('Article modifié'); openZone(location, warehouse);
+
+}
+
+async function deleteItem(id, location, warehouse, name){
+
+if (!confirm(`Supprimer définitivement "${name}" ?`)) return;
+
+const r = await api(`/database/rows/table/${STOCK_TABLE_ID}/${id}/`, { method:'DELETE' });
+
+if (!r.ok) { showToast('Erreur suppression', true); return; }
+
+await loadStock(); updateAllCells(); showToast('Article supprimé'); openZone(location, warehouse);
+
+}
+
+// RESERVATIONS
+
+async function openReserve(id, location, warehouse){
+
+const r = await api(`/database/rows/table/${STOCK_TABLE_ID}/${id}/?user_field_names=false`);
+
+if (!r.ok) { showToast('Article introuvable', true); return; }
+
+const it = await r.json();
+
+const available = (+it.field_5527934||0) - (+it.field_5532799||0);
+
+document.getElementById('modalBody').innerHTML = `
+
+<div class='h1' style='font-size:1.1rem;'>Créer une réservation</div>
+
+<div class='small'>${it.field_5527921} • dispo ${available}</div>
+
+<div class='row' style='grid-template-columns:1fr 1fr;'>
+
+<div><label class='small'>Prénom *</label><input id='rp' class='input'></div>
+
+<div><label class='small'>Nom *</label><input id='rn' class='input'></div>
+
+<div><label class='small'>Quantité *</label><input id='rq' type='number' min='1' max='${available}' value='1' class='input'></div>
+
+<div><label class='small'>Téléphone</label><input id='rt' class='input'></div>
+
+<div><label class='small'>Email</label><input id='re' type='email' class='input'></div>
+
+<div><label class='small'>Date réservation *</label><input id='rdr' type='date' class='input' value='${new Date().toISOString().split('T')[0]}'></div>
+
+<div><label class='small'>Date retrait</label><input id='rde' type='date' class='input'></div>
+
+<div style='grid-column:1 / -1;'><label class='small'>Commentaire</label><textarea id='rc' class='input' rows='2'></textarea></div>
+
+</div>
+
+<div style='margin-top:12px; display:flex; gap:8px;'>
+
+<button class='btn' onclick="saveReservation(${id}, '${location}', ${warehouse})">Créer</button>
+
+<button class='btn btn--muted' onclick="openZone('${location}', ${warehouse})">Annuler</button>
+
+</div>
+
+`;
+
+}
+
+async function saveReservation(stockId, location, warehouse){
+
+const prenom = document.getElementById('rp').value.trim();
+
+const nom = document.getElementById('rn').value.trim();
+
+const q = +document.getElementById('rq').value;
+
+const tel = document.getElementById('rt').value.trim();
+
+const email = document.getElementById('re').value.trim();
+
+const dres = document.getElementById('rdr').value; const dret = document.getElementById('rde').value;
+
+const com = document.getElementById('rc').value.trim();
+
+if (!prenom || !nom || !q) { showToast('Champs requis', true); return; }
+
+// Récupère le nom produit
+
+const s = await api(`/database/rows/table/${STOCK_TABLE_ID}/${stockId}/?user_field_names=false`); const item = await s.json();
+
+const payload = {
+
+field_5527943: item.field_5527921,
+
+field_5527944: q,
+
+field_5527945: `${prenom} ${nom}`,
+
+field_5615909: prenom,
+
+field_5615908: nom,
+
+field_5527986: dres,
+
+field_5527990: ['En attente'],
+
+field_5529273: [stockId]
+
+};
+
+if (tel) payload.field_5615903 = parseInt(tel);
+
+if (email) payload.field_5615904 = email;
+
+if (dret) payload.field_5527991 = dret;
+
+if (com) payload.field_5615910 = com;
+
+const r = await api(`/database/rows/table/${RESERVATION_TABLE_ID}/`, { method:'POST', body: JSON.stringify(payload) });
+
+if (!r.ok) { showToast('Erreur réservation', true); return; }
+
+await loadStock(); updateAllCells(); await loadReservations(); showToast('Réservation créée'); openZone(location, warehouse);
+
+}
+
+async function editReservation(id){
+
+const r = await api(`/database/rows/table/${RESERVATION_TABLE_ID}/${id}/?user_field_names=false`); if (!r.ok) { showToast('Introuvable', true); return; }
+
+const res = await r.json();
+
+document.getElementById('modalTitle').textContent = 'Modifier la réservation';
+
+document.getElementById('modal').style.display = 'block';
+
+document.getElementById('modalBody').innerHTML = `
+
+<div class='row' style='grid-template-columns:1fr 1fr;'>
+
+<div><label class='small'>Bénéficiaire</label><input id='er_name' class='input' value='${res.field_5527945||''}'></div>
+
+<div><label class='small'>Quantité</label><input id='er_q' class='input' type='number' value='${res.field_5527944||0}'></div>
+
+<div><label class='small'>État</label><select id='er_state' class='input'><option ${Array.isArray(res.field_5527990)&&res.field_5527990.includes('En attente')?'selected':''}>En attente</option><option ${Array.isArray(res.field_5527990)&&res.field_5527990.includes('Retiré')?'selected':''}>Retiré</option></select></div>
+
+<div><label class='small'>Date réservation</label><input id='er_dr' class='input' type='date' value='${res.field_5527986||''}'></div>
+
+<div><label class='small'>Date retrait</label><input id='er_de' class='input' type='date' value='${res.field_5527991||''}'></div>
+
+<div style='grid-column:1 / -1;'><label class='small'>Commentaire</label><textarea id='er_c' class='input'>${res.field_5615910||''}</textarea></div>
+
+</div>
+
+<div style='margin-top:12px; display:flex; gap:8px;'>
+
+<button class='btn' onclick='saveReservationEdit(${id})'>Enregistrer</button>
+
+<button class='btn btn--muted' onclick="document.getElementById('modal').style.display='none'">Fermer</button>
+
+</div>
+
+`;
+
+}
+
+async function saveReservationEdit(id){
+
+const payload = {
+
+field_5527945: document.getElementById('er_name').value,
+
+field_5527944: +document.getElementById('er_q').value,
+
+field_5527990: [document.getElementById('er_state').value],
+
+field_5527986: document.getElementById('er_dr').value || null,
+
+field_5527991: document.getElementById('er_de').value || null,
+
+field_5615910: document.getElementById('er_c').value || null
+
+};
+
+const r = await api(`/database/rows/table/${RESERVATION_TABLE_ID}/${id}/`, { method:'PATCH', body: JSON.stringify(payload) });
+
+if (!r.ok) { showToast('Erreur modification', true); return; }
+
+await loadStock(); updateAllCells(); await loadReservations(); showToast('Réservation modifiée'); document.getElementById('modal').style.display='none';
+
+}
+
+async function deleteReservation(id){
+
+if (!confirm('Supprimer cette réservation ?')) return;
+
+const r = await api(`/database/rows/table/${RESERVATION_TABLE_ID}/${id}/`, { method:'DELETE' });
+
+if (!r.ok) { showToast('Erreur suppression', true); return; }
+
+await loadStock(); updateAllCells(); await loadReservations(); showToast('Réservation supprimée');
+
+}
+
+// AJOUT D'UN NOUVEL ENTREPÔT
+
+function openAddWarehouse(){
+
+document.getElementById('modalTitle').textContent = 'Ajouter un entrepôt';
+
+document.getElementById('modal').style.display = 'block';
+
+document.getElementById('modalBody').innerHTML = `
+
+<div class='row' style='grid-template-columns:1fr 1fr;'>
+
+<div><label class='small'>ID Entrepôt (nombre) *</label><input id='ew_id' class='input' type='number' min='1'></div>
+
+<div><label class='small'>Localisation *</label><input id='ew_loc' class='input'></div>
+
+<div><label class='small'>Superficie (m²)</label><input id='ew_s' class='input' type='number' min='0'></div>
+
+<div><label class='small'>Taille (L x l, m)</label><div style='display:flex; gap:8px;'><input id='ew_L' class='input' type='number' min='0' placeholder='L'><input id='ew_l' class='input' type='number' min='0' placeholder='l'></div></div>
+
+</div>
+
+<div style='margin-top:12px; display:flex; gap:8px;'>
+
+<button class='btn' onclick='saveWarehouse()'>Créer</button>
+
+<button class='btn btn--muted' onclick="document.getElementById('modal').style.display='none'">Annuler</button>
+
+</div>
+
+`;
+
+}
+
+async function saveWarehouse(){
+
+const id = +document.getElementById('ew_id').value; const loc = document.getElementById('ew_loc').value.trim();
+
+const S = +document.getElementById('ew_s').value; const L = +document.getElementById('ew_L').value; const l = +document.getElementById('ew_l').value;
+
+if (!id || !loc) { showToast('Champs requis', true); return; }
+
+const payload = {
+
+field_5527870: id,
+
+field_5527887: loc,
+
+field_5527883: S||null,
+
+field_5527884: L||null,
+
+field_5527885: l||null
+
+};
+
+const r = await api(`/database/rows/table/${ENTREPOTS_TABLE_ID}/`, { method:'POST', body: JSON.stringify(payload) });
+
+if (!r.ok) { const tx = await r.text(); console.error(tx); showToast('Erreur création entrepôt', true); return; }
+
+showToast('Entrepôt créé'); document.getElementById('modal').style.display='none';
+
+// Option: ajouter un onglet visuel immédiatement
+
+const tabs = document.getElementById('warehouseTabs');
+
+const b = document.createElement('button'); b.className='tab'; b.dataset.warehouse=id; b.innerHTML=`<i class="fa-solid fa-warehouse"></i> Entrepôt ${id} - ${loc}`; b.onclick=()=>selectWarehouse(id);
+
+tabs.insertBefore(b, tabs.lastElementChild);
+
+}
+
+</script>
+
 </body>
+
 </html>
