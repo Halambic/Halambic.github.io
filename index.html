@@ -1,1331 +1,1107 @@
 <!DOCTYPE html>
-
-<html lang="fr">
-
+<html lang="fr" class="h-full">
 <head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Vista • Test Notion connecté Baserow</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
-<style>
-
-:root {
-
---vista-blue: #402c7c;
-
---bg: #f8f9fa;
-
---ok: #28a745;
-
---warn: #ff9800;
-
---danger: #dc3545;
-
---muted: #6c757d;
-
-}
-
-- { box-sizing: border-box; }
-
-body { font-family: 'Poppins', sans-serif; background: var(--bg); color: #333; margin: 0; }
-
-.header { background:#fff; padding: 12px 18px; box-shadow: 0 2px 10px rgba(64,44,124,.08); position: sticky; top:0; z-index: 10; }
-
-.header-inner { max-width: 1280px; margin: 0 auto; display:flex; align-items:center; gap:16px; justify-content: space-between; }
-
-.logo img { height: 44px; }
-
-.nav a { color:#fff; text-decoration:none; background: var(--vista-blue); padding:10px 14px; border-radius:8px; font-weight:500; }
-
-.container { max-width: 1280px; margin: 0 auto; padding: 24px 18px; }
-
-.h1 { font-size: 1.8rem; font-weight:600; color: var(--vista-blue); margin: 8px 0 18px; }
-
-.card { background:#fff; border-radius:14px; box-shadow: 0 6px 24px rgba(0,0,0,.08); padding: 18px; margin-bottom: 18px; }
-
-.row { display:grid; gap: 18px; grid-template-columns: 1fr; }
-
-@media(min-width: 1024px) { .row { grid-template-columns: 2fr 1fr; } }
-
-.tabs { display:flex; flex-wrap:wrap; gap: 10px; margin-bottom: 12px; }
-
-.tab { border:2px solid #e5e5e5; background:#f7f7fb; color:#333; padding:10px 14px; border-radius:8px; cursor:pointer; display:flex; gap:8px; align-items:center; }
-
-.tab.active { background: var(--vista-blue); color:#fff; border-color: var(--vista-blue); }
-
-.tab.add { background:#2f9e44; border-color:#2f9e44; color:#fff; }
-
-.grid { display:grid; gap: 4px; }
-
-.grid--w1 { grid-template-columns: 40px repeat(6, 1fr); grid-template-rows: 40px repeat(3, 1fr); }
-
-.grid--w2 { grid-template-columns: 40px repeat(2, 1fr); grid-template-rows: 40px repeat(1, 1fr); }
-
-.cell, .head { border-radius:8px; display:flex; align-items:center; justify-content:center; text-align:center; }
-
-.head { background: var(--vista-blue); color:#fff; font-weight:600; }
-
-.cell { position:relative; border:2px solid #e0e0e0; min-height: 120px; padding: 8px; cursor:pointer; transition: .2s; }
-
-.cell:hover { transform: translateY(-2px); box-shadow: 0 4px 14px rgba(0,0,0,.12); }
-
-.[cell.free](http://cell.free) { background:#e8f5e8; border-color:#4caf50; color:#2e7d32; }
-
-.cell.busy { background:#e3f2fd; border-color:#2196f3; color:#1565c0; }
-
-.cell.res { background:#fff3e0; border-color:#ff9800; color:#e65100; }
-
-.cell.inactive { background:#f5f5f5; border-color:#bdbdbd; color:#757575; filter: grayscale(40%); opacity:.8; }
-
-.badge { position:absolute; top:6px; left:6px; background: rgba(64,44,124,.9); color:#fff; padding: 2px 8px; border-radius: 10px; font-size:.72rem; font-weight:600; }
-
-.zone { position:absolute; bottom:6px; right:6px; padding: 2px 8px; border-radius: 10px; font-weight:600; font-size:.72rem; }
-
-.zone--on { background:#4caf50; color:#fff; }
-
-.zone--off { background:#f44336; color:#fff; }
-
-.cell-icons { position:absolute; top:6px; right:6px; font-size:.8rem; }
-
-.cell-code { font-weight:700; }
-
-.cell-title { font-size:.85rem; margin-top: 4px; font-weight:600; }
-
-.cell-status { font-size:.78rem; margin-top: 4px; }
-
-.input, select, textarea { width:100%; padding:10px 12px; border:2px solid #e5e5e5; border-radius:8px; font-family:inherit; font-size: 1rem; }
-
-.input:focus, select:focus, textarea:focus { outline:none; border-color: var(--vista-blue); }
-
-.btn { background: var(--vista-blue); color:#fff; border:none; padding:10px 14px; border-radius:8px; cursor:pointer; font-weight:500; transition:.2s; }
-
-.btn:hover { transform: translateY(-1px); filter: brightness(1.05); }
-
-.btn--muted { background: var(--muted); }
-
-.btn--ok { background: var(--ok); }
-
-.btn--warn { background: var(--warn); color:#333; }
-
-.btn--danger { background: var(--danger); }
-
-.legend { display:flex; flex-wrap:wrap; gap: 16px; align-items:center; }
-
-.legend .dot { width:18px; height:18px; border-radius:4px; border:2px solid #ccc; margin-right:6px; display:inline-block; vertical-align: middle; }
-
-.modal { display:none; position:fixed; inset:0; background: rgba(0,0,0,.45); padding: 24px; z-index: 50; }
-
-.modal__inner { max-width: 900px; margin: auto; background:#fff; border-radius: 14px; overflow: hidden; }
-
-.modal__header { display:flex; align-items:center; justify-content: space-between; padding: 16px 18px; border-bottom: 1px solid #eee; }
-
-.modal__title { font-weight:600; color: var(--vista-blue); }
-
-.modal__body { padding: 18px; max-height: 75vh; overflow:auto; }
-
-.toast { position: fixed; top: 16px; right: 16px; background:#d4edda; border:1px solid #c3e6cb; color:#155724; padding: 10px 14px; border-radius: 10px; transform: translateX(360px); transition: .25s; z-index: 60; }
-
-.[toast.show](http://toast.show) { transform: translateX(0); }
-
-.err { background:#f8d7da; border-color:#f5c6cb; color:#721c24; }
-
-.small { font-size:.9rem; color:#666; }
-
-</style>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tank Commander DB</title>
+    
+    <!-- Tailwind CSS (Style) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- React & ReactDOM (Framework) -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    
+    <!-- Babel (Pour lire le code React dans le navigateur) -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- Configuration Tailwind -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        slate: {
+                            850: '#151f32',
+                            900: '#0f172a',
+                            950: '#020617',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        /* Force full height without scroll on body */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        
+        /* Scrollbar personnalisée */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #1e293b; 
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #475569; 
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #64748b; 
+        }
+    </style>
 </head>
-
-<body>
-
-<header class="header">
-
-<div class="header-inner">
-
-<a class="logo" href="https://associationvista.fr" target="_blank">
-
-<img src="https://swiftask-prod-files.s3.eu-west-3.amazonaws.com/vista_logo.png" alt="Vista">
-
-</a>
-
-<nav class="nav">
-
-<a href="#" onclick="location.reload()"><i class="fa-solid fa-arrows-rotate"></i> Recharger</a>
-
-</nav>
-
-</div>
-
-</header>
-
-<div class="container">
-
-<h1 class="h1">Plan des entrepôts • Contrôle des zones • Stock • Réservations</h1>
-
-<div class="card">
-
-<div class="tabs" id="warehouseTabs">
-
-<button class="tab active" data-warehouse="1" onclick="selectWarehouse(1)"><i class="fa-solid fa-warehouse"></i> Entrepôt 1 - Challans</button>
-
-<button class="tab" data-warehouse="2" onclick="selectWarehouse(2)"><i class="fa-solid fa-boxes-stacked"></i> Entrepôt 2 - Sables d'Olonne</button>
-
-<button class="tab add" onclick="openAddWarehouse()"><i class="fa-solid fa-plus"></i> Ajouter un entrepôt</button>
-
-</div>
-
-<div class="row">
-
-<div>
-
-<div class="card">
-
-<div class="small" style="margin-bottom:10px;">
-
-<input class="input" id="searchInput" placeholder="Rechercher par article, catégorie, zone...">
-
-</div>
-
-<div id="warehouse-1">
-
-<div class="grid grid--w1">
-
-<div class="head"></div>
-
-<div class="head">A</div><div class="head">B</div><div class="head">C</div><div class="head">D</div><div class="head">E</div><div class="head">F</div>
-
-<div class="head">1</div>
-
-<div class="cell inactive" style="grid-column: 2 / 4; grid-row: 2 / 5;">
-
-<div class="cell-title">Espace chantier d'insertion</div>
-
-<div class="cell-status">Zone non-disponible</div>
-
-</div>
-
-<div class="cell inactive" style="grid-column: 4 / 5; grid-row: 2 / 5;">
-
-<div class="cell-title">Espace logistique & bricolage</div>
-
-<div class="cell-status">Zone non-disponible</div>
-
-</div>
-
-<div class="cell free" data-location="D1" data-warehouse="1" onclick="openZone('D1',1)">
-
-<div class="cell-code">D1</div>
-
-<div class="cell-title">Jeux enfants</div>
-
-<div class="cell-status">Libre</div>
-
-<div class="cell-icons"></div>
-
-<div class="badge" style="display:none;">0</div>
-
-<div class="zone zone--on">Actif</div>
-
-</div>
-
-<div class="cell free" data-location="E1" data-warehouse="1" onclick="openZone('E1',1)">
-
-<div class="cell-code">E1</div>
-
-<div class="cell-title">Hygiène</div>
-
-<div class="cell-status">Libre</div>
-
-<div class="cell-icons"></div>
-
-<div class="badge" style="display:none;">0</div>
-
-<div class="zone zone--on">Actif</div>
-
-</div>
-
-<div class="cell free" data-location="F1" data-warehouse="1" onclick="openZone('F1',1)">
-
-<div class="cell-code">F1</div>
-
-<div class="cell-title">Vaisselle</div>
-
-<div class="cell-status">Libre</div>
-
-<div class="cell-icons"></div>
-
-<div class="badge" style="display:none;">0</div>
-
-<div class="zone zone--on">Actif</div>
-
-</div>
-
-<div class="head">2</div>
-
-<div class="cell free" data-location="F2" data-warehouse="1" onclick="openZone('F2',1)">
-
-<div class="cell-code">F2</div>
-
-<div class="cell-title">Lingerie</div>
-
-<div class="cell-status">Libre</div>
-
-<div class="badge" style="display:none;">0</div>
-
-<div class="zone zone--on">Actif</div>
-
-</div>
-
-<div class="head">3</div>
-
-<div class="cell free" data-location="D2-E3" data-warehouse="1" style="grid-column: 5 / 7; grid-row: 3 / 5;" onclick="openZone('D2-E3',1)">
-
-<div class="cell-code">D2-E3</div>
-
-<div class="cell-title">Stockage logistique</div>
-
-<div class="cell-status">Libre</div>
-
-<div class="badge" style="display:none;">0</div>
-
-<div class="zone zone--on">Actif</div>
-
-</div>
-
-<div class="cell free" data-location="F3" data-warehouse="1" onclick="openZone('F3',1)">
-
-<div class="cell-code">F3</div>
-
-<div class="cell-title">Fournitures, livres enfants</div>
-
-<div class="cell-status">Libre</div>
-
-<div class="badge" style="display:none;">0</div>
-
-<div class="zone zone--on">Actif</div>
-
-</div>
-
-</div>
-
-<div id="loading1" class="small" style="text-align:center; padding: 10px;">Chargement Baserow...</div>
-
-</div>
-
-<div id="warehouse-2" style="display:none;">
-
-<div class="grid grid--w2">
-
-<div class="head"></div>
-
-<div class="head">A</div><div class="head">B</div>
-
-<div class="head">1</div>
-
-<div class="cell free" data-location="A1" data-warehouse="2" onclick="openZone('A1',2)">
-
-<div class="cell-code">A1</div>
-
-<div class="cell-title">Étagère bas</div>
-
-<div class="cell-status">Libre</div>
-
-<div class="badge" style="display:none;">0</div>
-
-<div class="zone zone--on">Actif</div>
-
-</div>
-
-<div class="cell free" data-location="A2" data-warehouse="2" onclick="openZone('A2',2)">
-
-<div class="cell-code">A2</div>
-
-<div class="cell-title">Étagère haut</div>
-
-<div class="cell-status">Libre</div>
-
-<div class="badge" style="display:none;">0</div>
-
-<div class="zone zone--on">Actif</div>
-
-</div>
-
-</div>
-
-<div id="loading2" class="small" style="text-align:center; padding: 10px;">Chargement Baserow...</div>
-
-</div>
-
-</div>
-
-</div>
-
-<div>
-
-<div class="card">
-
-<div class="h1" style="font-size:1.2rem;">Légende</div>
-
-<div class="legend">
-
-Zone libre</span>
-
-Zone occupée 📦</span>
-
-Avec réservations 📅</span>
-
-Zone non-disponible ⛔</span>
-
-</div>
-
-</div>
-
-<div class="card">
-
-<div class="h1" style="font-size:1.2rem;">Réservations en cours</div>
-
-<div id="reservationsPanel" class="small">Chargement...</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<div class="modal" id="modal">
-
-<div class="modal__inner">
-
-<div class="modal__header">
-
-<div class="modal__title" id="modalTitle">Détails zone</div>
-
-<button class="btn btn--muted" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
-
-</div>
-
-<div class="modal__body" id="modalBody"></div>
-
-</div>
-
-</div>
-
-<div class="toast" id="toast">Succès</div>
-
-<script>
-
-// CONFIG BASEROW
-
-const BASEROW_API_KEY = 'zYoz2ylTSe42E1CVXimBJR30WvLEFURv';
-
-const BASEROW_BASE_URL = 'https://api.baserow.io/api';
-
-const STOCK_TABLE_ID = 671322;
-
-const CATEGORIES_TABLE_ID = 671321;
-
-const ENTREPOTS_TABLE_ID = 671316;
-
-const PLAN_ENTREPOT_TABLE_ID = 671384;
-
-const RESERVATION_TABLE_ID = 671325;
-
-// ÉTAT LOCAL
-
-let currentWarehouse = 1;
-
-let categories = [];
-
-let zonePositions = {}; // { 'D1': { id: X, status: 'actif' } }
-
-let warehouseData = { 1: {}, 2: {} }; // données par zone
-
-// HELPERS
-
-function showToast(text, isError=false) {
-
-const t = document.getElementById('toast');
-
-t.textContent = text;
-
-t.classList.toggle('err', !!isError);
-
-t.classList.add('show');
-
-setTimeout(()=> t.classList.remove('show'), 2500);
-
-}
-
-function api(path, options={}) {
-
-return fetch(`${BASEROW_BASE_URL}${path}`, {
-
-...options,
-
-headers: {
-
-'Authorization': `Token ${BASEROW_API_KEY}`,
-
-'Content-Type': 'application/json',
-
-...(options.headers||{})
-
-}
-
-});
-
-}
-
-// INIT
-
-document.addEventListener('DOMContentLoaded', async () => {
-
-document.getElementById('searchInput').addEventListener('input', applySearch);
-
-await Promise.all([
-
-loadCategories(),
-
-loadZonePositions(),
-
-loadReservations()
-
-]);
-
-await loadStock();
-
-updateAllCells();
-
-document.getElementById('loading1').style.display = 'none';
-
-document.getElementById('loading2').style.display = 'none';
-
-});
-
-// CHARGEMENTS
-
-async function loadCategories() {
-
-const r = await api(`/database/rows/table/${CATEGORIES_TABLE_ID}/?user_field_names=false`);
-
-if (!r.ok) return;
-
-const data = await r.json();
-
-categories = [data.results.map](http://data.results.map)(it => ({ id: [it.id](http://it.id), nom: it.field_5527913 }));
-
-}
-
-async function loadZonePositions() {
-
-const r = await api(`/database/rows/table/${PLAN_ENTREPOT_TABLE_ID}/?user_field_names=false`);
-
-if (!r.ok) return;
-
-const data = await r.json();
-
-zonePositions = {};
-
-data.results.forEach(row => {
-
-const position = row.field_5528810; // Position
-
-let etat = 'actif';
-
-const raw = row.field_5542793; // multi-select
-
-if (raw) {
-
-if (Array.isArray(raw)) {
-
-etat = raw.includes('inactif') ? 'inactif' : 'actif';
-
-} else if (typeof raw === 'string') {
-
-etat = raw.toLowerCase() === 'inactif' ? 'inactif' : 'actif';
-
-}
-
-}
-
-if (position) zonePositions[position] = { id: [row.id](http://row.id), status: etat };
-
-});
-
-}
-
-async function loadStock() {
-
-const r = await api(`/database/rows/table/${STOCK_TABLE_ID}/?user_field_names=false`);
-
-if (!r.ok) return;
-
-const data = await r.json();
-
-warehouseData = { 1: {}, 2: {} };
-
-// Initialise zones connues pour conserver affichage
-
-['D1','E1','F1','D2-E3','F2','F3'].forEach(p => warehouseData[1][p] = { items: [], occupied:false, hasRes:false, zoneStatus: (zonePositions[p]?.status||'actif') });
-
-['A1','A2'].forEach(p => warehouseData[2][p] = { items: [], occupied:false, hasRes:false, zoneStatus: (zonePositions[p]?.status||'actif') });
-
-data.results.forEach(row => {
-
-const name = row.field_5527921 || 'Article';
-
-const quantity = +row.field_5527934 || 0;
-
-const reserved = +row.field_5532799 || 0;
-
-const price = +row.field_5529132 || 0;
-
-const type = row.field_5529130 || 'Don';
-
-const etat = row.field_5615747 || 'Bon état';
-
-let pos = null, w = 1;
-
-if (Array.isArray(row.field_5532813) && row.field_5532813.length) {
-
-const val = row.field_5532813[0].value;
-
-pos = val; w = (val === 'A1' || val === 'A2') ? 2 : 1;
-
-}
-
-if (!pos || !warehouseData[w] || !warehouseData[w][pos]) return;
-
-const catName = (()=>{
-
-if (Array.isArray(row.field_5529113) && row.field_5529113.length) {
-
-const id = row.field_5529113[0];
-
-const c = categories.find(x=>[x.id](http://x.id)===id); return c?c.nom:'Autre';
-
-}
-
-return 'Autre';
-
-})();
-
-warehouseData[w][pos].items.push({
-
-id: [row.id](http://row.id), name, quantity, reserved, price, type, etat, category: catName
-
-});
-
-warehouseData[w][pos].occupied = true;
-
-warehouseData[w][pos].hasRes = reserved>0;
-
-});
-
-}
-
-async function loadReservations() {
-
-const r = await api(`/database/rows/table/${RESERVATION_TABLE_ID}/?user_field_names=false`);
-
-if (!r.ok) { document.getElementById('reservationsPanel').textContent = 'Erreur de chargement'; return; }
-
-const data = await r.json();
-
-if (!data.results?.length) { document.getElementById('reservationsPanel').textContent = 'Aucune réservation'; return; }
-
-const lines = [data.results.map](http://data.results.map)(r=>{
-
-const nom = r.field_5527943 || 'Article';
-
-const q = r.field_5527944 || 0;
-
-const who = r.field_5527945 || `${r.field_5615909||''} ${r.field_5615908||''}`.trim();
-
-const etat = Array.isArray(r.field_5527990) ? r.field_5527990.join(', ') : (r.field_5527990||'');
-
-const id = [r.id](http://r.id);
-
-return `<div style="display:flex; justify-content:space-between; gap:8px; padding:8px 0; border-bottom:1px solid #eee;">
-
-<div><strong>${nom}</strong> • ${q} • ${who} • ${etat}</div>
-
-<div>
-
-<button class="btn btn--ok" onclick="editReservation(${id})">Modifier</button>
-
-<button class="btn btn--danger" onclick="deleteReservation(${id})">Supprimer</button>
-
-</div>
-
-</div>`
-
-}).join('');
-
-document.getElementById('reservationsPanel').innerHTML = lines;
-
-}
-
-// AFFICHAGE
-
-function selectWarehouse(id) {
-
-currentWarehouse = id;
-
-document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-
-document.querySelector(`.tab[data-warehouse="${id}"]`).classList.add('active');
-
-document.getElementById('warehouse-1').style.display = id===1? 'block':'none';
-
-document.getElementById('warehouse-2').style.display = id===2? 'block':'none';
-
-updateAllCells();
-
-}
-
-function updateAllCells() {
-
-document.querySelectorAll(`#warehouse-${currentWarehouse} .cell[data-location]`).forEach(cell => {
-
-const loc = cell.dataset.location; const w = +cell.dataset.warehouse;
-
-const d = warehouseData[w]?.[loc] || { items:[], occupied:false, hasRes:false, zoneStatus: (zonePositions[loc]?.status||'actif') };
-
-const badge = cell.querySelector('.badge');
-
-const status = cell.querySelector('.cell-status');
-
-const zone = cell.querySelector('.zone');
-
-const count = d.items.length;
-
-[badge.style](http://badge.style).display = count? 'block':'none';
-
-badge.textContent = count;
-
-cell.classList.remove('free','busy','res','inactive');
-
-if (d.zoneStatus === 'inactif') cell.classList.add('inactive');
-
-if (d.occupied) {
-
-if (d.hasRes) { cell.classList.add('res'); status.textContent = `${count} article(s)`; }
-
-else { cell.classList.add('busy'); status.textContent = `${count} article(s)`; }
-
-} else { cell.classList.add('free'); status.textContent = 'Libre'; }
-
-zone.textContent = d.zoneStatus === 'actif'? 'Actif':'Inactif';
-
-zone.className = `zone ${d.zoneStatus === 'actif' ? 'zone--on' : 'zone--off'}`;
-
-});
-
-}
-
-function applySearch(e) {
-
-const term = (e?.target?.value || document.getElementById('searchInput').value || '').toLowerCase();
-
-document.querySelectorAll(`#warehouse-${currentWarehouse} .cell[data-location]`).forEach(cell => {
-
-const loc = cell.dataset.location; const w = +cell.dataset.warehouse;
-
-const d = warehouseData[w]?.[loc] || { items:[] };
-
-const match = loc.toLowerCase().includes(term)
-
-|  | (cell.querySelector('.cell-title')?.textContent.toLowerCase().includes(term)) |
-| --- | --- |
-|  | d.items.some(it => ([it.name](http://it.name) |
-
-[cell.style](http://cell.style).display = match? 'flex':'none';
-
-});
-
-}
-
-// MODAL ZONE
-
-function openZone(location, warehouse) {
-
-const d = warehouseData[warehouse]?.[location] || { items:[], zoneStatus: (zonePositions[location]?.status||'actif') };
-
-document.getElementById('modalTitle').textContent = `Entrepôt ${warehouse} • Zone ${location}`;
-
-let html = '';
-
-html += `<div style="display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:12px;">
-
-Statut zone: <strong>${d.zoneStatus==='actif'?'🟢 Active':'🔴 Inactive'}</strong>
-
-<button class="btn btn--warn" onclick="openZoneStatus('${location}', ${warehouse})"><i class='fa-solid fa-toggle-on'></i> Gérer la zone</button>
-
-</div>`;
-
-if (!d.items.length) {
-
-html += `<div class="card small" style="background:#dff7e1;">Zone libre. Ajoutez un article pour commencer.</div>
-
-<button class="btn" onclick="openAddItem('${location}', ${warehouse})"><i class='fa-solid fa-plus'></i> Ajouter un article</button>`;
-
-} else {
-
-html += `<div class="h1" style="font-size:1.1rem;">Articles (${d.items.length})</div>`;
-
-d.items.forEach(it => {
-
-const avail = (it.quantity||0) - (it.reserved||0);
-
-html += `<div class="card">
-
-<div style="display:flex; justify-content:space-between; align-items:center;">
-
-<div><strong>${[it.name](http://it.name)}</strong> ${it.type==='Don'?'🎁':'💰'} • ${it.category}</div>
-
-<div class='small'>Stock ${it.quantity} • Réservé ${it.reserved} • Dispo <strong>${avail}</strong></div>
-
-</div>
-
-<div style="display:flex; gap:8px; margin-top:8px;">
-
-<button class="btn btn--warn" onclick="openEditItem(${[it.id](http://it.id)}, '${location}', ${warehouse})">Modifier</button>
-
-<button class="btn btn--ok" onclick="openReserve(${[it.id](http://it.id)}, '${location}', ${warehouse})">Réserver</button>
-
-<button class="btn btn--danger" onclick="deleteItem(${[it.id](http://it.id)}, '${location}', ${warehouse}, '${[it.name](http://it.name)}')">Supprimer</button>
-
-</div>
-
-</div>`;
-
-});
-
-html += `<div style="margin-top:10px;"><button class="btn" onclick="openAddItem('${location}', ${warehouse})"><i class='fa-solid fa-plus'></i> Ajouter un article</button></div>`;
-
-}
-
-document.getElementById('modalBody').innerHTML = html;
-
-document.getElementById('modal').style.display = 'block';
-
-}
-
-function closeModal(){ document.getElementById('modal').style.display = 'none'; }
-
-// GESTION STATUT ZONE
-
-function openZoneStatus(location, warehouse){
-
-const status = warehouseData[warehouse]?.[location]?.zoneStatus || (zonePositions[location]?.status||'actif');
-
-document.getElementById('modalBody').innerHTML = `
-
-<div class='h1' style='font-size:1.1rem;'>Changer le statut</div>
-
-<div class='small' style='margin:8px 0 12px;'>Zone ${location} • Entrepôt ${warehouse}</div>
-
-<label class='small'>Statut</label>
-
-<select id='zoneStatusSel' class='input'>
-
-<option value='actif' ${status==='actif'?'selected':''}>Actif</option>
-
-<option value='inactif' ${status==='inactif'?'selected':''}>Inactif</option>
-
-</select>
-
-<div style='margin-top:12px; display:flex; gap:8px;'>
-
-<button class='btn' onclick="saveZoneStatus('${location}', ${warehouse})">Enregistrer</button>
-
-<button class='btn btn--muted' onclick="openZone('${location}', ${warehouse})">Annuler</button>
-
-</div>
-
+<body class="bg-slate-900 text-slate-100 font-sans">
+    <div id="root" class="h-full w-full flex flex-col"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useMemo } = React;
+
+        // ==========================================
+        // 1. CONSTANTES & CONFIGURATION
+        // ==========================================
+
+        const TRANSLATIONS = {
+          fr: {
+            appTitle: "Tank Commander DB",
+            garage: "Garage",
+            compare: "Comparer",
+            details: "Détails",
+            dropRates: "Taux de drop",
+            dropProbability: "Probabilités d'obtention",
+            searchPlaceholder: "Rechercher un char...",
+            allNations: "Toutes nations",
+            allAges: "Toutes époques",
+            allTiers: "Tous tiers",
+            collected: "Acquis",
+            myTanks: "Mes chars",
+            noResults: "Aucun char ne correspond à ces critères.",
+            checkSpelling: "Essayez de vérifier l'orthographe.",
+            addToGarage: "Ajouter au garage",
+            removeFromGarage: "Retirer du garage",
+            selected: "Sélectionné",
+            size: "Taille",
+            reset: "Réinitialiser",
+            // Stats Headers
+            armor: "Blindage",
+            firepower: "Puissance de feu",
+            mobility: "Mobilité",
+            accuracy: "Précision",
+            visibility: "Visibilité",
+            // Tech Headers
+            stabilizer: "Stabilisateur",
+            thermal: "Thermique",
+            nightVision: "Vision nocturne",
+            era: "ERA",
+            aps: "APS",
+            autoloader: "Chargeur auto",
+            autocannon: "Autocanon",
+            protectedAmmo: "Munitions protégées",
+            rangefinder: "Télémètre",
+            atgm_p: "ATGM (P)",
+            atgm_s: "ATGM (S)",
+            // Comparison Table
+            characteristic: "Caractéristique",
+            nation: "Nation",
+            age: "Époque",
+            rarity: "Tier/Rareté",
+            remove: "Retirer",
+            yes: "Oui",
+            no: "Non",
+            selectTanks: "Sélectionnez des chars pour commencer la comparaison.",
+            dropNote: "Taux officiels définis pour le jeu."
+          },
+          en: {
+            appTitle: "Tank Commander DB",
+            garage: "Garage",
+            compare: "Compare",
+            details: "Details",
+            dropRates: "Drop Rates",
+            dropProbability: "Drop Probability",
+            searchPlaceholder: "Search for a tank...",
+            allNations: "All nations",
+            allAges: "All ages",
+            allTiers: "All tiers",
+            collected: "Collected",
+            myTanks: "My tanks",
+            noResults: "No tanks match these criteria.",
+            checkSpelling: "Try checking your spelling.",
+            addToGarage: "Add to garage",
+            removeFromGarage: "Remove from garage",
+            selected: "Selected",
+            size: "Size",
+            reset: "Reset",
+            // Stats Headers
+            armor: "Armor",
+            firepower: "Firepower",
+            mobility: "Mobility",
+            accuracy: "Accuracy",
+            visibility: "Visibility",
+            // Tech Headers
+            stabilizer: "Stabilizer",
+            thermal: "Thermal",
+            nightVision: "Night vision",
+            era: "ERA",
+            aps: "APS",
+            autoloader: "Autoloader",
+            autocannon: "Autocannon",
+            protectedAmmo: "Protected ammo",
+            rangefinder: "Rangefinder",
+            atgm_p: "ATGM (P)",
+            atgm_s: "ATGM (S)",
+            // Comparison Table
+            characteristic: "Characteristic",
+            nation: "Nation",
+            age: "Age",
+            rarity: "Tier/rarity",
+            remove: "Remove",
+            yes: "Yes",
+            no: "No",
+            selectTanks: "Select tanks to start comparing.",
+            dropNote: "Official drop rates defined for the game."
+          }
+        };
+
+        const DATA_VALUE_MAP_FR = {
+          "Soviet Union": "Union soviétique",
+          "German Reich": "Reich allemand",
+          "United States of America": "États-Unis",
+          "United Kingdom": "Royaume-Uni",
+          "France": "France",
+          "Germany": "Allemagne",
+          "Austria": "Autriche",
+          "Russia": "Russie",
+          "Modern": "Moderne",
+          "Cold War": "Guerre froide",
+          "WW1-WW2": "PGM-SGM",
+          "Very High": "Très élevé",
+          "High": "Élevé",
+          "Medium": "Moyen",
+          "Low": "Faible",
+          "Very Low": "Très faible",
+          "Small Arms": "Armes légères",
+          "Very Light": "Très léger",
+          "Light": "Léger",
+          "Heavy": "Lourd",
+          "Very Heavy": "Très lourd",
+          "Fast": "Rapide",
+          "Very Fast": "Très rapide",
+          "Slow": "Lent",
+          "Very Slow": "Très lent",
+          "Small": "Petit",
+          "Large": "Grand",
+          "Very Large": "Très grand",
+          "Tiny": "Minuscule",
+          "Normal": "Normal",
+          "None": "Aucun",
+          "Yes": "Oui",
+          "No": "Non"
+        };
+
+        const FIXED_DROP_RATES = [
+            { tier: 'Tier I', rate: '51,97%', color: 'text-slate-300' },
+            { tier: 'Tier II', rate: '41,06%', color: 'text-green-400' },
+            { tier: 'Tier III', rate: '4,798%', color: 'text-blue-400' },
+            { tier: 'Tier IV', rate: '1,669%', color: 'text-purple-400' },
+            { tier: 'Tier V', rate: '0,4165%', color: 'text-orange-400' },
+            { tier: 'Prototype', rate: '0,0999%', color: 'text-red-500' },
+            { tier: 'Event', rate: 'Spécial', color: 'text-yellow-400' },
+        ];
+
+        // ==========================================
+        // 2. DONNÉES CSV
+        // ==========================================
+        const rawCSV = `Name,Nation,Age,Rarity,Armor,Firepower,Accuracy,Size,Mobility,Angled,Visibility,Autocannon,Stabilizer,Protected Ammo,Rangefinder,Autoloader,Night Vision,Thermal Vision,ERA,ATGM (P),ATGM (S),APS
+T-26 (twin-turreted),Soviet Union,WW1-WW2,Tier I,Very Light,Small Arms,Low,Small,Slow,Low,Low,No,No,No,No,No,No,No,No,No,No,No
+T-26,Soviet Union,WW1-WW2,Tier I,Very Light,Light,Medium,Small,Slow,Low,Low,No,No,No,No,No,No,No,No,No,No,No
+BT-2,Soviet Union,WW1-WW2,Tier I,Very Light,Very Light,Medium,Small,Very Fast,Low,Low,No,No,No,No,No,No,No,No,No,No,No
+BT-5,Soviet Union,WW1-WW2,Tier II,Very Light,Light,Medium,Small,Very Fast,Low,Low,No,No,No,No,No,No,No,No,No,No,No
+BT-7,Soviet Union,WW1-WW2,Tier II,Very Light,Light,Medium,Small,Very Fast,Low,Low,No,No,No,No,No,No,No,No,No,No,No
+T-28,Soviet Union,WW1-WW2,Tier II,Light,Light,Medium,Large,Slow,Low,Medium,No,No,No,No,No,No,No,No,No,No,No
+T-35A,Soviet Union,WW1-WW2,Tier II,Medium,Heavy,Medium,Very Large,Slow,Low,Medium,No,No,No,No,No,No,No,No,No,No,No
+T-50,Soviet Union,WW1-WW2,Tier III,Light,Light,Medium,Small,Fast,High,Medium,No,No,No,No,No,No,No,No,No,No,No
+T-40,Soviet Union,WW1-WW2,Tier I,Very Light,Very Light,Low,Small,Normal,None,Low,No,No,No,No,No,No,No,No,No,No,No
+T-60,Soviet Union,WW1-WW2,Tier II,Light,Very Light,Low,Small,Normal,Medium,Low,Yes,No,No,No,No,No,No,No,No,No,No
+T-70,Soviet Union,WW1-WW2,Tier III,Light,Light,Low,Small,Normal,High,Low,No,No,No,No,No,No,No,No,No,No,No
+T-80,Soviet Union,WW1-WW2,Tier II,Light,Light,Medium,Small,Normal,High,Medium,No,No,No,No,No,No,No,No,No,No,No
+T-34 Model 1940,Soviet Union,WW1-WW2,Tier II,Medium,Medium,Medium,Medium,Fast,High,Low,No,No,No,No,No,No,No,No,No,No,No
+T-34 Model 1941,Soviet Union,WW1-WW2,Tier III,Medium,Medium,High,Medium,Fast,High,Medium,No,No,No,No,No,No,No,No,No,No,No
+T-34 Model 1942,Soviet Union,WW1-WW2,Tier III,Medium,Medium,High,Medium,Fast,High,Medium,No,No,No,No,No,No,No,No,No,No,No
+T-34 Model 1943,Soviet Union,WW1-WW2,Tier III,Medium,Medium,High,Medium,Fast,High,Medium,No,No,No,No,No,No,No,No,No,No,No
+T-34-85,Soviet Union,WW1-WW2,Tier IV,Medium,Heavy,High,Medium,Normal,High,High,No,No,No,No,No,No,No,No,No,No,No
+KV-1 Model 1939,Soviet Union,WW1-WW2,Tier II,Heavy,Medium,Medium,Medium,Slow,Medium,Medium,No,No,No,No,No,No,No,No,No,No,No
+KV-1 Model 1940,Soviet Union,WW1-WW2,Tier II,Heavy,Medium,Medium,Medium,Slow,Medium,Medium,No,No,No,No,No,No,No,No,No,No,No
+KV-1 Model 1941,Soviet Union,WW1-WW2,Tier III,Heavy,Medium,High,Medium,Slow,Medium,Medium,No,No,No,No,No,No,No,No,No,No,No
+KV-1 Model 1942,Soviet Union,WW1-WW2,Tier III,Heavy,Medium,High,Medium,Slow,Medium,Medium,No,No,No,No,No,No,No,No,No,No,No
+KV-1S,Soviet Union,WW1-WW2,Tier IV,Heavy,Medium,High,Medium,Normal,High,Medium,No,No,No,No,No,No,No,No,No,No,No
+KV-2,Soviet Union,WW1-WW2,Tier IV,Heavy,Very Heavy,Low,Large,Slow,Medium,Medium,No,No,No,No,No,No,No,No,No,No,No
+KV-85,Soviet Union,WW1-WW2,Tier IV,Heavy,Heavy,High,Medium,Slow,Medium,Medium,No,No,No,No,No,No,No,No,No,No,No
+IS-2,Soviet Union,WW1-WW2,Tier V,Very Heavy,Very Heavy,Very High,Very Large,Slow,Medium,High,No,No,No,No,No,No,No,No,No,No,No
+SU-76M,Soviet Union,WW1-WW2,Tier II,Very Light,Medium,High,Medium,Normal,High,Medium,No,No,No,No,No,No,No,No,No,No,No
+SU-85,Soviet Union,WW1-WW2,Tier IV,Medium,Heavy,High,Medium,Normal,High,Medium,No,No,No,No,No,No,No,No,No,No,No
+SU-100,Soviet Union,WW1-WW2,Tier V,Heavy,Very Heavy,High,Medium,Normal,High,Medium,No,No,No,No,No,No,No,No,No,No,No
+SU-122,Soviet Union,WW1-WW2,Tier III,Medium,Very Heavy,Medium,Medium,Normal,High,Low,No,No,No,No,No,No,No,No,No,No,No
+SU-152,Soviet Union,WW1-WW2,Tier IV,Heavy,Very Heavy,Medium,Medium,Normal,Medium,Low,No,No,No,No,No,No,No,No,No,No,No
+ISU-122,Soviet Union,WW1-WW2,Tier V,Very Heavy,Very Heavy,Very High,Large,Slow,Medium,High,No,No,No,No,No,No,No,No,No,No,No
+ISU-152,Soviet Union,WW1-WW2,Tier V,Very Heavy,Very Heavy,Very High,Large,Slow,Medium,High,No,No,No,No,No,No,No,No,No,No,No
+M3 Stuart,United States of America,WW1-WW2,Tier I,Very Light,Very Light,Medium,Small,Fast,Low,Medium,No,Yes,No,No,No,No,No,No,No,No,No
+M5 Stuart,United States of America,WW1-WW2,Tier I,Very Light,Light,Medium,Small,Fast,Medium,Medium,No,Yes,No,No,No,No,No,No,No,No,No
+M2 light tank,United States of America,WW1-WW2,Tier I,Very Light,Very Light,Medium,Small,Fast,Low,Medium,No,Yes,No,No,No,No,No,No,No,No,No
+M2A2 light tank,United States of America,WW1-WW2,Tier I,Very Light,Small Arms,Low,Small,Fast,Low,Medium,No,No,No,No,No,No,No,No,No,No,No
+M22 Locust,United States of America,WW1-WW2,Tier II,Light,Light,Medium,Tiny,Fast,High,Low,No,No,No,No,No,No,No,No,No,No,No
+M2A4 light tank,United States of America,WW1-WW2,Tier I,Very Light,Light,Medium,Small,Fast,Low,Medium,No,Yes,No,No,No,No,No,No,No,No,No
+M3 Lee,United States of America,WW1-WW2,Tier II,Light,Medium,Medium,Medium,Normal,Medium,Medium,No,Yes,No,No,No,No,No,No,No,No,No
+M4 Sherman,United States of America,WW1-WW2,Tier II,Medium,Medium,Medium,Medium,Normal,Medium,High,No,Yes,No,No,No,No,No,No,No,No,No
+M4(105) Sherman,United States of America,WW1-WW2,Tier II,Medium,Heavy,Low,Medium,Normal,Medium,High,No,No,No,No,No,No,No,No,No,No,No
+M4A1 Sherman,United States of America,WW1-WW2,Tier II,Medium,Medium,Medium,Medium,Normal,Low,High,No,Yes,No,No,No,No,No,No,No,No,No
+M4A1(76)W Sherman,United States of America,WW1-WW2,Tier III,Medium,Heavy,High,Medium,Normal,Low,High,No,Yes,Yes,No,No,No,No,No,No,No,No
+M4A2 Sherman,United States of America,WW1-WW2,Tier II,Medium,Medium,Medium,Medium,Normal,Medium,High,No,Yes,No,No,No,No,No,No,No,No,No
+M4A2(76)W Sherman,United States of America,WW1-WW2,Tier III,Medium,Heavy,High,Medium,Normal,Medium,High,No,Yes,Yes,No,No,No,No,No,No,No,No
+M4A3(75)W Sherman,United States of America,WW1-WW2,Tier III,Medium,Heavy,High,Medium,Normal,Medium,High,No,Yes,Yes,No,No,No,No,No,No,No,No
+M4A3E2 "Jumbo" (75),United States of America,WW1-WW2,Tier IV,Heavy,Medium,Medium,Medium,Slow,Medium,Medium,No,Yes,No,No,No,No,No,No,No,No,No
+M4A3E2 "Jumbo" (76),United States of America,WW1-WW2,Tier IV,Heavy,Heavy,High,Medium,Slow,Medium,Medium,No,Yes,No,No,No,No,No,No,No,No,No
+M4A3(76)W Sherman,United States of America,WW1-WW2,Tier IV,Medium,Heavy,High,Medium,Normal,Medium,High,No,Yes,Yes,No,No,No,No,No,No,No,No
+M4A4 Sherman,United States of America,WW1-WW2,Tier II,Medium,Medium,Medium,Medium,Normal,Medium,High,No,Yes,No,No,No,No,No,No,No,No,No
+M4A1(76)W HVSS Sherman,United States of America,WW1-WW2,Tier III,Medium,Heavy,High,Medium,Fast,Medium,High,No,Yes,Yes,No,No,No,No,No,No,No,No
+M4A3(76)W HVSS (Easy Eight) Sherman,United States of America,WW1-WW2,Tier IV,Medium,Heavy,High,Medium,Fast,Medium,High,No,Yes,Yes,No,No,No,No,No,No,No,No
+M4A3(75)W HVSS Sherman,United States of America,WW1-WW2,Tier III,Medium,Medium,Medium,Medium,Fast,Medium,High,No,Yes,Yes,No,No,No,No,No,No,No,No
+M24 Chaffee,United States of America,WW1-WW2,Tier III,Light,Medium,Medium,Medium,Fast,Medium,High,No,Yes,No,No,No,No,No,No,No,No,No
+M3 GMC,United States of America,WW1-WW2,Tier II,Very Light,Medium,High,Medium,Very Fast,None,High,No,No,No,No,No,No,No,No,No,No,No
+3-inch GMC M10,United States of America,WW1-WW2,Tier III,Medium,Heavy,High,Medium,Normal,Medium,High,No,No,No,No,No,No,No,No,No,No,No
+90 mm GMC M36,United States of America,WW1-WW2,Tier IV,Medium,Heavy,Very High,Medium,Normal,Medium,High,No,No,No,No,No,No,No,No,No,No,No
+M18 GMC,United States of America,WW1-WW2,Tier IV,Very Light,Heavy,High,Small,Very Fast,Low,High,No,No,No,No,No,No,No,No,No,No,No
+M26 Pershing,United States of America,WW1-WW2,Tier V,Heavy,Heavy,High,Large,Normal,Medium,High,No,No,No,No,No,No,No,No,No,No,No
+M26 "Super Pershing",United States of America,WW1-WW2,Tier V,Very Heavy,Heavy,High,Large,Normal,Medium,High,No,No,No,No,No,No,No,No,No,No,No
+Carden Loyd Tankette,United Kingdom,WW1-WW2,Tier I,Unarmored,Small Arms,Low,Tiny,Normal,Low,Medium,No,No,No,No,No,No,No,No,No,No,No
+Light Tank Mk IV,United Kingdom,WW1-WW2,Tier I,Very Light,Small Arms,Low,Small,Normal,Medium,Medium,No,No,No,No,No,No,No,No,No,No,No
+Light Tank Mk V,United Kingdom,WW1-WW2,Tier I,Very Light,Small Arms,Low,Small,Normal,Medium,Medium,No,No,No,No,No,No,No,No,No,No,No
+Light Tank Mk VI,United Kingdom,WW1-WW2,Tier I,Very Light,Small Arms,Low,Small,Normal,Medium,Medium,No,No,No,No,No,No,No,No,No,No,No
+Light Tank Mk VII Tetrarch,United Kingdom,WW1-WW2,Tier I,Very Light,Light,Medium,Small,Fast,Low,Medium,No,No,No,No,No,No,No,No,No,No,No
+Light Tank Mk VIII Harry Hopkins,United Kingdom,WW1-WW2,Tier I,Very Light,Light,Medium,Small,Normal,Medium,Medium,No,No,No,No,No,No,No,No,No,No,No
+Cruiser Tank Mk V,United Kingdom,WW1-WW2,Tier I,Very Light,Light,Medium,Medium,Normal,Low,Medium,No,No,No,No,No,No,No,No,No,No,No
+Crusader I,United Kingdom,WW1-WW2,Tier II,Light,Light,Medium,Medium,Normal,Medium,Medium,No,No,No,No,No,No,No,No,No,No,No
+Crusader II,United Kingdom,WW1-WW2,Tier II,Light,Light,Medium,Medium,Normal,Medium,Medium,No,No,No,No,No,No,No,No,No,No,No
+Crusader III,United Kingdom,WW1-WW2,Tier II,Light,Medium,High,Medium,Normal,Medium,Medium,No,No,No,No,No,No,No,No,No,No,No
+Cavalier,United Kingdom,WW1-WW2,Tier III,Medium,Medium,High,Medium,Normal,Medium,Medium,No,No,No,No,No,No,No,No,No,No,No
+Cromwell I,United Kingdom,WW1-WW2,Tier III,Medium,Medium,High,Medium,Normal,Low,Medium,No,No,No,No,No,No,No,No,No,No,No
+Cromwell III,United Kingdom,WW1-WW2,Tier III,Medium,Medium,High,Medium,Normal,Low,Medium,No,No,No,No,No,No,No,No,No,No,No
+Cromwell IV,United Kingdom,WW1-WW2,Tier III,Medium,Medium,Medium,Medium,Normal,Low,Medium,No,No,No,No,No,No,No,No,No,No,No
+Cromwell VII,United Kingdom,WW1-WW2,Tier III,Medium,Medium,Medium,Medium,Normal,Low,Medium,No,No,No,No,No,No,No,No,No,No,No
+Centaur I,United Kingdom,WW1-WW2,Tier III,Medium,Medium,High,Medium,Normal,Medium,Medium,No,No,No,No,No,No,No,No,No,No,No
+Centaur III,United Kingdom,WW1-WW2,Tier III,Medium,Medium,Medium,Medium,Normal,Low,Medium,No,No,No,No,No,No,No,No,No,No,No
+Challenger,United Kingdom,WW1-WW2,Tier IV,Medium,Heavy,Very High,Medium,Normal,Low,Medium,No,No,No,No,No,No,No,No,No,No,No
+Comet I,United Kingdom,WW1-WW2,Tier IV,Medium,Heavy,Very High,Medium,Normal,Low,High,No,No,No,No,No,No,No,No,No,No,No
+Matilda I,United Kingdom,WW1-WW2,Tier I,Light,Small Arms,Low,Small,Very Slow,Medium,Low,No,No,No,No,No,No,No,No,No,No,No
+Matilda II,United Kingdom,WW1-WW2,Tier II,Medium,Light,Medium,Medium,Very Slow,Medium,High,No,No,No,No,No,No,No,No,No,No,No
+Valentine I,United Kingdom,WW1-WW2,Tier II,Light,Light,Medium,Medium,Slow,Medium,Medium,No,No,No,No,No,No,No,No,No,No,No
+Valentine II,United Kingdom,WW1-WW2,Tier II,Light,Light,Medium,Medium,Slow,Medium,Medium,No,No,No,No,No,No,No,No,No,No,No
+Valentine III,United Kingdom,WW1-WW2,Tier II,Light,Light,Medium,Medium,Slow,Medium,Medium,No,No,No,No,No,No,No,No,No,No,No
+Valentine IX,United Kingdom,WW1-WW2,Tier III,Light,Medium,High,Medium,Slow,Medium,Medium,No,No,No,No,No,No,No,No,No,No,No
+Valentine X,United Kingdom,WW1-WW2,Tier III,Light,Medium,High,Medium,Slow,Medium,Medium,No,No,No,No,No,No,No,No,No,No,No
+Valentine XI,United Kingdom,WW1-WW2,Tier III,Light,Medium,Medium,Medium,Slow,Medium,Medium,No,No,No,No,No,No,No,No,No,No,No
+Churchill Mk I,United Kingdom,WW1-WW2,Tier II,Heavy,Light,Medium,Large,Very Slow,Low,Medium,No,No,No,No,No,No,No,No,No,No,No
+Churchill Mk II,United Kingdom,WW1-WW2,Tier II,Heavy,Light,Medium,Large,Very Slow,Low,Medium,No,No,No,No,No,No,No,No,No,No,No
+Churchill Mk III,United Kingdom,WW1-WW2,Tier III,Heavy,Medium,High,Large,Very Slow,Low,Medium,No,No,No,No,No,No,No,No,No,No,No
+Churchill Mk IV,United Kingdom,WW1-WW2,Tier III,Heavy,Medium,High,Large,Very Slow,Low,Medium,No,No,No,No,No,No,No,No,No,No,No
+Churchill Mk VII,United Kingdom,WW1-WW2,Tier IV,Very Heavy,Medium,Medium,Large,Very Slow,Low,High,No,No,No,No,No,No,No,No,No,No,No
+Churchill Mk IX,United Kingdom,WW1-WW2,Tier IV,Very Heavy,Medium,Medium,Large,Very Slow,Low,High,No,No,No,No,No,No,No,No,No,No,No
+Churchill NA75,United Kingdom,WW1-WW2,Tier III,Medium,Medium,High,Large,Very Slow,Low,High,No,No,No,No,No,No,No,No,No,No,No
+Churchill Crocodile,United Kingdom,WW1-WW2,Tier V,Very Heavy,Heavy,High,Large,Very Slow,Low,High,No,No,No,No,No,No,No,No,No,No,No
+Archer,United Kingdom,WW1-WW2,Tier III,Light,Heavy,Very High,Medium,Slow,Low,High,No,No,No,No,No,No,No,No,No,No,No
+17pdr SP Achilles,United Kingdom,WW1-WW2,Tier IV,Very Light,Heavy,Very High,Medium,Normal,Medium,High,No,No,No,No,No,No,No,No,No,No,No
+Sherman Firefly VC,United Kingdom,WW1-WW2,Tier IV,Medium,Heavy,Very High,Medium,Normal,Medium,High,No,No,No,No,No,No,No,No,No,No,No
+Sherman Firefly IC,United Kingdom,WW1-WW2,Tier IV,Medium,Heavy,Very High,Medium,Normal,Medium,High,No,No,No,No,No,No,No,No,No,No,No
+M3 Grant,United Kingdom,WW1-WW2,Tier II,Light,Medium,Medium,Medium,Normal,Medium,High,No,No,No,No,No,No,No,No,No,No,No
+Panzer I Ausf. A,German Reich,WW1-WW2,Tier I,Very Light,Small Arms,Low,Small,Slow,Low,Low,No,No,No,No,No,No,No,No,No,No,No
+Panzer I Ausf. C,German Reich,WW1-WW2,Tier I,Very Light,Small Arms,Low,Tiny,Slow,Low,Low,No,No,No,No,No,No,No,No,No,No,No
+Panzer I Ausf. F,German Reich,WW1-WW2,Tier II,Light,Small Arms,Low,Small,Slow,Low,Low,No,No,No,No,No,No,No,No,No,No,No
+Panzer 35 (t),German Reich,WW1-WW2,Tier I,Very Light,Very Light,Medium,Small,Slow,None,Medium,No,Yes,No,No,No,No,No,No,No,No,No
+Panzer 38 (t) Ausf. A-D,German Reich,WW1-WW2,Tier I,Very Light,Very Light,Medium,Small,Normal,None,Medium,No,Yes,No,No,No,No,No,No,No,No,No
+Panzer 38 (t) Ausf. E-F,German Reich,WW1-WW2,Tier I,Light,Very Light,Medium,Small,Normal,None,Medium,No,Yes,No,No,No,No,No,No,No,No,No
+Panzer II Ausf. B,German Reich,WW1-WW2,Tier I,Very Light,Very Light,Low,Small,Normal,Low,Medium,Yes,No,No,No,No,No,No,No,No,No,No
+Panzer II Ausf. D,German Reich,WW1-WW2,Tier I,Very Light,Very Light,Low,Small,Normal,Low,Medium,Yes,No,No,No,No,No,No,No,No,No,No
+Panzer II Ausf. L "Luchs",German Reich,WW1-WW2,Tier II,Very Light,Very Light,Low,Small,Normal,Low,Medium,Yes,No,No,No,No,No,No,No,No,No,No
+Panzer III Ausf. F,German Reich,WW1-WW2,Tier II,Very Light,Light,Medium,Medium,Normal,None,Medium,No,No,No,No,No,No,No,No,No,No,No
+Panzer III Ausf. H,German Reich,WW1-WW2,Tier II,Light,Light,Medium,Medium,Normal,None,Medium,No,No,No,No,No,No,No,No,No,No,No
+Panzer III Ausf. J,German Reich,WW1-WW2,Tier II,Light,Light,Medium,Medium,Normal,None,Medium,No,No,No,No,No,No,No,No,No,No,No
+Panzer III Ausf. L,German Reich,WW1-WW2,Tier III,Light,Medium,Medium,Medium,Normal,None,Medium,No,No,No,No,No,No,No,No,No,No,No
+Panzer III Ausf. M,German Reich,WW1-WW2,Tier III,Light,Medium,Medium,Medium,Normal,None,Medium,No,No,No,No,No,No,No,No,No,No,No
+Panzer III Ausf. N,German Reich,WW1-WW2,Tier II,Light,Medium,Low,Medium,Normal,None,Medium,No,No,No,No,No,No,No,No,No,No,No
+Panzer IV Ausf. D,German Reich,WW1-WW2,Tier II,Light,Medium,Low,Medium,Normal,None,High,No,No,No,No,No,No,No,No,No,No,No
+Panzer IV Ausf. E,German Reich,WW1-WW2,Tier II,Light,Medium,Low,Medium,Normal,None,High,No,No,No,No,No,No,No,No,No,No,No
+Panzer IV Ausf. F,German Reich,WW1-WW2,Tier II,Light,Medium,Low,Medium,Normal,None,High,No,No,No,No,No,No,No,No,No,No,No
+Panzer IV Ausf. G,German Reich,WW1-WW2,Tier III,Medium,Heavy,High,Medium,Normal,None,High,No,No,No,No,No,No,No,No,No,No,No
+Panzer IV Ausf. H,German Reich,WW1-WW2,Tier III,Medium,Heavy,High,Medium,Normal,None,High,No,No,No,No,No,No,No,No,No,No,No
+Panzer IV Ausf. J,German Reich,WW1-WW2,Tier III,Medium,Heavy,High,Medium,Normal,None,High,No,No,No,No,No,No,No,No,No,No,No
+Stug III Ausf. B,German Reich,WW1-WW2,Tier II,Medium,Light,Low,Medium,Normal,None,Medium,No,No,No,No,No,No,No,No,No,No,No
+Stug III Ausf. E,German Reich,WW1-WW2,Tier II,Medium,Light,Low,Medium,Normal,None,Medium,No,No,No,No,No,No,No,No,No,No,No
+Stug III Ausf. F,German Reich,WW1-WW2,Tier III,Medium,Heavy,High,Medium,Normal,None,Medium,No,No,No,No,No,No,No,No,No,No,No
+Stug III Ausf. G,German Reich,WW1-WW2,Tier III,Medium,Heavy,High,Medium,Normal,None,High,No,No,No,No,No,No,No,No,No,No,No
+Stug IV,German Reich,WW1-WW2,Tier III,Medium,Heavy,High,Medium,Normal,None,High,No,No,No,No,No,No,No,No,No,No,No
+StuH 42,German Reich,WW1-WW2,Tier III,Medium,Medium,Medium,Medium,Normal,None,High,No,No,No,No,No,No,No,No,No,No,No
+Sturm-Infanteriegeschütz 33B,German Reich,WW1-WW2,Tier III,Medium,Heavy,Medium,Medium,Very Slow,None,Medium,No,No,No,No,No,No,No,No,No,No,No
+Panzerjäger I,German Reich,WW1-WW2,Tier I,Very Light,Light,High,Small,Normal,Low,High,No,No,No,No,No,No,No,No,No,No,No
+Marder I,German Reich,WW1-WW2,Tier II,Very Light,Medium,Medium,Small,Normal,None,High,No,No,No,No,No,No,No,No,No,No,No
+Marder II,German Reich,WW1-WW2,Tier II,Very Light,Medium,High,Small,Normal,None,High,No,No,No,No,No,No,No,No,No,No,No
+Marder III (Sd.Kfz.139),German Reich,WW1-WW2,Tier II,Very Light,Heavy,High,Medium,Normal,Low,High,No,No,No,No,No,No,No,No,No,No,No
+Marder III Ausf. H,German Reich,WW1-WW2,Tier III,Very Light,Heavy,High,Medium,Normal,Medium,High,No,No,No,No,No,No,No,No,No,No,No
+Marder III Ausf. M,German Reich,WW1-WW2,Tier III,Very Light,Heavy,High,Medium,Normal,Medium,High,No,No,No,No,No,No,No,No,No,No,No
+Sturer Emil,German Reich,WW1-WW2,Tier IV,Light,Heavy,High,Large,Slow,Low,High,No,No,No,No,No,No,No,No,No,No,No
+Hetzer,German Reich,WW1-WW2,Tier III,Medium,Heavy,High,Small,Normal,High,Low,No,No,No,No,No,No,No,No,No,No,No
+Jagdpanzer IV,German Reich,WW1-WW2,Tier IV,Medium,Heavy,High,Medium,Slow,High,Medium,No,No,No,No,No,No,No,No,No,No,No
+Jagdpanzer IV/70,German Reich,WW1-WW2,Tier IV,Medium,Heavy,Very High,Medium,Slow,High,Medium,No,No,No,No,No,No,No,No,No,No,No
+Nashorn,German Reich,WW1-WW2,Tier IV,Light,Very Heavy,Very High,Medium,Normal,Medium,High,No,No,No,No,No,No,No,No,No,No,No
+Jagdpanther,German Reich,WW1-WW2,Tier V,Heavy,Very Heavy,Very High,Large,Normal,High,Medium,No,No,No,No,No,No,No,No,No,No,No
+Jagdtiger,German Reich,WW1-WW2,Tier V,Very Heavy,Very Heavy,Very High,Very Large,Slow,High,Medium,No,No,No,No,No,No,No,No,No,No,No
+Elefant,German Reich,WW1-WW2,Tier V,Very Heavy,Very Heavy,Very High,Large,Slow,High,High,No,No,No,No,No,No,No,No,No,No,No
+Ferdinand,German Reich,WW1-WW2,Tier V,Very Heavy,Very Heavy,Very High,Large,Slow,High,High,No,No,No,No,No,No,No,No,No,No,No
+Tiger I Ausf. H1,German Reich,WW1-WW2,Tier IV,Heavy,Heavy,High,Large,Normal,High,High,No,No,No,No,No,No,No,No,No,No,No
+Tiger I Ausf. E,German Reich,WW1-WW2,Tier IV,Heavy,Heavy,High,Large,Normal,High,High,No,No,No,No,No,No,No,No,No,No,No
+Panther Ausf. D,German Reich,WW1-WW2,Tier IV,Medium,Heavy,Very High,Large,Fast,High,High,No,No,No,No,No,No,No,No,No,No,No
+Panther Ausf. A,German Reich,WW1-WW2,Tier IV,Medium,Heavy,Very High,Large,Normal,High,High,No,No,No,No,No,No,No,No,No,No,No
+Panther Ausf. G,German Reich,WW1-WW2,Tier IV,Medium,Heavy,Very High,Large,Normal,High,High,No,No,No,No,No,No,No,No,No,No,No
+Tiger II (early),German Reich,WW1-WW2,Tier V,Very Heavy,Very Heavy,Very High,Very Large,Normal,High,High,No,No,No,No,No,No,No,No,No,No,No
+Tiger II (late),German Reich,WW1-WW2,Tier V,Very Heavy,Very Heavy,Very High,Very Large,Normal,High,High,No,No,No,No,No,No,No,No,No,No,No
+Sturmtiger,German Reich,WW1-WW2,Tier V,Very Heavy,Very Heavy,Low,Large,Normal,Low,Medium,No,No,No,No,No,No,No,No,No,No,No
+Pz.Kpfw. VIII Maus,German Reich,WW1-WW2,Prototype,Very Heavy,Very Heavy,Very High,Very Large,Very Slow,Medium,High,No,No,No,No,No,No,No,No,No,No,No
+SU-100Y Self Propelled Gun,Soviet Union,WW1-WW2,Prototype,Heavy,Very Heavy,High,Very Large,Normal,Low,High,No,No,No,No,No,No,No,No,No,No,No
+Super Heavy Tank T28,United States of America,WW1-WW2,Prototype,Very Heavy,Very Heavy,Very High,Very Large,Very Slow,Medium,High,No,No,No,No,No,No,No,No,No,No,No
+TOG II,United Kingdom,WW1-WW2,Prototype,Medium,Very Heavy,Very High,Very Large,Very Slow,Low,Medium,No,No,No,No,No,No,No,No,No,No,No
+T-44A,Soviet Union,Cold War,Tier I,Medium,Medium,Low,Medium,Fast,High,Low,No,No,No,No,No,No,No,No,No,No,No
+IS-3,Soviet Union,Cold War,Tier III,Heavy,Heavy,Low,Medium,Slow,High,Low,No,No,No,No,No,No,No,No,No,No,No
+IS-3M,Soviet Union,Cold War,Tier III,Heavy,Heavy,Low,Medium,Slow,High,Low,No,No,No,No,No,No,No,No,No,No,No
+IS-4,Soviet Union,Cold War,Tier III,Heavy,Heavy,Low,Medium,Slow,High,Low,No,No,No,No,No,No,No,No,No,No,No
+T-10,Soviet Union,Cold War,Tier III,Very Heavy,Heavy,Low,Medium,Slow,High,Low,No,No,No,No,No,No,No,No,No,No,No
+T-10A,Soviet Union,Cold War,Tier III,Very Heavy,Heavy,Low,Medium,Normal,High,Medium,No,Yes,No,No,No,No,No,No,No,No,No
+T-10M,Soviet Union,Cold War,Tier III,Heavy,Heavy,Very High,Medium,Normal,High,Medium,No,Yes,No,No,No,Yes,No,No,No,No,No
+T-54-1,Soviet Union,Cold War,Tier III,Medium,Medium,High,Medium,Normal,High,Medium,No,No,No,No,No,No,No,No,No,No,No
+T-54-2,Soviet Union,Cold War,Tier III,Medium,Medium,High,Medium,Normal,High,Medium,No,No,No,No,No,No,No,No,No,No,No
+T-54-3,Soviet Union,Cold War,Tier III,Medium,Medium,High,Medium,Normal,High,Medium,No,No,No,No,No,No,No,No,No,No,No
+T-54A,Soviet Union,Cold War,Tier III,Medium,Medium,High,Medium,Normal,High,Medium,No,Yes,No,No,No,Yes,No,No,No,No,No
+T-54B,Soviet Union,Cold War,Tier III,Medium,Medium,Very High,Medium,Normal,High,Medium,No,Yes,No,No,No,Yes,No,No,No,No,No
+T-55,Soviet Union,Cold War,Tier IV,Medium,Heavy,Very High,Medium,Normal,High,Medium,No,Yes,No,No,No,Yes,No,No,No,No,No
+T-55A,Soviet Union,Cold War,Tier IV,Medium,Heavy,Very High,Medium,Normal,High,High,No,Yes,No,No,No,Yes,No,No,No,No,No
+T-62 Obr. 1960,Soviet Union,Cold War,Tier V,Medium,Very Heavy,Very High,Medium,Normal,High,High,No,Yes,No,No,No,Yes,No,No,No,No,No
+T-62 Obr. 1967,Soviet Union,Cold War,Tier V,Medium,Very Heavy,Very High,Medium,Normal,High,High,No,Yes,No,No,No,Yes,No,No,No,No,No
+T-64,Soviet Union,Cold War,Tier V,Heavy,Very Heavy,Very High,Medium,Normal,High,High,No,Yes,No,No,Yes,Yes,No,No,No,No,No
+ASU-57,Soviet Union,Cold War,Tier I,Unarmored,Light,Medium,Tiny,Fast,None,Very High,No,No,No,No,No,Yes,No,No,No,No,No
+ASU-85,Soviet Union,Cold War,Tier II,Light,Medium,High,Small,Normal,Medium,High,No,No,No,No,No,Yes,No,No,No,No,No
+BMP-1,Soviet Union,Cold War,Tier III,Very Light,Medium,High,Medium,Fast,Medium,Medium,No,No,No,No,No,Yes,No,No,No,Yes,No
+BMD-1,Soviet Union,Cold War,Tier III,Very Light,Medium,High,Medium,Very Fast,Medium,Medium,No,No,No,No,No,Yes,No,No,No,Yes,No
+PT-76,Soviet Union,Cold War,Tier II,Very Light,Medium,Medium,Medium,Normal,Medium,Medium,No,No,No,No,No,Yes,No,No,No,No,No
+PT-76B,Soviet Union,Cold War,Tier III,Very Light,Heavy,Medium,Medium,Normal,Medium,Medium,No,No,No,No,No,Yes,No,No,No,No,No
+IT-1,Soviet Union,Cold War,Tier IV,Medium,N/A,N/A,Medium,Normal,High,High,No,No,No,No,No,Yes,No,No,Yes,No,No
+M41 Walker Bulldog,United States of America,Cold War,Tier I,Very Light,Light,Low,Medium,Fast,Medium,Medium,No,No,No,No,No,No,No,No,No,No,No
+M41A1 Walker Bulldog,United States of America,Cold War,Tier II,Very Light,Medium,Medium,Medium,Fast,Medium,Very High,No,No,No,No,No,No,No,No,No,No,No
+M551 Sheridan,United States of America,Cold War,Tier III,Very Light,Heavy,Low,Medium,Fast,Medium,Medium,No,No,No,No,No,Yes,No,No,No,Yes,No
+M46 Patton,United States of America,Cold War,Tier II,Medium,Medium,High,Medium,Normal,Medium,Medium,No,No,No,No,No,No,No,No,No,No,No
+M47 Patton,United States of America,Cold War,Tier II,Medium,Medium,High,Medium,Normal,Medium,Medium,No,No,No,No,No,No,No,No,No,No,No
+M48 Patton,United States of America,Cold War,Tier III,Medium,Heavy,High,Medium,Normal,Medium,High,No,No,No,No,No,No,No,No,No,No,No
+M48A1 Patton,United States of America,Cold War,Tier III,Medium,Heavy,High,Medium,Normal,Medium,High,No,No,No,No,No,No,No,No,No,No,No
+M48A2 Patton,United States of America,Cold War,Tier III,Medium,Heavy,High,Medium,Normal,Medium,High,No,No,No,No,No,No,No,No,No,No,No
+M48A3 Patton,United States of America,Cold War,Tier III,Medium,Heavy,High,Medium,Normal,Medium,High,No,No,No,No,No,No,No,No,No,No,No
+M60,United States of America,Cold War,Tier IV,Medium,Heavy,Very High,Medium,Normal,High,High,No,No,No,No,No,Yes,No,No,No,No,No
+M60A1,United States of America,Cold War,Tier IV,Medium,Heavy,Very High,Medium,Normal,High,High,No,Yes,No,No,No,Yes,No,No,No,No,No
+M103,United States of America,Cold War,Tier V,Heavy,Very Heavy,Very High,Medium,Slow,High,Medium,No,No,No,No,No,No,No,No,No,No,No
+M103A2,United States of America,Cold War,Tier V,Heavy,Very Heavy,Very High,Medium,Slow,High,High,No,No,No,No,No,No,No,No,No,No,No
+M50 "Ontos",United States of America,Cold War,Tier III,Unarmored,Very Heavy,Low,Tiny,Normal,High,Medium,No,No,No,No,No,No,No,No,No,No,No
+M56 Scorpion,United States of America,Cold War,Tier III,Unarmored,Heavy,High,Tiny,Normal,None,Very High,No,No,No,No,No,No,No,No,No,No,No
+Centurion Mk 1,United Kingdom,Cold War,Tier I,Medium,Medium,Medium,Medium,Slow,Medium,Medium,No,No,No,No,No,No,No,No,No,No,No
+Centurion Mk 2,United Kingdom,Cold War,Tier I,Medium,Medium,Medium,Medium,Slow,Medium,Medium,No,Yes,No,No,No,No,No,No,No,No,No
+Centurion Mk 3,United Kingdom,Cold War,Tier II,Medium,Medium,High,Medium,Slow,Medium,Medium,No,Yes,No,No,No,No,No,No,No,No,No
+Centurion Mk 5/2,United Kingdom,Cold War,Tier III,Medium,Heavy,Very High,Medium,Slow,Medium,High,No,Yes,No,No,No,No,No,No,No,No,No
+Centurion Mk 6/2,United Kingdom,Cold War,Tier III,Medium,Heavy,Very High,Medium,Slow,Medium,High,No,Yes,No,No,No,Yes,No,No,No,No,No
+Charioteer,United Kingdom,Cold War,Tier I,Very Light,Medium,High,Medium,Normal,Low,High,No,No,No,No,No,No,No,No,No,No,No
+Conqueror Mk I,United Kingdom,Cold War,Tier IV,Heavy,Very Heavy,Very High,Medium,Slow,High,High,No,No,No,No,No,No,No,No,No,No,No
+Conqueror Mk II,United Kingdom,Cold War,Tier V,Very Heavy,Very Heavy,Very High,Medium,Slow,High,High,No,No,No,No,No,No,No,No,No,No,No
+Chieftain Mk 1,United Kingdom,Cold War,Tier V,Heavy,Very Heavy,Very High,Medium,Normal,High,Very High,No,Yes,No,No,No,No,No,No,No,No,No
+Chieftain Mk 2,United Kingdom,Cold War,Tier V,Heavy,Very Heavy,Very High,Medium,Normal,High,Very High,No,Yes,No,No,No,No,No,No,No,No,No
+Humber Hornet,United Kingdom,Cold War,Tier II,Very Light,N/A,N/A,Medium,Fast,Low,High,No,No,No,No,No,No,No,No,Yes,No,No
+Schützenpanzer SPz 11-2 Kurz,Germany,Cold War,Tier I,Very Light,Very Light,Low,Small,Fast,Medium,Medium,Yes,No,No,No,No,No,No,No,No,No,No
+Schützenpanzer Lang HS.30,Germany,Cold War,Tier I,Very Light,Very Light,Low,Small,Fast,Low,Medium,Yes,No,No,No,No,No,No,No,No,No,No
+Schützenpanzer Lang HS.30 (106mm),Germany,Cold War,Tier II,Very Light,Medium,High,Small,Fast,Low,Medium,No,No,No,No,No,No,No,No,No,No,No
+Leopard 1,Germany,Cold War,Tier IV,Light,Heavy,Very High,Medium,Fast,Medium,High,No,No,No,No,No,Yes,No,No,No,No,No
+Kanonenjagdpanzer,Germany,Cold War,Tier III,Light,Medium,High,Small,Fast,Low,High,No,No,No,No,No,Yes,No,No,No,No,No
+Object 279,Soviet Union,Cold War,Prototype,Very Heavy,Very Heavy,Very High,Very Large,Very Fast,High,Very High,No,No,No,No,No,No,No,No,No,No,No
+T114,United States of America,Cold War,Prototype,Very Light,Heavy,Medium,Small,Fast,Medium,High,No,No,No,No,No,No,No,No,No,No,No
+KPz 70,Germany,Cold War,Prototype,Medium,Heavy,High,Medium,Fast,Medium,Very High,No,Yes,No,No,Yes,Yes,No,No,No,Yes,No
+FV4005,United Kingdom,Cold War,Prototype,Unarmored,Very Heavy,Very High,Large,Slow,Low,Medium,No,No,No,No,No,No,No,No,No,No,No
+T-62 Obr. 1972,Soviet Union,Modern,Tier I,Medium,Medium,Medium,Medium,Normal,Medium,Medium,No,Yes,No,No,No,Yes,No,No,No,No,No
+T-62 Obr. 1975,Soviet Union,Modern,Tier I,Medium,Medium,Medium,Medium,Normal,Medium,Medium,No,Yes,No,Yes,No,Yes,No,No,No,No,No
+T-62D,Soviet Union,Modern,Tier II,Medium,Medium,Medium,Medium,Normal,Medium,Medium,No,Yes,No,Yes,No,Yes,No,No,No,No,Yes
+T-62M,Soviet Union,Modern,Tier II,Heavy,Medium,High,Medium,Normal,Medium,High,No,Yes,No,Yes,No,Yes,No,No,No,Yes,No
+T-62MD,Soviet Union,Modern,Tier II,Heavy,Medium,High,Medium,Normal,Medium,High,No,Yes,No,Yes,No,Yes,No,No,No,Yes,Yes
+T-62MV,Soviet Union,Modern,Tier II,Heavy,Medium,High,Medium,Normal,Medium,High,No,Yes,No,Yes,No,Yes,No,Yes,No,Yes,No
+T-64A,Soviet Union,Modern,Tier II,Heavy,Heavy,High,Medium,Normal,High,Medium,No,Yes,No,Yes,Yes,Yes,No,No,No,No,No
+T-64B,Soviet Union,Modern,Tier III,Heavy,Heavy,High,Medium,Normal,High,High,No,Yes,No,Yes,Yes,Yes,No,No,No,Yes,No
+T-64BV,Soviet Union,Modern,Tier III,Heavy,Heavy,High,Medium,Normal,High,High,No,Yes,No,Yes,Yes,Yes,No,Yes,No,Yes,No
+T-72 Ural,Soviet Union,Modern,Tier III,Heavy,Medium,High,Medium,Fast,High,Medium,No,Yes,No,No,Yes,Yes,No,No,No,No,No
+T-72A,Soviet Union,Modern,Tier III,Heavy,Heavy,High,Medium,Fast,High,High,No,Yes,No,Yes,Yes,Yes,No,No,No,No,No
+T-72B,Soviet Union,Modern,Tier III,Heavy,Heavy,High,Medium,Fast,High,High,No,Yes,No,Yes,Yes,Yes,No,Yes,No,Yes,No
+T-72B3,Russia,Modern,Tier III,Heavy,Heavy,Very High,Medium,Fast,High,High,No,Yes,Yes,Yes,Yes,Yes,Yes,Yes,No,Yes,No
+BMPT Terminator,Russia,Modern,Tier III,Heavy,Very Light,Low,Medium,Fast,Medium,High,Yes,Yes,No,Yes,No,Yes,Yes,Yes,No,Yes,No
+BMPT-72 Terminator-2,Russia,Modern,Tier III,Heavy,Very Light,Low,Medium,Fast,Medium,High,Yes,Yes,No,Yes,No,Yes,Yes,Yes,No,Yes,No
+T-80,Soviet Union,Modern,Tier IV,Heavy,Heavy,Very High,Medium,Very Fast,High,Medium,No,Yes,No,Yes,Yes,Yes,No,No,No,No,No
+T-80B,Soviet Union,Modern,Tier IV,Heavy,Heavy,Very High,Medium,Very Fast,High,High,No,Yes,No,Yes,Yes,Yes,Yes,No,No,Yes,No
+T-80BV,Soviet Union,Modern,Tier IV,Heavy,Heavy,Very High,Medium,Very Fast,High,High,No,Yes,No,Yes,Yes,Yes,Yes,Yes,No,Yes,No
+T-80U,Soviet Union,Modern,Tier IV,Very Heavy,Heavy,Very High,Medium,Very Fast,High,High,No,Yes,No,Yes,Yes,Yes,Yes,Yes,No,Yes,No
+T-80UM,Russia,Modern,Tier V,Very Heavy,Heavy,Very High,Medium,Very Fast,High,High,No,Yes,No,Yes,Yes,Yes,Yes,Yes,No,Yes,No
+T-80BVM,Russia,Modern,Tier V,Very Heavy,Very Heavy,Very High,Medium,Very Fast,High,Very High,No,Yes,No,Yes,Yes,Yes,Yes,Yes,No,Yes,No
+T-90,Russia,Modern,Tier IV,Very Heavy,Heavy,Very High,Medium,Fast,High,High,No,Yes,No,Yes,Yes,Yes,No,No,No,Yes,No
+T-90A,Russia,Modern,Tier V,Very Heavy,Heavy,Very High,Medium,Fast,High,High,No,Yes,No,Yes,Yes,Yes,Yes,Yes,No,Yes,No
+T-90M,Russia,Modern,Tier V,Very Heavy,Very Heavy,Very High,Medium,Fast,High,Very High,No,Yes,Yes,Yes,Yes,Yes,Yes,Yes,No,Yes,Yes
+BMP-1P,Soviet Union,Modern,Tier I,Very Light,Medium,Low,Small,Fast,Medium,Medium,No,No,No,No,No,Yes,No,No,No,Yes,No
+BMP-1D,Soviet Union,Modern,Tier I,Very Light,Very Light,Low,Small,Fast,Medium,Medium,Yes,No,No,No,No,Yes,No,No,No,Yes,No
+BMP-1AM Basurmanin,Russia,Modern,Tier I,Very Light,Very Light,Low,Small,Fast,Medium,Medium,Yes,Yes,No,No,No,Yes,No,No,No,Yes,No
+BMP-2,Soviet Union,Modern,Tier I,Very Light,Very Light,Low,Small,Fast,Medium,Medium,Yes,Yes,No,No,No,Yes,No,No,No,Yes,No
+BMP-2M,Russia,Modern,Tier I,Very Light,Light,Low,Small,Fast,Medium,High,Yes,Yes,No,Yes,No,Yes,Yes,No,No,Yes,No
+BMP-2M "Berezhok",Russia,Modern,Tier I,Very Light,Light,Low,Small,Fast,Medium,High,Yes,Yes,No,Yes,No,Yes,Yes,No,No,Yes,No
+BMP-3,Soviet Union,Modern,Tier II,Very Light,Very Light,Low,Small,Very Fast,Low,High,Yes,Yes,No,Yes,Yes,Yes,Yes,No,No,Yes,No
+BMP-3M,Russia,Modern,Tier III,Very Light,Very Light,Low,Small,Very Fast,Low,High,Yes,Yes,No,Yes,Yes,Yes,Yes,Yes,No,Yes,No
+BRM-3K "Rys",Russia,Modern,Tier II,Very Light,Light,Low,Small,Very Fast,Low,Very High,Yes,Yes,No,Yes,Yes,Yes,Yes,No,No,No,No
+BMP-3 "Khrizantema-S",Russia,Modern,Tier II,Very Light,N/A,N/A,Small,Very Fast,High,High,No,No,No,Yes,Yes,Yes,Yes,No,Yes,No,No
+BMD-1P,Soviet Union,Modern,Tier I,Very Light,Medium,Low,Small,Very Fast,Low,Medium,No,No,No,No,No,Yes,No,No,No,Yes,No
+BMD-2,Soviet Union,Modern,Tier I,Very Light,Very Light,Low,Small,Very Fast,Low,High,Yes,Yes,No,No,No,Yes,No,No,No,Yes,No
+BMD-2M,Russia,Modern,Tier III,Very Light,Very Light,Low,Small,Very Fast,Low,High,Yes,Yes,No,Yes,No,Yes,Yes,No,No,Yes,No
+BMD-3,Russia,Modern,Tier II,Very Light,Very Light,Low,Small,Very Fast,Low,High,Yes,Yes,No,No,No,Yes,No,No,No,Yes,No
+BMD-4,Russia,Modern,Tier II,Very Light,Light,Low,Small,Very Fast,Low,High,Yes,Yes,No,Yes,Yes,Yes,Yes,No,No,Yes,No
+2S25 Sprut-SD,Russia,Modern,Tier III,Very Light,Very Heavy,Very High,Medium,Fast,Low,Very High,No,Yes,No,Yes,Yes,Yes,Yes,No,No,No,No
+M48A5 Patton,United States of America,Modern,Tier I,Light,Light,High,Medium,Normal,Medium,Medium,No,Yes,No,No,No,No,No,No,No,No,No
+M60A1 AOS,United States of America,Modern,Tier I,Medium,Light,High,Medium,Normal,Medium,Medium,No,Yes,No,No,No,Yes,No,No,No,No,No
+M60A1 RISE,United States of America,Modern,Tier I,Medium,Medium,High,Medium,Normal,Medium,Medium,No,Yes,No,No,No,Yes,No,No,No,No,No
+M60A1 RISE Passive,United States of America,Modern,Tier II,Medium,Medium,High,Medium,Normal,Medium,Medium,No,Yes,No,No,No,Yes,No,Yes,No,No,No
+M60A2 "Starship",United States of America,Modern,Tier II,Medium,Medium,Medium,Medium,Normal,Medium,Medium,No,Yes,No,Yes,No,Yes,No,No,No,Yes,No
+M60A3,United States of America,Modern,Tier III,Medium,Medium,High,Medium,Normal,Medium,High,No,Yes,No,Yes,No,Yes,No,No,No,No,No
+M60A3 TTS,United States of America,Modern,Tier III,Medium,Medium,High,Medium,Normal,Medium,High,No,Yes,No,Yes,No,Yes,Yes,Yes,No,No,No
+M1 Abrams,United States of America,Modern,Tier III,Medium,Medium,High,Large,Very Fast,Medium,High,No,Yes,Yes,Yes,No,Yes,Yes,No,No,No,No
+M1A1 Abrams,United States of America,Modern,Tier IV,Heavy,Heavy,Very High,Large,Very Fast,Medium,High,No,Yes,Yes,Yes,No,Yes,Yes,No,No,No,No
+M1A1HA Abrams,United States of America,Modern,Tier IV,Heavy,Heavy,Very High,Large,Very Fast,Medium,High,No,Yes,Yes,Yes,No,Yes,Yes,No,No,No,No
+M1A1HC Abrams,United States of America,Modern,Tier IV,Heavy,Heavy,Very High,Large,Very Fast,Medium,High,No,Yes,Yes,Yes,No,Yes,Yes,No,No,No,No
+M1A2 Abrams,United States of America,Modern,Tier V,Heavy,Very Heavy,Very High,Large,Fast,Medium,High,No,Yes,Yes,Yes,No,Yes,Yes,No,No,No,No
+M1A2 SEPv3 Abrams,United States of America,Modern,Tier V,Heavy,Very Heavy,Very High,Very Large,Fast,Medium,Very High,No,Yes,Yes,Yes,No,Yes,Yes,Yes,No,No,Yes
+M551A1 Sheridan,United States of America,Modern,Tier II,Very Light,Light,Medium,Medium,Fast,Medium,Medium,No,Yes,No,Yes,No,Yes,No,No,No,Yes,No
+M551A1 TTS Sheridan,United States of America,Modern,Tier II,Very Light,Light,Medium,Medium,Fast,Medium,High,No,Yes,No,Yes,No,Yes,Yes,No,No,Yes,No
+M1128 mobile gun system,United States of America,Modern,Tier III,Very Light,Heavy,High,Medium,Very Fast,Medium,High,No,Yes,No,Yes,Yes,Yes,Yes,No,No,No,No
+M1134 ATGM vehicle,United States of America,Modern,Tier I,Very Light,N/A,N/A,Medium,Very Fast,Medium,High,No,No,No,No,No,Yes,No,No,Yes,No,No
+M1296 (ICVD),United States of America,Modern,Tier I,Very Light,Very Light,Low,Medium,Very Fast,Medium,Very High,Yes,Yes,No,Yes,No,Yes,No,No,No,No,No
+M2 Bradley,United States of America,Modern,Tier II,Very Light,Very Light,Low,Large,Normal,Medium,Medium,Yes,Yes,No,No,No,Yes,Yes,No,No,Yes,No
+M2A2 Bradley,United States of America,Modern,Tier II,Very Light,Very Light,Low,Large,Normal,Medium,High,Yes,Yes,No,Yes,No,Yes,Yes,Yes,No,Yes,No
+M2A3 Bradley,United States of America,Modern,Tier III,Very Light,Light,Low,Large,Normal,Medium,High,Yes,Yes,No,Yes,No,Yes,Yes,Yes,No,Yes,No
+M2A4 Bradley,United States of America,Modern,Tier III,Very Light,Light,Low,Large,Normal,Medium,High,Yes,Yes,No,Yes,No,Yes,Yes,Yes,No,Yes,Yes
+M3 Bradley,United States of America,Modern,Tier II,Very Light,Very Light,Low,Large,Normal,Medium,High,Yes,Yes,No,No,No,Yes,Yes,No,No,Yes,No
+M3A2 Bradley,United States of America,Modern,Tier III,Very Light,Light,Low,Large,Normal,Medium,High,Yes,Yes,No,Yes,No,Yes,Yes,Yes,No,Yes,No
+M3A3 Bradley,United States of America,Modern,Tier III,Very Light,Light,Low,Large,Normal,Medium,High,Yes,Yes,No,Yes,No,Yes,Yes,Yes,No,Yes,No
+M901 ITV,United States of America,Modern,Tier II,Very Light,N/A,N/A,Large,Normal,Low,High,No,No,No,No,No,Yes,No,No,Yes,No,No
+Chieftain Mk 3,United Kingdom,Modern,Tier II,Medium,Medium,Very High,Medium,Slow,Medium,High,No,Yes,No,No,No,Yes,No,No,No,No,No
+Chieftain Mk 3/3,United Kingdom,Modern,Tier II,Medium,Medium,Very High,Medium,Slow,Medium,High,No,Yes,No,Yes,No,Yes,No,No,No,No,No
+Chieftain Mk 10,United Kingdom,Modern,Tier III,Heavy,Heavy,Very High,Medium,Slow,Medium,High,No,Yes,No,Yes,No,Yes,No,No,No,No,No
+Challenger 1 Mk 1,United Kingdom,Modern,Tier III,Heavy,Heavy,Very High,Medium,Fast,High,High,No,Yes,No,Yes,No,Yes,Yes,No,No,No,No
+Challenger 1 Mk 2,United Kingdom,Modern,Tier III,Heavy,Heavy,Very High,Medium,Fast,High,High,No,Yes,No,Yes,No,Yes,Yes,No,No,No,No
+Challenger 2,United Kingdom,Modern,Tier V,Heavy,Heavy,Very High,Large,Fast,High,High,No,Yes,No,Yes,No,Yes,Yes,No,No,No,No
+FV438 Swingfire,United Kingdom,Modern,Tier II,Very Light,N/A,N/A,Small,Normal,Low,Medium,No,No,No,No,No,No,No,No,Yes,No,No
+FV102 Striker,United Kingdom,Modern,Tier II,Very Light,N/A,N/A,Small,Very Fast,Low,Medium,No,No,No,No,No,No,No,No,Yes,No,No
+Leopard 1A1A1,Germany,Modern,Tier II,Very Light,Medium,High,Medium,Fast,Medium,Medium,No,Yes,No,No,No,Yes,No,No,No,No,No
+Leopard 1A1A2,Germany,Modern,Tier III,Very Light,Medium,High,Medium,Fast,Medium,Medium,No,Yes,No,No,No,Yes,Yes,No,No,No,No
+Leopard 1A2,Germany,Modern,Tier II,Very Light,Medium,High,Medium,Fast,Medium,High,No,Yes,No,No,No,Yes,No,No,No,No,No
+Leopard 1A2A1,Germany,Modern,Tier III,Very Light,Medium,High,Medium,Fast,Medium,High,No,Yes,No,No,No,Yes,Yes,No,No,No,No
+Leopard 1A3,Germany,Modern,Tier II,Very Light,Medium,High,Medium,Fast,Medium,High,No,Yes,No,No,No,Yes,No,No,No,No,No
+Leopard 1A5,Germany,Modern,Tier II,Very Light,Heavy,High,Medium,Fast,Medium,High,No,Yes,No,Yes,No,Yes,Yes,No,No,No,No
+Leopard 2A0,Germany,Modern,Tier III,Light,Heavy,Very High,Medium,Fast,Medium,High,No,Yes,Yes,Yes,No,Yes,No,No,No,No,No
+Leopard 2A1,Germany,Modern,Tier III,Light,Heavy,Very High,Medium,Fast,Medium,High,No,Yes,Yes,Yes,No,Yes,Yes,No,No,No,No
+Leopard 2A4,Germany,Modern,Tier III,Medium,Heavy,Very High,Large,Fast,Medium,High,No,Yes,Yes,Yes,No,Yes,Yes,No,No,No,No
+Leopard 2A5,Germany,Modern,Tier IV,Heavy,Very Heavy,Very High,Large,Fast,Medium,High,No,Yes,Yes,Yes,No,Yes,Yes,No,No,No,No
+Leopard 2A6,Germany,Modern,Tier IV,Heavy,Very Heavy,Very High,Large,Fast,Medium,High,No,Yes,Yes,Yes,No,Yes,Yes,No,No,No,No
+Leopard 2A7,Germany,Modern,Tier V,Very Heavy,Very Heavy,Very High,Large,Fast,Medium,Very High,No,Yes,Yes,Yes,No,Yes,Yes,No,No,No,No
+Marder 1,Germany,Modern,Tier I,Very Light,Very Light,Low,Medium,Fast,Medium,Medium,Yes,No,No,No,No,No,No,No,No,Yes,No
+Marder 1 A1(+),Germany,Modern,Tier II,Very Light,Very Light,Low,Medium,Fast,Medium,Medium,Yes,No,No,No,No,Yes,Yes,No,No,Yes,No
+Marder 1 A1(-),Germany,Modern,Tier I,Very Light,Very Light,Low,Medium,Fast,Medium,Medium,Yes,No,No,No,No,Yes,No,No,No,Yes,No
+Marder 1 A1A,Germany,Modern,Tier II,Very Light,Very Light,Low,Medium,Fast,Medium,Medium,Yes,No,No,No,No,No,Yes,No,No,Yes,No
+Marder 1 A1A2,Germany,Modern,Tier II,Very Light,Very Light,Low,Medium,Fast,Medium,Medium,Yes,No,No,No,No,Yes,Yes,No,No,Yes,No
+Marder 1 A2,Germany,Modern,Tier II,Very Light,Very Light,Low,Medium,Fast,Medium,High,Yes,No,No,No,No,Yes,Yes,No,No,Yes,No
+Wiesel 1 ATM TOW,Germany,Modern,Tier II,Very Light,N/A,N/A,Tiny,Fast,Medium,Medium,No,No,No,No,No,Yes,No,No,Yes,No,No
+Wiesel 1 MK20,Germany,Modern,Tier I,Very Light,Very Light,Low,Tiny,Fast,Medium,Medium,Yes,No,No,No,No,Yes,No,No,No,No,No
+Jaguar 1,Germany,Modern,Tier II,Very Light,N/A,N/A,Small,Fast,Low,High,No,No,No,No,No,Yes,No,No,Yes,No,No
+Jaguar 1A3,Germany,Modern,Tier II,Very Light,N/A,N/A,Small,Fast,Low,High,No,No,No,No,No,Yes,Yes,No,Yes,No,No
+Jaguar 2,Germany,Modern,Tier II,Very Light,N/A,N/A,Small,Fast,Low,High,No,No,No,No,No,Yes,No,No,Yes,No,No
+Schützenpanzer Puma,Germany,Modern,Tier III,Medium,Light,Low,Large,Normal,Medium,High,Yes,Yes,No,Yes,No,Yes,Yes,Yes,No,Yes,No
+Object 640,Soviet Union,Modern,Prototype,Heavy,Heavy,Very High,Medium,Fast,High,High,No,Yes,No,Yes,Yes,Yes,Yes,Yes,No,Yes,No
+HSTVL,United States of America,Modern,Prototype,Very Light,Medium,Very High,Medium,Very Fast,High,High,No,Yes,No,Yes,Yes,Yes,Yes,No,No,No,No
+Challenger 3,United Kingdom,Modern,Prototype,Very Heavy,Very Heavy,Very High,Large,Fast,High,Very High,No,Yes,No,Yes,No,Yes,Yes,No,No,No,No
+Begleitpanzer 57,Germany,Modern,Prototype,Very Light,Light,High,Small,Very Fast,High,High,Yes,Yes,No,Yes,No,Yes,No,No,No,Yes,No
+Renault FT 1917,France,WW1-WW2,Tier I,Very Light,Very Light,Low,Tiny,Very Slow,Medium,Low,No,No,No,No,No,No,No,No,No,No,No
+Renault FT 1931,France,WW1-WW2,Tier I,Very Light,Very Light,Low,Tiny,Very Slow,Low,Low,No,No,No,No,No,No,No,No,No,No,No
+Hotchkiss H35,France,WW1-WW2,Tier I,Light,Very Light,Low,Small,Slow,Low,Low,No,No,No,No,No,No,No,No,No,No,No
+Hotchkiss H38,France,WW1-WW2,Tier I,Light,Very Light,Low,Small,Slow,Low,Low,No,No,No,No,No,No,No,No,No,No,No
+Hotchkiss H39,France,WW1-WW2,Tier I,Light,Very Light,Low,Small,Slow,Low,Low,No,No,No,No,No,No,No,No,No,No,No
+AMR 35 ZT1,France,WW1-WW2,Tier I,Light,Small Arms,Low,Small,Slow,Low,Medium,No,No,No,No,No,No,No,No,No,No,No
+AMR 35 ZT2,France,WW1-WW2,Tier I,Light,Very Light,Low,Small,Slow,Low,Medium,No,No,No,No,No,No,No,No,No,No,No
+AMR 35 ZT3,France,WW1-WW2,Tier I,Light,Light,Low,Tiny,Slow,Medium,Medium,No,No,No,No,No,No,No,No,No,No,No
+AMR 35 ZT3,France,WW1-WW2,Tier I,Light,Small Arms,Low,Tiny,Slow,Medium,Medium,No,No,No,No,No,No,No,No,No,No,No
+AMC 34,France,WW1-WW2,Tier I,Light,Very Light,Low,Tiny,Slow,Low,Low,No,No,No,No,No,No,No,No,No,No,No
+Renault D1,France,WW1-WW2,Tier I,Light,Very Light,Low,Small,Slow,Low,Low,No,No,No,No,No,No,No,No,No,No,No
+SOMUA S35,France,WW1-WW2,Tier II,Medium,Light,Medium,Medium,Slow,Medium,Medium,No,No,No,No,No,No,No,No,No,No,No
+Panhard 178 AMD 35,France,WW1-WW2,Tier II,Very Light,Light,Medium,Small,Very Fast,Low,Medium,No,No,No,No,No,No,No,No,No,No,No
+Renault D2,France,WW1-WW2,Tier II,Medium,Light,Medium,Medium,Slow,Low,Medium,No,No,No,No,No,No,No,No,No,No,No
+Panhard 178 B,France,WW1-WW2,Tier II,Very Light,Medium,Medium,Medium,Fast,Low,High,No,No,No,No,No,No,No,No,No,No,No
+Char B1 bis,France,WW1-WW2,Tier III,Heavy,Medium,Medium,Large,Slow,Medium,Medium,No,No,No,No,No,No,No,No,No,No,No
+Char B1 ter,France,WW1-WW2,Tier III,Heavy,Medium,Medium,Large,Slow,High,Medium,No,No,No,No,No,No,No,No,No,No,No
+Char 2C,France,WW1-WW2,Tier III,Heavy,Medium,Medium,Very Large,Very Slow,Medium,Medium,No,No,No,No,No,No,No,No,No,No,No
+SAu 40,France,WW1-WW2,Tier III,Medium,Medium,Medium,Medium,Normal,High,Medium,No,No,No,No,No,No,No,No,No,No,No
+AML-60 12,France,Cold War,Tier I,Very Light,Small Arms,Low,Tiny,Very Fast,Low,High,No,No,No,No,No,No,No,No,No,No,No
+AML-60 20 Serval,France,Cold War,Tier I,Very Light,Very Light,Low,Tiny,Very Fast,Low,High,No,No,No,No,No,No,No,No,No,No,No
+AMX 13 FL11,France,Cold War,Tier I,Very Light,Light,Low,Small,Fast,Low,Medium,No,No,No,No,No,No,No,No,No,No,No
+AMX 13 M24,France,Cold War,Tier I,Light,Light,Medium,Medium,Fast,Medium,Medium,No,No,No,No,No,No,No,No,No,No,No
+ARL 44,France,Cold War,Tier II,Medium,Medium,Medium,Very Large,Normal,High,Medium,No,No,No,No,No,No,No,No,No,No,No
+AMX 13 75,France,Cold War,Tier II,Very Light,Medium,Medium,Medium,Fast,Low,Medium,No,No,No,No,Yes,No,No,No,No,No,No
+EBR 1951,France,Cold War,Tier II,Very Light,Light,Low,Small,Very Fast,Low,High,No,No,No,No,No,No,No,No,No,No,No
+AMX 13 90,France,Cold War,Tier III,Very Light,Heavy,High,Medium,Fast,Low,Medium,No,No,No,No,Yes,No,No,No,No,No,No
+AMX 13 90 LRF,France,Cold War,Tier III,Very Light,Heavy,High,Medium,Fast,Low,Medium,No,No,No,Yes,Yes,No,No,No,No,No,No
+AMX 13 SS11,France,Cold War,Tier III,Very Light,Medium,High,Medium,Fast,Medium,High,No,No,No,No,Yes,No,No,No,No,Yes,No
+EBR 1954,France,Cold War,Tier III,Very Light,Medium,High,Small,Very Fast,Low,High,No,No,No,No,Yes,No,No,No,No,No,No
+EBR 1963,France,Cold War,Tier III,Very Light,Heavy,High,Small,Very Fast,Low,High,No,No,No,No,No,No,No,No,No,No,No
+AML 90,France,Cold War,Tier III,Very Light,Heavy,High,Tiny,Very Fast,None,Very High,No,No,No,No,No,No,No,No,No,No,No
+AMX 30 1966,France,Cold War,Tier IV,Medium,Heavy,Very High,Medium,Fast,Low,Very High,No,No,No,Yes,No,Yes,No,No,No,No,No
+AMX 50 Foch,France,Cold War,Prototype,Very Heavy,Very Heavy,Very High,Large,Slow,High,Very High,No,No,No,Yes,No,No,No,No,No,No,No
+AMX 30 1972,France,Modern,Tier I,Very Light,Light,Low,Medium,Fast,Low,Medium,No,No,No,Yes,No,Yes,No,No,No,No,No
+AMX 10 P,France,Modern,Tier I,Light,Small Arms,Low,Medium,Normal,High,Medium,Yes,No,No,No,No,No,No,No,No,No,No
+AMX 10 RC,France,Modern,Tier II,Very Light,Medium,High,Small,Very Fast,Low,High,No,No,No,Yes,No,Yes,Yes,No,No,No,No
+AMX 10 RC Surblindé,France,Modern,Tier II,Very Light,Medium,High,Small,Very Fast,Low,High,No,No,No,Yes,No,Yes,Yes,No,No,No,No
+AMX 30 B2,France,Modern,Tier II,Very Light,Medium,Medium,Medium,Fast,Low,Medium,No,No,No,Yes,No,Yes,Yes,No,No,No,No
+VAB Mephisto,France,Modern,Tier II,Very Light,N/A,N/A,Small,Very Fast,None,High,No,No,No,No,No,Yes,No,No,Yes,No,No
+VBC 90,France,Modern,Tier II,Very Light,Medium,High,Medium,Very Fast,Low,High,No,Yes,No,Yes,Yes,Yes,No,No,No,No,No
+ERC 90 Sagaie,France,Modern,Tier II,Very Light,Medium,High,Medium,Very Fast,Low,High,No,Yes,No,Yes,Yes,Yes,No,No,No,No,No
+AMX 10 RCR,France,Modern,Tier III,Very Light,Medium,High,Small,Very Fast,Medium,Very High,No,Yes,No,Yes,No,Yes,Yes,No,No,No,Yes
+AMX 30 B2 Brenus,France,Modern,Tier III,Very Light,Medium,High,Medium,Fast,Low,Medium,No,No,No,Yes,No,Yes,Yes,Yes,No,No,Yes
+VBCI  ,France,Modern,Tier III,Very Light,Very Light,Low,Large,Very Fast,High,High,Yes,Yes,No,Yes,No,Yes,Yes,No,No,No,No
+VBCI 2,France,Modern,Tier III,Very Light,Light,Low,Large,Very Fast,High,High,Yes,Yes,No,Yes,No,Yes,Yes,No,No,Yes,No
+Jaguar EBRC,France,Modern,Tier IV,Light,Light,Low,Medium,Very Fast,Medium,Very High,Yes,Yes,No,Yes,No,Yes,Yes,No,No,Yes,No
+Leclerc S1 OP,France,Modern,Tier IV,Heavy,Very Heavy,Very High,Medium,Fast,Medium,High,No,Yes,Yes,Yes,Yes,Yes,Yes,No,No,No,No
+Leclerc S2,France,Modern,Tier IV,Heavy,Very Heavy,Very High,Medium,Fast,Medium,High,No,Yes,Yes,Yes,Yes,Yes,Yes,No,No,No,No
+Leclerc S XXI,France,Modern,Tier V,Heavy,Very Heavy,Very High,Medium,Fast,Medium,Very High,No,Yes,Yes,Yes,Yes,Yes,Yes,No,No,No,No
+Leclerc AZUR,France,Modern,Tier V,Heavy,Very Heavy,Very High,Medium,Fast,Medium,Very High,No,Yes,Yes,Yes,Yes,Yes,Yes,Yes,No,No,No
+Leclerc XLR,France,Modern,Tier V,Heavy,Very Heavy,Very High,Medium,Fast,Medium,Very High,No,Yes,Yes,Yes,Yes,Yes,Yes,Yes,No,No,No
+Leclerc EVOLUTION,France,Modern,Prototype,Heavy,Very Heavy,Very High,Large,Fast,High,Very High,No,Yes,Yes,Yes,Yes,Yes,Yes,No,No,No,Yes
+Suarer 4K4FA G2,Austria,Cold War,Tier I,Very Light,Very Light,Low,Small,Fast,Medium,Medium,Yes,No,No,No,No,No,No,No,No,No,No
+Sk-105 A1,Austria,Cold War,Tier III,Very Light,Medium,Medium,Medium,Fast,Low,High,No,No,No,No,No,No,No,No,No,No,No
+Sk-105 A2,Austria,Modern,Tier I,Very Light,Light,Medium,Medium,Fast,Low,High,No,No,No,No,Yes,No,No,No,No,No,No
+Pandur I MTPz PAL,Austria,Modern,Tier II,Very Light,Small Arms,Low,Medium,Very Fast,Low,High,No,No,No,No,No,Yes,No,No,Yes,No,No
+Flammwagen auf Panzerkampfwagen B-2 (f),German Reich,WW1-WW2,Tier III,Heavy,Medium,Medium,Large,Slow,Medium,Medium,No,No,No,No,No,No,No,No,No,No,No
+7.5 cm PaK auf Geschützwagen FCM(f),German Reich,WW1-WW2,Tier III,Very Light,Medium,High,Medium,Slow,Low,Medium,No,No,No,No,No,No,No,No,No,No,No
+10.5 cm leFH 16 (Sf.) auf Geschützwagen FCM 36(f),German Reich,WW1-WW2,Tier III,Very Light,Medium,Medium,Medium,Slow,Low,Medium,No,No,No,No,No,No,No,No,No,No,No
+"4,7 cm PaK(t) auf Panzerkampfwagen 35R(f) ohne Turm",German Reich,WW1-WW2,Tier II,Very Light,Light,Medium,Small,Slow,Low,Medium,No,No,No,No,No,No,No,No,No,No,No
+Challenger 2 Black Night,United Kingdom,Modern,Tier V,Very Heavy,Very Heavy,Very High,Large,Fast,High,Very High,No,Yes,No,Yes,No,Yes,Yes,No,No,No,Yes
+T-72B3M Arena M,Russia,Modern,Tier V,Very Heavy,Very Heavy,Very High,Medium,Fast,High,Very High,No,Yes,Yes,Yes,Yes,Yes,Yes,Yes,No,Yes,Yes
+T-90M2,Russia,Modern,Tier V,Very Heavy,Very Heavy,Very High,Medium,Very Fast,High,Very High,No,Yes,Yes,Yes,Yes,Yes,Yes,Yes,No,Yes,Yes
+Char B1 bis (Eure),France,WW1-WW2,Event,Heavy,Medium,Medium,Large,Slow,Medium,Medium,No,No,No,No,No,No,No,No,No,No,No
+M47 Patton 331,Austria,Cold War,Event,Medium,Medium,High,Medium,Normal,Medium,Medium,No,No,No,No,No,No,No,No,No,No,No
+Tankora-72,Soviet Union,Modern,Event,Heavy,Medium,High,Medium,Fast,High,Medium,No,Yes,No,No,Yes,Yes,No,No,No,No,No
 `;
 
-}
-
-async function saveZoneStatus(location, warehouse){
-
-const newStatus = document.getElementById('zoneStatusSel').value;
-
-const info = zonePositions[location];
-
-if (!info) { showToast('Position inconnue', true); return; }
-
-const payload = { field_5542793: [newStatus] };
-
-const r = await api(`/database/rows/table/${PLAN_ENTREPOT_TABLE_ID}/${[info.id](http://info.id)}/`, { method:'PATCH', body: JSON.stringify(payload) });
-
-if (!r.ok) { const tx = await r.text(); showToast('Erreur maj zone', true); console.error(tx); return; }
-
-warehouseData[warehouse][location].zoneStatus = newStatus;
-
-zonePositions[location].status = newStatus;
-
-updateAllCells();
-
-showToast(`Zone ${location} → ${newStatus}`);
-
-openZone(location, warehouse);
-
-}
-
-// CRUD ARTICLES
-
-function openAddItem(location, warehouse){
-
-const opts = [categories.map](http://categories.map)(c=>`<option value='${[c.id](http://c.id)}'>${c.nom}</option>`).join('');
-
-document.getElementById('modalBody').innerHTML = `
-
-<div class='h1' style='font-size:1.1rem;'>Ajouter un article</div>
-
-<div class='row' style='grid-template-columns:1fr 1fr;'>
-
-<div><label class='small'>Nom *</label><input id='itName' class='input' required></div>
-
-<div><label class='small'>Quantité *</label><input id='itQty' type='number' min='1' value='1' class='input' required></div>
-
-<div><label class='small'>Prix unitaire (€)</label><input id='itPrice' type='number' step='0.01' min='0' value='0' class='input'></div>
-
-<div><label class='small'>Catégorie</label><select id='itCat' class='input'><option value=''>—</option>${opts}</select></div>
-
-<div><label class='small'>Type *</label><select id='itType' class='input'><option value='Don'>Don</option><option value='Achat'>Achat</option></select></div>
-
-<div><label class='small'>État *</label><select id='itEtat' class='input'><option value='Neuf'>Neuf</option><option value='Bon état'>Bon état</option></select></div>
-
-<div style='grid-column:1 / -1;'><label class='small'>Site fournisseur</label><input id='itSite' class='input' placeholder='https://...'></div>
-
-</div>
-
-<div style='margin-top:12px; display:flex; gap:8px;'>
-
-<button class='btn' onclick="saveNewItem('${location}', ${warehouse})">Ajouter</button>
-
-<button class='btn btn--muted' onclick="openZone('${location}', ${warehouse})">Annuler</button>
-
-</div>
-
-`;
-
-}
-
-async function saveNewItem(location, warehouse){
-
-const name = document.getElementById('itName').value.trim();
-
-const quantity = +document.getElementById('itQty').value;
-
-const price = +document.getElementById('itPrice').value;
-
-const cat = document.getElementById('itCat').value;
-
-const type = document.getElementById('itType').value;
-
-const etat = document.getElementById('itEtat').value;
-
-const site = document.getElementById('itSite').value.trim();
-
-if (!name || !quantity) { showToast('Champs requis manquants', true); return; }
-
-const posInfo = zonePositions[location]; if (!posInfo) { showToast('Position inconnue', true); return; }
-
-// Trouver l'entrepôt lié par ID_Entrepôt == warehouse
-
-let entrepotId = null;
-
-const ent = await api(`/database/rows/table/${ENTREPOTS_TABLE_ID}/?user_field_names=false`);
-
-if (ent.ok) { const ed = await ent.json(); const row = ed.results.find(e=> e.field_5527870 === warehouse); if (row) entrepotId = [row.id](http://row.id); }
-
-const payload = {
-
-field_5527921: name,
-
-field_5527934: quantity,
-
-field_5529132: price,
-
-field_5529130: type,
-
-field_5615747: etat,
-
-field_5615690: new Date().toISOString().split('T')[0],
-
-field_5532813: [[posInfo.id](http://posInfo.id)]
-
-};
-
-if (entrepotId) payload.field_5527922 = [entrepotId];
-
-if (cat) payload.field_5529113 = [parseInt(cat)];
-
-if (site) payload.field_5529271 = site;
-
-const r = await api(`/database/rows/table/${STOCK_TABLE_ID}/`, { method:'POST', body: JSON.stringify(payload) });
-
-if (!r.ok) { showToast('Erreur ajout', true); return; }
-
-await loadStock(); updateAllCells(); showToast('Article ajouté'); openZone(location, warehouse);
-
-}
-
-async function openEditItem(id, location, warehouse){
-
-const r = await api(`/database/rows/table/${STOCK_TABLE_ID}/${id}/?user_field_names=false`);
-
-if (!r.ok) { showToast('Article introuvable', true); return; }
-
-const it = await r.json();
-
-const opts = [categories.map](http://categories.map)(c=>`<option value='${[c.id](http://c.id)}' ${(it.field_5529113||[]).includes([c.id](http://c.id))?'selected':''}>${c.nom}</option>`).join('');
-
-document.getElementById('modalBody').innerHTML = `
-
-<div class='h1' style='font-size:1.1rem;'>Modifier l'article</div>
-
-<div class='row' style='grid-template-columns:1fr 1fr;'>
-
-<div><label class='small'>Nom *</label><input id='editName' class='input' value='${it.field_5527921||''}'></div>
-
-<div><label class='small'>Quantité *</label><input id='editQty' type='number' min='0' class='input' value='${it.field_5527934||0}'></div>
-
-<div><label class='small'>Prix unitaire</label><input id='editPrice' type='number' step='0.01' class='input' value='${it.field_5529132||0}'></div>
-
-<div><label class='small'>Catégorie</label><select id='editCat' class='input'><option value=''>—</option>${opts}</select></div>
-
-<div><label class='small'>Type</label><select id='editType' class='input'><option value='Don' ${it.field_5529130==='Don'?'selected':''}>Don</option><option value='Achat' ${it.field_5529130==='Achat'?'selected':''}>Achat</option></select></div>
-
-<div><label class='small'>État</label><select id='editEtat' class='input'><option value='Neuf' ${it.field_5615747==='Neuf'?'selected':''}>Neuf</option><option value='Bon état' ${it.field_5615747==='Bon état'?'selected':''}>Bon état</option></select></div>
-
-</div>
-
-<div style='margin-top:12px; display:flex; gap:8px;'>
-
-<button class='btn' onclick="saveEditItem(${id}, '${location}', ${warehouse})">Enregistrer</button>
-
-<button class='btn btn--muted' onclick="openZone('${location}', ${warehouse})">Annuler</button>
-
-</div>
-
-`;
-
-}
-
-async function saveEditItem(id, location, warehouse){
-
-const payload = {
-
-field_5527921: document.getElementById('editName').value.trim(),
-
-field_5527934: +document.getElementById('editQty').value,
-
-field_5529132: +document.getElementById('editPrice').value,
-
-field_5529130: document.getElementById('editType').value,
-
-field_5615747: document.getElementById('editEtat').value,
-
-field_5615692: new Date().toISOString().split('T')[0]
-
-};
-
-const cat = document.getElementById('editCat').value; payload.field_5529113 = cat? [parseInt(cat)] : [];
-
-const r = await api(`/database/rows/table/${STOCK_TABLE_ID}/${id}/`, { method:'PATCH', body: JSON.stringify(payload) });
-
-if (!r.ok) { showToast('Erreur modification', true); return; }
-
-await loadStock(); updateAllCells(); showToast('Article modifié'); openZone(location, warehouse);
-
-}
-
-async function deleteItem(id, location, warehouse, name){
-
-if (!confirm(`Supprimer définitivement "${name}" ?`)) return;
-
-const r = await api(`/database/rows/table/${STOCK_TABLE_ID}/${id}/`, { method:'DELETE' });
-
-if (!r.ok) { showToast('Erreur suppression', true); return; }
-
-await loadStock(); updateAllCells(); showToast('Article supprimé'); openZone(location, warehouse);
-
-}
-
-// RESERVATIONS
-
-async function openReserve(id, location, warehouse){
-
-const r = await api(`/database/rows/table/${STOCK_TABLE_ID}/${id}/?user_field_names=false`);
-
-if (!r.ok) { showToast('Article introuvable', true); return; }
-
-const it = await r.json();
-
-const available = (+it.field_5527934||0) - (+it.field_5532799||0);
-
-document.getElementById('modalBody').innerHTML = `
-
-<div class='h1' style='font-size:1.1rem;'>Créer une réservation</div>
-
-<div class='small'>${it.field_5527921} • dispo ${available}</div>
-
-<div class='row' style='grid-template-columns:1fr 1fr;'>
-
-<div><label class='small'>Prénom *</label><input id='rp' class='input'></div>
-
-<div><label class='small'>Nom *</label><input id='rn' class='input'></div>
-
-<div><label class='small'>Quantité *</label><input id='rq' type='number' min='1' max='${available}' value='1' class='input'></div>
-
-<div><label class='small'>Téléphone</label><input id='rt' class='input'></div>
-
-<div><label class='small'>Email</label><input id='re' type='email' class='input'></div>
-
-<div><label class='small'>Date réservation *</label><input id='rdr' type='date' class='input' value='${new Date().toISOString().split('T')[0]}'></div>
-
-<div><label class='small'>Date retrait</label><input id='rde' type='date' class='input'></div>
-
-<div style='grid-column:1 / -1;'><label class='small'>Commentaire</label><textarea id='rc' class='input' rows='2'></textarea></div>
-
-</div>
-
-<div style='margin-top:12px; display:flex; gap:8px;'>
-
-<button class='btn' onclick="saveReservation(${id}, '${location}', ${warehouse})">Créer</button>
-
-<button class='btn btn--muted' onclick="openZone('${location}', ${warehouse})">Annuler</button>
-
-</div>
-
-`;
-
-}
-
-async function saveReservation(stockId, location, warehouse){
-
-const prenom = document.getElementById('rp').value.trim();
-
-const nom = document.getElementById('rn').value.trim();
-
-const q = +document.getElementById('rq').value;
-
-const tel = document.getElementById('rt').value.trim();
-
-const email = document.getElementById('re').value.trim();
-
-const dres = document.getElementById('rdr').value; const dret = document.getElementById('rde').value;
-
-const com = document.getElementById('rc').value.trim();
-
-if (!prenom || !nom || !q) { showToast('Champs requis', true); return; }
-
-// Récupère le nom produit
-
-const s = await api(`/database/rows/table/${STOCK_TABLE_ID}/${stockId}/?user_field_names=false`); const item = await s.json();
-
-const payload = {
-
-field_5527943: item.field_5527921,
-
-field_5527944: q,
-
-field_5527945: `${prenom} ${nom}`,
-
-field_5615909: prenom,
-
-field_5615908: nom,
-
-field_5527986: dres,
-
-field_5527990: ['En attente'],
-
-field_5529273: [stockId]
-
-};
-
-if (tel) payload.field_5615903 = parseInt(tel);
-
-if (email) payload.field_5615904 = email;
-
-if (dret) payload.field_5527991 = dret;
-
-if (com) payload.field_5615910 = com;
-
-const r = await api(`/database/rows/table/${RESERVATION_TABLE_ID}/`, { method:'POST', body: JSON.stringify(payload) });
-
-if (!r.ok) { showToast('Erreur réservation', true); return; }
-
-await loadStock(); updateAllCells(); await loadReservations(); showToast('Réservation créée'); openZone(location, warehouse);
-
-}
-
-async function editReservation(id){
-
-const r = await api(`/database/rows/table/${RESERVATION_TABLE_ID}/${id}/?user_field_names=false`); if (!r.ok) { showToast('Introuvable', true); return; }
-
-const res = await r.json();
-
-document.getElementById('modalTitle').textContent = 'Modifier la réservation';
-
-document.getElementById('modal').style.display = 'block';
-
-document.getElementById('modalBody').innerHTML = `
-
-<div class='row' style='grid-template-columns:1fr 1fr;'>
-
-<div><label class='small'>Bénéficiaire</label><input id='er_name' class='input' value='${res.field_5527945||''}'></div>
-
-<div><label class='small'>Quantité</label><input id='er_q' class='input' type='number' value='${res.field_5527944||0}'></div>
-
-<div><label class='small'>État</label><select id='er_state' class='input'><option ${Array.isArray(res.field_5527990)&&res.field_5527990.includes('En attente')?'selected':''}>En attente</option><option ${Array.isArray(res.field_5527990)&&res.field_5527990.includes('Retiré')?'selected':''}>Retiré</option></select></div>
-
-<div><label class='small'>Date réservation</label><input id='er_dr' class='input' type='date' value='${res.field_5527986||''}'></div>
-
-<div><label class='small'>Date retrait</label><input id='er_de' class='input' type='date' value='${res.field_5527991||''}'></div>
-
-<div style='grid-column:1 / -1;'><label class='small'>Commentaire</label><textarea id='er_c' class='input'>${res.field_5615910||''}</textarea></div>
-
-</div>
-
-<div style='margin-top:12px; display:flex; gap:8px;'>
-
-<button class='btn' onclick='saveReservationEdit(${id})'>Enregistrer</button>
-
-<button class='btn btn--muted' onclick="document.getElementById('modal').style.display='none'">Fermer</button>
-
-</div>
-
-`;
-
-}
-
-async function saveReservationEdit(id){
-
-const payload = {
-
-field_5527945: document.getElementById('er_name').value,
-
-field_5527944: +document.getElementById('er_q').value,
-
-field_5527990: [document.getElementById('er_state').value],
-
-field_5527986: document.getElementById('er_dr').value || null,
-
-field_5527991: document.getElementById('er_de').value || null,
-
-field_5615910: document.getElementById('er_c').value || null
-
-};
-
-const r = await api(`/database/rows/table/${RESERVATION_TABLE_ID}/${id}/`, { method:'PATCH', body: JSON.stringify(payload) });
-
-if (!r.ok) { showToast('Erreur modification', true); return; }
-
-await loadStock(); updateAllCells(); await loadReservations(); showToast('Réservation modifiée'); document.getElementById('modal').style.display='none';
-
-}
-
-async function deleteReservation(id){
-
-if (!confirm('Supprimer cette réservation ?')) return;
-
-const r = await api(`/database/rows/table/${RESERVATION_TABLE_ID}/${id}/`, { method:'DELETE' });
-
-if (!r.ok) { showToast('Erreur suppression', true); return; }
-
-await loadStock(); updateAllCells(); await loadReservations(); showToast('Réservation supprimée');
-
-}
-
-// AJOUT D'UN NOUVEL ENTREPÔT
-
-function openAddWarehouse(){
-
-document.getElementById('modalTitle').textContent = 'Ajouter un entrepôt';
-
-document.getElementById('modal').style.display = 'block';
-
-document.getElementById('modalBody').innerHTML = `
-
-<div class='row' style='grid-template-columns:1fr 1fr;'>
-
-<div><label class='small'>ID Entrepôt (nombre) *</label><input id='ew_id' class='input' type='number' min='1'></div>
-
-<div><label class='small'>Localisation *</label><input id='ew_loc' class='input'></div>
-
-<div><label class='small'>Superficie (m²)</label><input id='ew_s' class='input' type='number' min='0'></div>
-
-<div><label class='small'>Taille (L x l, m)</label><div style='display:flex; gap:8px;'><input id='ew_L' class='input' type='number' min='0' placeholder='L'><input id='ew_l' class='input' type='number' min='0' placeholder='l'></div></div>
-
-</div>
-
-<div style='margin-top:12px; display:flex; gap:8px;'>
-
-<button class='btn' onclick='saveWarehouse()'>Créer</button>
-
-<button class='btn btn--muted' onclick="document.getElementById('modal').style.display='none'">Annuler</button>
-
-</div>
-
-`;
-
-}
-
-async function saveWarehouse(){
-
-const id = +document.getElementById('ew_id').value; const loc = document.getElementById('ew_loc').value.trim();
-
-const S = +document.getElementById('ew_s').value; const L = +document.getElementById('ew_L').value; const l = +document.getElementById('ew_l').value;
-
-if (!id || !loc) { showToast('Champs requis', true); return; }
-
-const payload = {
-
-field_5527870: id,
-
-field_5527887: loc,
-
-field_5527883: S||null,
-
-field_5527884: L||null,
-
-field_5527885: l||null
-
-};
-
-const r = await api(`/database/rows/table/${ENTREPOTS_TABLE_ID}/`, { method:'POST', body: JSON.stringify(payload) });
-
-if (!r.ok) { const tx = await r.text(); console.error(tx); showToast('Erreur création entrepôt', true); return; }
-
-showToast('Entrepôt créé'); document.getElementById('modal').style.display='none';
-
-// Option: ajouter un onglet visuel immédiatement
-
-const tabs = document.getElementById('warehouseTabs');
-
-const b = document.createElement('button'); b.className='tab'; b.dataset.warehouse=id; b.innerHTML=`<i class="fa-solid fa-warehouse"></i> Entrepôt ${id} - ${loc}`; b.onclick=()=>selectWarehouse(id);
-
-tabs.insertBefore(b, tabs.lastElementChild);
-
-}
-
-</script>
-
+        // ==========================================
+        // 3. FONCTIONS UTILITAIRES
+        // ==========================================
+
+        const parseCSV = (text) => {
+          const lines = text.trim().split('\n');
+          const detectSeparator = (str) => str.includes('\t') ? '\t' : ',';
+          const headerLine = lines[0];
+          const headerSeparator = detectSeparator(headerLine);
+          const headers = headerLine.split(headerSeparator).map(h => h.trim());
+          
+          return lines.slice(1)
+              .filter(line => line.trim() !== '') 
+              .map((line, index) => {
+            const separator = detectSeparator(line);
+            const result = [];
+            let current = '';
+            let inQuotes = false;
+            for (let i = 0; i < line.length; i++) {
+              const char = line[i];
+              if (char === '"') { inQuotes = !inQuotes; }
+              else if (char === separator && !inQuotes) { result.push(current.trim()); current = ''; }
+              else { current += char; }
+            }
+            result.push(current.trim());
+            const obj = { id: index };
+            headers.forEach((header, i) => { obj[header] = result[i] || ''; });
+            return obj;
+          });
+        };
+
+        const getStatValue = (val) => {
+          if (!val) return 0;
+          const v = val.toLowerCase();
+          if (v.includes('very high') || v.includes('very heavy') || v.includes('very fast')) return 100;
+          if (v.includes('high') || v.includes('heavy') || v.includes('fast')) return 75;
+          if (v.includes('medium') || v.includes('normal')) return 50;
+          if (v.includes('low') || v.includes('light') || v.includes('slow')) return 25;
+          if (v.includes('very low') || v.includes('very light') || v.includes('small arms') || v.includes('tiny')) return 10;
+          return 0;
+        };
+
+        const getStatColor = (val) => {
+          if (val >= 80) return 'bg-green-500';
+          if (val >= 60) return 'bg-emerald-400';
+          if (val >= 40) return 'bg-yellow-400';
+          if (val >= 20) return 'bg-orange-400';
+          return 'bg-red-500';
+        };
+        
+        const getRarityColor = (tier) => {
+           if (tier.includes('Tier I') && !tier.includes('II') && !tier.includes('III') && !tier.includes('IV') && !tier.includes('V')) return 'text-slate-300';
+           if (tier.includes('Tier II') && !tier.includes('III')) return 'text-green-400';
+           if (tier.includes('Tier III')) return 'text-blue-400';
+           if (tier.includes('Tier IV')) return 'text-purple-400';
+           if (tier.includes('Tier V')) return 'text-orange-400';
+           if (tier.includes('Prototype')) return 'text-red-500';
+           if (tier.includes('Event')) return 'text-yellow-400';
+           return 'text-white';
+        };
+
+        const translateData = (val, key = '', lang = 'fr') => {
+          if (lang === 'fr' && ['Firepower', 'Accuracy', 'Mobility', 'Visibility', 'Size'].includes(key)) {
+              const feminineMap = {
+                "Very High": "Très élevée",
+                "High": "Élevée",
+                "Medium": "Moyenne",
+                "Heavy": "Lourde",
+                "Very Heavy": "Très lourde",
+                "Very Light": "Très légère",
+                "Light": "Légère",
+                "Slow": "Lente",
+                "Very Slow": "Très lente",
+                "Normal": "Normale",
+                "Small": "Petite",
+                "Large": "Grande",
+                "Very Large": "Très grande",
+                "Small Arms": "Armes légères"
+              };
+              if (feminineMap[val]) return feminineMap[val];
+          }
+
+          if (lang === 'fr') {
+              return DATA_VALUE_MAP_FR[val] || val;
+          }
+          return val;
+        };
+
+        // ==========================================
+        // 4. COMPOSANTS UI
+        // ==========================================
+
+        const IconWrapper = ({ children, size = 24, className = "" }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>{children}</svg>
+        );
+
+        const Icons = {
+            Search: (props) => <IconWrapper {...props}><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></IconWrapper>,
+            Filter: (props) => <IconWrapper {...props}><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></IconWrapper>,
+            Check: (props) => <IconWrapper {...props}><polyline points="20 6 9 17 4 12"/></IconWrapper>,
+            X: (props) => <IconWrapper {...props}><path d="M18 6 6 18"/><path d="m6 6 12 12"/></IconWrapper>,
+            Trash2: (props) => <IconWrapper {...props}><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></IconWrapper>,
+            Database: (props) => <IconWrapper {...props}><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></IconWrapper>,
+            Shield: (props) => <IconWrapper {...props}><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/></IconWrapper>,
+            Crosshair: (props) => <IconWrapper {...props}><circle cx="12" cy="12" r="10"/><line x1="22" x2="18" y1="12" y2="12"/><line x1="6" x2="2" y1="12" y2="12"/><line x1="12" x2="12" y1="6" y2="2"/><line x1="12" x2="12" y1="22" y2="18"/></IconWrapper>,
+            Zap: (props) => <IconWrapper {...props}><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></IconWrapper>,
+            Scale: (props) => <IconWrapper {...props}><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></IconWrapper>,
+            Globe: (props) => <IconWrapper {...props}><circle cx="12" cy="12" r="10"/><line x1="2" x2="22" y1="12" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></IconWrapper>,
+            Eye: (props) => <IconWrapper {...props}><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></IconWrapper>,
+            Target: (props) => <IconWrapper {...props}><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></IconWrapper>,
+            Info: (props) => <IconWrapper {...props}><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></IconWrapper>,
+            Percent: (props) => <IconWrapper {...props}><line x1="19" x2="5" y1="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></IconWrapper>
+        };
+
+        const StatBar = ({ label, value, rawValue, icon: Icon, lang, statKey }) => {
+          const numValue = getStatValue(rawValue);
+          const displayValue = lang === 'fr' ? translateData(rawValue, statKey, lang) : rawValue;
+          
+          return (
+            <div className="mb-2">
+              <div className="flex justify-between items-center text-xs text-slate-400 mb-1">
+                <span className="flex items-center gap-1">{Icon && <Icon size={12} />} {label}</span>
+                <span className="font-medium text-slate-200">{displayValue}</span>
+              </div>
+              <div className="h-1.5 w-full bg-slate-700 rounded-full overflow-hidden">
+                <div 
+                  className={`h-full rounded-full ${getStatColor(numValue)} transition-all duration-500`} 
+                  style={{ width: `${numValue}%` }}
+                />
+              </div>
+            </div>
+          );
+        };
+
+        const BooleanBadge = ({ label, value, lang }) => {
+          const isYes = value === 'Yes';
+          if (!isYes) return null;
+          return (
+            <span className="inline-flex items-center gap-1 px-2 py-1 rounded bg-slate-700/50 border border-slate-600 text-[10px] text-slate-300">
+              <Icons.Check size={10} className="text-green-400" /> {label}
+            </span>
+          );
+        };
+
+        // ==========================================
+        // 5. APPLICATION
+        // ==========================================
+
+        function TankApp() {
+          const [tanks, setTanks] = useState([]);
+          const [collection, setCollection] = useState(new Set());
+          const [compareList, setCompareList] = useState([]);
+          const [showCompare, setShowCompare] = useState(false);
+          const [viewTank, setViewTank] = useState(null); 
+          const [showDropRates, setShowDropRates] = useState(false);
+          const [lang, setLang] = useState('fr'); 
+          
+          const translate = (key) => TRANSLATIONS[lang][key] || key;
+          const tData = (val, key) => translateData(val, key, lang);
+          
+          const [search, setSearch] = useState('');
+          const [filterNation, setFilterNation] = useState('All');
+          const [filterAge, setFilterAge] = useState('All');
+          const [filterRarity, setFilterRarity] = useState('All');
+          const [showCollectedOnly, setShowCollectedOnly] = useState(false);
+
+          useEffect(() => {
+            const parsedData = parseCSV(rawCSV);
+            setTanks(parsedData);
+            const savedCollection = localStorage.getItem('tankCollection');
+            if (savedCollection) {
+              setCollection(new Set(JSON.parse(savedCollection)));
+            }
+          }, []);
+
+          const toggleCollection = (tankName) => {
+            const newSet = new Set(collection);
+            if (newSet.has(tankName)) { newSet.delete(tankName); } 
+            else { newSet.add(tankName); }
+            setCollection(newSet);
+            localStorage.setItem('tankCollection', JSON.stringify([...newSet]));
+          };
+
+          const resetFilters = () => {
+              setSearch('');
+              setFilterNation('All');
+              setFilterAge('All');
+              setFilterRarity('All');
+              setShowCollectedOnly(false);
+          };
+
+          const toggleCompare = (tank) => {
+            if (compareList.find(t => t.Name === tank.Name)) {
+              setCompareList(compareList.filter(t => t.Name !== tank.Name));
+            } else {
+              if (compareList.length < 3) { setCompareList([...compareList, tank]); } 
+              else { alert(lang === 'fr' ? "Maximum 3 chars." : "Max 3 tanks."); }
+            }
+          };
+
+          const uniqueNations = useMemo(() => {
+              const nations = new Set(tanks.map(t => t.Nation).filter(n => n && !n.match(/\d/) && n.length < 30));
+              return ['All', ...[...nations].sort()];
+          }, [tanks]);
+
+          const uniqueAges = useMemo(() => {
+              const ages = new Set(tanks.map(t => t.Age).filter(a => a && !a.match(/\d{3,}/) && a.length < 20));
+               return ['All', ...[...ages].sort()];
+          }, [tanks]);
+
+          const uniqueRarities = useMemo(() => {
+               const rarities = new Set(tanks.map(t => t.Rarity).filter(r => r && (r.includes('Tier') || r === 'Prototype' || r === 'Event')));
+               return ['All', ...[...rarities].sort()];
+          }, [tanks]);
+
+
+          const filteredTanks = useMemo(() => {
+            return tanks.filter(tank => {
+              const matchSearch = tank.Name.toLowerCase().includes(search.toLowerCase());
+              const matchNation = filterNation === 'All' || tank.Nation === filterNation;
+              const matchAge = filterAge === 'All' || tank.Age === filterAge;
+              const matchRarity = filterRarity === 'All' || tank.Rarity === filterRarity;
+              const matchCollection = !showCollectedOnly || collection.has(tank.Name);
+              return matchSearch && matchNation && matchAge && matchRarity && matchCollection;
+            });
+          }, [tanks, search, filterNation, filterAge, filterRarity, showCollectedOnly, collection]);
+
+          const collectionStats = useMemo(() => {
+            return {
+              total: tanks.length,
+              owned: collection.size,
+              percent: tanks.length > 0 ? Math.round((collection.size / tanks.length) * 100) : 0
+            };
+          }, [tanks, collection]);
+
+          return (
+            <div className="h-full flex flex-col bg-slate-900 text-slate-100 font-sans">
+              
+              {/* HEADER */}
+              <header className="bg-slate-800 border-b border-slate-700 sticky top-0 z-20 shadow-xl flex-shrink-0">
+                <div className="max-w-7xl mx-auto px-4 py-4">
+                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                      <h1 className="text-2xl font-bold bg-gradient-to-r from-emerald-400 to-blue-500 bg-clip-text text-transparent flex items-center gap-2">
+                        <Icons.Database className="text-emerald-400" /> {translate('appTitle')}
+                      </h1>
+                      <p className="text-xs text-slate-400 mt-1 flex items-center gap-2">
+                        {translate('garage')} : <span className="text-emerald-400 font-bold">{collectionStats.owned}</span> / {collectionStats.total} 
+                        <span className="bg-slate-700 px-2 rounded text-slate-300">{collectionStats.percent}%</span>
+                      </p>
+                      <div className="w-full max-w-[200px] h-1.5 bg-slate-700 rounded-full mt-2 overflow-hidden">
+                        <div className="h-full bg-emerald-500 rounded-full transition-all duration-700 shadow-[0_0_10px_rgba(16,185,129,0.5)]" style={{ width: `${collectionStats.percent}%` }}></div>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-3">
+                       {/* SÉLECTEUR DE LANGUE */}
+                       <div className="flex items-center bg-slate-700 rounded-lg border border-slate-600 p-1">
+                         <button onClick={() => setLang('fr')} className={`p-1.5 rounded transition-all ${lang === 'fr' ? 'bg-slate-500 shadow-sm scale-110' : 'opacity-40 hover:opacity-100 grayscale'}`} title="Français">
+                           <svg width="24" height="16" viewBox="0 0 3 2" className="rounded-sm shadow-sm"><rect width="3" height="2" fill="#ED2939"/><rect width="2" height="2" fill="#fff"/><rect width="1" height="2" fill="#002395"/></svg>
+                         </button>
+                         <div className="w-px h-4 bg-slate-600 mx-1"></div>
+                         <button onClick={() => setLang('en')} className={`p-1.5 rounded transition-all ${lang === 'en' ? 'bg-slate-500 shadow-sm scale-110' : 'opacity-40 hover:opacity-100 grayscale'}`} title="English">
+                           <svg width="24" height="16" viewBox="0 0 60 30" className="rounded-sm shadow-sm">
+                             <clipPath id="s"><path d="M0,0 v30 h60 v-30 z"/></clipPath><clipPath id="t"><path d="M30,15 h30 v15 z v15 h-30 z h-30 v-15 z v-15 h30 z"/></clipPath><g clipPath="url(#s)"><path d="M0,0 v30 h60 v-30 z" fill="#012169"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" strokeWidth="6"/><path d="M0,0 L60,30 M60,0 L0,30" clipPath="url(#t)" stroke="#C8102E" strokeWidth="4"/><path d="M30,0 v30 M0,15 h60" stroke="#fff" strokeWidth="10"/><path d="M30,0 v30 M0,15 h60" stroke="#C8102E" strokeWidth="6"/></g>
+                           </svg>
+                         </button>
+                       </div>
+                       
+                       {/* BOUTON TAUX DE DROP */}
+                       <button onClick={() => setShowDropRates(true)} className="bg-slate-700 hover:bg-slate-600 text-white px-3 py-2 rounded-lg flex items-center justify-center transition-colors border border-slate-600" title={translate('dropRates')}>
+                         <Icons.Percent size={20} />
+                       </button>
+
+                       {compareList.length > 0 && (
+                         <button onClick={() => setShowCompare(true)} className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 text-sm transition-colors animate-pulse shadow-lg shadow-blue-900/50">
+                           <Icons.Scale size={16} /> {translate('compare')} ({compareList.length})
+                         </button>
+                       )}
+                    </div>
+                  </div>
+
+                  {/* BARRE DE FILTRES */}
+                  <div className="mt-4 flex flex-col lg:flex-row gap-3 bg-slate-900/50 p-3 rounded-lg border border-slate-700/50 backdrop-blur-sm">
+                    <div className="relative flex-grow">
+                      <Icons.Search className="absolute left-3 top-2.5 text-slate-500" size={18} />
+                      <input type="text" placeholder={translate('searchPlaceholder')} className="w-full bg-slate-800 border border-slate-700 rounded-md py-2 pl-10 pr-4 text-sm focus:ring-2 focus:ring-blue-500 outline-none text-slate-200 placeholder-slate-500 transition-all" value={search} onChange={(e) => setSearch(e.target.value)} />
+                    </div>
+
+                    <select className="bg-slate-800 border border-slate-700 rounded-md py-2 px-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none hover:border-slate-600 transition-colors" value={filterNation} onChange={(e) => setFilterNation(e.target.value)}>
+                      {uniqueNations.map(n => <option key={n} value={n}>{n === 'All' ? translate('allNations') : tData(n)}</option>)}
+                    </select>
+
+                    <select className="bg-slate-800 border border-slate-700 rounded-md py-2 px-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none hover:border-slate-600 transition-colors" value={filterAge} onChange={(e) => setFilterAge(e.target.value)}>
+                      {uniqueAges.map(a => <option key={a} value={a}>{a === 'All' ? translate('allAges') : tData(a)}</option>)}
+                    </select>
+
+                    <select className="bg-slate-800 border border-slate-700 rounded-md py-2 px-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none hover:border-slate-600 transition-colors" value={filterRarity} onChange={(e) => setFilterRarity(e.target.value)}>
+                      {uniqueRarities.map(r => <option key={r} value={r}>{r === 'All' ? translate('allTiers') : r}</option>)}
+                    </select>
+
+                    <button onClick={() => setShowCollectedOnly(!showCollectedOnly)} className={`px-4 py-2 rounded-md text-sm border transition-colors flex items-center gap-2 whitespace-nowrap ${showCollectedOnly ? 'bg-emerald-600 border-emerald-500 text-white shadow-lg shadow-emerald-900/50' : 'bg-slate-800 border-slate-700 text-slate-400 hover:bg-slate-700 hover:text-white'}`}>
+                      <Icons.Check size={16} /> {showCollectedOnly ? translate('myTanks') : translate('collected')}
+                    </button>
+                    
+                    <button onClick={resetFilters} className="px-3 py-2 rounded-md bg-slate-700 text-slate-300 hover:bg-slate-600 hover:text-white transition-colors" title={translate('reset')}>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                            <path d="M3 3v5h5"/>
+                        </svg>
+                    </button>
+                  </div>
+                </div>
+              </header>
+
+              {/* CONTENU PRINCIPAL */}
+              <main className="flex-grow overflow-y-auto custom-scrollbar w-full">
+                <div className="max-w-7xl mx-auto px-4 py-6">
+                  {filteredTanks.length === 0 ? (
+                    <div className="text-center py-20 text-slate-500">
+                      <Icons.Filter size={48} className="mx-auto mb-4 opacity-50" />
+                      <p className="text-lg">{translate('noResults')}</p>
+                      {search && <p className="text-sm mt-2 text-slate-600">{translate('checkSpelling')}</p>}
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pb-20">
+                      {filteredTanks.map((tank) => {
+                        const isCollected = collection.has(tank.Name);
+                        const isComparing = compareList.find(t => t.Name === tank.Name);
+                        
+                        return (
+                          <div key={tank.id} className={`bg-slate-800 rounded-xl border-2 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-black/40 group flex flex-col ${isCollected ? 'border-emerald-500/30' : 'border-slate-700'} ${isComparing ? 'ring-2 ring-blue-500' : ''}`}>
+                            <div className="p-4 border-b border-slate-700/50 bg-slate-800 rounded-t-xl relative overflow-hidden">
+                              {isCollected && <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 to-transparent pointer-events-none"></div>}
+                              <div className="flex justify-between items-start mb-2 relative z-10">
+                                <div className="flex-1 pr-2">
+                                  <span className="text-[10px] tracking-wider text-slate-400 font-semibold">{tData(tank.Nation)}</span>
+                                  <h3 className="font-bold text-lg leading-tight text-white mb-1 line-clamp-2" title={tank.Name}>{tank.Name}</h3>
+                                  <div className="flex flex-wrap gap-2 mt-2">
+                                    <span className="text-xs px-2 py-0.5 rounded bg-slate-700 text-slate-300 border border-slate-600/50">{tData(tank.Age)}</span>
+                                    <span className={`text-xs px-2 py-0.5 rounded font-medium border border-transparent ${tank.Rarity.includes('Tier I') && !tank.Rarity.includes('II') && !tank.Rarity.includes('V') ? 'bg-slate-600 text-white' : 'bg-yellow-600/20 text-yellow-500 border-yellow-600/20'}`}>{tank.Rarity}</span>
+                                  </div>
+                                </div>
+                                <div className="flex flex-col gap-2">
+                                  <button onClick={() => toggleCollection(tank.Name)} className={`p-2 rounded-full transition-all duration-300 shadow-lg ${isCollected ? 'bg-emerald-500 text-white hover:bg-emerald-600' : 'bg-slate-700 text-slate-500 hover:bg-slate-600 hover:text-white'}`} title={isCollected ? translate('removeFromGarage') : translate('addToGarage')}><Icons.Check size={18} /></button>
+                                  <button onClick={() => setViewTank(tank)} className="p-2 rounded-full bg-slate-700 text-slate-400 hover:text-white hover:bg-blue-600 transition-colors shadow-lg" title={translate('details')}><Icons.Eye size={18} /></button>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="p-4 space-y-3 flex-grow">
+                              <StatBar label={translate('armor')} rawValue={tank.Armor} icon={Icons.Shield} lang={lang} statKey="Armor" />
+                              <StatBar label={translate('firepower')} rawValue={tank.Firepower} icon={Icons.Crosshair} lang={lang} statKey="Firepower" />
+                              <StatBar label={translate('mobility')} rawValue={tank.Mobility} icon={Icons.Zap} lang={lang} statKey="Mobility" />
+                              <StatBar label={translate('accuracy')} rawValue={tank.Accuracy} icon={Icons.Target} lang={lang} statKey="Accuracy" />
+                              <StatBar label={translate('visibility')} rawValue={tank.Visibility} icon={Icons.Eye} lang={lang} statKey="Visibility" />
+                              <div className="flex flex-wrap gap-1 mt-4 pt-3 border-t border-slate-700/30">
+                                <BooleanBadge label={translate('stabilizer')} value={tank.Stabilizer} lang={lang} />
+                                <BooleanBadge label={translate('thermal')} value={tank['Thermal Vision']} lang={lang} />
+                                <BooleanBadge label={translate('era')} value={tank.ERA} lang={lang} />
+                                <BooleanBadge label={translate('autoloader')} value={tank.Autoloader} lang={lang} />
+                                <BooleanBadge label={translate('aps')} value={tank.APS} lang={lang} />
+                                <BooleanBadge label={translate('nightVision')} value={tank['Night Vision']} lang={lang} />
+                                <BooleanBadge label={translate('autocannon')} value={tank.Autocannon} lang={lang} />
+                                <BooleanBadge label={translate('rangefinder')} value={tank.Rangefinder} lang={lang} />
+                                <BooleanBadge label={translate('protectedAmmo')} value={tank['Protected Ammo']} lang={lang} />
+                                <BooleanBadge label={translate('atgm_p')} value={tank['ATGM (P)']} lang={lang} />
+                                <BooleanBadge label={translate('atgm_s')} value={tank['ATGM (S)']} lang={lang} />
+                              </div>
+                            </div>
+                            <div className="p-3 border-t border-slate-700/50 bg-slate-800/50 rounded-b-xl flex justify-between items-center mt-auto">
+                              <button onClick={() => toggleCompare(tank)} className={`text-xs font-medium px-3 py-1.5 rounded flex items-center gap-1 transition-colors ${isComparing ? 'bg-blue-600 text-white shadow-md shadow-blue-900/40' : 'text-blue-400 hover:bg-blue-900/30'}`}>{isComparing ? <Icons.Check size={14} /> : <Icons.Scale size={14} />} {isComparing ? translate('selected') : translate('compare')}</button>
+                              <span className="text-[10px] text-slate-500">{translate('size')}: {tData(tank.Size, 'Size')}</span>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              </main>
+
+              {/* MODAL DE DÉTAILS */}
+              {viewTank && (
+                <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+                  <div className="bg-slate-800 w-full max-w-2xl max-h-[90vh] rounded-2xl border border-slate-700 shadow-2xl overflow-hidden flex flex-col animate-in fade-in zoom-in duration-200">
+                    <div className="p-4 border-b border-slate-700 flex justify-between items-center bg-slate-900 flex-shrink-0">
+                      <h2 className="text-xl font-bold text-white flex items-center gap-2"><Icons.Info className="text-emerald-400" /> {translate('details')}</h2>
+                      <button onClick={() => setViewTank(null)} className="text-slate-400 hover:text-white transition-colors bg-slate-800 p-1 rounded-full hover:bg-slate-700"><Icons.X size={24} /></button>
+                    </div>
+                    <div className="overflow-auto p-6 flex-grow custom-scrollbar">
+                      <div className="flex flex-col gap-6">
+                        <div>
+                          <h3 className="text-2xl font-bold text-white mb-1">{viewTank.Name}</h3>
+                          <div className="flex flex-wrap gap-2 text-sm text-slate-400">
+                            <span className="px-2 py-0.5 bg-slate-700 rounded text-white">{tData(viewTank.Nation)}</span>
+                            <span className="px-2 py-0.5 bg-slate-700 rounded text-white">{tData(viewTank.Age)}</span>
+                            <span className="px-2 py-0.5 bg-slate-700 rounded text-yellow-500">{viewTank.Rarity}</span>
+                          </div>
+                        </div>
+                        <div className="space-y-4">
+                          <h4 className="text-emerald-400 font-bold uppercase text-xs tracking-wider border-b border-emerald-900/30 pb-1">Statistiques Principales</h4>
+                          <StatBar label={translate('armor')} rawValue={viewTank.Armor} icon={Icons.Shield} lang={lang} statKey="Armor" />
+                          <StatBar label={translate('firepower')} rawValue={viewTank.Firepower} icon={Icons.Crosshair} lang={lang} statKey="Firepower" />
+                          <StatBar label={translate('mobility')} rawValue={viewTank.Mobility} icon={Icons.Zap} lang={lang} statKey="Mobility" />
+                          <StatBar label={translate('accuracy')} rawValue={viewTank.Accuracy} icon={Icons.Target} lang={lang} statKey="Accuracy" />
+                          <StatBar label={translate('visibility')} rawValue={viewTank.Visibility} icon={Icons.Eye} lang={lang} statKey="Visibility" />
+                          <div className="flex justify-between items-center text-sm text-slate-300 mt-2 p-2 bg-slate-700/30 rounded"><span>{translate('size')}</span><span className="font-bold">{tData(viewTank.Size, 'Size')}</span></div>
+                        </div>
+                        <div className="space-y-4">
+                          <h4 className="text-emerald-400 font-bold uppercase text-xs tracking-wider border-b border-emerald-900/30 pb-1">Équipements & Technologies</h4>
+                          <div className="grid grid-cols-2 gap-3">
+                            {[{ key: 'Stabilizer', label: 'stabilizer' }, { key: 'Thermal Vision', label: 'thermal' }, { key: 'Night Vision', label: 'nightVision' }, { key: 'ERA', label: 'era' }, { key: 'APS', label: 'aps' }, { key: 'Autoloader', label: 'autoloader' }, { key: 'Autocannon', label: 'autocannon' }, { key: 'Rangefinder', label: 'rangefinder' }, { key: 'Protected Ammo', label: 'protectedAmmo' }, { key: 'ATGM (P)', label: 'atgm_p' }, { key: 'ATGM (S)', label: 'atgm_s' }].map(item => (
+                              <div key={item.key} className="flex justify-between items-center p-2 bg-slate-700/20 rounded border border-slate-700/50">
+                                <span className="text-sm text-slate-400">{translate(item.label)}</span>
+                                {viewTank[item.key] === 'Yes' ? (<span className="text-green-400 flex items-center gap-1 text-xs font-bold"><Icons.Check size={14} /> {translate('yes')}</span>) : (<span className="text-slate-600 flex items-center gap-1 text-xs"><Icons.X size={14} /> {translate('no')}</span>)}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+              
+              {/* MODAL DE TAUX DE DROP */}
+              {showDropRates && (
+                <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+                  <div className="bg-slate-800 w-full max-w-md rounded-2xl border border-slate-700 shadow-2xl overflow-hidden flex flex-col animate-in fade-in zoom-in duration-200">
+                    <div className="p-4 border-b border-slate-700 flex justify-between items-center bg-slate-900">
+                      <h2 className="text-xl font-bold text-white flex items-center gap-2"><Icons.Percent className="text-purple-400" /> {translate('dropProbability')}</h2>
+                      <button onClick={() => setShowDropRates(false)} className="text-slate-400 hover:text-white transition-colors bg-slate-800 p-1 rounded-full hover:bg-slate-700"><Icons.X size={24} /></button>
+                    </div>
+                    <div className="p-6">
+                      <div className="space-y-2">
+                        {FIXED_DROP_RATES.map((item, index) => (
+                          <div key={index} className="flex justify-between items-center p-3 bg-slate-700/30 rounded-lg hover:bg-slate-700/50 transition-colors border border-slate-700/50">
+                            <span className={`font-bold ${item.color}`}>{item.tier}</span>
+                            <div className="flex items-center gap-2">
+                              <span className="font-mono text-slate-200 bg-slate-900 px-3 py-1 rounded border border-slate-700 min-w-[60px] text-center">{item.rate}</span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                      <p className="text-xs text-slate-500 mt-4 text-center italic">
+                        * {translate('dropNote').replace('{total}', tanks.length)}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* MODAL DE COMPARAISON */}
+              {showCompare && (
+                <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+                  <div className="bg-slate-800 w-full max-w-5xl max-h-[90vh] rounded-2xl border border-slate-700 shadow-2xl overflow-hidden flex flex-col animate-in fade-in zoom-in duration-200">
+                    <div className="p-4 border-b border-slate-700 flex justify-between items-center bg-slate-900 flex-shrink-0">
+                      <h2 className="text-xl font-bold text-white flex items-center gap-2"><Icons.Scale className="text-blue-500" /> {translate('compare')}</h2>
+                      <button onClick={() => setShowCompare(false)} className="text-slate-400 hover:text-white transition-colors bg-slate-800 p-1 rounded-full hover:bg-slate-700"><Icons.X size={24} /></button>
+                    </div>
+                    <div className="overflow-auto p-6 flex-grow custom-scrollbar">
+                      {compareList.length === 0 ? (
+                        <div className="text-center text-slate-500 py-10">{translate('selectTanks')}</div>
+                      ) : (
+                        <div className="grid gap-0 border border-slate-700 rounded-lg overflow-hidden text-sm shadow-xl" style={{ gridTemplateColumns: `180px repeat(${compareList.length}, minmax(220px, 1fr))` }}>
+                          <div className="bg-slate-900 p-4 font-bold text-slate-400 flex items-center border-b border-r border-slate-700">{translate('characteristic')}</div>
+                          {compareList.map(tankItem => (
+                            <div key={tankItem.id} className="bg-slate-900/95 p-4 font-bold text-white border-b border-r border-slate-700 min-w-[200px] relative group backdrop-blur">
+                              <div className="pr-6">{tankItem.Name}</div>
+                              <button onClick={() => setCompareList(compareList.filter(item => item.id !== tankItem.id))} className="absolute top-4 right-2 text-slate-600 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity" title={translate('remove')}><Icons.Trash2 size={16} /></button>
+                            </div>
+                          ))}
+                          {[
+                            { key: 'Nation', label: translate('nation') }, { key: 'Age', label: translate('age') }, { key: 'Rarity', label: translate('rarity') },
+                            { key: 'Armor', label: translate('armor'), isStat: true }, { key: 'Firepower', label: translate('firepower'), isStat: true }, { key: 'Accuracy', label: translate('accuracy'), isStat: true }, { key: 'Mobility', label: translate('mobility'), isStat: true }, { key: 'Visibility', label: translate('visibility'), isStat: true }, { key: 'Size', label: translate('size') },
+                            { key: 'Stabilizer', label: translate('stabilizer'), isBool: true }, { key: 'Night Vision', label: translate('nightVision'), isBool: true }, { key: 'Thermal Vision', label: translate('thermal'), isBool: true }, { key: 'ERA', label: translate('era'), isBool: true }, { key: 'APS', label: translate('aps'), isBool: true }, { key: 'Autoloader', label: translate('autoloader'), isBool: true }, { key: 'Autocannon', label: translate('autocannon'), isBool: true }, { key: 'Rangefinder', label: translate('rangefinder'), isBool: true }, { key: 'Protected Ammo', label: translate('protectedAmmo'), isBool: true }, { key: 'ATGM (P)', label: translate('atgm_p'), isBool: true }, { key: 'ATGM (S)', label: translate('atgm_s'), isBool: true },
+                          ].map((row) => (
+                            <React.Fragment key={row.key}>
+                              <div className="p-3 font-medium text-slate-300 bg-slate-800/80 border-b border-r border-slate-700 flex items-center">{row.label}</div>
+                              {compareList.map(tankItem => (
+                                <div key={`${tankItem.id}-${row.key}`} className="p-3 text-slate-200 border-b border-r border-slate-700 flex items-center bg-slate-800 hover:bg-slate-700/50 transition-colors">
+                                  {row.isBool ? (tankItem[row.key] === 'Yes' ? <div className="flex items-center gap-1 text-green-400 bg-green-900/20 px-2 py-1 rounded border border-green-900/30"><Icons.Check size={14} /> {translate('yes')}</div> : <div className="flex items-center gap-1 text-slate-500"><Icons.X size={14} /> {translate('no')}</div>) : row.isStat ? (<div className="w-full"><span className="block mb-1 text-xs text-slate-400 font-medium">{tData(tankItem[row.key], row.key)}</span><div className="h-1.5 w-full bg-slate-700 rounded-full overflow-hidden"><div className={`h-full rounded-full ${getStatColor(getStatValue(tankItem[row.key]))}`} style={{ width: `${getStatValue(tankItem[row.key])}%` }}></div></div></div>) : (tData(tankItem[row.key]))}
+                                </div>
+                              ))}
+                            </React.Fragment>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<TankApp />);
+    </script>
 </body>
-
 </html>
