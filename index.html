@@ -107,6 +107,10 @@
             size: "Taille",
             reset: "Réinitialiser",
             condition: "État",
+            instances: "exemplaires",
+            totalVehicles: "Véhicules total",
+            uniqueModels: "Modèles uniques",
+            addAnother: "Ajouter un autre",
             // Conditions
             salvage: "Salvage (Épave)",
             damaged: "Damaged (Endommagé)",
@@ -164,6 +168,10 @@
             size: "Size",
             reset: "Reset",
             condition: "Condition",
+            instances: "instances",
+            totalVehicles: "Total vehicles",
+            uniqueModels: "Unique models",
+            addAnother: "Add another",
              // Conditions
             salvage: "Salvage",
             damaged: "Damaged",
@@ -748,7 +756,8 @@ Tankora-72,Soviet Union,Modern,Event,Heavy,Medium,High,Medium,Fast,High,Medium,N
             Eye: (props) => <IconWrapper {...props}><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></IconWrapper>,
             Target: (props) => <IconWrapper {...props}><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></IconWrapper>,
             Info: (props) => <IconWrapper {...props}><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></IconWrapper>,
-            Percent: (props) => <IconWrapper {...props}><line x1="19" x2="5" y1="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></IconWrapper>
+            Percent: (props) => <IconWrapper {...props}><line x1="19" x2="5" y1="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></IconWrapper>,
+            Plus: (props) => <IconWrapper {...props}><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></IconWrapper>
         };
 
         const StatBar = ({ label, value, rawValue, icon: Icon, lang, statKey }) => {
@@ -787,7 +796,7 @@ Tankora-72,Soviet Union,Modern,Event,Heavy,Medium,High,Medium,Fast,High,Medium,N
 
         function TankApp() {
           const [tanks, setTanks] = useState([]);
-          // NEW: Collection is now an object { tankName: condition } instead of a Set
+          // NEW: Collection is now an object { tankName: [condition, condition, ...] } 
           const [collection, setCollection] = useState({});
           const [compareList, setCompareList] = useState([]);
           const [showCompare, setShowCompare] = useState(false);
@@ -813,15 +822,23 @@ Tankora-72,Soviet Union,Modern,Event,Heavy,Medium,High,Medium,Fast,High,Medium,N
             if (savedCollection) {
               try {
                   const parsed = JSON.parse(savedCollection);
-                  // Migration from Set (Array in JSON) to Object
+                  let newCollection = {};
+                  
                   if (Array.isArray(parsed)) {
-                      const newCollection = {};
-                      parsed.forEach(name => newCollection[name] = 'field_ready');
-                      setCollection(newCollection);
-                      localStorage.setItem('tankCollection', JSON.stringify(newCollection));
+                      // Migration V1 (Set -> Array)
+                      parsed.forEach(name => newCollection[name] = ['field_ready']);
                   } else {
-                      setCollection(parsed);
+                      // Migration V2 (String -> Array) or V3 (Keep Array)
+                      Object.keys(parsed).forEach(key => {
+                          if (typeof parsed[key] === 'string') {
+                              newCollection[key] = [parsed[key]];
+                          } else {
+                              newCollection[key] = parsed[key];
+                          }
+                      });
                   }
+                  setCollection(newCollection);
+                  localStorage.setItem('tankCollection', JSON.stringify(newCollection));
               } catch (e) {
                   console.error("Error loading collection", e);
                   setCollection({});
@@ -829,22 +846,42 @@ Tankora-72,Soviet Union,Modern,Event,Heavy,Medium,High,Medium,Fast,High,Medium,N
             }
           }, []);
 
-          const toggleCollection = (tankName) => {
+          // Add a new instance of a tank
+          const addTankInstance = (tankName) => {
             const newCollection = { ...collection };
-            if (newCollection[tankName]) {
-                delete newCollection[tankName];
-            } else {
-                newCollection[tankName] = 'field_ready'; // Default state
+            if (!newCollection[tankName]) {
+                newCollection[tankName] = [];
             }
+            newCollection[tankName].push('field_ready'); // Default condition
             setCollection(newCollection);
             localStorage.setItem('tankCollection', JSON.stringify(newCollection));
           };
 
-          const updateCondition = (tankName, condition) => {
+          // Remove specific instance
+          const removeTankInstance = (tankName, index) => {
               const newCollection = { ...collection };
-              newCollection[tankName] = condition;
-              setCollection(newCollection);
-              localStorage.setItem('tankCollection', JSON.stringify(newCollection));
+              if (newCollection[tankName]) {
+                  const newArr = newCollection[tankName].filter((_, i) => i !== index);
+                  if (newArr.length === 0) {
+                      delete newCollection[tankName];
+                  } else {
+                      newCollection[tankName] = newArr;
+                  }
+                  setCollection(newCollection);
+                  localStorage.setItem('tankCollection', JSON.stringify(newCollection));
+              }
+          };
+
+          // Update condition of specific instance
+          const updateInstanceCondition = (tankName, index, condition) => {
+              const newCollection = { ...collection };
+              if (newCollection[tankName] && newCollection[tankName][index]) {
+                  const newArr = [...newCollection[tankName]];
+                  newArr[index] = condition;
+                  newCollection[tankName] = newArr;
+                  setCollection(newCollection);
+                  localStorage.setItem('tankCollection', JSON.stringify(newCollection));
+              }
           };
 
           const resetFilters = () => {
@@ -892,11 +929,14 @@ Tankora-72,Soviet Union,Modern,Event,Heavy,Medium,High,Medium,Fast,High,Medium,N
           }, [tanks, search, filterNation, filterAge, filterRarity, showCollectedOnly, collection]);
 
           const collectionStats = useMemo(() => {
-            const ownedCount = Object.keys(collection).length;
+            const uniqueOwned = Object.keys(collection).length;
+            const totalItems = Object.values(collection).reduce((acc, curr) => acc + curr.length, 0);
+            
             return {
               total: tanks.length,
-              owned: ownedCount,
-              percent: tanks.length > 0 ? Math.round((ownedCount / tanks.length) * 100) : 0
+              uniqueOwned: uniqueOwned,
+              totalItems: totalItems,
+              percent: tanks.length > 0 ? Math.round((uniqueOwned / tanks.length) * 100) : 0
             };
           }, [tanks, collection]);
 
@@ -911,10 +951,16 @@ Tankora-72,Soviet Union,Modern,Event,Heavy,Medium,High,Medium,Fast,High,Medium,N
                       <h1 className="text-2xl font-bold bg-gradient-to-r from-emerald-400 to-blue-500 bg-clip-text text-transparent flex items-center gap-2">
                         <Icons.Database className="text-emerald-400" /> {translate('appTitle')}
                       </h1>
-                      <p className="text-xs text-slate-400 mt-1 flex items-center gap-2">
-                        {translate('garage')} : <span className="text-emerald-400 font-bold">{collectionStats.owned}</span> / {collectionStats.total} 
-                        <span className="bg-slate-700 px-2 rounded text-slate-300">{collectionStats.percent}%</span>
-                      </p>
+                      <div className="text-xs text-slate-400 mt-1 flex flex-col sm:flex-row sm:items-center gap-2">
+                        <span className="flex items-center gap-1">
+                            {translate('uniqueModels')} : <span className="text-emerald-400 font-bold">{collectionStats.uniqueOwned}</span> / {collectionStats.total} 
+                            <span className="bg-slate-700 px-2 rounded text-slate-300 ml-1">{collectionStats.percent}%</span>
+                        </span>
+                        <span className="hidden sm:inline text-slate-600">|</span>
+                        <span className="flex items-center gap-1">
+                            {translate('totalVehicles')} : <span className="text-blue-400 font-bold">{collectionStats.totalItems}</span>
+                        </span>
+                      </div>
                       <div className="w-full max-w-[200px] h-1.5 bg-slate-700 rounded-full mt-2 overflow-hidden">
                         <div className="h-full bg-emerald-500 rounded-full transition-all duration-700 shadow-[0_0_10px_rgba(16,185,129,0.5)]" style={{ width: `${collectionStats.percent}%` }}></div>
                       </div>
@@ -992,10 +1038,9 @@ Tankora-72,Soviet Union,Modern,Event,Heavy,Medium,High,Medium,Fast,High,Medium,N
                   ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pb-20">
                       {filteredTanks.map((tank) => {
-                        const collectedState = collection[tank.Name];
-                        const isCollected = collectedState !== undefined;
+                        const instances = collection[tank.Name] || [];
+                        const isCollected = instances.length > 0;
                         const isComparing = compareList.find(t => t.Name === tank.Name);
-                        const currentCondition = isCollected ? CONDITIONS[collectedState] : null;
                         
                         return (
                           <div key={tank.id} className={`bg-slate-800 rounded-xl border-2 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-black/40 group flex flex-col ${isCollected ? 'border-emerald-500/30' : 'border-slate-700'} ${isComparing ? 'ring-2 ring-blue-500' : ''}`}>
@@ -1010,31 +1055,47 @@ Tankora-72,Soviet Union,Modern,Event,Heavy,Medium,High,Medium,Fast,High,Medium,N
                                     <span className={`text-xs px-2 py-0.5 rounded font-medium border border-transparent ${tank.Rarity.includes('Tier I') && !tank.Rarity.includes('II') && !tank.Rarity.includes('V') ? 'bg-slate-600 text-white' : 'bg-yellow-600/20 text-yellow-500 border-yellow-600/20'}`}>{tank.Rarity}</span>
                                   </div>
                                 </div>
-                                <div className="flex flex-col gap-2">
-                                  <button onClick={() => toggleCollection(tank.Name)} className={`p-2 rounded-full transition-all duration-300 shadow-lg ${isCollected ? 'bg-emerald-500 text-white hover:bg-emerald-600' : 'bg-slate-700 text-slate-500 hover:bg-slate-600 hover:text-white'}`} title={isCollected ? translate('removeFromGarage') : translate('addToGarage')}><Icons.Check size={18} /></button>
+                                <div className="flex flex-col gap-2 items-center">
+                                  <button onClick={() => addTankInstance(tank.Name)} className={`p-2 rounded-full transition-all duration-300 shadow-lg ${isCollected ? 'bg-emerald-500 text-white hover:bg-emerald-600' : 'bg-slate-700 text-slate-500 hover:bg-slate-600 hover:text-white'}`} title={translate('addAnother')}>
+                                    {isCollected ? <Icons.Plus size={18} /> : <Icons.Plus size={18} />}
+                                  </button>
                                   <button onClick={() => setViewTank(tank)} className="p-2 rounded-full bg-slate-700 text-slate-400 hover:text-white hover:bg-blue-600 transition-colors shadow-lg" title={translate('details')}><Icons.Eye size={18} /></button>
+                                  {isCollected && (
+                                      <span className="text-xs font-bold text-emerald-400 bg-emerald-900/30 px-2 py-0.5 rounded border border-emerald-500/30">x{instances.length}</span>
+                                  )}
                                 </div>
                               </div>
                             </div>
                             
-                            {/* CONDITION SELECTOR (IF COLLECTED) */}
+                            {/* CONDITION SELECTORS (IF COLLECTED) */}
                             {isCollected && (
-                                <div className="px-4 pt-2">
-                                    <select 
-                                        value={collectedState} 
-                                        onChange={(e) => updateCondition(tank.Name, e.target.value)}
-                                        className={`w-full text-[10px] font-bold uppercase tracking-wider py-1 rounded border condition-select cursor-pointer outline-none transition-colors ${currentCondition ? currentCondition.color : 'bg-slate-700'}`}
-                                    >
-                                        {Object.values(CONDITIONS).map(c => (
-                                            <option key={c.id} value={c.id} className="bg-slate-800 text-slate-200">
-                                                {translate(c.id)}
-                                            </option>
-                                        ))}
-                                    </select>
+                                <div className="px-4 pt-2 max-h-32 overflow-y-auto custom-scrollbar space-y-2 mb-2">
+                                    {instances.map((condition, idx) => (
+                                        <div key={idx} className="flex gap-1 items-center animate-in fade-in slide-in-from-top-1 duration-200">
+                                            <select 
+                                                value={condition} 
+                                                onChange={(e) => updateInstanceCondition(tank.Name, idx, e.target.value)}
+                                                className={`flex-grow text-[10px] font-bold uppercase tracking-wider py-1 px-1 rounded border condition-select cursor-pointer outline-none transition-colors ${CONDITIONS[condition] ? CONDITIONS[condition].color : 'bg-slate-700'}`}
+                                            >
+                                                {Object.values(CONDITIONS).map(c => (
+                                                    <option key={c.id} value={c.id} className="bg-slate-800 text-slate-200">
+                                                        {translate(c.id)}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                            <button 
+                                                onClick={() => removeTankInstance(tank.Name, idx)}
+                                                className="p-1 text-slate-500 hover:text-red-400 transition-colors rounded hover:bg-red-900/20"
+                                                title={translate('removeInstance')}
+                                            >
+                                                <Icons.Trash2 size={14} />
+                                            </button>
+                                        </div>
+                                    ))}
                                 </div>
                             )}
 
-                            <div className="p-4 space-y-3 flex-grow">
+                            <div className="p-4 space-y-3 flex-grow pt-0 mt-2">
                               <StatBar label={translate('armor')} rawValue={tank.Armor} icon={Icons.Shield} lang={lang} statKey="Armor" />
                               <StatBar label={translate('firepower')} rawValue={tank.Firepower} icon={Icons.Crosshair} lang={lang} statKey="Firepower" />
                               <StatBar label={translate('mobility')} rawValue={tank.Mobility} icon={Icons.Zap} lang={lang} statKey="Mobility" />
@@ -1083,10 +1144,14 @@ Tankora-72,Soviet Union,Modern,Event,Heavy,Medium,High,Medium,Fast,High,Medium,N
                             <span className="px-2 py-0.5 bg-slate-700 rounded text-white">{tData(viewTank.Age)}</span>
                             <span className="px-2 py-0.5 bg-slate-700 rounded text-yellow-500">{viewTank.Rarity}</span>
                             {/* Display Condition in Modal if owned */}
-                            {collection[viewTank.Name] && (
-                                <span className={`px-2 py-0.5 rounded border ${CONDITIONS[collection[viewTank.Name]].color}`}>
-                                    {translate(collection[viewTank.Name])}
-                                </span>
+                            {collection[viewTank.Name] && collection[viewTank.Name].length > 0 && (
+                                <div className="flex flex-wrap gap-1 mt-1">
+                                    {collection[viewTank.Name].map((cond, idx) => (
+                                        <span key={idx} className={`px-2 py-0.5 rounded border text-xs ${CONDITIONS[cond] ? CONDITIONS[cond].color : ''}`}>
+                                            {translate(cond)}
+                                        </span>
+                                    ))}
+                                </div>
                             )}
                           </div>
                         </div>
@@ -1165,7 +1230,7 @@ Tankora-72,Soviet Union,Modern,Event,Heavy,Medium,High,Medium,Fast,High,Medium,N
                           ))}
                           {[
                             { key: 'Nation', label: translate('nation') }, { key: 'Age', label: translate('age') }, { key: 'Rarity', label: translate('rarity') },
-                            { key: 'Condition', label: translate('condition') }, // Added Condition Row
+                            { key: 'Condition', label: translate('condition') }, // Condition Row
                             { key: 'Armor', label: translate('armor'), isStat: true }, { key: 'Firepower', label: translate('firepower'), isStat: true }, { key: 'Accuracy', label: translate('accuracy'), isStat: true }, { key: 'Mobility', label: translate('mobility'), isStat: true }, { key: 'Visibility', label: translate('visibility'), isStat: true }, { key: 'Size', label: translate('size') },
                             { key: 'Stabilizer', label: translate('stabilizer'), isBool: true }, { key: 'Night Vision', label: translate('nightVision'), isBool: true }, { key: 'Thermal Vision', label: translate('thermal'), isBool: true }, { key: 'ERA', label: translate('era'), isBool: true }, { key: 'APS', label: translate('aps'), isBool: true }, { key: 'Autoloader', label: translate('autoloader'), isBool: true }, { key: 'Autocannon', label: translate('autocannon'), isBool: true }, { key: 'Rangefinder', label: translate('rangefinder'), isBool: true }, { key: 'Protected Ammo', label: translate('protectedAmmo'), isBool: true }, { key: 'ATGM (P)', label: translate('atgm_p'), isBool: true }, { key: 'ATGM (S)', label: translate('atgm_s'), isBool: true },
                           ].map((row) => (
@@ -1174,10 +1239,14 @@ Tankora-72,Soviet Union,Modern,Event,Heavy,Medium,High,Medium,Fast,High,Medium,N
                               {compareList.map(tankItem => (
                                 <div key={`${tankItem.id}-${row.key}`} className="p-3 text-slate-200 border-b border-r border-slate-700 flex items-center bg-slate-800 hover:bg-slate-700/50 transition-colors">
                                   {row.key === 'Condition' ? (
-                                     collection[tankItem.Name] ? (
-                                        <span className={`px-2 py-0.5 rounded text-xs border ${CONDITIONS[collection[tankItem.Name]].color}`}>
-                                            {translate(collection[tankItem.Name])}
-                                        </span>
+                                     collection[tankItem.Name] && collection[tankItem.Name].length > 0 ? (
+                                        <div className="flex flex-col gap-1">
+                                            {collection[tankItem.Name].map((cond, idx) => (
+                                                <span key={idx} className={`px-2 py-0.5 rounded text-xs border w-fit ${CONDITIONS[cond] ? CONDITIONS[cond].color : ''}`}>
+                                                    {translate(cond)}
+                                                </span>
+                                            ))}
+                                        </div>
                                      ) : <span className="text-slate-500 italic">-</span>
                                   ) : row.isBool ? (tankItem[row.key] === 'Yes' ? <div className="flex items-center gap-1 text-green-400 bg-green-900/20 px-2 py-1 rounded border border-green-900/30"><Icons.Check size={14} /> {translate('yes')}</div> : <div className="flex items-center gap-1 text-slate-500"><Icons.X size={14} /> {translate('no')}</div>) : row.isStat ? (<div className="w-full"><span className="block mb-1 text-xs text-slate-400 font-medium">{tData(tankItem[row.key], row.key)}</span><div className="h-1.5 w-full bg-slate-700 rounded-full overflow-hidden"><div className={`h-full rounded-full ${getStatColor(getStatValue(tankItem[row.key]))}`} style={{ width: `${getStatValue(tankItem[row.key])}%` }}></div></div></div>) : (tData(tankItem[row.key]))}
                                 </div>
