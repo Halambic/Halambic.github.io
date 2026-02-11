@@ -13,14 +13,14 @@
   <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Rajdhani:wght@400;500;600;700&display=swap"
     rel="stylesheet">
 
-  <!-- Tailwind CSS (Style) -->
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- React & ReactDOM (Framework) -->
+  <!-- React & ReactDOM -->
   <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
 
-  <!-- Babel (Pour lire le code React dans le navigateur) -->
+  <!-- Babel -->
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
   <!-- Configuration Tailwind -->
@@ -297,6 +297,7 @@
         supplyDrop: "Ravitaillement",
         openSupply: "Ouvrir caisse",
         statsReport: "Rapport de Progression",
+        statsWW2Only: "Stats PGM-SGM uniquement",
         timerReady: "J'AI WORK !",
         timerRunning: "PROCHAIN",
         timerCancel: "Annuler",
@@ -366,6 +367,7 @@
         supplyDrop: "Supply Drop",
         openSupply: "Open Crate",
         statsReport: "Progression Report",
+        statsWW2Only: "WW1-WW2 Stats Only",
         timerReady: "I WORKED!",
         timerRunning: "NEXT",
         timerCancel: "Cancel",
@@ -842,6 +844,7 @@ M47 Patton 331,Austria,Cold War,Event,Medium,Medium,High,Medium,Normal,Medium,Me
 Tankora-72,Soviet Union,Modern,Event,Heavy,Medium,High,Medium,Fast,High,Medium,No,Yes,No,No,Yes,Yes,No,No,No,No,No
 T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Medium,Fast,High,Medium,No,No,No,No,No,No,No,No,No,No,No
 `;
+    
     // ==========================================
     // 3. COMPOSANTS UTILITAIRES (Radar, Dropdowns, etc.)
     // ==========================================
@@ -874,7 +877,9 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
       Award: (props) => <IconWrapper {...props}><circle cx="12" cy="8" r="7" /><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88" /></IconWrapper>,
       User: (props) => <IconWrapper {...props}><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></IconWrapper>,
       CheckCircle: (props) => <IconWrapper {...props}><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><polyline points="22 4 12 14.01 9 11.01" /></IconWrapper>,
-      Gift: (props) => <IconWrapper {...props}><polyline points="20 12 20 22 4 22 4 12" /><rect width="20" height="5" x="2" y="7" /><line x1="12" x2="12" y1="22" y2="7" /><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z" /><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z" /></IconWrapper>
+      Gift: (props) => <IconWrapper {...props}><polyline points="20 12 20 22 4 22 4 12" /><rect width="20" height="5" x="2" y="7" /><line x1="12" x2="12" y1="22" y2="7" /><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z" /><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z" /></IconWrapper>,
+      ToggleLeft: (props) => <IconWrapper {...props}><rect x="1" y="5" width="22" height="14" rx="7" ry="7" /><circle cx="8" cy="12" r="3" /></IconWrapper>,
+      ToggleRight: (props) => <IconWrapper {...props}><rect x="1" y="5" width="22" height="14" rx="7" ry="7" /><circle cx="16" cy="12" r="3" /></IconWrapper>
     };
 
     const DrawTimer = ({ lang }) => {
@@ -889,6 +894,7 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
             const now = Date.now();
             const targetTime = parseInt(target, 10);
             const diff = Math.floor((targetTime - now) / 1000);
+            
             if (diff > 0) {
               setTimeLeft(diff);
               setIsRunning(true);
@@ -1223,26 +1229,43 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
     };
 
     const ProfileModal = ({ isOpen, onClose, stats, lang, tanks, collection }) => {
+      const [filterWW2, setFilterWW2] = useState(false);
+      
       if (!isOpen) return null;
+      
       const getGroupStats = (groupKey) => {
         const counts = {};
-        tanks.forEach(t => {
+        
+        // Filter source tanks if WW2 filter is active
+        const relevantTanks = filterWW2 
+            ? tanks.filter(t => t.Age === 'WW1-WW2') 
+            : tanks;
+            
+        // Init total counts based on relevant tanks
+        relevantTanks.forEach(t => {
           const key = t[groupKey];
           if (!key) return;
           if (!counts[key]) counts[key] = { total: 0, owned: 0 };
           counts[key].total++;
         });
+        
+        // Count owned
         Object.keys(collection).forEach(id => {
           const tank = tanks.find(t => t.id.toString() === id.toString());
+          // Only count if tank exists AND key exists AND tank matches filter if active
           if (tank && tank[groupKey] && counts[tank[groupKey]]) {
-            counts[tank[groupKey]].owned++;
+             if (filterWW2 && tank.Age !== 'WW1-WW2') return;
+             counts[tank[groupKey]].owned++;
           }
         });
+        
         return Object.entries(counts).map(([label, data]) => ({ label, ...data, percent: Math.round((data.owned / data.total) * 100) })).sort((a, b) => b.percent - a.percent);
       };
+      
       const nationStats = getGroupStats('Nation');
       const ageStats = getGroupStats('Age');
       const tierStats = getGroupStats('Rarity');
+      
       return (
         <div className="fixed inset-0 z-50 bg-slate-900/90 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in duration-300" onClick={onClose}>
           <div className="bg-[#0f141a] w-full max-w-4xl max-h-[90vh] rounded-3xl border border-white/10 shadow-2xl overflow-hidden flex flex-col md:flex-row animate-in slide-in-from-bottom duration-300" onClick={e => e.stopPropagation()}>
@@ -1263,7 +1286,16 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
             <div className="flex-1 p-8 overflow-y-auto custom-scrollbar bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMCAwIDQwIDQwIiBmaWxsPSJub25lIiBzdHJva2U9IiMzMzQxNTUiIHN0cm9rZS1vcGFjaXR5PSIwLjAzIiBzdHJva2Utd2lkdGg9IjEiPjxwYXRoIGQ9Ik0wIDQwaDQwTTAgMGg0MCIvPjwvc3ZnPg==')]">
               <div className="flex justify-between items-center mb-6">
                 <h3 className="text-xl font-bold text-white flex items-center gap-2 uppercase tracking-wide"><Icons.Database className="text-blue-500" /> {lang === 'fr' ? 'Progression Détaillée' : 'Detailed Progression'}</h3>
-                <button onClick={onClose} className="text-slate-500 hover:text-white transition-colors"><Icons.X size={24} /></button>
+                <div className="flex items-center gap-4">
+                     <button 
+                        onClick={() => setFilterWW2(!filterWW2)}
+                        className={`flex items-center gap-2 px-3 py-1.5 rounded-full border text-xs font-bold transition-all ${filterWW2 ? 'bg-amber-600 border-amber-500 text-white' : 'bg-slate-800 border-white/10 text-slate-400 hover:text-white'}`}
+                     >
+                        {filterWW2 ? <Icons.ToggleRight size={16} /> : <Icons.ToggleLeft size={16} />}
+                        {lang === 'fr' ? 'PGM-SGM Uniquement' : 'WW1-WW2 Only'}
+                     </button>
+                    <button onClick={onClose} className="text-slate-500 hover:text-white transition-colors"><Icons.X size={24} /></button>
+                </div>
               </div>
               <div className="space-y-8 animate-in fade-in slide-in-from-right-4 duration-300">
                 <div>
