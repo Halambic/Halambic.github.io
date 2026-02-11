@@ -97,7 +97,7 @@
         viewMode: "Vue", compactView: "Liste", cardView: "Cartes", exportData: "Sauvegarder", importData: "Charger", fileError: "Fichier invalide", dataManagement: "Gestion des données", sortBy: "Trier par", sortNameAsc: "Nom (A-Z)", sortNameDesc: "Nom (Z-A)", sortTierAsc: "Tier (Croissant)", sortTierDesc: "Tier (Décroissant)", sortNation: "Nation", advancedFilters: "Filtres Avancés", toastSaved: "Sauvegarde effectuée !", toastLoaded: "Sauvegarde chargée !", toastAdded: "ajouté au garage !", toastRemoved: "retiré du garage.", distribution: "Répartition par Nation"
       },
       en: {
-        appTitle: "Tankora DB", garage: "Garage", compare: "Compare", details: "Details", dropRates: "Drop Rates", dropProbability: "Drop Probability", searchPlaceholder: "Search...", allNations: "All nations", allAges: "All ages", allTiers: "All tiers", collected: "Collected", myTanks: "My tanks", noResults: "No tanks match these criteria.", checkSpelling: "Try checking your spelling.", addToGarage: "Add to garage", removeFromGarage: "Remove from garage", selected: "Selected", size: "Size", reset: "Reset", condition: "Condition", instances: "ex.", totalVehicles: "Total vehicles", uniqueModels: "Unique models", addAnother: "Add", credits: "All rights reserved to the creator of the Discord bot", supplyDrop: "Supply Drop", openSupply: "Open Crate", statsReport: "Progression Report", timerReady: "I WORKED!", timerRunning: "NEXT", timerCancel: "Cancel", filterStatus: "Status", statusAll: "All tanks", statusOwned: "Collected", statusMissing: "Missing", statusDuplicates: "Duplicates", salvage: "Salvage", damaged: "Damaged", worn: "Worn", field_ready: "Field Ready", parade_ready: "Parade Ready", factory_new: "Factory New", armor: "Armor", firepower: "Firepower", mobility: "Mobility", accuracy: "Accuracy", visibility: "Visibility", stabilizer: "Stabilizer", thermal: "Thermal", nightVision: "Night vision", era: "ERA", aps: "APS", autoloader: "Autoloader", autocannon: "Autocannon", protectedAmmo: "Protected ammo", rangefinder: "Rangefinder", atgm_p: "ATGM (P)", atgm_s: "ATGM (S)", characteristic: "Characteristic", nation: "Nation", age: "Age", rarity: "Tier/rarity", remove: "Remove", yes: "Yes", no: "No", selectTanks: "Select tanks to start comparing.", dropNote: "Official drop rates defined for the game.",
+        appTitle: "Tankora DB", garage: "Garage", compare: "Compare", details: "Details", dropRates: "Drop Rates", dropProbability: "Drop Probability", searchPlaceholder: "Search for a tank...", allNations: "All nations", allAges: "All ages", allTiers: "All tiers", collected: "Collected", myTanks: "My tanks", noResults: "No tanks match these criteria.", checkSpelling: "Try checking your spelling.", addToGarage: "Add to garage", removeFromGarage: "Remove from garage", selected: "Selected", size: "Size", reset: "Reset", condition: "Condition", instances: "ex.", totalVehicles: "Total vehicles", uniqueModels: "Unique models", addAnother: "Add", credits: "All rights reserved to the creator of the Discord bot", supplyDrop: "Supply Drop", openSupply: "Open Crate", statsReport: "Progression Report", timerReady: "I WORKED!", timerRunning: "NEXT", timerCancel: "Cancel", filterStatus: "Status", statusAll: "All tanks", statusOwned: "Collected", statusMissing: "Missing", statusDuplicates: "Duplicates", salvage: "Salvage", damaged: "Damaged", worn: "Worn", field_ready: "Field Ready", parade_ready: "Parade Ready", factory_new: "Factory New", armor: "Armor", firepower: "Firepower", mobility: "Mobility", accuracy: "Accuracy", visibility: "Visibility", stabilizer: "Stabilizer", thermal: "Thermal", nightVision: "Night vision", era: "ERA", aps: "APS", autoloader: "Autoloader", autocannon: "Autocannon", protectedAmmo: "Protected ammo", rangefinder: "Rangefinder", atgm_p: "ATGM (P)", atgm_s: "ATGM (S)", characteristic: "Characteristic", nation: "Nation", age: "Age", rarity: "Tier/rarity", remove: "Remove", yes: "Yes", no: "No", selectTanks: "Select tanks to start comparing.", dropNote: "Official drop rates defined for the game.",
         viewMode: "View", compactView: "List", cardView: "Cards", exportData: "Save", importData: "Load", fileError: "Invalid file", dataManagement: "Data Management", sortBy: "Sort by", sortNameAsc: "Name (A-Z)", sortNameDesc: "Name (Z-A)", sortTierAsc: "Tier (Low to High)", sortTierDesc: "Tier (High to Low)", sortNation: "Nation", advancedFilters: "Advanced Filters", toastSaved: "Save successful!", toastLoaded: "Save loaded!", toastAdded: "added to garage!", toastRemoved: "removed from garage.", distribution: "Nation Distribution"
       }
     };
@@ -116,6 +116,9 @@
       { tier: 'Event', rate: 'Spécial', color: 'text-yellow-400' },
     ];
 
+    // ==========================================
+    // 2. DONNÉES CSV
+    // ==========================================
     const rawCSV = `Name,Nation,Age,Rarity,Armor,Firepower,Accuracy,Size,Mobility,Angled,Visibility,Autocannon,Stabilizer,Protected Ammo,Rangefinder,Autoloader,Night Vision,Thermal Vision,ERA,ATGM (P),ATGM (S),APS
 T-26 (twin-turreted),Soviet Union,WW1-WW2,Tier I,Very Light,Small Arms,Low,Small,Slow,Low,Low,No,No,No,No,No,No,No,No,No,No,No
 T-26,Soviet Union,WW1-WW2,Tier I,Very Light,Light,Medium,Small,Slow,Low,Low,No,No,No,No,No,No,No,No,No,No,No
@@ -343,7 +346,7 @@ T-64BV,Soviet Union,Modern,Tier III,Heavy,Heavy,High,Medium,Normal,High,High,No,
 T-72 Ural,Soviet Union,Modern,Tier III,Heavy,Medium,High,Medium,Fast,High,Medium,No,Yes,No,No,Yes,Yes,No,No,No,No,No
 T-72A,Soviet Union,Modern,Tier III,Heavy,Heavy,High,Medium,Fast,High,High,No,Yes,No,Yes,Yes,Yes,No,No,No,No,No
 T-72B,Soviet Union,Modern,Tier III,Heavy,Heavy,High,Medium,Fast,High,High,No,Yes,No,Yes,Yes,Yes,No,Yes,No,Yes,No
-T-72B3,Russia,Modern,Tier III,Heavy,Heavy,Very High,Medium,Fast,High,High,No,Yes,Yes,Yes,Yes,Yes,Yes,Yes,No,Yes,No
+T-72B3,Russia,Modern,Tier IV,Heavy,Heavy,Very High,Medium,Fast,High,High,No,Yes,Yes,Yes,Yes,Yes,Yes,Yes,No,Yes,No
 BMPT Terminator,Russia,Modern,Tier III,Heavy,Very Light,Low,Medium,Fast,Medium,High,Yes,Yes,No,Yes,No,Yes,Yes,Yes,No,Yes,No
 BMPT-72 Terminator-2,Russia,Modern,Tier III,Heavy,Very Light,Low,Medium,Fast,Medium,High,Yes,Yes,No,Yes,No,Yes,Yes,Yes,No,Yes,No
 T-80,Soviet Union,Modern,Tier IV,Heavy,Heavy,Very High,Medium,Very Fast,High,Medium,No,Yes,No,Yes,Yes,Yes,No,No,No,No,No
@@ -1150,7 +1153,19 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
       const [viewMode, setViewMode] = useState('grid');
       const [sortBy, setSortBy] = useState('none');
       const [showAdvanced, setShowAdvanced] = useState(false);
-      const [advancedFilters, setAdvancedFilters] = useState({ stabilizer: false, thermal: false, nightVision: false, era: false, missile: false });
+      const [advancedFilters, setAdvancedFilters] = useState({ 
+          stabilizer: false, 
+          thermal: false, 
+          nightVision: false, 
+          era: false, 
+          aps: false,
+          autoloader: false,
+          autocannon: false,
+          rangefinder: false,
+          protectedAmmo: false,
+          missile: false, // ATGM (P)
+          missile_s: false // ATGM (S)
+      });
       const [toasts, setToasts] = useState([]);
       
       const scrollContainerRef = useRef(null);
@@ -1241,7 +1256,7 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
 
       const resetFilters = () => { 
           setSearch(''); setFilterNation('All'); setFilterAge('All'); setFilterRarity('All'); setOwnershipFilter('all'); 
-          setAdvancedFilters({ stabilizer: false, thermal: false, nightVision: false, era: false, missile: false });
+          setAdvancedFilters({ stabilizer: false, thermal: false, nightVision: false, era: false, aps: false, autoloader: false, autocannon: false, rangefinder: false, protectedAmmo: false, missile: false, missile_s: false });
           setSortBy('none');
       };
       useEffect(() => { const scanline = document.querySelector('.scanline'); if (scanline) scanline.style.display = visualsEnabled ? 'block' : 'none'; }, [visualsEnabled]);
@@ -1267,7 +1282,13 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
           if (advancedFilters.thermal && tank['Thermal Vision'] !== 'Yes') matchAdvanced = false;
           if (advancedFilters.nightVision && tank['Night Vision'] !== 'Yes') matchAdvanced = false;
           if (advancedFilters.era && tank.ERA !== 'Yes') matchAdvanced = false;
-          if (advancedFilters.missile && tank['ATGM (P)'] !== 'Yes' && tank['ATGM (S)'] !== 'Yes') matchAdvanced = false;
+          if (advancedFilters.aps && tank.APS !== 'Yes') matchAdvanced = false;
+          if (advancedFilters.autoloader && tank.Autoloader !== 'Yes') matchAdvanced = false;
+          if (advancedFilters.autocannon && tank.Autocannon !== 'Yes') matchAdvanced = false;
+          if (advancedFilters.rangefinder && tank.Rangefinder !== 'Yes') matchAdvanced = false;
+          if (advancedFilters.protectedAmmo && tank['Protected Ammo'] !== 'Yes') matchAdvanced = false;
+          if (advancedFilters.missile && tank['ATGM (P)'] !== 'Yes') matchAdvanced = false;
+          if (advancedFilters.missile_s && tank['ATGM (S)'] !== 'Yes') matchAdvanced = false;
 
           return matchSearch && matchNation && matchAge && matchRarity && matchOwnership && matchAdvanced;
         });
@@ -1308,7 +1329,7 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                   <h1 className="text-4xl md:text-5xl font-military uppercase tracking-wider text-slate-100 flex items-center gap-4 drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]">
                     <span className="text-emerald-500 drop-shadow-[0_0_15px_rgba(16,185,129,0.8)]"><Icons.Tank size={42} strokeWidth={2.5} /></span>
                     <span>Tankora <span className="text-emerald-500">DB</span></span>
-                    <span className="text-[10px] font-sans font-bold bg-slate-800 text-slate-400 px-2 py-1 rounded border border-white/10 ml-2 self-start mt-2">v2.5</span>
+                    <span className="text-[10px] font-sans font-bold bg-slate-800 text-slate-400 px-2 py-1 rounded border border-white/10 ml-2 self-start mt-2">v2.6</span>
                   </h1>
                   <div className="text-xs font-medium text-slate-400 mt-2 flex flex-col sm:flex-row sm:items-center gap-3">
                     <span className="flex items-center gap-1.5 bg-slate-800/50 px-3 py-1 rounded-full border border-white/5 cursor-pointer hover:bg-slate-800 hover:text-emerald-400 transition-colors group" onClick={() => setShowProfile(true)} title={translate('details')}>
@@ -1384,7 +1405,13 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                             { key: 'thermal', label: 'thermal' },
                             { key: 'nightVision', label: 'nightVision' },
                             { key: 'era', label: 'era' },
-                            { key: 'missile', label: 'atgm_p' }
+                            { key: 'aps', label: 'aps' },
+                            { key: 'autoloader', label: 'autoloader' },
+                            { key: 'autocannon', label: 'autocannon' },
+                            { key: 'rangefinder', label: 'rangefinder' },
+                            { key: 'protectedAmmo', label: 'protectedAmmo' },
+                            { key: 'missile', label: 'atgm_p' },
+                            { key: 'missile_s', label: 'atgm_s' }
                         ].map(f => (
                             <button 
                                 key={f.key}
@@ -1591,7 +1618,7 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
             <p className="flex justify-center items-center gap-2">
               <span className="text-emerald-400 hover:text-emerald-300 transition-colors uppercase tracking-widest">{translate('credits')}</span>
               <span className="opacity-30">|</span>
-              <span className="opacity-50">v2.5 Reforged</span>
+              <span className="opacity-50">v2.6 Reforged</span>
             </p>
           </footer>
         </div>
