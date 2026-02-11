@@ -335,7 +335,14 @@
         yes: "Oui",
         no: "Non",
         selectTanks: "Sélectionnez des chars pour commencer la comparaison.",
-        dropNote: "Taux officiels définis pour le jeu."
+        dropNote: "Taux officiels définis pour le jeu.",
+        viewMode: "Vue",
+        compactView: "Liste",
+        cardView: "Cartes",
+        exportData: "Sauvegarder (Export)",
+        importData: "Charger (Import)",
+        fileError: "Fichier invalide",
+        dataManagement: "Gestion des données"
       },
       en: {
         appTitle: "Tankora DB",
@@ -404,7 +411,14 @@
         yes: "Yes",
         no: "No",
         selectTanks: "Select tanks to start comparing.",
-        dropNote: "Official drop rates defined for the game."
+        dropNote: "Official drop rates defined for the game.",
+        viewMode: "View",
+        compactView: "List",
+        cardView: "Cards",
+        exportData: "Save (Export)",
+        importData: "Load (Import)",
+        fileError: "Invalid file",
+        dataManagement: "Data Management"
       }
     };
 
@@ -664,7 +678,7 @@ Chieftain Mk 1,United Kingdom,Cold War,Tier V,Heavy,Very Heavy,Very High,Medium,
 Chieftain Mk 2,United Kingdom,Cold War,Tier V,Heavy,Very Heavy,Very High,Medium,Normal,High,Very High,No,Yes,No,No,No,No,No,No,No,No,No
 Humber Hornet,United Kingdom,Cold War,Tier II,Very Light,N/A,N/A,Medium,Fast,Low,High,No,No,No,No,No,No,No,No,Yes,No,No
 Schützenpanzer SPz 11-2 Kurz,Germany,Cold War,Tier I,Very Light,Very Light,Low,Small,Fast,Medium,Medium,Yes,No,No,No,No,No,No,No,No,No,No
-Schützenpanzer Lang HS.30,Germany,Cold War,Tier I,Very Light,Very Light,Low,Small,Fast,Low,Medium,Yes,No,No,No,No,No,No,No,No,No,No
+Schützenpanzer Lang HS.30,Germany,Cold War,Tier I,Very Light,Very Light,Low,Small,Fast,Low,Medium,Yes,No,No,No,No,No,No,No,No,No,No,No
 Schützenpanzer Lang HS.30 (106mm),Germany,Cold War,Tier II,Very Light,Medium,High,Small,Fast,Low,Medium,No,No,No,No,No,No,No,No,No,No,No
 Leopard 1,Germany,Cold War,Tier IV,Light,Heavy,Very High,Medium,Fast,Medium,High,No,No,No,No,No,Yes,No,No,No,No,No
 Kanonenjagdpanzer,Germany,Cold War,Tier III,Light,Medium,High,Small,Fast,Low,High,No,No,No,No,No,Yes,No,No,No,No,No
@@ -842,7 +856,6 @@ M47 Patton 331,Austria,Cold War,Event,Medium,Medium,High,Medium,Normal,Medium,Me
 Tankora-72,Soviet Union,Modern,Event,Heavy,Medium,High,Medium,Fast,High,Medium,No,Yes,No,No,Yes,Yes,No,No,No,No,No
 T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Medium,Fast,High,Medium,No,No,No,No,No,No,No,No,No,No,No
 `;
-    
     // ==========================================
     // 3. COMPOSANTS UTILITAIRES (Radar, Dropdowns, etc.)
     // ==========================================
@@ -877,7 +890,13 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
       CheckCircle: (props) => <IconWrapper {...props}><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><polyline points="22 4 12 14.01 9 11.01" /></IconWrapper>,
       Gift: (props) => <IconWrapper {...props}><polyline points="20 12 20 22 4 22 4 12" /><rect width="20" height="5" x="2" y="7" /><line x1="12" x2="12" y1="22" y2="7" /><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z" /><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z" /></IconWrapper>,
       ToggleLeft: (props) => <IconWrapper {...props}><rect x="1" y="5" width="22" height="14" rx="7" ry="7" /><circle cx="8" cy="12" r="3" /></IconWrapper>,
-      ToggleRight: (props) => <IconWrapper {...props}><rect x="1" y="5" width="22" height="14" rx="7" ry="7" /><circle cx="16" cy="12" r="3" /></IconWrapper>
+      ToggleRight: (props) => <IconWrapper {...props}><rect x="1" y="5" width="22" height="14" rx="7" ry="7" /><circle cx="16" cy="12" r="3" /></IconWrapper>,
+      Volume2: (props) => <IconWrapper {...props}><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" /><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07" /></IconWrapper>,
+      VolumeX: (props) => <IconWrapper {...props}><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" /><line x1="23" y1="9" x2="17" y2="15" /><line x1="17" y1="9" x2="23" y2="15" /></IconWrapper>,
+      Download: (props) => <IconWrapper {...props}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" /></IconWrapper>,
+      Upload: (props) => <IconWrapper {...props}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="17 8 12 3 7 8" /><line x1="12" y1="3" x2="12" y2="15" /></IconWrapper>,
+      List: (props) => <IconWrapper {...props}><line x1="8" y1="6" x2="21" y2="6" /><line x1="8" y1="12" x2="21" y2="12" /><line x1="8" y1="18" x2="21" y2="18" /><line x1="3" y1="6" x2="3.01" y2="6" /><line x1="3" y1="12" x2="3.01" y2="12" /><line x1="3" y1="18" x2="3.01" y2="18" /></IconWrapper>,
+      Grid: (props) => <IconWrapper {...props}><rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" /><rect x="14" y="14" width="7" height="7" /><rect x="3" y="14" width="7" height="7" /></IconWrapper>
     };
 
     const DrawTimer = ({ lang }) => {
@@ -897,7 +916,15 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
       const initialState = getInitialState();
       const [timeLeft, setTimeLeft] = useState(initialState.time);
       const [isRunning, setIsRunning] = useState(initialState.running);
+      const [soundEnabled, setSoundEnabled] = useState(() => localStorage.getItem('soundEnabled') !== 'false');
       const audioRef = useRef(null);
+      const titleIntervalRef = useRef(null);
+
+      useEffect(() => {
+        if (Notification.permission !== "granted" && Notification.permission !== "denied") {
+            Notification.requestPermission();
+        }
+      }, []);
 
       useEffect(() => {
           if (!isRunning) return;
@@ -915,9 +942,23 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
               const diff = Math.floor((targetTime - now) / 1000);
 
               if (diff <= 0) {
-                  if (audioRef.current) {
+                  if (audioRef.current && soundEnabled) {
                       audioRef.current.play().catch(e => console.log("Audio error", e));
                   }
+                  
+                  if (Notification.permission === "granted") {
+                      new Notification("Tankora DB", { body: "TON WORK EST DISPO !!!" });
+                  }
+                  
+                  // Blinking title
+                  if (!titleIntervalRef.current) {
+                      let showMsg = true;
+                      titleIntervalRef.current = setInterval(() => {
+                          document.title = showMsg ? "TON WORK EST DISPO !!!" : "Tankora DB";
+                          showMsg = !showMsg;
+                      }, 1000);
+                  }
+
                   setIsRunning(false);
                   setTimeLeft(0);
                   localStorage.removeItem('drawTimerTarget');
@@ -927,9 +968,21 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
           }, 1000);
 
           return () => clearInterval(interval);
-      }, [isRunning]);
+      }, [isRunning, soundEnabled]);
 
       const startTimer = () => {
+        // Clear existing title interval if any
+        if (titleIntervalRef.current) {
+             clearInterval(titleIntervalRef.current);
+             titleIntervalRef.current = null;
+             document.title = "Tankora DB";
+        }
+        
+        // Request notification permission on first interaction
+        if (Notification.permission !== "granted" && Notification.permission !== "denied") {
+            Notification.requestPermission();
+        }
+        
         const minutes = 30;
         const targetTime = Date.now() + minutes * 60 * 1000;
         localStorage.setItem('drawTimerTarget', targetTime.toString());
@@ -938,9 +991,20 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
       };
 
       const cancelTimer = () => {
+          if (titleIntervalRef.current) {
+             clearInterval(titleIntervalRef.current);
+             titleIntervalRef.current = null;
+             document.title = "Tankora DB";
+          }
           localStorage.removeItem('drawTimerTarget');
           setTimeLeft(0);
           setIsRunning(false);
+      };
+      
+      const toggleSound = () => {
+          const newState = !soundEnabled;
+          setSoundEnabled(newState);
+          localStorage.setItem('soundEnabled', newState);
       };
 
       const formatTime = (seconds) => {
@@ -952,6 +1016,11 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
       return (
         <div className="flex items-center gap-2 bg-slate-800/80 rounded-full border border-white/10 p-1 pr-4 shadow-inner ml-2 relative group">
             <audio ref={audioRef} src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" preload="auto"></audio>
+            
+            <button onClick={toggleSound} className="w-8 h-8 flex items-center justify-center text-slate-400 hover:text-white transition-colors" title={soundEnabled ? "Mute" : "Unmute"}>
+                {soundEnabled ? <Icons.Volume2 size={14} /> : <Icons.VolumeX size={14} />}
+            </button>
+
             <button
                 onClick={isRunning ? cancelTimer : startTimer}
                 className={`w-8 h-8 rounded-full flex items-center justify-center transition-all z-20 relative ${isRunning ? 'bg-orange-500/20 text-orange-400 hover:bg-orange-500 hover:text-white' : 'bg-emerald-500 hover:bg-emerald-400 text-white shadow-[0_0_10px_#10b981]'}`}
@@ -970,7 +1039,7 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
             </div>
             
             {!isRunning && (
-                <button onClick={startTimer} className="absolute inset-0 z-10 cursor-pointer rounded-full" title="Lancer le chrono"></button>
+                <button onClick={startTimer} className="absolute inset-0 z-10 cursor-pointer rounded-full" style={{ left: '32px' }} title="Lancer le chrono"></button>
             )}
         </div>
       );
@@ -1224,7 +1293,7 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
       );
     };
 
-    const ProfileModal = ({ isOpen, onClose, stats, lang, tanks, collection }) => {
+    const ProfileModal = ({ isOpen, onClose, stats, lang, tanks, collection, setCollection }) => {
       const [activeEra, setActiveEra] = useState('All');
       
       if (!isOpen) return null;
@@ -1251,6 +1320,36 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
       const nationStats = getGroupStats('Nation');
       const ageStats = getGroupStats('Age');
       const tierStats = getGroupStats('Rarity');
+
+      const handleExport = () => {
+          const dataStr = JSON.stringify(collection);
+          const blob = new Blob([dataStr], { type: "application/json" });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `tankora_save_${new Date().toISOString().slice(0,10)}.json`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+      };
+
+      const handleImport = (event) => {
+          const file = event.target.files[0];
+          if (!file) return;
+          const reader = new FileReader();
+          reader.onload = (e) => {
+              try {
+                  const imported = JSON.parse(e.target.result);
+                  if (typeof imported === 'object') {
+                      setCollection(imported);
+                      alert("Sauvegarde chargée avec succès !");
+                  }
+              } catch (err) {
+                  alert(translate('fileError'));
+              }
+          };
+          reader.readAsText(file);
+      };
       
       return (
         <div className="fixed inset-0 z-50 bg-slate-900/90 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in duration-300" onClick={onClose}>
@@ -1258,7 +1357,7 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
             <div className="w-full md:w-1/4 bg-slate-900 border-r border-white/5 p-6 flex flex-col items-center text-center relative overflow-hidden justify-center">
               <div className="absolute inset-0 bg-gradient-to-b from-blue-500/5 to-transparent pointer-events-none"></div>
               <h2 className="text-xl font-black text-white uppercase tracking-wider mb-6 flex items-center gap-2"><Icons.Database className="text-blue-500"/> {lang === 'fr' ? 'Rapport' : 'Report'}</h2>
-              <div className="w-full space-y-3">
+              <div className="w-full space-y-3 mb-6">
                 <div className="flex justify-between items-center p-2.5 bg-slate-800/50 rounded-lg border border-white/5">
                   <span className="text-[10px] text-slate-400 uppercase">{lang === 'fr' ? 'Véhicules' : 'Vehicles'}</span>
                   <span className="font-mono font-bold text-sm text-white">{stats.total}</span>
@@ -1267,6 +1366,15 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                   <span className="text-[10px] text-slate-400 uppercase">{lang === 'fr' ? 'Modèles' : 'Models'}</span>
                   <span className="font-mono font-bold text-sm text-emerald-400">{stats.unique}</span>
                 </div>
+              </div>
+              
+              <div className="w-full pt-6 border-t border-white/5 flex flex-col gap-2">
+                 <h4 className="text-[10px] text-slate-500 uppercase font-bold mb-1">{lang === 'fr' ? 'Gestion des données' : 'Data Management'}</h4>
+                 <button onClick={handleExport} className="w-full py-2 bg-slate-800 hover:bg-slate-700 text-xs font-bold text-emerald-400 rounded border border-white/5 flex items-center justify-center gap-2 transition-colors"><Icons.Download size={14}/> {lang === 'fr' ? 'Sauvegarder' : 'Save'}</button>
+                 <label className="w-full py-2 bg-slate-800 hover:bg-slate-700 text-xs font-bold text-blue-400 rounded border border-white/5 flex items-center justify-center gap-2 transition-colors cursor-pointer">
+                    <Icons.Upload size={14}/> {lang === 'fr' ? 'Charger' : 'Load'}
+                    <input type="file" accept=".json" className="hidden" onChange={handleImport} />
+                 </label>
               </div>
             </div>
             <div className="flex-1 p-8 overflow-y-auto custom-scrollbar bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMCAwIDQwIDQwIiBmaWxsPSJub25lIiBzdHJva2U9IiMzMzQxNTUiIHN0cm9rZS1vcGFjaXR5PSIwLjAzIiBzdHJva2Utd2lkdGg9IjEiPjxwYXRoIGQ9Ik0wIDQwaDQwTTAgMGg0MCIvPjwvc3ZnPg==')]">
@@ -1326,6 +1434,7 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
       const [showProfile, setShowProfile] = useState(false);
       const [visualsEnabled, setVisualsEnabled] = useState(true);
       const [visibleCount, setVisibleCount] = useState(20);
+      const [viewMode, setViewMode] = useState('grid');
       const scrollContainerRef = useRef(null);
       const translate = (key) => TRANSLATIONS[lang][key] || key;
       const tData = (val, key) => translateData(val, key, lang);
@@ -1441,7 +1550,7 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                   <h1 className="text-4xl md:text-5xl font-military uppercase tracking-wider text-slate-100 flex items-center gap-4 drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]">
                     <span className="text-emerald-500 drop-shadow-[0_0_15px_rgba(16,185,129,0.8)]"><Icons.Tank size={42} strokeWidth={2.5} /></span>
                     <span>Tankora <span className="text-emerald-500">DB</span></span>
-                    <span className="text-[10px] font-sans font-bold bg-slate-800 text-slate-400 px-2 py-1 rounded border border-white/10 ml-2 self-start mt-2">v2.2</span>
+                    <span className="text-[10px] font-sans font-bold bg-slate-800 text-slate-400 px-2 py-1 rounded border border-white/10 ml-2 self-start mt-2">v2.3</span>
                   </h1>
                   <div className="text-xs font-medium text-slate-400 mt-2 flex flex-col sm:flex-row sm:items-center gap-3">
                     <span className="flex items-center gap-1.5 bg-slate-800/50 px-3 py-1 rounded-full border border-white/5 cursor-pointer hover:bg-slate-800 hover:text-emerald-400 transition-colors group" onClick={() => setShowProfile(true)} title={translate('details')}>
@@ -1486,6 +1595,9 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                   <div className="relative flex-1 sm:flex-none">
                     <FilterDropdown value={ownershipFilter} onChange={(e) => setOwnershipFilter(e.target.value)} options={[{ value: 'all', label: translate('statusAll') }, { value: 'owned', label: translate('statusOwned') }, { value: 'missing', label: translate('statusMissing') }, { value: 'duplicates', label: translate('statusDuplicates') }]} icon={ownershipFilter === 'owned' ? Icons.Check : ownershipFilter === 'missing' ? Icons.X : ownershipFilter === 'duplicates' ? Icons.Filter : Icons.Filter} placeholder={translate('statusAll')} />
                   </div>
+                  <button onClick={() => setViewMode(viewMode === 'grid' ? 'list' : 'grid')} className={`w-12 h-12 rounded-none clip-corner-tr bg-[#0f141a] border border-white/10 transition-all flex items-center justify-center shadow-lg group ${viewMode === 'list' ? 'text-emerald-400 border-emerald-500/30 bg-emerald-900/10' : 'text-slate-400 hover:text-white hover:border-white/20'}`} title={viewMode === 'grid' ? translate('compactView') : translate('cardView')}>
+                    {viewMode === 'grid' ? <Icons.List size={20} /> : <Icons.Grid size={18} />}
+                  </button>
                   <button onClick={resetFilters} className="w-12 h-12 rounded-none clip-corner-tr bg-[#0f141a] text-red-400/70 hover:text-red-400 hover:bg-red-900/20 border border-white/10 hover:border-red-500/30 transition-all flex items-center justify-center shadow-lg group relative" title={translate('reset')}><Icons.Trash2 size={18} /><span className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></span></button>
                 </div>
               </div>
@@ -1497,6 +1609,7 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
               {filteredTanks.length === 0 ? (
                 <div className="text-center py-32 text-slate-500 animate-in fade-in zoom-in duration-500"><div className="bg-slate-800/50 p-6 rounded-full inline-block mb-4 shadow-xl"><Icons.Filter size={48} className="opacity-50" /></div><p className="text-xl font-medium text-slate-400">{translate('noResults')}</p>{search && <p className="text-sm mt-2 text-slate-600">{translate('checkSpelling')}</p>}</div>
               ) : (
+                viewMode === 'grid' ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6 pb-20">
                   {filteredTanks.slice(0, visibleCount).map((tank) => {
                     const instances = collection[tank.id] || [];
@@ -1554,6 +1667,37 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                     );
                   })}
                 </div>
+                ) : (
+                  <div className="flex flex-col gap-2 pb-20">
+                    {filteredTanks.slice(0, visibleCount).map((tank) => {
+                      const instances = collection[tank.id] || [];
+                      const isCollected = instances.length > 0;
+                      return (
+                        <div key={tank.id} className={`flex items-center justify-between p-3 bg-[#0f141a]/90 border border-white/5 rounded-lg hover:border-emerald-500/30 transition-all ${isCollected ? 'border-l-4 border-l-emerald-500' : ''}`}>
+                            <div className="flex items-center gap-4">
+                                <span className={`text-xs font-bold px-2 py-1 rounded bg-slate-800 text-slate-400 min-w-[80px] text-center`}>{tData(tank.Nation)}</span>
+                                <div>
+                                    <h4 className={`font-black text-lg ${isCollected ? 'text-emerald-400' : 'text-slate-300'}`}>{tank.Name}</h4>
+                                    <div className="flex gap-2 text-[10px] text-slate-500 uppercase tracking-wider">
+                                        <span>{tData(tank.Age)}</span> • <span>{tank.Rarity}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-3">
+                                {isCollected ? (
+                                    <div className="px-3 py-1 bg-emerald-900/30 border border-emerald-500/30 rounded text-emerald-400 text-xs font-bold">
+                                        {instances.length} {translate('instances')}
+                                    </div>
+                                ) : (
+                                    <button onClick={() => addTankInstance(tank.id)} className="text-slate-500 hover:text-white"><Icons.Plus size={20} /></button>
+                                )}
+                                <button onClick={() => setViewTank(tank)} className="p-2 bg-slate-800 rounded hover:bg-slate-700 text-slate-400 hover:text-white transition-colors"><Icons.Eye size={16}/></button>
+                            </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )
               )}
             </div>
           </main>
@@ -1645,12 +1789,12 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
           )}
           
           <SupplyDropModal isOpen={showSupply} onClose={() => setShowSupply(false)} onOpenDrop={initiateSupplyDrop} isOpening={isOpeningDrop} dropResult={dropResult} lang={lang} />
-          <ProfileModal isOpen={showProfile} onClose={() => setShowProfile(false)} stats={{ total: Object.values(collection).reduce((acc, curr) => acc + curr.length, 0), unique: Object.keys(collection).length }} lang={lang} tanks={tanks} collection={collection} />
+          <ProfileModal isOpen={showProfile} onClose={() => setShowProfile(false)} stats={{ total: Object.values(collection).reduce((acc, curr) => acc + curr.length, 0), unique: Object.keys(collection).length }} lang={lang} tanks={tanks} collection={collection} setCollection={setCollection} />
           <footer className="py-2 text-center text-[10px] text-slate-600 border-t border-slate-800 bg-slate-900 border-b-4 border-b-slate-900">
             <p className="flex justify-center items-center gap-2">
               <span className="text-emerald-400 hover:text-emerald-300 transition-colors uppercase tracking-widest">{translate('credits')}</span>
               <span className="opacity-30">|</span>
-              <span className="opacity-50">v2.2 Reforged</span>
+              <span className="opacity-50">v2.3 Reforged</span>
             </p>
           </footer>
         </div>
