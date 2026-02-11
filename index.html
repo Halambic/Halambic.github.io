@@ -1090,8 +1090,9 @@ Tankora-72,Soviet Union,Modern,Event,Heavy,Medium,High,Medium,Fast,High,Medium,N
         });
 
         // Count owned
-        Object.keys(collection).forEach(name => {
-          const tank = tanks.find(t => t.Name === name);
+        Object.keys(collection).forEach(id => {
+          // Changed lookup to find by ID (string or number match)
+          const tank = tanks.find(t => t.id.toString() === id.toString());
           if (tank && tank[groupKey] && counts[tank[groupKey]]) {
             counts[tank[groupKey]].owned++;
           }
@@ -1381,40 +1382,43 @@ Tankora-72,Soviet Union,Modern,Event,Heavy,Medium,High,Medium,Fast,High,Medium,N
         const parsedData = parseCSV(rawCSV);
         setTanks(parsedData);
 
-        // LOAD & MIGRATE DATA (Old migration logic, now handled by useState initializer)
-        // This block is kept for historical context but is effectively superseded
-        const savedCollection = localStorage.getItem('tankCollection');
-        if (savedCollection) {
-          try {
-            const parsed = JSON.parse(savedCollection);
-            let newCollection = {};
+        // MIGRATION V2 (Names to IDs)
+        // This runs once on mount to fix legacy data stored by Name string instead of unique ID
+        setCollection(prevCollection => {
+            const newCollection = {};
+            let hasLegacyData = false;
 
-            if (Array.isArray(parsed)) {
-              // Migration V1 (Set -> Array)
-              parsed.forEach(name => newCollection[name] = ['field_ready']);
-            } else {
-              // Migration V2 (String -> Array) or V3 (Keep Array)
-              Object.keys(parsed).forEach(key => {
-                if (typeof parsed[key] === 'string') {
-                  newCollection[key] = [parsed[key]];
+            Object.keys(prevCollection).forEach(key => {
+                // Check if key is a name (NaN) or an ID (Number string)
+                // Assuming IDs are numeric strings "0", "1", etc.
+                if (isNaN(parseInt(key)) || parsedData.find(t => t.Name === key && t.id.toString() !== key)) {
+                    // It's a name key, found legacy data
+                    hasLegacyData = true;
+                    // Find all tanks with this name in the DB
+                    const matchingTanks = parsedData.filter(t => t.Name === key);
+                    
+                    matchingTanks.forEach(tank => {
+                        // Duplicate the collection entry for each matching tank ID
+                        // This effectively "splits" the shared entry into distinct entries
+                        // so the user can delete one without affecting the other.
+                        if(!newCollection[tank.id]) {
+                             newCollection[tank.id] = prevCollection[key];
+                        }
+                    });
                 } else {
-                  newCollection[key] = parsed[key];
+                    // It's already an ID, keep as is
+                    newCollection[key] = prevCollection[key];
                 }
-              });
-            }
-            setCollection(newCollection);
-            localStorage.setItem('tankCollection', JSON.stringify(newCollection));
-          } catch (e) {
-            console.error("Error loading collection", e);
-            setCollection({});
-          }
-        }
+            });
+            
+            return hasLegacyData ? newCollection : prevCollection;
+        });
       }, []);
 
-      // Add a new instance of a tank
-      const addTankInstance = (tankName, condition = null) => {
+      // Add a new instance of a tank - NOW USES ID
+      const addTankInstance = (tankId, condition = null) => {
         setCollection(prev => {
-          const current = prev[tankName] || [];
+          const current = prev[tankId] || [];
           // Random condition logic if not specified
           // 40% Worn, 30% Field Ready, 20% Damaged, 5% Parade, 4% Mint, 1% Salvage
           let newCond = condition;
@@ -1428,7 +1432,7 @@ Tankora-72,Soviet Union,Modern,Event,Heavy,Medium,High,Medium,Fast,High,Medium,N
             else newCond = 'factory_new';
           }
 
-          return { ...prev, [tankName]: [...current, newCond] };
+          return { ...prev, [tankId]: [...current, newCond] };
         });
       };
 
@@ -1449,35 +1453,35 @@ Tankora-72,Soviet Union,Modern,Event,Heavy,Medium,High,Medium,Fast,High,Medium,N
             else if (roll > 0.8) condition = 'parade_ready';
             else if (roll < 0.1) condition = 'damaged';
 
-            addTankInstance(randomTank.Name, condition);
+            addTankInstance(randomTank.id, condition); // Use ID here
             setDropResult({ ...randomTank, condition });
           }
           setIsOpeningDrop(false);
         }, 2500); // 2.5s animation
       };
 
-      // Remove specific instance
-      const removeTankInstance = (tankName, index) => {
+      // Remove specific instance - NOW USES ID
+      const removeTankInstance = (tankId, index) => {
         const newCollection = { ...collection };
-        if (newCollection[tankName]) {
-          const newArr = newCollection[tankName].filter((_, i) => i !== index);
+        if (newCollection[tankId]) {
+          const newArr = newCollection[tankId].filter((_, i) => i !== index);
           if (newArr.length === 0) {
-            delete newCollection[tankName];
+            delete newCollection[tankId];
           } else {
-            newCollection[tankName] = newArr;
+            newCollection[tankId] = newArr;
           }
           setCollection(newCollection);
           localStorage.setItem('tankCollection', JSON.stringify(newCollection));
         }
       };
 
-      // Update condition of specific instance
-      const updateInstanceCondition = (tankName, index, condition) => {
+      // Update condition of specific instance - NOW USES ID
+      const updateInstanceCondition = (tankId, index, condition) => {
         const newCollection = { ...collection };
-        if (newCollection[tankName] && newCollection[tankName][index]) {
-          const newArr = [...newCollection[tankName]];
+        if (newCollection[tankId] && newCollection[tankId][index]) {
+          const newArr = [...newCollection[tankId]];
           newArr[index] = condition;
-          newCollection[tankName] = newArr;
+          newCollection[tankId] = newArr;
           setCollection(newCollection);
           localStorage.setItem('tankCollection', JSON.stringify(newCollection));
         }
@@ -1531,10 +1535,11 @@ Tankora-72,Soviet Union,Modern,Event,Heavy,Medium,High,Medium,Fast,High,Medium,N
 
           // Ownership logic
           let matchOwnership = true;
+          // Look up by ID now
           if (ownershipFilter === 'owned') {
-            matchOwnership = collection[tank.Name] !== undefined;
+            matchOwnership = collection[tank.id] !== undefined;
           } else if (ownershipFilter === 'missing') {
-            matchOwnership = collection[tank.Name] === undefined;
+            matchOwnership = collection[tank.id] === undefined;
           }
 
           return matchSearch && matchNation && matchAge && matchRarity && matchOwnership;
@@ -1700,7 +1705,8 @@ Tankora-72,Soviet Union,Modern,Event,Heavy,Medium,High,Medium,Fast,High,Medium,N
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6 pb-20">
                   {filteredTanks.slice(0, visibleCount).map((tank) => {
-                    const instances = collection[tank.Name] || [];
+                    // CHANGED: Access by ID instead of Name
+                    const instances = collection[tank.id] || [];
                     const isCollected = instances.length > 0;
                     const isComparing = compareList.find(t => t.Name === tank.Name);
 
@@ -1729,7 +1735,7 @@ Tankora-72,Soviet Union,Modern,Event,Heavy,Medium,High,Medium,Fast,High,Medium,N
                             </div>
 
                             <div className="flex flex-col gap-2">
-                              <button onClick={() => addTankInstance(tank.Name)} className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 shadow-lg active:scale-95 ${isCollected ? 'bg-gradient-to-br from-emerald-500 to-green-600 text-white hover:brightness-110 shadow-emerald-900/40' : 'bg-slate-700 text-slate-400 hover:bg-emerald-500 hover:text-white'}`} title={translate('addAnother')}>
+                              <button onClick={() => addTankInstance(tank.id)} className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 shadow-lg active:scale-95 ${isCollected ? 'bg-gradient-to-br from-emerald-500 to-green-600 text-white hover:brightness-110 shadow-emerald-900/40' : 'bg-slate-700 text-slate-400 hover:bg-emerald-500 hover:text-white'}`} title={translate('addAnother')}>
                                 <Icons.Plus size={20} />
                               </button>
                               <button onClick={() => setViewTank(tank)} className="w-10 h-10 rounded-full flex items-center justify-center bg-slate-700/50 text-slate-400 hover:text-white hover:bg-blue-600 transition-all hover:shadow-lg hover:shadow-blue-900/30" title={translate('details')}>
@@ -1756,7 +1762,7 @@ Tankora-72,Soviet Union,Modern,Event,Heavy,Medium,High,Medium,Fast,High,Medium,N
                                 <div className="relative flex-grow">
                                   <select
                                     value={condition}
-                                    onChange={(e) => updateInstanceCondition(tank.Name, idx, e.target.value)}
+                                    onChange={(e) => updateInstanceCondition(tank.id, idx, e.target.value)}
                                     className={`w-full text-[10px] font-bold uppercase tracking-wider py-1.5 pl-2 pr-6 rounded border cursor-pointer outline-none transition-all appearance-none ${CONDITIONS[condition] ? CONDITIONS[condition].color : 'bg-slate-700'}`}
                                   >
                                     {Object.values(CONDITIONS).map(c => (
@@ -1768,7 +1774,7 @@ Tankora-72,Soviet Union,Modern,Event,Heavy,Medium,High,Medium,Fast,High,Medium,N
                                   <div className="absolute right-2 top-1.5 pointer-events-none opacity-50 mixed-blend-overlay">▼</div>
                                 </div>
                                 <button
-                                  onClick={() => removeTankInstance(tank.Name, idx)}
+                                  onClick={() => removeTankInstance(tank.id, idx)}
                                   className="p-1.5 text-slate-500 hover:text-red-400 hover:bg-red-500/20 transition-colors rounded-md"
                                   title={translate('removeInstance')}
                                 >
@@ -2023,11 +2029,12 @@ Tankora-72,Soviet Union,Modern,Event,Heavy,Medium,High,Medium,Fast,High,Medium,N
                       </div>
 
                       {/* Collection Status inside Modal */}
-                      {collection[viewTank.Name] && collection[viewTank.Name].length > 0 && (
+                      {/* CHANGED: Access by ID instead of Name */}
+                      {collection[viewTank.id] && collection[viewTank.id].length > 0 && (
                         <div className="bg-emerald-900/10 border border-emerald-500/20 p-4 rounded-2xl">
-                          <h5 className="text-emerald-400 text-xs font-bold uppercase mb-3 flex items-center gap-2"><Icons.Check size={14} /> {translate('collected')} (x{collection[viewTank.Name].length})</h5>
+                          <h5 className="text-emerald-400 text-xs font-bold uppercase mb-3 flex items-center gap-2"><Icons.Check size={14} /> {translate('collected')} (x{collection[viewTank.id].length})</h5>
                           <div className="flex flex-wrap gap-2">
-                            {collection[viewTank.Name].map((cond, idx) => (
+                            {collection[viewTank.id].map((cond, idx) => (
                               <span key={idx} className={`px-2 py-1 rounded text-xs border font-medium ${CONDITIONS[cond] ? CONDITIONS[cond].color : ''}`}>
                                 {translate(cond)}
                               </span>
