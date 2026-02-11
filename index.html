@@ -302,6 +302,7 @@
         statusAll: "Tous les chars",
         statusOwned: "Acquis",
         statusMissing: "Manquants",
+        statusDuplicates: "Doublons",
         // Conditions
         salvage: "Salvage (Épave)",
         damaged: "Damaged (Endommagé)",
@@ -372,6 +373,7 @@
         statusAll: "All tanks",
         statusOwned: "Collected",
         statusMissing: "Missing",
+        statusDuplicates: "Duplicates",
          // Conditions
         salvage: "Salvage",
         damaged: "Damaged",
@@ -843,6 +845,7 @@ T-90M2,Russia,Modern,Tier V,Very Heavy,Very Heavy,Very High,Medium,Very Fast,Hig
 Char B1 bis (Eure),France,WW1-WW2,Event,Heavy,Medium,Medium,Large,Slow,Medium,Medium,No,No,No,No,No,No,No,No,No,No,No
 M47 Patton 331,Austria,Cold War,Event,Medium,Medium,High,Medium,Normal,Medium,Medium,No,No,No,No,No,No,No,No,No,No,No
 Tankora-72,Soviet Union,Modern,Event,Heavy,Medium,High,Medium,Fast,High,Medium,No,Yes,No,No,Yes,Yes,No,No,No,No,No
+T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Medium,Fast,High,Medium,No,No,No,No,No,No,No,No,No,No,No
 `;
 
     // ==========================================
@@ -1540,6 +1543,8 @@ Tankora-72,Soviet Union,Modern,Event,Heavy,Medium,High,Medium,Fast,High,Medium,N
             matchOwnership = collection[tank.id] !== undefined;
           } else if (ownershipFilter === 'missing') {
             matchOwnership = collection[tank.id] === undefined;
+          } else if (ownershipFilter === 'duplicates') {
+            matchOwnership = collection[tank.id] && collection[tank.id].length >= 2;
           }
 
           return matchSearch && matchNation && matchAge && matchRarity && matchOwnership;
@@ -1579,20 +1584,32 @@ Tankora-72,Soviet Union,Modern,Event,Heavy,Medium,High,Medium,Fast,High,Medium,N
                       <span className="bg-emerald-500/20 text-emerald-400 px-1.5 py-0.5 rounded text-[10px] ml-1 border border-emerald-500/20">{collectionStats.percent}%</span>
                       <Icons.Database size={12} className="ml-1 opacity-50 group-hover:opacity-100" />
                     </span>
+                    
                     <span className="hidden sm:inline text-slate-700">|</span>
+
+                    {/* RESTAURATION : Total des véhicules */}
                     <span className="flex items-center gap-1.5 bg-slate-800/50 px-3 py-1 rounded-full border border-white/5">
                       {translate('totalVehicles')} : <span className="text-blue-400 font-bold">{collectionStats.totalItems}</span>
                     </span>
                   </div>
 
+                  {/* Barre de Progression Améliorée (Plus épaisse et lumineuse) */}
                   <div
-                    className="w-full max-w-[280px] h-2 bg-slate-900/80 rounded-sm mt-3 overflow-hidden border border-white/10 relative cursor-pointer group"
+                    className="w-full max-w-[320px] h-3 bg-slate-900/80 rounded-sm mt-3 overflow-hidden border border-white/10 relative cursor-pointer group shadow-inner"
                     onClick={() => setShowProfile(true)}
-                    title="View detailed progression"
+                    title={`${lang === 'fr' ? 'Progression totale' : 'Total Progress'}: ${collectionStats.percent}%`}
                   >
-                    {/* Segmented Grid Overlay for Progress Bar */}
-                    <div className="absolute inset-0 flex" style={{ backgroundImage: 'linear-gradient(90deg, transparent 2px, rgba(0,0,0,0.8) 2px)', backgroundSize: '10px 100%' }}></div>
-                    <div className="h-full bg-emerald-500 relative -z-10 group-hover:bg-emerald-400 transition-colors" style={{ width: `${collectionStats.percent}%`, boxShadow: '0 0 10px #10b981' }}></div>
+                    {/* Grille de fond pour effet technique */}
+                    <div className="absolute inset-0 flex z-10 opacity-20 pointer-events-none" style={{ backgroundImage: 'linear-gradient(90deg, transparent 2px, #000 2px)', backgroundSize: '10% 100%' }}></div>
+                    
+                    {/* La barre elle-même */}
+                    <div 
+                        className="h-full bg-gradient-to-r from-emerald-600 via-emerald-500 to-emerald-400 relative -z-0 transition-all duration-700 ease-out group-hover:brightness-110" 
+                        style={{ width: `${collectionStats.percent}%`, boxShadow: '0 0 15px rgba(16, 185, 129, 0.4)' }}
+                    >
+                        {/* Petit effet de reflet sur le bout de la barre */}
+                        <div className="absolute right-0 top-0 bottom-0 w-0.5 bg-white/60 blur-[1px]"></div>
+                    </div>
                   </div>
                 </div>
 
@@ -1671,9 +1688,10 @@ Tankora-72,Soviet Union,Modern,Event,Heavy,Medium,High,Medium,Fast,High,Medium,N
                       options={[
                         { value: 'all', label: translate('statusAll') },
                         { value: 'owned', label: translate('statusOwned') },
-                        { value: 'missing', label: translate('statusMissing') }
+                        { value: 'missing', label: translate('statusMissing') },
+                        { value: 'duplicates', label: translate('statusDuplicates') }
                       ]}
-                      icon={ownershipFilter === 'owned' ? Icons.Check : ownershipFilter === 'missing' ? Icons.X : Icons.Filter}
+                      icon={ownershipFilter === 'owned' ? Icons.Check : ownershipFilter === 'missing' ? Icons.X : ownershipFilter === 'duplicates' ? Icons.Filter : Icons.Filter}
                       placeholder={translate('statusAll')}
                     />
                   </div>
