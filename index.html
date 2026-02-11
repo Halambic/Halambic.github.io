@@ -1022,9 +1022,9 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
       const ageStats = getGroupStats('Age');
       const tierStats = getGroupStats('Rarity');
       
-      // Data for Pie Chart
+      // Data for Pie Chart - Maintenant traduit !
       const pieData = nationStats.slice(0, 5).map((stat, i) => ({
-          label: stat.label,
+          label: translateData(stat.label, '', lang),
           value: stat.owned,
           color: ['#10b981', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6'][i] || '#64748b'
       }));
@@ -1097,7 +1097,7 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
               <div className="flex justify-between items-center mb-6">
                 <h3 className="text-xl font-bold text-white flex items-center gap-2 uppercase tracking-wide"><Icons.Database className="text-blue-500" /> {lang === 'fr' ? 'Progression Détaillée' : 'Detailed Progression'}</h3>
                 <div className="flex items-center gap-2">
-                    <button onClick={() => setActiveEra(activeEra === 'WW1-WW2' ? 'All' : 'WW1-WW2')} className={`flex items-center gap-2 px-3 py-1.5 rounded-full border text-[10px] font-bold transition-all ${activeEra === 'WW1-WW2' ? 'bg-amber-600 border-amber-500 text-white' : 'bg-slate-800 border-white/10 text-slate-400 hover:text-white'}`}>{activeEra === 'WW1-WW2' ? <Icons.ToggleRight size={14} /> : <Icons.ToggleLeft size={14} />} PGM-SGM</button>
+                    <button onClick={() => setActiveEra(activeEra === 'WW1-WW2' ? 'All' : 'WW1-WW2')} className={`flex items-center gap-2 px-3 py-1.5 rounded-full border text-[10px] font-bold transition-all ${activeEra === 'WW1-WW2' ? 'bg-amber-600 border-amber-500 text-white' : 'bg-slate-800 border-white/10 text-slate-400 hover:text-white'}`}>{activeEra === 'WW1-WW2' ? <Icons.ToggleRight size={14} /> : <Icons.ToggleLeft size={14} />} {lang === 'fr' ? 'PGM-SGM' : 'WW1-WW2'}</button>
                     <button onClick={() => setActiveEra(activeEra === 'Cold War' ? 'All' : 'Cold War')} className={`flex items-center gap-2 px-3 py-1.5 rounded-full border text-[10px] font-bold transition-all ${activeEra === 'Cold War' ? 'bg-sky-600 border-sky-500 text-white' : 'bg-slate-800 border-white/10 text-slate-400 hover:text-white'}`}>{activeEra === 'Cold War' ? <Icons.ToggleRight size={14} /> : <Icons.ToggleLeft size={14} />} {lang === 'fr' ? 'Guerre Froide' : 'Cold War'}</button>
                     <button onClick={() => setActiveEra(activeEra === 'Modern' ? 'All' : 'Modern')} className={`flex items-center gap-2 px-3 py-1.5 rounded-full border text-[10px] font-bold transition-all ${activeEra === 'Modern' ? 'bg-emerald-600 border-emerald-500 text-white' : 'bg-slate-800 border-white/10 text-slate-400 hover:text-white'}`}>{activeEra === 'Modern' ? <Icons.ToggleRight size={14} /> : <Icons.ToggleLeft size={14} />} {lang === 'fr' ? 'Moderne' : 'Modern'}</button>
                     <button onClick={onClose} className="text-slate-500 hover:text-white transition-colors ml-2"><Icons.X size={24} /></button>
