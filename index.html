@@ -293,11 +293,10 @@
         totalVehicles: "Véhicules total",
         uniqueModels: "Modèles uniques",
         addAnother: "Ajouter un autre",
-        credits: <React.Fragment>All rights reserved to the creator of the Discord bot <span className="font-black text-emerald-400 uppercase tracking-widest hover:text-emerald-300 transition-colors">Qwirdle</span></React.Fragment>,
+        credits: "All rights reserved to the creator of the Discord bot",
         supplyDrop: "Ravitaillement",
         openSupply: "Ouvrir caisse",
         statsReport: "Rapport de Progression",
-        statsWW2Only: "Stats PGM-SGM uniquement",
         timerReady: "J'AI WORK !",
         timerRunning: "PROCHAIN",
         timerCancel: "Annuler",
@@ -363,11 +362,10 @@
         totalVehicles: "Total vehicles",
         uniqueModels: "Unique models",
         addAnother: "Add another",
-        credits: <React.Fragment>All rights reserved to the creator of the Discord bot <span className="font-black text-emerald-400 uppercase tracking-widest hover:text-emerald-300 transition-colors">Qwirdle</span></React.Fragment>,
+        credits: "All rights reserved to the creator of the Discord bot",
         supplyDrop: "Supply Drop",
         openSupply: "Open Crate",
         statsReport: "Progression Report",
-        statsWW2Only: "WW1-WW2 Stats Only",
         timerReady: "I WORKED!",
         timerRunning: "NEXT",
         timerCancel: "Cancel",
@@ -666,7 +664,7 @@ Chieftain Mk 1,United Kingdom,Cold War,Tier V,Heavy,Very Heavy,Very High,Medium,
 Chieftain Mk 2,United Kingdom,Cold War,Tier V,Heavy,Very Heavy,Very High,Medium,Normal,High,Very High,No,Yes,No,No,No,No,No,No,No,No,No
 Humber Hornet,United Kingdom,Cold War,Tier II,Very Light,N/A,N/A,Medium,Fast,Low,High,No,No,No,No,No,No,No,No,Yes,No,No
 Schützenpanzer SPz 11-2 Kurz,Germany,Cold War,Tier I,Very Light,Very Light,Low,Small,Fast,Medium,Medium,Yes,No,No,No,No,No,No,No,No,No,No
-Schützenpanzer Lang HS.30,Germany,Cold War,Tier I,Very Light,Very Light,Low,Small,Fast,Low,Medium,Yes,No,No,No,No,No,No,No,No,No,No
+Schützenpanzer Lang HS.30,Germany,Cold War,Tier I,Very Light,Very Light,Low,Small,Fast,Low,Medium,Yes,No,No,No,No,No,No,No,No,No,No,No
 Schützenpanzer Lang HS.30 (106mm),Germany,Cold War,Tier II,Very Light,Medium,High,Small,Fast,Low,Medium,No,No,No,No,No,No,No,No,No,No,No
 Leopard 1,Germany,Cold War,Tier IV,Light,Heavy,Very High,Medium,Fast,Medium,High,No,No,No,No,No,Yes,No,No,No,No,No
 Kanonenjagdpanzer,Germany,Cold War,Tier III,Light,Medium,High,Small,Fast,Low,High,No,No,No,No,No,Yes,No,No,No,No,No
@@ -844,7 +842,6 @@ M47 Patton 331,Austria,Cold War,Event,Medium,Medium,High,Medium,Normal,Medium,Me
 Tankora-72,Soviet Union,Modern,Event,Heavy,Medium,High,Medium,Fast,High,Medium,No,Yes,No,No,Yes,Yes,No,No,No,No,No
 T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Medium,Fast,High,Medium,No,No,No,No,No,No,No,No,No,No,No
 `;
-    
     // ==========================================
     // 3. COMPOSANTS UTILITAIRES (Radar, Dropdowns, etc.)
     // ==========================================
@@ -883,69 +880,69 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
     };
 
     const DrawTimer = ({ lang }) => {
-      const [timeLeft, setTimeLeft] = useState(0);
-      const [isRunning, setIsRunning] = useState(false);
-      const audioRef = React.useRef(null);
-
-      useEffect(() => {
-        try {
-          const target = localStorage.getItem('drawTimerTarget');
-          if (target) {
-            const now = Date.now();
-            const targetTime = parseInt(target, 10);
-            const diff = Math.floor((targetTime - now) / 1000);
-            
-            if (diff > 0) {
-              setTimeLeft(diff);
-              setIsRunning(true);
-            } else {
-              localStorage.removeItem('drawTimerTarget');
-            }
-          }
-        } catch(e) {
-          console.log('Local storage error', e);
-        }
-      }, []);
-
-      useEffect(() => {
-        let interval = null;
-        if (isRunning && timeLeft > 0) {
-          interval = setInterval(() => {
+      // Calculate initial state from localStorage to avoid "reset" visual glitch on F5
+      const getInitialState = () => {
+         try {
             const target = localStorage.getItem('drawTimerTarget');
             if (target) {
-               const diff = Math.floor((parseInt(target) - Date.now()) / 1000);
-               if (diff <= 0) {
-                 if (audioRef.current) {
-                    audioRef.current.play().catch(e => console.log("Audio play failed", e));
-                 }
-                 setIsRunning(false);
-                 try { localStorage.removeItem('drawTimerTarget'); } catch(e) {}
-                 setTimeLeft(0);
-               } else {
-                 setTimeLeft(diff);
-               }
-            } else {
-                 setIsRunning(false);
+                const now = Date.now();
+                const targetTime = parseInt(target, 10);
+                const diff = Math.floor((targetTime - now) / 1000);
+                if (diff > 0) return { time: diff, running: true };
             }
+         } catch(e) {}
+         return { time: 0, running: false };
+      };
+
+      const initialState = getInitialState();
+      const [timeLeft, setTimeLeft] = useState(initialState.time);
+      const [isRunning, setIsRunning] = useState(initialState.running);
+      const audioRef = useRef(null);
+
+      // Effect to handle the interval
+      useEffect(() => {
+          if (!isRunning) return;
+
+          const interval = setInterval(() => {
+              const target = localStorage.getItem('drawTimerTarget');
+              if (!target) {
+                  setIsRunning(false);
+                  setTimeLeft(0);
+                  return;
+              }
+
+              const now = Date.now();
+              const targetTime = parseInt(target, 10);
+              const diff = Math.floor((targetTime - now) / 1000);
+
+              if (diff <= 0) {
+                  // Timer finished
+                  if (audioRef.current) {
+                      audioRef.current.play().catch(e => console.log("Audio error", e));
+                  }
+                  setIsRunning(false);
+                  setTimeLeft(0);
+                  localStorage.removeItem('drawTimerTarget');
+              } else {
+                  setTimeLeft(diff);
+              }
           }, 1000);
-        } else if (timeLeft === 0) {
-           setIsRunning(false);
-        }
-        return () => clearInterval(interval);
-      }, [isRunning, timeLeft]);
+
+          return () => clearInterval(interval);
+      }, [isRunning]);
 
       const startTimer = () => {
         const minutes = 30;
         const targetTime = Date.now() + minutes * 60 * 1000;
-        try { localStorage.setItem('drawTimerTarget', targetTime); } catch(e) {}
+        localStorage.setItem('drawTimerTarget', targetTime.toString());
         setTimeLeft(minutes * 60);
         setIsRunning(true);
       };
 
-       const cancelTimer = () => {
-        try { localStorage.removeItem('drawTimerTarget'); } catch(e) {}
-        setTimeLeft(0);
-        setIsRunning(false);
+      const cancelTimer = () => {
+          localStorage.removeItem('drawTimerTarget');
+          setTimeLeft(0);
+          setIsRunning(false);
       };
 
       const formatTime = (seconds) => {
@@ -974,6 +971,7 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                  </span>
             </div>
             
+            {/* If not running, make the whole text clickable to start for easier access */}
             {!isRunning && (
                 <button onClick={startTimer} className="absolute inset-0 z-10 cursor-pointer rounded-full" title="Lancer le chrono"></button>
             )}
@@ -1235,30 +1233,20 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
       
       const getGroupStats = (groupKey) => {
         const counts = {};
-        
-        // Filter source tanks if WW2 filter is active
-        const relevantTanks = filterWW2 
-            ? tanks.filter(t => t.Age === 'WW1-WW2') 
-            : tanks;
-            
-        // Init total counts based on relevant tanks
+        const relevantTanks = filterWW2 ? tanks.filter(t => t.Age === 'WW1-WW2') : tanks;
         relevantTanks.forEach(t => {
           const key = t[groupKey];
           if (!key) return;
           if (!counts[key]) counts[key] = { total: 0, owned: 0 };
           counts[key].total++;
         });
-        
-        // Count owned
         Object.keys(collection).forEach(id => {
           const tank = tanks.find(t => t.id.toString() === id.toString());
-          // Only count if tank exists AND key exists AND tank matches filter if active
           if (tank && tank[groupKey] && counts[tank[groupKey]]) {
              if (filterWW2 && tank.Age !== 'WW1-WW2') return;
              counts[tank[groupKey]].owned++;
           }
         });
-        
         return Object.entries(counts).map(([label, data]) => ({ label, ...data, percent: Math.round((data.owned / data.total) * 100) })).sort((a, b) => b.percent - a.percent);
       };
       
@@ -1287,13 +1275,7 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
               <div className="flex justify-between items-center mb-6">
                 <h3 className="text-xl font-bold text-white flex items-center gap-2 uppercase tracking-wide"><Icons.Database className="text-blue-500" /> {lang === 'fr' ? 'Progression Détaillée' : 'Detailed Progression'}</h3>
                 <div className="flex items-center gap-4">
-                     <button 
-                        onClick={() => setFilterWW2(!filterWW2)}
-                        className={`flex items-center gap-2 px-3 py-1.5 rounded-full border text-xs font-bold transition-all ${filterWW2 ? 'bg-amber-600 border-amber-500 text-white' : 'bg-slate-800 border-white/10 text-slate-400 hover:text-white'}`}
-                     >
-                        {filterWW2 ? <Icons.ToggleRight size={16} /> : <Icons.ToggleLeft size={16} />}
-                        {lang === 'fr' ? 'PGM-SGM Uniquement' : 'WW1-WW2 Only'}
-                     </button>
+                     <button onClick={() => setFilterWW2(!filterWW2)} className={`flex items-center gap-2 px-3 py-1.5 rounded-full border text-xs font-bold transition-all ${filterWW2 ? 'bg-amber-600 border-amber-500 text-white' : 'bg-slate-800 border-white/10 text-slate-400 hover:text-white'}`}>{filterWW2 ? <Icons.ToggleRight size={16} /> : <Icons.ToggleLeft size={16} />}{lang === 'fr' ? 'PGM-SGM Uniquement' : 'WW1-WW2 Only'}</button>
                     <button onClick={onClose} className="text-slate-500 hover:text-white transition-colors"><Icons.X size={24} /></button>
                 </div>
               </div>
