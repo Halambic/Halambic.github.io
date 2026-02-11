@@ -842,6 +842,7 @@ M47 Patton 331,Austria,Cold War,Event,Medium,Medium,High,Medium,Normal,Medium,Me
 Tankora-72,Soviet Union,Modern,Event,Heavy,Medium,High,Medium,Fast,High,Medium,No,Yes,No,No,Yes,Yes,No,No,No,No,No
 T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Medium,Fast,High,Medium,No,No,No,No,No,No,No,No,No,No,No
 `;
+    
     // ==========================================
     // 3. COMPOSANTS UTILITAIRES (Radar, Dropdowns, etc.)
     // ==========================================
@@ -900,6 +901,7 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
 
       useEffect(() => {
           if (!isRunning) return;
+
           const interval = setInterval(() => {
               const target = localStorage.getItem('drawTimerTarget');
               if (!target) {
@@ -907,9 +909,11 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                   setTimeLeft(0);
                   return;
               }
+
               const now = Date.now();
               const targetTime = parseInt(target, 10);
               const diff = Math.floor((targetTime - now) / 1000);
+
               if (diff <= 0) {
                   if (audioRef.current) {
                       audioRef.current.play().catch(e => console.log("Audio error", e));
@@ -921,6 +925,7 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                   setTimeLeft(diff);
               }
           }, 1000);
+
           return () => clearInterval(interval);
       }, [isRunning]);
 
@@ -985,6 +990,7 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
       };
 
       const points = data.map((d, i) => getCoordinates(d.value, i)).join(",");
+
       const levels = [0.25, 0.5, 0.75, 1];
 
       return (
@@ -1219,13 +1225,13 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
     };
 
     const ProfileModal = ({ isOpen, onClose, stats, lang, tanks, collection }) => {
-      const [filterWW2, setFilterWW2] = useState(false);
+      const [activeEra, setActiveEra] = useState('All');
       
       if (!isOpen) return null;
       
       const getGroupStats = (groupKey) => {
         const counts = {};
-        const relevantTanks = filterWW2 ? tanks.filter(t => t.Age === 'WW1-WW2') : tanks;
+        const relevantTanks = activeEra !== 'All' ? tanks.filter(t => t.Age === activeEra) : tanks;
         relevantTanks.forEach(t => {
           const key = t[groupKey];
           if (!key) return;
@@ -1235,7 +1241,7 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
         Object.keys(collection).forEach(id => {
           const tank = tanks.find(t => t.id.toString() === id.toString());
           if (tank && tank[groupKey] && counts[tank[groupKey]]) {
-             if (filterWW2 && tank.Age !== 'WW1-WW2') return;
+             if (activeEra !== 'All' && tank.Age !== activeEra) return;
              counts[tank[groupKey]].owned++;
           }
         });
@@ -1266,9 +1272,11 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
             <div className="flex-1 p-8 overflow-y-auto custom-scrollbar bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMCAwIDQwIDQwIiBmaWxsPSJub25lIiBzdHJva2U9IiMzMzQxNTUiIHN0cm9rZS1vcGFjaXR5PSIwLjAzIiBzdHJva2Utd2lkdGg9IjEiPjxwYXRoIGQ9Ik0wIDQwaDQwTTAgMGg0MCIvPjwvc3ZnPg==')]">
               <div className="flex justify-between items-center mb-6">
                 <h3 className="text-xl font-bold text-white flex items-center gap-2 uppercase tracking-wide"><Icons.Database className="text-blue-500" /> {lang === 'fr' ? 'Progression Détaillée' : 'Detailed Progression'}</h3>
-                <div className="flex items-center gap-4">
-                     <button onClick={() => setFilterWW2(!filterWW2)} className={`flex items-center gap-2 px-3 py-1.5 rounded-full border text-xs font-bold transition-all ${filterWW2 ? 'bg-amber-600 border-amber-500 text-white' : 'bg-slate-800 border-white/10 text-slate-400 hover:text-white'}`}>{filterWW2 ? <Icons.ToggleRight size={16} /> : <Icons.ToggleLeft size={16} />}{lang === 'fr' ? 'PGM-SGM Uniquement' : 'WW1-WW2 Only'}</button>
-                    <button onClick={onClose} className="text-slate-500 hover:text-white transition-colors"><Icons.X size={24} /></button>
+                <div className="flex items-center gap-2">
+                    <button onClick={() => setActiveEra(activeEra === 'WW1-WW2' ? 'All' : 'WW1-WW2')} className={`flex items-center gap-2 px-3 py-1.5 rounded-full border text-[10px] font-bold transition-all ${activeEra === 'WW1-WW2' ? 'bg-amber-600 border-amber-500 text-white' : 'bg-slate-800 border-white/10 text-slate-400 hover:text-white'}`}>{activeEra === 'WW1-WW2' ? <Icons.ToggleRight size={14} /> : <Icons.ToggleLeft size={14} />} PGM-SGM</button>
+                    <button onClick={() => setActiveEra(activeEra === 'Cold War' ? 'All' : 'Cold War')} className={`flex items-center gap-2 px-3 py-1.5 rounded-full border text-[10px] font-bold transition-all ${activeEra === 'Cold War' ? 'bg-sky-600 border-sky-500 text-white' : 'bg-slate-800 border-white/10 text-slate-400 hover:text-white'}`}>{activeEra === 'Cold War' ? <Icons.ToggleRight size={14} /> : <Icons.ToggleLeft size={14} />} {lang === 'fr' ? 'Guerre Froide' : 'Cold War'}</button>
+                    <button onClick={() => setActiveEra(activeEra === 'Modern' ? 'All' : 'Modern')} className={`flex items-center gap-2 px-3 py-1.5 rounded-full border text-[10px] font-bold transition-all ${activeEra === 'Modern' ? 'bg-emerald-600 border-emerald-500 text-white' : 'bg-slate-800 border-white/10 text-slate-400 hover:text-white'}`}>{activeEra === 'Modern' ? <Icons.ToggleRight size={14} /> : <Icons.ToggleLeft size={14} />} {lang === 'fr' ? 'Moderne' : 'Modern'}</button>
+                    <button onClick={onClose} className="text-slate-500 hover:text-white transition-colors ml-2"><Icons.X size={24} /></button>
                 </div>
               </div>
               <div className="space-y-8 animate-in fade-in slide-in-from-right-4 duration-300">
@@ -1640,8 +1648,7 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
           <ProfileModal isOpen={showProfile} onClose={() => setShowProfile(false)} stats={{ total: Object.values(collection).reduce((acc, curr) => acc + curr.length, 0), unique: Object.keys(collection).length }} lang={lang} tanks={tanks} collection={collection} />
           <footer className="py-2 text-center text-[10px] text-slate-600 border-t border-slate-800 bg-slate-900 border-b-4 border-b-slate-900">
             <p className="flex justify-center items-center gap-2">
-              <span className="text-slate-500">All rights reserved to the creator of the Discord bot</span>
-              <span className="font-black text-emerald-400 uppercase tracking-widest hover:text-emerald-300 transition-colors">Qwirdle</span>
+              <span className="text-emerald-400 hover:text-emerald-300 transition-colors uppercase tracking-widest">{translate('credits')}</span>
               <span className="opacity-30">|</span>
               <span className="opacity-50">v2.2 Reforged</span>
             </p>
