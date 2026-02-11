@@ -1022,7 +1022,7 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
       const ageStats = getGroupStats('Age');
       const tierStats = getGroupStats('Rarity');
       
-      // Data for Pie Chart - Maintenant traduit !
+      // Data for Pie Chart
       const pieData = nationStats.slice(0, 5).map((stat, i) => ({
           label: translateData(stat.label, '', lang),
           value: stat.owned,
@@ -1044,17 +1044,74 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
       const handleImport = (event) => {
           const file = event.target.files[0];
           if (!file) return;
+
           const reader = new FileReader();
           reader.onload = (e) => {
-              try {
-                  const imported = JSON.parse(e.target.result);
-                  if (typeof imported === 'object') {
-                      setCollection(imported);
-                      alert(translate('toastLoaded'));
+              const content = e.target.result;
+
+              // Check if JSON
+              if (file.name.endsWith('.json')) {
+                  try {
+                      const imported = JSON.parse(content);
+                      if (typeof imported === 'object') {
+                          setCollection(imported);
+                          alert(translate('toastLoaded'));
+                      }
+                  } catch (err) {
+                      alert(translate('fileError'));
                   }
-              } catch (err) {
-                  alert(translate('fileError'));
+                  return;
               }
+
+              // Check if TXT (Discord Bot export)
+              if (file.name.endsWith('.txt')) {
+                  let newCollection = {}; // Start fresh or merge? Let's replace as "Load" implies.
+                  
+                  const lines = content.split('\n');
+                  let inTanksSection = false;
+
+                  for (const line of lines) {
+                      const l = line.trim();
+                      if (l === 'Tanks Owned:') {
+                          inTanksSection = true;
+                          continue;
+                      }
+                      if (!inTanksSection) continue;
+                      if (!l) continue;
+
+                      // Parse line: "Name - Condition - drawn on..."
+                      // We split by " - " to separate parts
+                      const parts = l.split(' - ');
+                      if (parts.length >= 2) {
+                          const name = parts[0].trim();
+                          const rawCond = parts[1].trim();
+
+                          // Map condition text to ID
+                          let condId = 'field_ready'; // fallback
+                          if (rawCond.includes('salvage')) condId = 'salvage';
+                          else if (rawCond.includes('damaged')) condId = 'damaged';
+                          else if (rawCond.includes('worn')) condId = 'worn';
+                          else if (rawCond.includes('field ready')) condId = 'field_ready';
+                          else if (rawCond.includes('parade ready')) condId = 'parade_ready';
+                          else if (rawCond.includes('factory new')) condId = 'factory_new';
+
+                          // Find tank by name to get its ID
+                          const tankData = tanks.find(t => t.Name === name);
+                          if (tankData) {
+                              if (!newCollection[tankData.id]) {
+                                  newCollection[tankData.id] = [];
+                              }
+                              newCollection[tankData.id].push(condId);
+                          }
+                      }
+                  }
+                  
+                  setCollection(newCollection);
+                  alert(translate('toastLoaded'));
+                  return;
+              }
+              
+              alert(translate('fileError'));
           };
           reader.readAsText(file);
       };
@@ -1089,7 +1146,7 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                  <button onClick={handleExport} className="w-full py-2 bg-slate-800 hover:bg-slate-700 text-xs font-bold text-emerald-400 rounded border border-white/5 flex items-center justify-center gap-2 transition-colors"><Icons.Download size={14}/> {translate('exportData')}</button>
                  <label className="w-full py-2 bg-slate-800 hover:bg-slate-700 text-xs font-bold text-blue-400 rounded border border-white/5 flex items-center justify-center gap-2 transition-colors cursor-pointer">
                     <Icons.Upload size={14}/> {translate('importData')}
-                    <input type="file" accept=".json" className="hidden" onChange={handleImport} />
+                    <input type="file" accept=".json,.txt" className="hidden" onChange={handleImport} />
                  </label>
               </div>
             </div>
@@ -1329,7 +1386,7 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                   <h1 className="text-4xl md:text-5xl font-military uppercase tracking-wider text-slate-100 flex items-center gap-4 drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]">
                     <span className="text-emerald-500 drop-shadow-[0_0_15px_rgba(16,185,129,0.8)]"><Icons.Tank size={42} strokeWidth={2.5} /></span>
                     <span>Tankora <span className="text-emerald-500">DB</span></span>
-                    <span className="text-[10px] font-sans font-bold bg-slate-800 text-slate-400 px-2 py-1 rounded border border-white/10 ml-2 self-start mt-2">v2.6</span>
+                    <span className="text-[10px] font-sans font-bold bg-slate-800 text-slate-400 px-2 py-1 rounded border border-white/10 ml-2 self-start mt-2">v2.7</span>
                   </h1>
                   <div className="text-xs font-medium text-slate-400 mt-2 flex flex-col sm:flex-row sm:items-center gap-3">
                     <span className="flex items-center gap-1.5 bg-slate-800/50 px-3 py-1 rounded-full border border-white/5 cursor-pointer hover:bg-slate-800 hover:text-emerald-400 transition-colors group" onClick={() => setShowProfile(true)} title={translate('details')}>
@@ -1618,7 +1675,7 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
             <p className="flex justify-center items-center gap-2">
               <span className="text-emerald-400 hover:text-emerald-300 transition-colors uppercase tracking-widest">{translate('credits')}</span>
               <span className="opacity-30">|</span>
-              <span className="opacity-50">v2.6 Reforged</span>
+              <span className="opacity-50">v2.7 Reforged</span>
             </p>
           </footer>
         </div>
