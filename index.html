@@ -293,7 +293,7 @@
         totalVehicles: "Véhicules total",
         uniqueModels: "Modèles uniques",
         addAnother: "Ajouter un autre",
-        credits: "All rights reserved to the creator of the Discord bot",
+        credits: <React.Fragment>All rights reserved to the creator of the Discord bot <span className="font-black text-emerald-400 uppercase tracking-widest hover:text-emerald-300 transition-colors">Qwirdle</span></React.Fragment>,
         supplyDrop: "Ravitaillement",
         openSupply: "Ouvrir caisse",
         statsReport: "Rapport de Progression",
@@ -362,7 +362,7 @@
         totalVehicles: "Total vehicles",
         uniqueModels: "Unique models",
         addAnother: "Add another",
-        credits: "All rights reserved to the creator of the Discord bot",
+        credits: <React.Fragment>All rights reserved to the creator of the Discord bot <span className="font-black text-emerald-400 uppercase tracking-widest hover:text-emerald-300 transition-colors">Qwirdle</span></React.Fragment>,
         supplyDrop: "Supply Drop",
         openSupply: "Open Crate",
         statsReport: "Progression Report",
@@ -664,7 +664,7 @@ Chieftain Mk 1,United Kingdom,Cold War,Tier V,Heavy,Very Heavy,Very High,Medium,
 Chieftain Mk 2,United Kingdom,Cold War,Tier V,Heavy,Very Heavy,Very High,Medium,Normal,High,Very High,No,Yes,No,No,No,No,No,No,No,No,No
 Humber Hornet,United Kingdom,Cold War,Tier II,Very Light,N/A,N/A,Medium,Fast,Low,High,No,No,No,No,No,No,No,No,Yes,No,No
 Schützenpanzer SPz 11-2 Kurz,Germany,Cold War,Tier I,Very Light,Very Light,Low,Small,Fast,Medium,Medium,Yes,No,No,No,No,No,No,No,No,No,No
-Schützenpanzer Lang HS.30,Germany,Cold War,Tier I,Very Light,Very Light,Low,Small,Fast,Low,Medium,Yes,No,No,No,No,No,No,No,No,No,No,No
+Schützenpanzer Lang HS.30,Germany,Cold War,Tier I,Very Light,Very Light,Low,Small,Fast,Low,Medium,Yes,No,No,No,No,No,No,No,No,No,No
 Schützenpanzer Lang HS.30 (106mm),Germany,Cold War,Tier II,Very Light,Medium,High,Small,Fast,Low,Medium,No,No,No,No,No,No,No,No,No,No,No
 Leopard 1,Germany,Cold War,Tier IV,Light,Heavy,Very High,Medium,Fast,Medium,High,No,No,No,No,No,Yes,No,No,No,No,No
 Kanonenjagdpanzer,Germany,Cold War,Tier III,Light,Medium,High,Small,Fast,Low,High,No,No,No,No,No,Yes,No,No,No,No,No
@@ -880,7 +880,6 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
     };
 
     const DrawTimer = ({ lang }) => {
-      // Calculate initial state from localStorage to avoid "reset" visual glitch on F5
       const getInitialState = () => {
          try {
             const target = localStorage.getItem('drawTimerTarget');
@@ -899,10 +898,8 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
       const [isRunning, setIsRunning] = useState(initialState.running);
       const audioRef = useRef(null);
 
-      // Effect to handle the interval
       useEffect(() => {
           if (!isRunning) return;
-
           const interval = setInterval(() => {
               const target = localStorage.getItem('drawTimerTarget');
               if (!target) {
@@ -910,13 +907,10 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                   setTimeLeft(0);
                   return;
               }
-
               const now = Date.now();
               const targetTime = parseInt(target, 10);
               const diff = Math.floor((targetTime - now) / 1000);
-
               if (diff <= 0) {
-                  // Timer finished
                   if (audioRef.current) {
                       audioRef.current.play().catch(e => console.log("Audio error", e));
                   }
@@ -927,7 +921,6 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                   setTimeLeft(diff);
               }
           }, 1000);
-
           return () => clearInterval(interval);
       }, [isRunning]);
 
@@ -971,7 +964,6 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                  </span>
             </div>
             
-            {/* If not running, make the whole text clickable to start for easier access */}
             {!isRunning && (
                 <button onClick={startTimer} className="absolute inset-0 z-10 cursor-pointer rounded-full" title="Lancer le chrono"></button>
             )}
@@ -1648,7 +1640,8 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
           <ProfileModal isOpen={showProfile} onClose={() => setShowProfile(false)} stats={{ total: Object.values(collection).reduce((acc, curr) => acc + curr.length, 0), unique: Object.keys(collection).length }} lang={lang} tanks={tanks} collection={collection} />
           <footer className="py-2 text-center text-[10px] text-slate-600 border-t border-slate-800 bg-slate-900 border-b-4 border-b-slate-900">
             <p className="flex justify-center items-center gap-2">
-              <span className="text-emerald-400 hover:text-emerald-300 transition-colors uppercase tracking-widest">{translate('credits')}</span>
+              <span className="text-slate-500">All rights reserved to the creator of the Discord bot</span>
+              <span className="font-black text-emerald-400 uppercase tracking-widest hover:text-emerald-300 transition-colors">Qwirdle</span>
               <span className="opacity-30">|</span>
               <span className="opacity-50">v2.2 Reforged</span>
             </p>
