@@ -72,6 +72,12 @@
     .radar-path { stroke-dasharray: 1000; stroke-dashoffset: 1000; animation: dash 1.5s ease-out forwards; }
     @keyframes dash { to { stroke-dashoffset: 0; } }
     .scanline { position: fixed; left: 0; top: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0) 50%, rgba(0, 0, 0, 0.2) 50%, rgba(0, 0, 0, 0.2)); background-size: 100% 4px; pointer-events: none; z-index: 9999; opacity: 0.15; }
+    /* Table styles */
+    .compare-table { width: 100%; border-collapse: separate; border-spacing: 0; }
+    .compare-table th, .compare-table td { padding: 12px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .compare-table th:first-child, .compare-table td:first-child { text-align: left; padding-left: 16px; border-right: 1px solid rgba(255,255,255,0.05); background: rgba(15, 23, 42, 0.5); position: sticky; left: 0; z-index: 10; }
+    .compare-table th { background: rgba(15, 23, 42, 0.9); font-weight: bold; color: #94a3b8; text-transform: uppercase; font-size: 0.7rem; letter-spacing: 0.05em; }
+    .compare-table tr:hover td { background: rgba(255,255,255,0.02); }
   </style>
 </head>
 
@@ -93,12 +99,12 @@
 
     const TRANSLATIONS = {
       fr: {
-        appTitle: "Tankora DB", garage: "Garage", compare: "Comparer", details: "Détails", dropRates: "Taux de drop", dropProbability: "Probabilités d'obtention", searchPlaceholder: "Rechercher...", allNations: "Toutes nations", allAges: "Toutes époques", allTiers: "Tous tiers", collected: "Acquis", myTanks: "Mes chars", noResults: "Aucun char ne correspond à ces critères.", checkSpelling: "Essayez de vérifier l'orthographe.", bestFull: "Meilleur", addToGarage: "Ajouter au garage", removeFromGarage: "Retirer du garage", selected: "Sélectionné", size: "Taille", reset: "Réinitialiser", condition: "État", instances: "ex.", totalVehicles: "Véhicules total", uniqueModels: "Modèles uniques", addAnother: "Ajouter", credits: "All rights reserved to the creator of the Discord bot", supplyDrop: "Ravitaillement", openSupply: "Ouvrir caisse", statsReport: "Rapport de Progression", statsWW2Only: "Stats PGM-SGM", timerReady: "J'AI WORK !", timerRunning: "PROCHAIN", timerCancel: "Annuler", filterStatus: "Statut", statusAll: "Tous les chars", statusOwned: "Acquis", statusMissing: "Manquants", statusDuplicates: "Doublons", salvage: "Salvage (Épave)", damaged: "Damaged (Endommagé)", worn: "Worn (Usé)", field_ready: "Field Ready (Opérationnel)", parade_ready: "Parade Ready (Défilé)", factory_new: "Factory New (Neuf)", armor: "Blindage", firepower: "Puissance de feu", mobility: "Mobilité", accuracy: "Précision", visibility: "Visibilité", stabilizer: "Stabilisateur", thermal: "Thermique", nightVision: "Vision nocturne", era: "ERA", aps: "APS", autoloader: "Chargeur auto", autocannon: "Autocannon", protectedAmmo: "Munitions protégées", rangefinder: "Télémètre", atgm_p: "ATGM (P)", atgm_s: "ATGM (S)", characteristic: "Caractéristique", nation: "Nation", age: "Époque", rarity: "Tier/Rareté", remove: "Retirer", yes: "Oui", no: "Non", selectTanks: "Sélectionnez des chars pour commencer la comparaison.", dropNote: "Taux officiels définis pour le jeu.",
-        viewMode: "Vue", compactView: "Liste", cardView: "Cartes", exportData: "Sauvegarder", importData: "Charger", fileError: "Fichier invalide", dataManagement: "Gestion des données", sortBy: "Trier par", sortNameAsc: "Nom (A-Z)", sortNameDesc: "Nom (Z-A)", sortTierAsc: "Tier (Croissant)", sortTierDesc: "Tier (Décroissant)", sortNation: "Nation", advancedFilters: "Filtres Avancés", toastSaved: "Sauvegarde effectuée !", toastLoaded: "Sauvegarde chargée !", toastAdded: "ajouté au garage !", toastRemoved: "retiré du garage.", distribution: "Répartition par Nation"
+        appTitle: "Tankora DB", garage: "Garage", compare: "Comparer", details: "Détails", dropRates: "Taux de drop", dropProbability: "Probabilités d'obtention", searchPlaceholder: "Rechercher...", allNations: "Toutes nations", allAges: "Toutes époques", allTiers: "Tous tiers", collected: "Acquis", myTanks: "Mes chars", noResults: "Aucun char ne correspond à ces critères.", checkSpelling: "Essayez de vérifier l'orthographe.", bestFull: "Meilleur", addToGarage: "Ajouter au garage", removeFromGarage: "Retirer du garage", selected: "Sélectionné", size: "Taille", reset: "Réinitialiser", condition: "État", instances: "ex.", totalVehicles: "Véhicules total", uniqueModels: "Modèles uniques", addAnother: "Ajouter", credits: <React.Fragment>All rights reserved to the creator of the Discord bot <span className="font-black text-emerald-400 uppercase tracking-widest hover:text-emerald-300 transition-colors">Qwirdle</span></React.Fragment>, supplyDrop: "Ravitaillement", openSupply: "Ouvrir caisse", statsReport: "Rapport de Progression", statsWW2Only: "Stats PGM-SGM", timerReady: "J'AI WORK !", timerRunning: "PROCHAIN", timerCancel: "Annuler", filterStatus: "Statut", statusAll: "Tous les chars", statusOwned: "Acquis", statusMissing: "Manquants", statusDuplicates: "Doublons", salvage: "Salvage (Épave)", damaged: "Damaged (Endommagé)", worn: "Worn (Usé)", field_ready: "Field Ready (Opérationnel)", parade_ready: "Parade Ready (Défilé)", factory_new: "Factory New (Neuf)", armor: "Blindage", firepower: "Puissance de feu", mobility: "Mobilité", accuracy: "Précision", visibility: "Visibilité", stabilizer: "Stabilisateur", thermal: "Thermique", nightVision: "Vision nocturne", era: "ERA", aps: "APS", autoloader: "Chargeur auto", autocannon: "Autocanon", protectedAmmo: "Munitions protégées", rangefinder: "Télémètre", atgm_p: "ATGM (P)", atgm_s: "ATGM (S)", characteristic: "Caractéristique", nation: "Nation", age: "Époque", rarity: "Tier/Rareté", remove: "Retirer", yes: "Oui", no: "Non", selectTanks: "Sélectionnez des chars pour commencer la comparaison.", dropNote: "Taux officiels définis pour le jeu.",
+        viewMode: "Vue", compactView: "Liste", cardView: "Cartes", exportData: "Sauvegarder", importData: "Charger", fileError: "Fichier invalide", dataManagement: "Gestion des données", sortBy: "Trier par", sortNameAsc: "Nom (A-Z)", sortNameDesc: "Nom (Z-A)", sortTierAsc: "Tier (Croissant)", sortTierDesc: "Tier (Décroissant)", sortNation: "Nation", advancedFilters: "Filtres Avancés", toastSaved: "Sauvegarde effectuée !", toastLoaded: "Sauvegarde chargée !", toastAdded: "ajouté au garage !", toastRemoved: "retiré du garage.", distribution: "Répartition par Nation", cleanDuplicates: "Nettoyer doublons", confirmClean: "Êtes-vous sûr de vouloir supprimer tous les doublons ? Seul le meilleur état de chaque char sera conservé.", cleanSuccess: "Doublons nettoyés avec succès !"
       },
       en: {
-        appTitle: "Tankora DB", garage: "Garage", compare: "Compare", details: "Details", dropRates: "Drop Rates", dropProbability: "Drop Probability", searchPlaceholder: "Search for a tank...", allNations: "All nations", allAges: "All ages", allTiers: "All tiers", collected: "Collected", myTanks: "My tanks", noResults: "No tanks match these criteria.", checkSpelling: "Try checking your spelling.", addToGarage: "Add to garage", removeFromGarage: "Remove from garage", selected: "Selected", size: "Size", reset: "Reset", condition: "Condition", instances: "ex.", totalVehicles: "Total vehicles", uniqueModels: "Unique models", addAnother: "Add", credits: "All rights reserved to the creator of the Discord bot", supplyDrop: "Supply Drop", openSupply: "Open Crate", statsReport: "Progression Report", timerReady: "I WORKED!", timerRunning: "NEXT", timerCancel: "Cancel", filterStatus: "Status", statusAll: "All tanks", statusOwned: "Collected", statusMissing: "Missing", statusDuplicates: "Duplicates", salvage: "Salvage", damaged: "Damaged", worn: "Worn", field_ready: "Field Ready", parade_ready: "Parade Ready", factory_new: "Factory New", armor: "Armor", firepower: "Firepower", mobility: "Mobility", accuracy: "Accuracy", visibility: "Visibility", stabilizer: "Stabilizer", thermal: "Thermal", nightVision: "Night vision", era: "ERA", aps: "APS", autoloader: "Autoloader", autocannon: "Autocannon", protectedAmmo: "Protected ammo", rangefinder: "Rangefinder", atgm_p: "ATGM (P)", atgm_s: "ATGM (S)", characteristic: "Characteristic", nation: "Nation", age: "Age", rarity: "Tier/rarity", remove: "Remove", yes: "Yes", no: "No", selectTanks: "Select tanks to start comparing.", dropNote: "Official drop rates defined for the game.",
-        viewMode: "View", compactView: "List", cardView: "Cards", exportData: "Save", importData: "Load", fileError: "Invalid file", dataManagement: "Data Management", sortBy: "Sort by", sortNameAsc: "Name (A-Z)", sortNameDesc: "Name (Z-A)", sortTierAsc: "Tier (Low to High)", sortTierDesc: "Tier (High to Low)", sortNation: "Nation", advancedFilters: "Advanced Filters", toastSaved: "Save successful!", toastLoaded: "Save loaded!", toastAdded: "added to garage!", toastRemoved: "removed from garage.", distribution: "Nation Distribution"
+        appTitle: "Tankora DB", garage: "Garage", compare: "Compare", details: "Details", dropRates: "Drop Rates", dropProbability: "Drop Probability", searchPlaceholder: "Search for a tank...", allNations: "All nations", allAges: "All ages", allTiers: "All tiers", collected: "Collected", myTanks: "My tanks", noResults: "No tanks match these criteria.", checkSpelling: "Try checking your spelling.", addToGarage: "Add to garage", removeFromGarage: "Remove from garage", selected: "Selected", size: "Size", reset: "Reset", condition: "Condition", instances: "ex.", totalVehicles: "Total vehicles", uniqueModels: "Unique models", addAnother: "Add", credits: <React.Fragment>All rights reserved to the creator of the Discord bot <span className="font-black text-emerald-400 uppercase tracking-widest hover:text-emerald-300 transition-colors">Qwirdle</span></React.Fragment>, supplyDrop: "Supply Drop", openSupply: "Open Crate", statsReport: "Progression Report", timerReady: "I WORKED!", timerRunning: "NEXT", timerCancel: "Cancel", filterStatus: "Status", statusAll: "All tanks", statusOwned: "Collected", statusMissing: "Missing", statusDuplicates: "Duplicates", salvage: "Salvage", damaged: "Damaged", worn: "Worn", field_ready: "Field Ready", parade_ready: "Parade Ready", factory_new: "Factory New", armor: "Armor", firepower: "Firepower", mobility: "Mobility", accuracy: "Accuracy", visibility: "Visibility", stabilizer: "Stabilizer", thermal: "Thermal", nightVision: "Night vision", era: "ERA", aps: "APS", autoloader: "Autoloader", autocannon: "Autocannon", protectedAmmo: "Protected ammo", rangefinder: "Rangefinder", atgm_p: "ATGM (P)", atgm_s: "ATGM (S)", characteristic: "Characteristic", nation: "Nation", age: "Age", rarity: "Tier/rarity", remove: "Remove", yes: "Yes", no: "No", selectTanks: "Select tanks to start comparing.", dropNote: "Official drop rates defined for the game.",
+        viewMode: "View", compactView: "List", cardView: "Cards", exportData: "Save", importData: "Load", fileError: "Invalid file", dataManagement: "Data Management", sortBy: "Sort by", sortNameAsc: "Name (A-Z)", sortNameDesc: "Name (Z-A)", sortTierAsc: "Tier (Low to High)", sortTierDesc: "Tier (High to Low)", sortNation: "Nation", advancedFilters: "Advanced Filters", toastSaved: "Save successful!", toastLoaded: "Save loaded!", toastAdded: "added to garage!", toastRemoved: "removed from garage.", distribution: "Nation Distribution", cleanDuplicates: "Clean Duplicates", confirmClean: "Are you sure you want to remove all duplicates? Only the best condition of each tank will be kept.", cleanSuccess: "Duplicates cleaned successfully!"
       }
     };
 
@@ -116,9 +122,6 @@
       { tier: 'Event', rate: 'Spécial', color: 'text-yellow-400' },
     ];
 
-    // ==========================================
-    // 2. DONNÉES CSV
-    // ==========================================
     const rawCSV = `Name,Nation,Age,Rarity,Armor,Firepower,Accuracy,Size,Mobility,Angled,Visibility,Autocannon,Stabilizer,Protected Ammo,Rangefinder,Autoloader,Night Vision,Thermal Vision,ERA,ATGM (P),ATGM (S),APS
 T-26 (twin-turreted),Soviet Union,WW1-WW2,Tier I,Very Light,Small Arms,Low,Small,Slow,Low,Low,No,No,No,No,No,No,No,No,No,No,No
 T-26,Soviet Union,WW1-WW2,Tier I,Very Light,Light,Medium,Small,Slow,Low,Low,No,No,No,No,No,No,No,No,No,No,No
@@ -843,6 +846,99 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
             </div>
         );
     };
+    
+    // NEW COMPARISON TABLE COMPONENT
+    const ComparisonTable = ({ compareList, getStatValue, getStatColor, translate, tData, lang }) => {
+        const stats = [
+             { label: 'armor', key: 'Armor' },
+             { label: 'firepower', key: 'Firepower' },
+             { label: 'mobility', key: 'Mobility' },
+             { label: 'accuracy', key: 'Accuracy' },
+             { label: 'visibility', key: 'Visibility' }
+        ];
+
+        const techs = [
+             { key: 'Stabilizer', label: 'stabilizer' },
+             { key: 'Thermal Vision', label: 'thermal' },
+             { key: 'Night Vision', label: 'nightVision' },
+             { key: 'ERA', label: 'era' },
+             { key: 'APS', label: 'aps' },
+             { key: 'Autoloader', label: 'autoloader' },
+             { key: 'Rangefinder', label: 'rangefinder' },
+             { key: 'Protected Ammo', label: 'protectedAmmo' },
+             { key: 'ATGM (P)', label: 'atgm_p' }
+        ];
+
+        const getBestValue = (statKey) => {
+             return Math.max(...compareList.map(t => getStatValue(t[statKey])));
+        };
+
+        return (
+            <div className="w-full overflow-x-auto">
+                 <table className="compare-table w-full text-sm text-left">
+                     <thead>
+                         <tr>
+                             <th className="p-4 bg-slate-900 sticky left-0 z-10 w-40 border-b border-white/10"></th>
+                             {compareList.map(tank => (
+                                 <th key={tank.id} className="p-4 bg-slate-900 border-b border-white/10 min-w-[200px]">
+                                     <div className="flex flex-col items-center gap-2">
+                                         <span className="text-[10px] text-slate-500 bg-slate-800 px-2 py-0.5 rounded">{tData(tank.Nation)}</span>
+                                         <span className="text-lg font-black text-white text-center leading-tight">{tank.Name}</span>
+                                         <span className="text-[10px] text-emerald-400 font-bold border border-emerald-500/30 px-1.5 rounded">{tank.Rarity}</span>
+                                     </div>
+                                 </th>
+                             ))}
+                         </tr>
+                     </thead>
+                     <tbody>
+                         {/* STATS */}
+                         <tr className="bg-slate-800/50"><td colSpan={compareList.length + 1} className="p-2 text-xs font-bold text-slate-500 uppercase tracking-widest pl-4">Performance</td></tr>
+                         {stats.map(stat => {
+                             const bestValue = getBestValue(stat.key);
+                             return (
+                                 <tr key={stat.key} className="border-b border-white/5 hover:bg-white/5 transition-colors">
+                                     <td className="p-3 font-medium text-slate-300 bg-slate-900/50 sticky left-0 z-10 border-r border-white/10 flex items-center gap-2">
+                                         {translate(stat.label)}
+                                     </td>
+                                     {compareList.map(tank => {
+                                         const val = getStatValue(tank[stat.key]);
+                                         const displayVal = lang === 'fr' ? translateData(tank[stat.key], stat.key, lang) : tank[stat.key];
+                                         const isBest = val === bestValue && bestValue > 0;
+                                         
+                                         return (
+                                             <td key={`${tank.id}-${stat.key}`} className="p-3 text-center align-middle">
+                                                 <span className={`font-bold ${isBest ? 'text-emerald-400 drop-shadow-[0_0_5px_rgba(52,211,153,0.5)]' : 'text-slate-400'}`}>
+                                                     {displayVal}
+                                                 </span>
+                                             </td>
+                                         );
+                                     })}
+                                 </tr>
+                             );
+                         })}
+
+                         {/* TECHS */}
+                         <tr className="bg-slate-800/50"><td colSpan={compareList.length + 1} className="p-2 text-xs font-bold text-slate-500 uppercase tracking-widest pl-4">Technologies</td></tr>
+                         {techs.map(tech => (
+                             <tr key={tech.key} className="border-b border-white/5 hover:bg-white/5 transition-colors">
+                                 <td className="p-3 font-medium text-slate-300 bg-slate-900/50 sticky left-0 z-10 border-r border-white/10">
+                                     {translate(tech.label)}
+                                 </td>
+                                 {compareList.map(tank => (
+                                     <td key={`${tank.id}-${tech.key}`} className="p-3 text-center align-middle">
+                                         {tank[tech.key] === 'Yes' ? 
+                                             <span className="inline-flex justify-center items-center w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400"><Icons.Check size={14} strokeWidth={3}/></span> 
+                                             : <span className="text-slate-700">-</span>
+                                         }
+                                     </td>
+                                 ))}
+                             </tr>
+                         ))}
+                     </tbody>
+                 </table>
+            </div>
+        );
+    };
 
     const parseCSV = (text) => {
       const lines = text.trim().split('\n');
@@ -994,7 +1090,7 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
       );
     };
 
-    const ProfileModal = ({ isOpen, onClose, stats, lang, tanks, collection, setCollection, translate }) => {
+    const ProfileModal = ({ isOpen, onClose, stats, lang, tanks, collection, setCollection, translate, addToast }) => {
       const [activeEra, setActiveEra] = useState('All');
       
       if (!isOpen) return null;
@@ -1029,6 +1125,24 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
           color: ['#10b981', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6'][i] || '#64748b'
       }));
 
+      const handleCleanDuplicates = () => {
+        if (window.confirm(translate('confirmClean'))) {
+            const newCollection = {};
+            Object.keys(collection).forEach(key => {
+                const instances = collection[key];
+                if (instances && instances.length > 0) {
+                    // Find best condition based on rank
+                    const best = instances.reduce((prev, current) => {
+                        return (CONDITIONS[current].rank > CONDITIONS[prev].rank) ? current : prev;
+                    });
+                    newCollection[key] = [best];
+                }
+            });
+            setCollection(newCollection);
+            addToast(translate('cleanSuccess'));
+        }
+      };
+
       const handleExport = () => {
           const dataStr = JSON.stringify(collection);
           const blob = new Blob([dataStr], { type: "application/json" });
@@ -1039,6 +1153,7 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
           document.body.appendChild(a);
           a.click();
           document.body.removeChild(a);
+          addToast(translate('toastSaved'));
       };
 
       const handleImport = (event) => {
@@ -1055,7 +1170,7 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                       const imported = JSON.parse(content);
                       if (typeof imported === 'object') {
                           setCollection(imported);
-                          alert(translate('toastLoaded'));
+                          addToast(translate('toastLoaded'));
                       }
                   } catch (err) {
                       alert(translate('fileError'));
@@ -1107,7 +1222,7 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                   }
                   
                   setCollection(newCollection);
-                  alert(translate('toastLoaded'));
+                  addToast(translate('toastLoaded'));
                   return;
               }
               
@@ -1143,6 +1258,7 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
 
               <div className="w-full pt-6 border-t border-white/5 flex flex-col gap-2 mt-auto">
                  <h4 className="text-[10px] text-slate-500 uppercase font-bold mb-1">{translate('dataManagement')}</h4>
+                 <button onClick={handleCleanDuplicates} className="w-full py-2 bg-slate-800 hover:bg-slate-700 text-xs font-bold text-orange-400 rounded border border-white/5 flex items-center justify-center gap-2 transition-colors"><Icons.Trash2 size={14}/> {translate('cleanDuplicates')}</button>
                  <button onClick={handleExport} className="w-full py-2 bg-slate-800 hover:bg-slate-700 text-xs font-bold text-emerald-400 rounded border border-white/5 flex items-center justify-center gap-2 transition-colors"><Icons.Download size={14}/> {translate('exportData')}</button>
                  <label className="w-full py-2 bg-slate-800 hover:bg-slate-700 text-xs font-bold text-blue-400 rounded border border-white/5 flex items-center justify-center gap-2 transition-colors cursor-pointer">
                     <Icons.Upload size={14}/> {translate('importData')}
@@ -1154,7 +1270,7 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
               <div className="flex justify-between items-center mb-6">
                 <h3 className="text-xl font-bold text-white flex items-center gap-2 uppercase tracking-wide"><Icons.Database className="text-blue-500" /> {lang === 'fr' ? 'Progression Détaillée' : 'Detailed Progression'}</h3>
                 <div className="flex items-center gap-2">
-                    <button onClick={() => setActiveEra(activeEra === 'WW1-WW2' ? 'All' : 'WW1-WW2')} className={`flex items-center gap-2 px-3 py-1.5 rounded-full border text-[10px] font-bold transition-all ${activeEra === 'WW1-WW2' ? 'bg-amber-600 border-amber-500 text-white' : 'bg-slate-800 border-white/10 text-slate-400 hover:text-white'}`}>{activeEra === 'WW1-WW2' ? <Icons.ToggleRight size={14} /> : <Icons.ToggleLeft size={14} />} {lang === 'fr' ? 'PGM-SGM' : 'WW1-WW2'}</button>
+                    <button onClick={() => setActiveEra(activeEra === 'WW1-WW2' ? 'All' : 'WW1-WW2')} className={`flex items-center gap-2 px-3 py-1.5 rounded-full border text-[10px] font-bold transition-all ${activeEra === 'WW1-WW2' ? 'bg-amber-600 border-amber-500 text-white' : 'bg-slate-800 border-white/10 text-slate-400 hover:text-white'}`}>{activeEra === 'WW1-WW2' ? <Icons.ToggleRight size={14} /> : <Icons.ToggleLeft size={14} />} PGM-SGM</button>
                     <button onClick={() => setActiveEra(activeEra === 'Cold War' ? 'All' : 'Cold War')} className={`flex items-center gap-2 px-3 py-1.5 rounded-full border text-[10px] font-bold transition-all ${activeEra === 'Cold War' ? 'bg-sky-600 border-sky-500 text-white' : 'bg-slate-800 border-white/10 text-slate-400 hover:text-white'}`}>{activeEra === 'Cold War' ? <Icons.ToggleRight size={14} /> : <Icons.ToggleLeft size={14} />} {lang === 'fr' ? 'Guerre Froide' : 'Cold War'}</button>
                     <button onClick={() => setActiveEra(activeEra === 'Modern' ? 'All' : 'Modern')} className={`flex items-center gap-2 px-3 py-1.5 rounded-full border text-[10px] font-bold transition-all ${activeEra === 'Modern' ? 'bg-emerald-600 border-emerald-500 text-white' : 'bg-slate-800 border-white/10 text-slate-400 hover:text-white'}`}>{activeEra === 'Modern' ? <Icons.ToggleRight size={14} /> : <Icons.ToggleLeft size={14} />} {lang === 'fr' ? 'Moderne' : 'Modern'}</button>
                     <button onClick={onClose} className="text-slate-500 hover:text-white transition-colors ml-2"><Icons.X size={24} /></button>
@@ -1386,7 +1502,7 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                   <h1 className="text-4xl md:text-5xl font-military uppercase tracking-wider text-slate-100 flex items-center gap-4 drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]">
                     <span className="text-emerald-500 drop-shadow-[0_0_15px_rgba(16,185,129,0.8)]"><Icons.Tank size={42} strokeWidth={2.5} /></span>
                     <span>Tankora <span className="text-emerald-500">DB</span></span>
-                    <span className="text-[10px] font-sans font-bold bg-slate-800 text-slate-400 px-2 py-1 rounded border border-white/10 ml-2 self-start mt-2">v2.7</span>
+                    <span className="text-[10px] font-sans font-bold bg-slate-800 text-slate-400 px-2 py-1 rounded border border-white/10 ml-2 self-start mt-2">v2.8</span>
                   </h1>
                   <div className="text-xs font-medium text-slate-400 mt-2 flex flex-col sm:flex-row sm:items-center gap-3">
                     <span className="flex items-center gap-1.5 bg-slate-800/50 px-3 py-1 rounded-full border border-white/5 cursor-pointer hover:bg-slate-800 hover:text-emerald-400 transition-colors group" onClick={() => setShowProfile(true)} title={translate('details')}>
@@ -1596,13 +1712,38 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                 <div className="overflow-auto p-6 md:p-8 custom-scrollbar">
                   {compareList.length === 0 ? (<div className="text-center py-20 text-slate-500"><p>{translate('selectTanks')}</p></div>) : (
                     <div className="min-w-[800px]"> 
-                      <div className="grid grid-cols-[200px_repeat(4,1fr)] gap-4 mb-8">
-                        <div className="flex flex-col justify-end pb-2 font-bold text-slate-500 uppercase tracking-widest text-xs">{translate('characteristic')}</div>
-                        {compareList.map(tank => (<div key={tank.id} className="relative bg-slate-800/50 p-4 rounded-2xl border border-white/5 flex flex-col items-center text-center"><button onClick={() => toggleCompare(tank)} className="absolute top-2 right-2 text-slate-500 hover:text-red-400 transition-colors"><Icons.X size={16} /></button><span className="text-[10px] uppercase font-bold text-slate-400 mb-2 bg-slate-900/80 px-2 py-0.5 rounded-full">{tData(tank.Nation)}</span><h3 className="font-black text-lg leading-tight text-white mb-1">{tank.Name}</h3><span className={`text-[10px] px-2 py-0.5 rounded font-bold border ${tank.Rarity.includes('Tier I') && !tank.Rarity.includes('II') && !tank.Rarity.includes('V') ? 'bg-slate-700 text-slate-300 border-white/5' : 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20'}`}>{tank.Rarity}</span></div>))}
-                        {[...Array(4 - compareList.length)].map((_, i) => (<div key={`empty-${i}`} className="bg-slate-900/20 rounded-2xl border border-white/5 border-dashed flex items-center justify-center min-h-[140px] opacity-30"><span className="text-slate-600 text-sm font-military tracking-widest uppercase">Empty Slot</span></div>))}
-                      </div>
-                      {compareList.length > 0 && (<div className="mb-8 p-4 bg-[#0f141a] border border-white/5 rounded-2xl flex justify-center tech-border"><div className="flex gap-8 items-center"><div className="text-xs text-slate-500 uppercase tracking-widest max-w-[150px]">Comparing up to 4 units on the tactical grid.</div><div className="relative" style={{ width: 300, height: 300 }}>{compareList.map((tank, idx) => { const colors = ['#10b981', '#3b82f6', '#f59e0b', '#ef4444']; return (<div key={tank.id} className="absolute inset-0 flex justify-center items-center pointer-events-none"><RadarChart size={280} color={colors[idx]} data={[{ label: 'ARM', value: getStatValue(tank.Armor) }, { label: 'FPOW', value: getStatValue(tank.Firepower) }, { label: 'ACC', value: getStatValue(tank.Accuracy) }, { label: 'MOB', value: getStatValue(tank.Mobility) }, { label: 'VIS', value: getStatValue(tank.Visibility) }]} /></div>) })}</div><div className="flex flex-col gap-2">{compareList.map((tank, idx) => (<div key={tank.id} className="flex items-center gap-2"><div className="w-3 h-3 rounded-full" style={{ background: ['#10b981', '#3b82f6', '#f59e0b', '#ef4444'][idx] }}></div><span className="text-xs font-bold text-slate-300">{tank.Name}</span></div>))}</div></div></div>)}
-                      <div className="space-y-6"><div className="space-y-2"><h4 className="font-bold text-emerald-400 uppercase text-xs tracking-wider mb-2 border-b border-white/5 pb-1">Performance</h4>{[{ label: 'armor', key: 'Armor', icon: Icons.Shield }, { label: 'firepower', key: 'Firepower', icon: Icons.Crosshair }, { label: 'mobility', key: 'Mobility', icon: Icons.Zap }, { label: 'accuracy', key: 'Accuracy', icon: Icons.Target }, { label: 'visibility', key: 'Visibility', icon: Icons.Eye }].map(stat => (<div key={stat.key} className="grid grid-cols-[200px_repeat(4,1fr)] gap-4 items-center py-2 border-b border-white/5 last:border-0 hover:bg-white/5 transition-colors rounded-lg px-2"><div className="flex items-center gap-2 text-slate-400 text-sm font-medium"><stat.icon size={14} /> {translate(stat.label)}</div>{compareList.map(tank => { const val = getStatValue(tank[stat.key]); const displayVal = lang === 'fr' ? translateData(tank[stat.key], stat.key, lang) : tank[stat.key]; return (<div key={`${tank.id}-${stat.key}`} className="text-center"><span className={`inline-block px-2 py-0.5 rounded text-xs font-bold ${getStatColor(val).replace('bg-', 'text-')}`}>{displayVal}</span><div className="h-1 w-full bg-slate-700/50 rounded-full mt-1 overflow-hidden"><div className={`h-full ${getStatColor(val)}`} style={{ width: `${val}%` }}></div></div></div>); })}</div>))}</div><div className="space-y-2"><h4 className="font-bold text-blue-400 uppercase text-xs tracking-wider mb-2 border-b border-white/5 pb-1">Tech Specs</h4>{[{ key: 'Stabilizer', label: 'stabilizer' }, { key: 'Thermal Vision', label: 'thermal' }, { key: 'Night Vision', label: 'nightVision' }, { key: 'ERA', label: 'era' }, { key: 'APS', label: 'aps' }, { key: 'Autoloader', label: 'autoloader' }, { key: 'Rangefinder', label: 'rangefinder' }, { key: 'Protected Ammo', label: 'protectedAmmo' }, { key: 'ATGM (P)', label: 'atgm_p' }].map(tech => (<div key={tech.key} className="grid grid-cols-[200px_repeat(4,1fr)] gap-4 items-center py-2 border-b border-white/5 last:border-0 hover:bg-white/5 transition-colors rounded-lg px-2"><div className="text-slate-400 text-sm font-medium pl-6">{translate(tech.label)}</div>{compareList.map(tank => (<div key={`${tank.id}-${tech.key}`} className="flex justify-center">{tank[tech.key] === 'Yes' ? <span className="text-emerald-400 bg-emerald-900/20 p-1 rounded-full"><Icons.Check size={16} strokeWidth={3} /></span> : <span className="text-slate-700/50"><Icons.X size={16} /></span>}</div>))}</div>))}</div></div>
+                        <div className="mb-8 p-4 bg-[#0f141a] border border-white/5 rounded-2xl flex justify-center tech-border">
+                          <div className="flex gap-8 items-center">
+                            <div className="text-xs text-slate-500 uppercase tracking-widest max-w-[150px]">Comparing up to 4 units on the tactical grid.</div>
+                            <div className="relative" style={{ width: 300, height: 300 }}>
+                              {compareList.map((tank, idx) => {
+                                const colors = ['#10b981', '#3b82f6', '#f59e0b', '#ef4444'];
+                                return (
+                                  <div key={tank.id} className="absolute inset-0 flex justify-center items-center pointer-events-none">
+                                    <RadarChart size={280} color={colors[idx]} data={[{ label: 'ARM', value: getStatValue(tank.Armor) }, { label: 'FPOW', value: getStatValue(tank.Firepower) }, { label: 'ACC', value: getStatValue(tank.Accuracy) }, { label: 'MOB', value: getStatValue(tank.Mobility) }, { label: 'VIS', value: getStatValue(tank.Visibility) }]} />
+                                  </div>
+                                )
+                              })}
+                            </div>
+                            <div className="flex flex-col gap-2">
+                              {compareList.map((tank, idx) => (
+                                <div key={tank.id} className="flex items-center gap-2">
+                                  <div className="w-3 h-3 rounded-full" style={{ background: ['#10b981', '#3b82f6', '#f59e0b', '#ef4444'][idx] }}></div>
+                                  <span className="text-xs font-bold text-slate-300">{tank.Name}</span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+
+                      <ComparisonTable 
+                        compareList={compareList} 
+                        getStatValue={getStatValue} 
+                        getStatColor={getStatColor} 
+                        translate={translate} 
+                        tData={tData} 
+                        lang={lang} 
+                      />
                     </div>
                   )}
                 </div>
@@ -1670,12 +1811,12 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
           )}
           
           <SupplyDropModal isOpen={showSupply} onClose={() => setShowSupply(false)} onOpenDrop={initiateSupplyDrop} isOpening={isOpeningDrop} dropResult={dropResult} lang={lang} />
-          <ProfileModal isOpen={showProfile} onClose={() => setShowProfile(false)} stats={{ total: Object.values(collection).reduce((acc, curr) => acc + curr.length, 0), unique: Object.keys(collection).length }} lang={lang} tanks={tanks} collection={collection} setCollection={setCollection} translate={translate} />
+          <ProfileModal isOpen={showProfile} onClose={() => setShowProfile(false)} stats={{ total: Object.values(collection).reduce((acc, curr) => acc + curr.length, 0), unique: Object.keys(collection).length }} lang={lang} tanks={tanks} collection={collection} setCollection={setCollection} translate={translate} addToast={addToast} />
           <footer className="py-2 text-center text-[10px] text-slate-600 border-t border-slate-800 bg-slate-900 border-b-4 border-b-slate-900">
             <p className="flex justify-center items-center gap-2">
               <span className="text-emerald-400 hover:text-emerald-300 transition-colors uppercase tracking-widest">{translate('credits')}</span>
               <span className="opacity-30">|</span>
-              <span className="opacity-50">v2.7 Reforged</span>
+              <span className="opacity-50">v2.8 Reforged</span>
             </p>
           </footer>
         </div>
