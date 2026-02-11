@@ -251,7 +251,7 @@
   <div id="root" class="h-full w-full flex flex-col"></div>
 
   <script type="text/babel">
-    const { useState, useEffect, useMemo } = React;
+    const { useState, useEffect, useMemo, useRef } = React;
 
     // ==========================================
     // 1. CONSTANTES & CONFIGURATION
@@ -297,6 +297,9 @@
         supplyDrop: "Ravitaillement",
         openSupply: "Ouvrir caisse",
         statsReport: "Rapport de Progression",
+        timerReady: "J'AI DRAW !",
+        timerRunning: "PROCHAIN",
+        timerCancel: "Annuler",
         // Filtres Status
         filterStatus: "Statut",
         statusAll: "Tous les chars",
@@ -368,6 +371,9 @@
         supplyDrop: "Supply Drop",
         openSupply: "Open Crate",
         statsReport: "Progression Report",
+        timerReady: "I DREW!",
+        timerRunning: "NEXT",
+        timerCancel: "Cancel",
         // Status Filter
         filterStatus: "Status",
         statusAll: "All tanks",
@@ -852,7 +858,100 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
     // 3. COMPOSANTS UTILITAIRES (Radar, Dropdowns, etc.)
     // ==========================================
 
+    const DrawTimer = ({ lang }) => {
+      const [timeLeft, setTimeLeft] = useState(0);
+      const [isRunning, setIsRunning] = useState(false);
+      const audioRef = React.useRef(null);
+
+      // Initialize from local storage
+      useEffect(() => {
+        const target = localStorage.getItem('drawTimerTarget');
+        if (target) {
+          const diff = Math.floor((parseInt(target) - Date.now()) / 1000);
+          if (diff > 0) {
+            setTimeLeft(diff);
+            setIsRunning(true);
+          } else {
+            localStorage.removeItem('drawTimerTarget');
+          }
+        }
+      }, []);
+
+      // Timer logic
+      useEffect(() => {
+        let interval = null;
+        if (isRunning && timeLeft > 0) {
+          interval = setInterval(() => {
+            setTimeLeft((prev) => {
+              const newVal = prev - 1;
+              if (newVal <= 0) {
+                // Timer finished
+                if (audioRef.current) {
+                    audioRef.current.play().catch(e => console.log("Audio play failed", e));
+                }
+                setIsRunning(false);
+                localStorage.removeItem('drawTimerTarget');
+                return 0;
+              }
+              return newVal;
+            });
+          }, 1000);
+        } else if (timeLeft === 0) {
+           setIsRunning(false);
+        }
+        return () => clearInterval(interval);
+      }, [isRunning, timeLeft]);
+
+      const startTimer = () => {
+        const minutes = 30;
+        const targetTime = Date.now() + minutes * 60 * 1000;
+        localStorage.setItem('drawTimerTarget', targetTime);
+        setTimeLeft(minutes * 60);
+        setIsRunning(true);
+      };
+
+       const cancelTimer = () => {
+        localStorage.removeItem('drawTimerTarget');
+        setTimeLeft(0);
+        setIsRunning(false);
+      };
+
+      const formatTime = (seconds) => {
+        const m = Math.floor(seconds / 60);
+        const s = seconds % 60;
+        return `${m}:${s < 10 ? '0' : ''}${s}`;
+      };
+
+      return (
+        <div className="flex items-center gap-2 bg-slate-800/80 rounded-full border border-white/10 p-1 pr-4 shadow-inner ml-2 relative group">
+            <audio ref={audioRef} src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" preload="auto"></audio>
+            <button
+                onClick={isRunning ? cancelTimer : startTimer}
+                className={`w-8 h-8 rounded-full flex items-center justify-center transition-all z-20 relative ${isRunning ? 'bg-orange-500/20 text-orange-400 hover:bg-orange-500 hover:text-white' : 'bg-emerald-500 hover:bg-emerald-400 text-white shadow-[0_0_10px_#10b981]'}`}
+                title={isRunning ? (lang === 'fr' ? "Annuler le chrono" : "Cancel timer") : (lang === 'fr' ? "Lancer le chrono (30m)" : "Start timer (30m)")}
+            >
+                {isRunning ? <Icons.X size={16} /> : <Icons.Target size={16} />}
+            </button>
+
+            <div className="flex flex-col leading-none z-10">
+                 <span className="text-[9px] font-bold text-slate-500 uppercase tracking-wider">
+                    {isRunning ? (lang === 'fr' ? "Prochain Draw" : "Next Draw") : (lang === 'fr' ? "Prêt !" : "Ready!")}
+                 </span>
+                 <span className={`font-mono font-bold text-sm ${isRunning ? 'text-orange-400 animate-pulse' : 'text-emerald-400'}`}>
+                    {isRunning ? formatTime(timeLeft) : (lang === 'fr' ? "J'AI DRAW !" : "I DREW!")}
+                 </span>
+            </div>
+            
+            {/* If not running, make the whole text clickable to start for easier access */}
+            {!isRunning && (
+                <button onClick={startTimer} className="absolute inset-0 z-10 cursor-pointer rounded-full" title="Lancer le chrono"></button>
+            )}
+        </div>
+      );
+    };
+
     const RadarChart = ({ data, size = 200, color = "#10b981" }) => {
+    // ... rest of the code remains the same ...
       // Data format: { label: string, value: number (0-100) }[]
       // 5 axis: Armor, Firepower, Mobility, Accuracy, Visibility
 
@@ -1633,6 +1732,8 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                       </svg>
                     </button>
                   </div>
+
+                  <DrawTimer lang={lang} />
 
                   {/* BOUTON TAUX DE DROP */}
                   <button onClick={() => setShowDropRates(true)} className="bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white p-2.5 rounded-full flex items-center justify-center transition-all border border-white/10 hover:border-white/20 hover:shadow-lg hover:shadow-purple-500/20 active:scale-95" title={translate('dropRates')}>
