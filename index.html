@@ -1008,6 +1008,15 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
         return 0;
     };
 
+    const getNationRank = (nation) => {
+        if (nation.includes('United States')) return 1;
+        if (nation.includes('German')) return 2;
+        if (nation.includes('Soviet') || nation.includes('Russia')) return 3;
+        if (nation.includes('Kingdom')) return 4;
+        if (nation.includes('France')) return 5;
+        return 99; // Autres nations (Autriche, etc.) à la fin
+    };
+
     const translateData = (val, key = '', lang = 'fr') => {
       if (lang === 'fr' && ['Firepower', 'Accuracy', 'Mobility', 'Visibility', 'Size'].includes(key)) {
         const feminineMap = {
@@ -1477,9 +1486,30 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
             result.sort((a, b) => {
                 if (sortBy === 'name_asc') return a.Name.localeCompare(b.Name);
                 if (sortBy === 'name_desc') return b.Name.localeCompare(a.Name);
-                if (sortBy === 'nation') return a.Nation.localeCompare(b.Nation);
-                if (sortBy === 'tier_asc') return getTierRank(a.Rarity) - getTierRank(b.Rarity);
-                if (sortBy === 'tier_desc') return getTierRank(b.Rarity) - getTierRank(a.Rarity);
+                
+                if (sortBy === 'nation') {
+                    const nationDiff = getNationRank(a.Nation) - getNationRank(b.Nation);
+                    if (nationDiff !== 0) return nationDiff;
+                    const tierDiff = getTierRank(a.Rarity) - getTierRank(b.Rarity);
+                    if (tierDiff !== 0) return tierDiff;
+                    return a.Name.localeCompare(b.Name);
+                }
+                
+                if (sortBy === 'tier_asc') {
+                    const tierDiff = getTierRank(a.Rarity) - getTierRank(b.Rarity);
+                    if (tierDiff !== 0) return tierDiff;
+                    const nationDiff = getNationRank(a.Nation) - getNationRank(b.Nation);
+                    if (nationDiff !== 0) return nationDiff;
+                    return a.Name.localeCompare(b.Name);
+                }
+                
+                if (sortBy === 'tier_desc') {
+                    const tierDiff = getTierRank(b.Rarity) - getTierRank(a.Rarity);
+                    if (tierDiff !== 0) return tierDiff;
+                    const nationDiff = getNationRank(a.Nation) - getNationRank(b.Nation);
+                    if (nationDiff !== 0) return nationDiff;
+                    return a.Name.localeCompare(b.Name);
+                }
                 return 0; 
             });
         }
