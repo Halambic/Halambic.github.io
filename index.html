@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Tankora DB</title>
   <link rel="icon" type="image/svg+xml"
     href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiMzNGQzOTkiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMiAxMmgyMHY2YTIgMiAwIDAgMS0yIDJINGEyIDIgMCAwIDEtMi0ydi02eiIvPjxwYXRoIGQ9Ik02IDEybDItNmg4bDIgNiIvPjxwYXRoIGQ9Ik0xOCA5aDQhaC00Ii8+PHBhdGggZD0iTTIgMTZoMjBoLTIwIi8+PC9zdmc+">
@@ -37,6 +37,9 @@
               panel: '#111822',
               accent: '#eab308'
             }
+          },
+          screens: {
+            'xs': '480px',
           },
           backgroundImage: {
             'hex-pattern': "url('data:image/svg+xml,%3Csvg width=\"24\" height=\"40\" viewBox=\"0 0 24 40\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cpath d=\"M0 40c5.523 0 10-4.477 10-10V10c0-5.523-4.477-10-10-10s-10 4.477-10 10v20c0 5.523 4.477 10 10 10zM24 20c0 5.523-4.477 10-10 10S4 25.523 4 20s4.477-10 10-10 10 4.477 10 10z\" fill=\"%231e293b\" fill-opacity=\"0.05\" fill-rule=\"evenodd\"/%3E%3C/svg%3E')",
@@ -122,6 +125,9 @@
       { tier: 'Event', rate: 'Spécial', color: 'text-yellow-400' },
     ];
 
+    // ==========================================
+    // 2. DONNÉES CSV
+    // ==========================================
     const rawCSV = `Name,Nation,Age,Rarity,Armor,Firepower,Accuracy,Size,Mobility,Angled,Visibility,Autocannon,Stabilizer,Protected Ammo,Rangefinder,Autoloader,Night Vision,Thermal Vision,ERA,ATGM (P),ATGM (S),APS
 T-26 (twin-turreted),Soviet Union,WW1-WW2,Tier I,Very Light,Small Arms,Low,Small,Slow,Low,Low,No,No,No,No,No,No,No,No,No,No,No
 T-26,Soviet Union,WW1-WW2,Tier I,Very Light,Light,Medium,Small,Slow,Low,Low,No,No,No,No,No,No,No,No,No,No,No
@@ -358,7 +364,7 @@ T-80BV,Soviet Union,Modern,Tier IV,Heavy,Heavy,Very High,Medium,Very Fast,High,H
 T-80U,Soviet Union,Modern,Tier IV,Very Heavy,Heavy,Very High,Medium,Very Fast,High,High,No,Yes,No,Yes,Yes,Yes,Yes,Yes,No,Yes,No
 T-80UM,Russia,Modern,Tier V,Very Heavy,Heavy,Very High,Medium,Very Fast,High,High,No,Yes,No,Yes,Yes,Yes,Yes,Yes,No,Yes,No
 T-80BVM,Russia,Modern,Tier V,Very Heavy,Very Heavy,Very High,Medium,Very Fast,High,Very High,No,Yes,No,Yes,Yes,Yes,Yes,Yes,No,Yes,No
-T-90,Russia,Modern,Tier IV,Very Heavy,Heavy,Very High,Medium,Fast,High,High,No,Yes,No,Yes,Yes,Yes,No,No,No,Yes,No
+T-90,Russia,Modern,Tier IV,Very Heavy,Heavy,Very High,Medium,Fast,High,High,No,Yes,No,Yes,Yes,Yes,No,Yes,No,Yes,No
 T-90A,Russia,Modern,Tier V,Very Heavy,Heavy,Very High,Medium,Fast,High,High,No,Yes,No,Yes,Yes,Yes,Yes,Yes,No,Yes,No
 T-90M,Russia,Modern,Tier V,Very Heavy,Very Heavy,Very High,Medium,Fast,High,Very High,No,Yes,Yes,Yes,Yes,Yes,Yes,Yes,No,Yes,Yes
 BMP-1P,Soviet Union,Modern,Tier I,Very Light,Medium,Low,Small,Fast,Medium,Medium,No,No,No,No,No,Yes,No,No,No,Yes,No
@@ -373,7 +379,7 @@ BRM-3K "Rys",Russia,Modern,Tier II,Very Light,Light,Low,Small,Very Fast,Low,Very
 BMP-3 "Khrizantema-S",Russia,Modern,Tier II,Very Light,N/A,N/A,Small,Very Fast,High,High,No,No,No,Yes,Yes,Yes,Yes,No,Yes,No,No
 BMD-1P,Soviet Union,Modern,Tier I,Very Light,Medium,Low,Small,Very Fast,Low,Medium,No,No,No,No,No,Yes,No,No,No,Yes,No
 BMD-2,Soviet Union,Modern,Tier I,Very Light,Very Light,Low,Small,Very Fast,Low,High,Yes,Yes,No,No,No,Yes,No,No,No,Yes,No
-BMD-2M,Russia,Modern,Tier III,Very Light,Very Light,Low,Small,Very Fast,Low,High,Yes,Yes,No,Yes,No,Yes,Yes,No,No,Yes,No
+BMD-2M,Russia,Modern,Tier II,Very Light,Very Light,Low,Small,Very Fast,Low,High,Yes,Yes,No,Yes,No,Yes,Yes,No,No,Yes,No
 BMD-3,Russia,Modern,Tier II,Very Light,Very Light,Low,Small,Very Fast,Low,High,Yes,Yes,No,No,No,Yes,No,No,No,Yes,No
 BMD-4,Russia,Modern,Tier II,Very Light,Light,Low,Small,Very Fast,Low,High,Yes,Yes,No,Yes,Yes,Yes,Yes,No,No,Yes,No
 2S25 Sprut-SD,Russia,Modern,Tier III,Very Light,Very Heavy,Very High,Medium,Fast,Low,Very High,No,Yes,No,Yes,Yes,Yes,Yes,No,No,No,No
@@ -549,7 +555,8 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
       List: (props) => <IconWrapper {...props}><line x1="8" y1="6" x2="21" y2="6" /><line x1="8" y1="12" x2="21" y2="12" /><line x1="8" y1="18" x2="21" y2="18" /><line x1="3" y1="6" x2="3.01" y2="6" /><line x1="3" y1="12" x2="3.01" y2="12" /><line x1="3" y1="18" x2="3.01" y2="18" /></IconWrapper>,
       Grid: (props) => <IconWrapper {...props}><rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" /><rect x="14" y="14" width="7" height="7" /><rect x="3" y="14" width="7" height="7" /></IconWrapper>,
       Sliders: (props) => <IconWrapper {...props}><line x1="4" y1="21" x2="4" y2="14" /><line x1="4" y1="10" x2="4" y2="3" /><line x1="12" y1="21" x2="12" y2="12" /><line x1="12" y1="8" x2="12" y2="3" /><line x1="20" y1="21" x2="20" y2="16" /><line x1="20" y1="12" x2="20" y2="3" /><line x1="1" y1="14" x2="7" y2="14" /><line x1="9" y1="8" x2="15" y2="8" /><line x1="17" y1="16" x2="23" y2="16" /></IconWrapper>,
-      PieChart: (props) => <IconWrapper {...props}><path d="M21.21 15.89A10 10 0 1 1 8 2.83" /><path d="M22 12A10 10 0 0 0 12 2v10z" /></IconWrapper>
+      PieChart: (props) => <IconWrapper {...props}><path d="M21.21 15.89A10 10 0 1 1 8 2.83" /><path d="M22 12A10 10 0 0 0 12 2v10z" /></IconWrapper>,
+      ArrowUp: (props) => <IconWrapper {...props}><line x1="12" y1="19" x2="12" y2="5" /><polyline points="5 12 12 5 19 12" /></IconWrapper>
     };
 
     const DrawTimer = ({ lang }) => {
@@ -798,18 +805,18 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
     const FilterDropdown = ({ value, onChange, options, icon: Icon, placeholder }) => {
       const [isOpen, setIsOpen] = useState(false);
       return (
-        <div className="relative">
+        <div className="relative w-full sm:w-auto">
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className={`w-full sm:w-auto h-12 bg-[#0f141a] border ${isOpen ? 'border-emerald-500/50 ring-1 ring-emerald-500/20' : 'border-white/10 hover:border-white/20'} rounded-none clip-corner-tr flex items-center justify-between px-4 min-w-[180px] transition-all group`}
+            className={`w-full h-12 bg-[#0f141a] border ${isOpen ? 'border-emerald-500/50 ring-1 ring-emerald-500/20' : 'border-white/10 hover:border-white/20'} rounded-none clip-corner-tr flex items-center justify-between px-4 min-w-[180px] transition-all group`}
           >
-            <div className="flex items-center gap-3">
-              {Icon && <Icon size={16} className={`transition-colors ${value !== 'All' && value !== 'all' ? 'text-emerald-400' : 'text-slate-500 group-hover:text-slate-400'}`} />}
-              <span className={`text-sm font-military tracking-wider ${value !== 'All' && value !== 'all' ? 'text-emerald-400' : 'text-slate-400'}`}>
+            <div className="flex items-center gap-3 overflow-hidden">
+              {Icon && <Icon size={16} className={`transition-colors flex-shrink-0 ${value !== 'All' && value !== 'all' ? 'text-emerald-400' : 'text-slate-500 group-hover:text-slate-400'}`} />}
+              <span className={`text-sm font-military tracking-wider truncate ${value !== 'All' && value !== 'all' ? 'text-emerald-400' : 'text-slate-400'}`}>
                 {value === 'All' || value === 'all' ? placeholder : (options.find(o => o.value === value)?.label || value)}
               </span>
             </div>
-            <div className={`transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}>
+            <div className={`transition-transform duration-300 flex-shrink-0 ${isOpen ? 'rotate-180' : ''}`}>
               <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-slate-500" /></svg>
             </div>
           </button>
@@ -823,8 +830,8 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                     className={`w-full text-left px-4 py-3 text-sm font-military tracking-wider border-b border-white/5 last:border-0 hover:bg-slate-800 transition-colors flex items-center justify-between ${value === opt.value ? 'text-emerald-400 bg-emerald-900/10' : 'text-slate-400'}`}
                     onClick={() => { onChange({ target: { value: opt.value } }); setIsOpen(false); }}
                   >
-                    <span>{opt.label}</span>
-                    {value === opt.value && <Icons.Check size={14} />}
+                    <span className="truncate">{opt.label}</span>
+                    {value === opt.value && <Icons.Check size={14} className="flex-shrink-0" />}
                   </button>
                 ))}
               </div>
@@ -836,18 +843,18 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
     
     const ToastContainer = ({ toasts }) => {
         return (
-            <div className="fixed bottom-4 right-4 z-[100] flex flex-col gap-2 pointer-events-none">
+            <div className="fixed bottom-4 right-4 z-[100] flex flex-col gap-2 pointer-events-none max-w-[90vw]">
                 {toasts.map(toast => (
                     <div key={toast.id} className="bg-slate-800 border-l-4 border-emerald-500 text-white p-4 rounded shadow-lg flex items-center gap-3 animate-in slide-in-from-right-4">
-                        <Icons.CheckCircle className="text-emerald-500" size={20} />
-                        <span className="font-medium text-sm">{toast.message}</span>
+                        <Icons.CheckCircle className="text-emerald-500 flex-shrink-0" size={20} />
+                        <span className="font-medium text-sm truncate">{toast.message}</span>
                     </div>
                 ))}
             </div>
         );
     };
     
-    // NEW COMPARISON TABLE COMPONENT
+    // NEW COMPARISON TABLE COMPONENT - NEUTRAL STYLE
     const ComparisonTable = ({ compareList, getStatValue, getStatColor, translate, tData, lang }) => {
         const stats = [
              { label: 'armor', key: 'Armor' },
@@ -870,16 +877,16 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
         ];
 
         return (
-            <div className="w-full overflow-x-auto">
+            <div className="w-full overflow-x-auto custom-scrollbar pb-4">
                  <table className="compare-table w-full text-sm text-left">
                      <thead>
                          <tr>
-                             <th className="p-4 bg-slate-900 sticky left-0 z-10 w-40 border-b border-white/10"></th>
+                             <th className="p-4 bg-slate-900 sticky left-0 z-10 w-32 sm:w-40 border-b border-white/10 shadow-[2px_0_5px_rgba(0,0,0,0.5)]"></th>
                              {compareList.map(tank => (
-                                 <th key={tank.id} className="p-4 bg-slate-900 border-b border-white/10 min-w-[200px]">
+                                 <th key={tank.id} className="p-4 bg-slate-900 border-b border-white/10 min-w-[160px]">
                                      <div className="flex flex-col items-center gap-2">
-                                         <span className="text-[10px] text-slate-500 bg-slate-800 px-2 py-0.5 rounded">{tData(tank.Nation)}</span>
-                                         <span className="text-lg font-black text-white text-center leading-tight">{tank.Name}</span>
+                                         <span className="text-[10px] text-slate-500 bg-slate-800 px-2 py-0.5 rounded whitespace-nowrap">{tData(tank.Nation)}</span>
+                                         <span className="text-base sm:text-lg font-black text-white text-center leading-tight line-clamp-2 h-12 flex items-center">{tank.Name}</span>
                                          <span className="text-[10px] text-emerald-400 font-bold border border-emerald-500/30 px-1.5 rounded">{tank.Rarity}</span>
                                      </div>
                                  </th>
@@ -888,12 +895,12 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                      </thead>
                      <tbody>
                          {/* STATS */}
-                         <tr className="bg-slate-800/50"><td colSpan={compareList.length + 1} className="p-2 text-xs font-bold text-slate-500 uppercase tracking-widest pl-4">Performance</td></tr>
+                         <tr className="bg-slate-800/50"><td colSpan={compareList.length + 1} className="p-2 text-xs font-bold text-slate-500 uppercase tracking-widest pl-4 sticky left-0 z-20 bg-slate-900/90 backdrop-blur-sm border-r border-white/10">Performance</td></tr>
                          {stats.map(stat => {
                              return (
                                  <tr key={stat.key} className="border-b border-white/5 hover:bg-white/5 transition-colors">
-                                     <td className="p-3 font-medium text-slate-300 bg-slate-900/50 sticky left-0 z-10 border-r border-white/10 flex items-center gap-2">
-                                         {translate(stat.label)}
+                                     <td className="p-3 font-medium text-slate-300 bg-slate-900/95 sticky left-0 z-10 border-r border-white/10 flex items-center gap-2 shadow-[2px_0_5px_rgba(0,0,0,0.5)]">
+                                         <span className="truncate">{translate(stat.label)}</span>
                                      </td>
                                      {compareList.map(tank => {
                                          const val = getStatValue(tank[stat.key]);
@@ -901,7 +908,7 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                                          
                                          return (
                                              <td key={`${tank.id}-${stat.key}`} className="p-3 text-center align-middle">
-                                                 <span className={`font-bold text-slate-400`}>
+                                                 <span className="font-bold text-slate-300">
                                                      {displayVal}
                                                  </span>
                                              </td>
@@ -912,11 +919,11 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                          })}
 
                          {/* TECHS */}
-                         <tr className="bg-slate-800/50"><td colSpan={compareList.length + 1} className="p-2 text-xs font-bold text-slate-500 uppercase tracking-widest pl-4">Technologies</td></tr>
+                         <tr className="bg-slate-800/50"><td colSpan={compareList.length + 1} className="p-2 text-xs font-bold text-slate-500 uppercase tracking-widest pl-4 sticky left-0 z-20 bg-slate-900/90 backdrop-blur-sm border-r border-white/10">Technologies</td></tr>
                          {techs.map(tech => (
                              <tr key={tech.key} className="border-b border-white/5 hover:bg-white/5 transition-colors">
-                                 <td className="p-3 font-medium text-slate-300 bg-slate-900/50 sticky left-0 z-10 border-r border-white/10">
-                                     {translate(tech.label)}
+                                 <td className="p-3 font-medium text-slate-300 bg-slate-900/95 sticky left-0 z-10 border-r border-white/10 shadow-[2px_0_5px_rgba(0,0,0,0.5)]">
+                                     <span className="truncate">{translate(tech.label)}</span>
                                  </td>
                                  {compareList.map(tank => (
                                      <td key={`${tank.id}-${tech.key}`} className="p-3 text-center align-middle">
@@ -1047,32 +1054,32 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
       if (!isOpen) return null;
       return (
         <div className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in duration-300" onClick={!isOpening ? onClose : undefined}>
-          <div className="relative w-full max-w-lg bg-[#0f141a] border border-emerald-500/30 shadow-[0_0_50px_rgba(16,185,129,0.1)] rounded-3xl overflow-hidden flex flex-col items-center p-10 text-center" onClick={e => e.stopPropagation()}>
+          <div className="relative w-full max-w-lg bg-[#0f141a] border border-emerald-500/30 shadow-[0_0_50px_rgba(16,185,129,0.1)] rounded-3xl overflow-hidden flex flex-col items-center p-10 text-center mx-4" onClick={e => e.stopPropagation()}>
             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-emerald-500 to-transparent opacity-50"></div>
             <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-emerald-500 to-transparent opacity-50"></div>
             {!dropResult ? (
               <>
                 <div className="mb-8 relative">
-                  <div className={`w-48 h-48 bg-slate-800 rounded-full flex items-center justify-center border-4 border-slate-700 shadow-inner ${isOpening ? 'animate-spin duration-[2s]' : ''}`}>
+                  <div className={`w-32 h-32 sm:w-48 sm:h-48 bg-slate-800 rounded-full flex items-center justify-center border-4 border-slate-700 shadow-inner ${isOpening ? 'animate-spin duration-[2s]' : ''}`}>
                     <Icons.Box size={80} className={`text-emerald-400 ${isOpening ? 'animate-pulse' : ''}`} />
                   </div>
                   {isOpening && <div className="absolute inset-0 rounded-full border-4 border-emerald-500 border-t-transparent animate-spin"></div>}
                 </div>
-                <h2 className="text-3xl font-military text-white uppercase tracking-widest mb-4">{lang === 'fr' ? 'Ravitaillement' : 'Supply Drop'}</h2>
-                <p className="text-slate-400 mb-8 max-w-xs mx-auto text-sm">{lang === 'fr' ? 'Ouvrez une caisse pour obtenir un véhicule aléatoire.' : 'Open a crate to receive a random vehicle for your collection.'}</p>
-                <button onClick={onOpenDrop} disabled={isOpening} className="bg-emerald-600 hover:bg-emerald-500 text-white font-black uppercase tracking-widest py-4 px-10 rounded-xl clip-corner-tr shadow-[0_0_20px_rgba(16,185,129,0.4)] hover:shadow-[0_0_30px_rgba(16,185,129,0.6)] transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-3 text-lg">
+                <h2 className="text-2xl sm:text-3xl font-military text-white uppercase tracking-widest mb-4">{lang === 'fr' ? 'Ravitaillement' : 'Supply Drop'}</h2>
+                <p className="text-slate-400 mb-8 max-w-xs mx-auto text-xs sm:text-sm">{lang === 'fr' ? 'Ouvrez une caisse pour obtenir un véhicule aléatoire.' : 'Open a crate to receive a random vehicle for your collection.'}</p>
+                <button onClick={onOpenDrop} disabled={isOpening} className="bg-emerald-600 hover:bg-emerald-500 text-white font-black uppercase tracking-widest py-3 px-8 sm:py-4 sm:px-10 rounded-xl clip-corner-tr shadow-[0_0_20px_rgba(16,185,129,0.4)] hover:shadow-[0_0_30px_rgba(16,185,129,0.6)] transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-3 text-base sm:text-lg w-full sm:w-auto justify-center">
                   {isOpening ? (lang === 'fr' ? 'Ouverture...' : 'Opening...') : (lang === 'fr' ? 'INITIALISER LE DROP' : 'INITIATE DROP')}
                 </button>
               </>
             ) : (
-              <div className="animate-in zoom-in duration-500 flex flex-col items-center">
-                <div className="text-emerald-400 font-military text-xl uppercase tracking-[0.2em] mb-2 animate-pulse">{lang === 'fr' ? 'ACQUISITION RÉUSSIE' : 'ACQUISITION SUCCESSFUL'}</div>
+              <div className="animate-in zoom-in duration-500 flex flex-col items-center w-full">
+                <div className="text-emerald-400 font-military text-lg sm:text-xl uppercase tracking-[0.2em] mb-2 animate-pulse">{lang === 'fr' ? 'ACQUISITION RÉUSSIE' : 'ACQUISITION SUCCESSFUL'}</div>
                 <div className="w-full h-1 bg-emerald-500/30 mb-8"></div>
-                <div className="mb-6 relative group">
+                <div className="mb-6 relative group w-full max-w-sm">
                   <div className="absolute inset-0 bg-emerald-500/20 blur-xl rounded-full"></div>
                   <div className="tech-border bg-slate-900 p-6 rounded-2xl relative z-10 border border-emerald-500/50">
                     <span className="text-[10px] uppercase font-bold text-slate-400 mb-2 bg-slate-900 px-2 py-0.5 rounded-full block w-max mx-auto border border-white/10">{dropResult.Nation}</span>
-                    <h3 className="text-3xl font-black text-white mb-2">{dropResult.Name}</h3>
+                    <h3 className="text-2xl sm:text-3xl font-black text-white mb-2">{dropResult.Name}</h3>
                     <span className={`text-xs px-2 py-1 rounded font-bold border ${dropResult.Rarity.includes('Tier I') ? 'text-slate-400 border-slate-600' : 'text-yellow-400 border-yellow-500/50'}`}>{dropResult.Rarity}</span>
                   </div>
                 </div>
@@ -1228,7 +1235,7 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
       return (
         <div className="fixed inset-0 z-50 bg-slate-900/90 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in duration-300" onClick={onClose}>
           <div className="bg-[#0f141a] w-full max-w-5xl max-h-[90vh] rounded-3xl border border-white/10 shadow-2xl overflow-hidden flex flex-col md:flex-row animate-in slide-in-from-bottom duration-300" onClick={e => e.stopPropagation()}>
-            <div className="w-full md:w-1/4 bg-slate-900 border-r border-white/5 p-6 flex flex-col items-center text-center relative overflow-hidden justify-center">
+            <div className="w-full md:w-1/4 bg-slate-900 border-r border-white/5 p-6 flex flex-col items-center text-center relative overflow-hidden justify-center md:min-h-[500px]">
               <div className="absolute inset-0 bg-gradient-to-b from-blue-500/5 to-transparent pointer-events-none"></div>
               <h2 className="text-xl font-black text-white uppercase tracking-wider mb-6 flex items-center gap-2"><Icons.Database className="text-blue-500"/> {lang === 'fr' ? 'Rapport' : 'Report'}</h2>
               <div className="w-full space-y-3 mb-6">
@@ -1261,9 +1268,9 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
               </div>
             </div>
             <div className="flex-1 p-8 overflow-y-auto custom-scrollbar bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMCAwIDQwIDQwIiBmaWxsPSJub25lIiBzdHJva2U9IiMzMzQxNTUiIHN0cm9rZS1vcGFjaXR5PSIwLjAzIiBzdHJva2Utd2lkdGg9IjEiPjxwYXRoIGQ9Ik0wIDQwaDQwTTAgMGg0MCIvPjwvc3ZnPg==')]">
-              <div className="flex justify-between items-center mb-6">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
                 <h3 className="text-xl font-bold text-white flex items-center gap-2 uppercase tracking-wide"><Icons.Database className="text-blue-500" /> {lang === 'fr' ? 'Progression Détaillée' : 'Detailed Progression'}</h3>
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-2">
                     <button onClick={() => setActiveEra(activeEra === 'WW1-WW2' ? 'All' : 'WW1-WW2')} className={`flex items-center gap-2 px-3 py-1.5 rounded-full border text-[10px] font-bold transition-all ${activeEra === 'WW1-WW2' ? 'bg-amber-600 border-amber-500 text-white' : 'bg-slate-800 border-white/10 text-slate-400 hover:text-white'}`}>{activeEra === 'WW1-WW2' ? <Icons.ToggleRight size={14} /> : <Icons.ToggleLeft size={14} />} PGM-SGM</button>
                     <button onClick={() => setActiveEra(activeEra === 'Cold War' ? 'All' : 'Cold War')} className={`flex items-center gap-2 px-3 py-1.5 rounded-full border text-[10px] font-bold transition-all ${activeEra === 'Cold War' ? 'bg-sky-600 border-sky-500 text-white' : 'bg-slate-800 border-white/10 text-slate-400 hover:text-white'}`}>{activeEra === 'Cold War' ? <Icons.ToggleRight size={14} /> : <Icons.ToggleLeft size={14} />} {lang === 'fr' ? 'Guerre Froide' : 'Cold War'}</button>
                     <button onClick={() => setActiveEra(activeEra === 'Modern' ? 'All' : 'Modern')} className={`flex items-center gap-2 px-3 py-1.5 rounded-full border text-[10px] font-bold transition-all ${activeEra === 'Modern' ? 'bg-emerald-600 border-emerald-500 text-white' : 'bg-slate-800 border-white/10 text-slate-400 hover:text-white'}`}>{activeEra === 'Modern' ? <Icons.ToggleRight size={14} /> : <Icons.ToggleLeft size={14} />} {lang === 'fr' ? 'Moderne' : 'Modern'}</button>
@@ -1273,7 +1280,7 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
               <div className="space-y-8 animate-in fade-in slide-in-from-right-4 duration-300">
                 <div>
                   <h4 className="text-xs uppercase font-bold text-slate-500 mb-3 flex items-center gap-2"><Icons.Globe size={14} /> {lang === 'fr' ? 'Par Nation' : 'By Nation'}</h4>
-                  <div className="grid grid-cols-1 gap-3">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     {nationStats.map((stat, i) => (
                       <div key={i} className="bg-slate-800/40 p-3 rounded-xl border border-white/5 flex items-center gap-4">
                         <div className="w-8 h-5 rounded overflow-hidden relative"><div className="absolute inset-0 bg-slate-700"></div></div>
@@ -1334,6 +1341,7 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
           missile_s: false // ATGM (S)
       });
       const [toasts, setToasts] = useState([]);
+      const [showBackToTop, setShowBackToTop] = useState(false);
       
       const scrollContainerRef = useRef(null);
       const translate = (key) => TRANSLATIONS[lang][key] || key;
@@ -1352,7 +1360,11 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
 
       useEffect(() => { try { localStorage.setItem('tankCollection', JSON.stringify(collection)); } catch (e) {} }, [collection]);
       useEffect(() => { setVisibleCount(20); if (scrollContainerRef.current) { scrollContainerRef.current.scrollTop = 0; } }, [search, filterNation, filterAge, filterRarity, ownershipFilter, sortBy, advancedFilters]);
-      const handleScroll = (e) => { const { scrollTop, scrollHeight, clientHeight } = e.target; if (scrollHeight - scrollTop <= clientHeight * 1.5) { setVisibleCount(prev => prev + 20); } };
+      const handleScroll = (e) => { 
+        const { scrollTop, scrollHeight, clientHeight } = e.target; 
+        if (scrollHeight - scrollTop <= clientHeight * 1.5) { setVisibleCount(prev => prev + 20); } 
+        if (scrollTop > 300) setShowBackToTop(true); else setShowBackToTop(false);
+      };
       
       useEffect(() => {
         const parsedData = parseCSV(rawCSV);
@@ -1496,7 +1508,7 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                   <h1 className="text-4xl md:text-5xl font-military uppercase tracking-wider text-slate-100 flex items-center gap-4 drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]">
                     <span className="text-emerald-500 drop-shadow-[0_0_15px_rgba(16,185,129,0.8)]"><Icons.Tank size={42} strokeWidth={2.5} /></span>
                     <span>Tankora <span className="text-emerald-500">DB</span></span>
-                    <span className="text-[10px] font-sans font-bold bg-slate-800 text-slate-400 px-2 py-1 rounded border border-white/10 ml-2 self-start mt-2">v2.8</span>
+                    <span className="text-[10px] font-sans font-bold bg-slate-800 text-slate-400 px-2 py-1 rounded border border-white/10 ml-2 self-start mt-2">v2.9</span>
                   </h1>
                   <div className="text-xs font-medium text-slate-400 mt-2 flex flex-col sm:flex-row sm:items-center gap-3">
                     <span className="flex items-center gap-1.5 bg-slate-800/50 px-3 py-1 rounded-full border border-white/5 cursor-pointer hover:bg-slate-800 hover:text-emerald-400 transition-colors group" onClick={() => setShowProfile(true)} title={translate('details')}>
@@ -1552,21 +1564,33 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                   </div>
                 </div>
 
-                <div className="flex flex-col sm:flex-row gap-2 xl:w-auto w-full items-center">
-                  <FilterDropdown value={filterNation} onChange={(e) => setFilterNation(e.target.value)} options={uniqueNations.map(n => ({ value: n, label: n === 'All' ? translate('allNations') : tData(n) }))} icon={Icons.Globe} placeholder={translate('allNations')} />
-                  <FilterDropdown value={filterAge} onChange={(e) => setFilterAge(e.target.value)} options={uniqueAges.map(a => ({ value: a, label: a === 'All' ? translate('allAges') : tData(a) }))} icon={Icons.Info} placeholder={translate('allAges')} />
-                  <FilterDropdown value={filterRarity} onChange={(e) => setFilterRarity(e.target.value)} options={uniqueRarities.map(r => ({ value: r, label: r === 'All' ? translate('allTiers') : r }))} icon={Icons.Target} placeholder={translate('allTiers')} />
-                  <div className="relative flex-1 sm:flex-none">
+                <div className="flex flex-col sm:flex-row gap-2 xl:w-auto w-full items-center flex-wrap">
+                  <div className="w-full sm:w-auto flex-grow sm:flex-grow-0">
+                    <FilterDropdown value={filterNation} onChange={(e) => setFilterNation(e.target.value)} options={uniqueNations.map(n => ({ value: n, label: n === 'All' ? translate('allNations') : tData(n) }))} icon={Icons.Globe} placeholder={translate('allNations')} />
+                  </div>
+                   <div className="w-full sm:w-auto flex-grow sm:flex-grow-0">
+                    <FilterDropdown value={filterAge} onChange={(e) => setFilterAge(e.target.value)} options={uniqueAges.map(a => ({ value: a, label: a === 'All' ? translate('allAges') : tData(a) }))} icon={Icons.Info} placeholder={translate('allAges')} />
+                  </div>
+                   <div className="w-full sm:w-auto flex-grow sm:flex-grow-0">
+                    <FilterDropdown value={filterRarity} onChange={(e) => setFilterRarity(e.target.value)} options={uniqueRarities.map(r => ({ value: r, label: r === 'All' ? translate('allTiers') : r }))} icon={Icons.Target} placeholder={translate('allTiers')} />
+                  </div>
+                  <div className="relative w-full sm:w-auto flex-grow sm:flex-grow-0">
                     <FilterDropdown value={ownershipFilter} onChange={(e) => setOwnershipFilter(e.target.value)} options={[{ value: 'all', label: translate('statusAll') }, { value: 'owned', label: translate('statusOwned') }, { value: 'missing', label: translate('statusMissing') }, { value: 'duplicates', label: translate('statusDuplicates') }]} icon={ownershipFilter === 'owned' ? Icons.Check : ownershipFilter === 'missing' ? Icons.X : ownershipFilter === 'duplicates' ? Icons.Filter : Icons.Filter} placeholder={translate('statusAll')} />
                   </div>
-                  <button onClick={() => setViewMode(viewMode === 'grid' ? 'list' : 'grid')} className={`w-12 h-12 rounded-none clip-corner-tr bg-[#0f141a] border border-white/10 transition-all flex items-center justify-center shadow-lg group ${viewMode === 'list' ? 'text-emerald-400 border-emerald-500/30 bg-emerald-900/10' : 'text-slate-400 hover:text-white hover:border-white/20'}`} title={viewMode === 'grid' ? translate('compactView') : translate('cardView')}>
-                    {viewMode === 'grid' ? <Icons.List size={20} /> : <Icons.Grid size={18} />}
-                  </button>
-                  <button onClick={resetFilters} className="w-12 h-12 rounded-none clip-corner-tr bg-[#0f141a] text-red-400/70 hover:text-red-400 hover:bg-red-900/20 border border-white/10 hover:border-red-500/30 transition-all flex items-center justify-center shadow-lg group relative" title={translate('reset')}><Icons.Trash2 size={18} /><span className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></span></button>
+                  
+                  <div className="flex gap-2 w-full sm:w-auto mt-2 sm:mt-0">
+                    <button onClick={() => setViewMode(viewMode === 'grid' ? 'list' : 'grid')} className={`flex-1 sm:w-12 h-12 rounded-none clip-corner-tr bg-[#0f141a] border border-white/10 transition-all flex items-center justify-center shadow-lg group ${viewMode === 'list' ? 'text-emerald-400 border-emerald-500/30 bg-emerald-900/10' : 'text-slate-400 hover:text-white hover:border-white/20'}`} title={viewMode === 'grid' ? translate('compactView') : translate('cardView')}>
+                        {viewMode === 'grid' ? <Icons.List size={20} /> : <Icons.Grid size={18} />}
+                    </button>
+                    <button onClick={resetFilters} className="flex-1 sm:w-12 h-12 rounded-none clip-corner-tr bg-[#0f141a] text-red-400/70 hover:text-red-400 hover:bg-red-900/20 border border-white/10 hover:border-red-500/30 transition-all flex items-center justify-center shadow-lg group relative" title={translate('reset')}>
+                        <Icons.Trash2 size={18} />
+                        <span className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></span>
+                    </button>
+                  </div>
                 </div>
                 
                 {showAdvanced && (
-                    <div className="grid grid-cols-2 md:grid-cols-5 gap-3 pt-2 border-t border-white/5 animate-in slide-in-from-bottom duration-200">
+                    <div className="grid grid-cols-2 xs:grid-cols-3 md:grid-cols-5 gap-3 pt-2 border-t border-white/5 animate-in slide-in-from-bottom duration-200">
                         {[
                             { key: 'stabilizer', label: 'stabilizer' },
                             { key: 'thermal', label: 'thermal' },
@@ -1664,8 +1688,8 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                       const instances = collection[tank.id] || [];
                       const isCollected = instances.length > 0;
                       return (
-                        <div key={tank.id} className={`flex items-center justify-between p-3 bg-[#0f141a]/90 border border-white/5 rounded-lg hover:border-emerald-500/30 transition-all ${isCollected ? 'border-l-4 border-l-emerald-500' : ''}`}>
-                            <div className="flex items-center gap-4">
+                        <div key={tank.id} className={`flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 bg-[#0f141a]/90 border border-white/5 rounded-lg hover:border-emerald-500/30 transition-all ${isCollected ? 'border-l-4 border-l-emerald-500' : ''}`}>
+                            <div className="flex items-center gap-4 w-full sm:w-auto">
                                 <span className={`text-xs font-bold px-2 py-1 rounded bg-slate-800 text-slate-400 min-w-[80px] text-center`}>{tData(tank.Nation)}</span>
                                 <div>
                                     <h4 className={`font-black text-lg ${isCollected ? 'text-emerald-400' : 'text-slate-300'}`}>{tank.Name}</h4>
@@ -1674,7 +1698,7 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                                     </div>
                                 </div>
                             </div>
-                            <div className="flex items-center gap-3">
+                            <div className="flex items-center gap-3 mt-3 sm:mt-0 w-full sm:w-auto justify-end">
                                 {isCollected ? (
                                     <div className="px-3 py-1 bg-emerald-900/30 border border-emerald-500/30 rounded text-emerald-400 text-xs font-bold">
                                         {instances.length} {translate('instances')}
@@ -1697,13 +1721,13 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
             <div className="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-300" onClick={() => setShowCompare(false)}>
               <div className="bg-slate-800/90 backdrop-blur-xl w-full max-w-6xl max-h-[95vh] rounded-3xl border border-emerald-500/20 shadow-2xl overflow-hidden flex flex-col animate-in zoom-in duration-300 ring-1 ring-white/10" onClick={e => e.stopPropagation()}>
                 <div className="p-6 border-b border-white/5 flex justify-between items-center bg-slate-900/50">
-                  <h2 className="text-2xl font-black text-white flex items-center gap-3"><Icons.Scale className="text-blue-400" /> {translate('compare')}</h2>
-                  <div className="flex gap-4">
-                    <button onClick={() => setCompareList([])} className="text-sm text-red-400 hover:text-red-300 transition-colors uppercase font-bold tracking-wider">{translate('reset')}</button>
+                  <h2 className="text-xl sm:text-2xl font-black text-white flex items-center gap-3"><Icons.Scale className="text-blue-400" /> {translate('compare')}</h2>
+                  <div className="flex gap-2 sm:gap-4">
+                    <button onClick={() => setCompareList([])} className="text-xs sm:text-sm text-red-400 hover:text-red-300 transition-colors uppercase font-bold tracking-wider">{translate('reset')}</button>
                     <button onClick={() => setShowCompare(false)} className="text-slate-400 hover:text-white transition-colors bg-slate-800 p-2 rounded-full"><Icons.X size={24} /></button>
                   </div>
                 </div>
-                <div className="overflow-auto p-6 md:p-8 custom-scrollbar">
+                <div className="overflow-auto p-4 sm:p-8 custom-scrollbar">
                   {compareList.length === 0 ? (<div className="text-center py-20 text-slate-500"><p>{translate('selectTanks')}</p></div>) : (
                     <div className="min-w-[800px]"> 
                         <div className="mb-8 p-4 bg-[#0f141a] border border-white/5 rounded-2xl flex justify-center tech-border">
@@ -1810,8 +1834,18 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
             <p className="flex justify-center items-center gap-2">
               <span className="text-emerald-400 hover:text-emerald-300 transition-colors uppercase tracking-widest">{translate('credits')}</span>
               <span className="opacity-30">|</span>
-              <span className="opacity-50">v2.8 Reforged</span>
+              <span className="opacity-50">v2.9 Reforged</span>
             </p>
+            
+            {showBackToTop && (
+                <button 
+                  onClick={() => scrollContainerRef.current.scrollTo({ top: 0, behavior: 'smooth' })} 
+                  className="fixed bottom-8 right-8 bg-emerald-600 hover:bg-emerald-500 text-white w-12 h-12 flex items-center justify-center rounded-full shadow-lg border border-emerald-400/30 z-40 transition-all duration-300 animate-in zoom-in hover:-translate-y-1 hover:shadow-emerald-500/40"
+                  title="Haut de page"
+                >
+                  <Icons.ArrowUp size={24} />
+                </button>
+            )}
           </footer>
         </div>
       );
