@@ -102,7 +102,7 @@
 
     const TRANSLATIONS = {
       fr: {
-        appTitle: "Tankora DB", garage: "Garage", compare: "Comparer", details: "Détails", dropRates: "Taux de drop", dropProbability: "Probabilités d'obtention", searchPlaceholder: "Rechercher...", allNations: "Toutes nations", allAges: "Toutes époques", allTiers: "Tous tiers", collected: "Acquis", myTanks: "Mes chars", noResults: "Aucun char ne correspond à ces critères.", checkSpelling: "Essayez de vérifier l'orthographe.", bestFull: "Meilleur", addToGarage: "Ajouter au garage", removeFromGarage: "Retirer du garage", selected: "Sélectionné", size: "Taille", reset: "Réinitialiser", condition: "État", instances: "ex.", totalVehicles: "Véhicules total", uniqueModels: "Modèles uniques", addAnother: "Ajouter", credits: <React.Fragment>All rights reserved to the creator of the Discord bot <span className="font-black text-emerald-400 uppercase tracking-widest hover:text-emerald-300 transition-colors">Qwirdle</span></React.Fragment>, supplyDrop: "Ravitaillement", openSupply: "Ouvrir caisse", statsReport: "Rapport de Progression", statsWW2Only: "Stats PGM-SGM", timerReady: "J'AI WORK !", timerRunning: "PROCHAIN", timerCancel: "Annuler", filterStatus: "Statut", statusAll: "Tous les chars", statusOwned: "Acquis", statusMissing: "Manquants", statusDuplicates: "Doublons", salvage: "Salvage (Épave)", damaged: "Damaged (Endommagé)", worn: "Worn (Usé)", field_ready: "Field Ready (Opérationnel)", parade_ready: "Parade Ready (Défilé)", factory_new: "Factory New (Neuf)", armor: "Blindage", firepower: "Puissance de feu", mobility: "Mobilité", accuracy: "Précision", visibility: "Visibilité", stabilizer: "Stabilisateur", thermal: "Thermique", nightVision: "Vision nocturne", era: "ERA", aps: "APS", autoloader: "Chargeur auto", autocannon: "Autocanon", protectedAmmo: "Munitions protégées", rangefinder: "Télémètre", atgm_p: "ATGM (P)", atgm_s: "ATGM (S)", characteristic: "Caractéristique", nation: "Nation", age: "Époque", rarity: "Tier/Rareté", remove: "Retirer", yes: "Oui", no: "Non", selectTanks: "Sélectionnez des chars pour commencer la comparaison.", dropNote: "Taux officiels définis pour le jeu.",
+        appTitle: "Tankora DB", garage: "Garage", compare: "Comparer", details: "Détails", dropRates: "Taux de drop", dropProbability: "Probabilités d'obtention", searchPlaceholder: "Rechercher...", allNations: "Toutes nations", allAges: "Toutes époques", allTiers: "Tous tiers", collected: "Acquis", myTanks: "Mes chars", noResults: "Aucun char ne correspond à ces critères.", checkSpelling: "Essayez de vérifier l'orthographe.", bestFull: "Meilleur", addToGarage: "Ajouter au garage", removeFromGarage: "Retirer du garage", selected: "Sélectionné", size: "Taille", reset: "Réinitialiser", condition: "État", instances: "ex.", totalVehicles: "Véhicules total", uniqueModels: "Modèles uniques", addAnother: "Ajouter", credits: <React.Fragment>All rights reserved to the creator of the Discord bot <span className="font-black text-emerald-400 uppercase tracking-widest hover:text-emerald-300 transition-colors">Qwirdle</span></React.Fragment>, supplyDrop: "Ravitaillement", openSupply: "Ouvrir caisse", statsReport: "Rapport de Progression", statsWW2Only: "Stats PGM-SGM", timerReady: "J'AI WORK !", timerRunning: "PROCHAIN", timerCancel: "Annuler", filterStatus: "Statut", statusAll: "Tous les chars", statusOwned: "Acquis", statusMissing: "Manquants", statusDuplicates: "Doublons", salvage: "Salvage (Épave)", damaged: "Damaged (Endommagé)", worn: "Worn (Usé)", field_ready: "Field Ready (Opérationnel)", parade_ready: "Parade Ready (Défilé)", factory_new: "Factory New (Neuf)", armor: "Blindage", firepower: "Puissance de feu", mobility: "Mobilité", accuracy: "Précision", visibility: "Visibilité", stabilizer: "Stabilisateur", thermal: "Thermique", nightVision: "Vision nocturne", era: "ERA", aps: "APS", autoloader: "Chargeur auto", autocannon: "Autocannon", protectedAmmo: "Munitions protégées", rangefinder: "Télémètre", atgm_p: "ATGM (P)", atgm_s: "ATGM (S)", characteristic: "Caractéristique", nation: "Nation", age: "Époque", rarity: "Tier/Rareté", remove: "Retirer", yes: "Oui", no: "Non", selectTanks: "Sélectionnez des chars pour commencer la comparaison.", dropNote: "Taux officiels définis pour le jeu.",
         viewMode: "Vue", compactView: "Liste", cardView: "Cartes", exportData: "Sauvegarder", importData: "Charger", fileError: "Fichier invalide", dataManagement: "Gestion des données", sortBy: "Trier par", sortNameAsc: "Nom (A-Z)", sortNameDesc: "Nom (Z-A)", sortTierAsc: "Tier (Croissant)", sortTierDesc: "Tier (Décroissant)", sortNation: "Nation", advancedFilters: "Filtres Avancés", toastSaved: "Sauvegarde effectuée !", toastLoaded: "Sauvegarde chargée !", toastAdded: "ajouté au garage !", toastRemoved: "retiré du garage.", distribution: "Répartition par Nation", cleanDuplicates: "Nettoyer doublons", confirmClean: "Êtes-vous sûr de vouloir supprimer tous les doublons ? Seul le meilleur état de chaque char sera conservé.", cleanSuccess: "Doublons nettoyés avec succès !"
       },
       en: {
@@ -1008,22 +1008,22 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
         return 0;
     };
 
-    const getNationRank = (nation) => {
-        if (nation === 'United States of America') return 10;
-        if (nation === 'German Reich') return 20;
-        if (nation === 'Germany') return 21;
-        if (nation === 'Soviet Union') return 30;
-        if (nation === 'Russia') return 31;
-        if (nation === 'United Kingdom') return 40;
-        if (nation === 'France') return 50;
-        return 99; // Autres nations (Autriche, etc.) à la fin
-    };
-    
-    const getEraRank = (age) => {
+    const getAgeRank = (age) => {
         if (age === 'WW1-WW2') return 1;
         if (age === 'Cold War') return 2;
         if (age === 'Modern') return 3;
         return 99;
+    };
+
+    const getNationRank = (nation) => {
+        if (nation === 'United States of America') return 10;
+        // Group Germany
+        if (nation === 'German Reich' || nation === 'Germany') return 20;
+        // Group USSR
+        if (nation === 'Soviet Union' || nation === 'Russia') return 30;
+        if (nation === 'United Kingdom') return 40;
+        if (nation === 'France') return 50;
+        return 99; // Autres nations (Autriche, etc.) à la fin
     };
 
     const translateData = (val, key = '', lang = 'fr') => {
@@ -1134,8 +1134,8 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
       };
       
       const nationStats = getGroupStats('Nation');
-      const ageStats = getGroupStats('Age');
-      const tierStats = getGroupStats('Rarity');
+      const ageStats = getGroupStats('Age').sort((a, b) => getAgeRank(a.label) - getAgeRank(b.label)); // Sort Age Chronologically
+      const tierStats = getGroupStats('Rarity').sort((a, b) => getTierRank(a.label) - getTierRank(b.label)); // Sort Tier Numerically
       
       // Data for Pie Chart
       const pieData = nationStats.slice(0, 5).map((stat, i) => ({
@@ -1230,7 +1230,25 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                           else if (rawCond.includes('factory new')) condId = 'factory_new';
 
                           // Find tank by name to get its ID
-                          const tankData = tanks.find(t => t.Name === name);
+                          const candidates = tanks.filter(t => t.Name === name);
+                          let tankData = null;
+
+                          if (candidates.length === 1) {
+                              tankData = candidates[0];
+                          } else if (candidates.length > 1) {
+                              // Ambiguity resolution: prioritize Modern > Cold War > WW1-WW2, then Higher Tier
+                              candidates.sort((a, b) => {
+                                  const eraScore = { 'Modern': 3, 'Cold War': 2, 'WW1-WW2': 1 };
+                                  const scoreA = (eraScore[a.Age] || 0);
+                                  const scoreB = (eraScore[b.Age] || 0);
+                                  
+                                  if (scoreA !== scoreB) return scoreB - scoreA; // Descending Age
+                                  
+                                  return getTierRank(b.Rarity) - getTierRank(a.Rarity); // Descending Tier
+                              });
+                              tankData = candidates[0];
+                          }
+
                           if (tankData) {
                               if (!newCollection[tankData.id]) {
                                   newCollection[tankData.id] = [];
@@ -1288,7 +1306,7 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
             <div className="flex-1 p-8 overflow-y-auto custom-scrollbar bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMCAwIDQwIDQwIiBmaWxsPSJub25lIiBzdHJva2U9IiMzMzQxNTUiIHN0cm9rZS1vcGFjaXR5PSIwLjAzIiBzdHJva2Utd2lkdGg9IjEiPjxwYXRoIGQ9Ik0wIDQwaDQwTTAgMGg0MCIvPjwvc3ZnPg==')]">
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
                 <h3 className="text-xl font-bold text-white flex items-center gap-2 uppercase tracking-wide"><Icons.Database className="text-blue-500" /> {lang === 'fr' ? 'Progression Détaillée' : 'Detailed Progression'}</h3>
-                <div className="flex flex-wrap items-center gap-2">
+                <div className="flex items-center gap-2">
                     <button onClick={() => setActiveEra(activeEra === 'WW1-WW2' ? 'All' : 'WW1-WW2')} className={`flex items-center gap-2 px-3 py-1.5 rounded-full border text-[10px] font-bold transition-all ${activeEra === 'WW1-WW2' ? 'bg-amber-600 border-amber-500 text-white' : 'bg-slate-800 border-white/10 text-slate-400 hover:text-white'}`}>{activeEra === 'WW1-WW2' ? <Icons.ToggleRight size={14} /> : <Icons.ToggleLeft size={14} />} PGM-SGM</button>
                     <button onClick={() => setActiveEra(activeEra === 'Cold War' ? 'All' : 'Cold War')} className={`flex items-center gap-2 px-3 py-1.5 rounded-full border text-[10px] font-bold transition-all ${activeEra === 'Cold War' ? 'bg-sky-600 border-sky-500 text-white' : 'bg-slate-800 border-white/10 text-slate-400 hover:text-white'}`}>{activeEra === 'Cold War' ? <Icons.ToggleRight size={14} /> : <Icons.ToggleLeft size={14} />} {lang === 'fr' ? 'Guerre Froide' : 'Cold War'}</button>
                     <button onClick={() => setActiveEra(activeEra === 'Modern' ? 'All' : 'Modern')} className={`flex items-center gap-2 px-3 py-1.5 rounded-full border text-[10px] font-bold transition-all ${activeEra === 'Modern' ? 'bg-emerald-600 border-emerald-500 text-white' : 'bg-slate-800 border-white/10 text-slate-400 hover:text-white'}`}>{activeEra === 'Modern' ? <Icons.ToggleRight size={14} /> : <Icons.ToggleLeft size={14} />} {lang === 'fr' ? 'Moderne' : 'Modern'}</button>
@@ -1499,6 +1517,10 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                 if (sortBy === 'nation') {
                     const nationDiff = getNationRank(a.Nation) - getNationRank(b.Nation);
                     if (nationDiff !== 0) return nationDiff;
+                    // Add Age Rank
+                    const ageDiff = getAgeRank(a.Age) - getAgeRank(b.Age);
+                    if (ageDiff !== 0) return ageDiff;
+                    
                     const tierDiff = getTierRank(a.Rarity) - getTierRank(b.Rarity);
                     if (tierDiff !== 0) return tierDiff;
                     return a.Name.localeCompare(b.Name);
@@ -1508,28 +1530,26 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                     const tierDiff = getTierRank(a.Rarity) - getTierRank(b.Rarity);
                     if (tierDiff !== 0) return tierDiff;
                     
-                    // NEW: Sub-sort by Nation
                     const nationDiff = getNationRank(a.Nation) - getNationRank(b.Nation);
                     if (nationDiff !== 0) return nationDiff;
-                    
-                    // NEW: Sub-sort by Era (Age)
-                    const eraDiff = getEraRank(a.Age) - getEraRank(b.Age);
-                    if (eraDiff !== 0) return eraDiff;
-                    
+
+                    // Added Age rank for tier sorting
+                    const ageDiff = getAgeRank(a.Age) - getAgeRank(b.Age);
+                    if (ageDiff !== 0) return ageDiff;
+
                     return a.Name.localeCompare(b.Name);
                 }
                 
                 if (sortBy === 'tier_desc') {
                     const tierDiff = getTierRank(b.Rarity) - getTierRank(a.Rarity);
                     if (tierDiff !== 0) return tierDiff;
-                    
-                    // NEW: Sub-sort by Nation
+
                     const nationDiff = getNationRank(a.Nation) - getNationRank(b.Nation);
                     if (nationDiff !== 0) return nationDiff;
 
-                    // NEW: Sub-sort by Era (Age)
-                    const eraDiff = getEraRank(a.Age) - getEraRank(b.Age);
-                    if (eraDiff !== 0) return eraDiff;
+                    // Added Age rank for tier sorting
+                    const ageDiff = getAgeRank(a.Age) - getAgeRank(b.Age);
+                    if (ageDiff !== 0) return ageDiff;
                     
                     return a.Name.localeCompare(b.Name);
                 }
@@ -1561,7 +1581,7 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                   <h1 className="text-4xl md:text-5xl font-military uppercase tracking-wider text-slate-100 flex items-center gap-4 drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]">
                     <span className="text-emerald-500 drop-shadow-[0_0_15px_rgba(16,185,129,0.8)]"><Icons.Tank size={42} strokeWidth={2.5} /></span>
                     <span>Tankora <span className="text-emerald-500">DB</span></span>
-                    <span className="text-[10px] font-sans font-bold bg-slate-800 text-slate-400 px-2 py-1 rounded border border-white/10 ml-2 self-start mt-2">v3.1</span>
+                    <span className="text-[10px] font-sans font-bold bg-slate-800 text-slate-400 px-2 py-1 rounded border border-white/10 ml-2 self-start mt-2">v2.13</span>
                   </h1>
                   <div className="text-xs font-medium text-slate-400 mt-2 flex flex-col sm:flex-row sm:items-center gap-3">
                     <span className="flex items-center gap-1.5 bg-slate-800/50 px-3 py-1 rounded-full border border-white/5 cursor-pointer hover:bg-slate-800 hover:text-emerald-400 transition-colors group" onClick={() => setShowProfile(true)} title={translate('details')}>
@@ -1630,16 +1650,10 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                   <div className="relative w-full sm:w-auto flex-grow sm:flex-grow-0">
                     <FilterDropdown value={ownershipFilter} onChange={(e) => setOwnershipFilter(e.target.value)} options={[{ value: 'all', label: translate('statusAll') }, { value: 'owned', label: translate('statusOwned') }, { value: 'missing', label: translate('statusMissing') }, { value: 'duplicates', label: translate('statusDuplicates') }]} icon={ownershipFilter === 'owned' ? Icons.Check : ownershipFilter === 'missing' ? Icons.X : ownershipFilter === 'duplicates' ? Icons.Filter : Icons.Filter} placeholder={translate('statusAll')} />
                   </div>
-                  
-                  <div className="flex gap-2 w-full sm:w-auto mt-2 sm:mt-0">
-                    <button onClick={() => setViewMode(viewMode === 'grid' ? 'list' : 'grid')} className={`flex-1 sm:w-12 h-12 rounded-none clip-corner-tr bg-[#0f141a] border border-white/10 transition-all flex items-center justify-center shadow-lg group ${viewMode === 'list' ? 'text-emerald-400 border-emerald-500/30 bg-emerald-900/10' : 'text-slate-400 hover:text-white hover:border-white/20'}`} title={viewMode === 'grid' ? translate('compactView') : translate('cardView')}>
-                        {viewMode === 'grid' ? <Icons.List size={20} /> : <Icons.Grid size={18} />}
-                    </button>
-                    <button onClick={resetFilters} className="flex-1 sm:w-12 h-12 rounded-none clip-corner-tr bg-[#0f141a] text-red-400/70 hover:text-red-400 hover:bg-red-900/20 border border-white/10 hover:border-red-500/30 transition-all flex items-center justify-center shadow-lg group relative" title={translate('reset')}>
-                        <Icons.Trash2 size={18} />
-                        <span className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></span>
-                    </button>
-                  </div>
+                  <button onClick={() => setViewMode(viewMode === 'grid' ? 'list' : 'grid')} className={`w-12 h-12 rounded-none clip-corner-tr bg-[#0f141a] border border-white/10 transition-all flex items-center justify-center shadow-lg group ${viewMode === 'list' ? 'text-emerald-400 border-emerald-500/30 bg-emerald-900/10' : 'text-slate-400 hover:text-white hover:border-white/20'}`} title={viewMode === 'grid' ? translate('compactView') : translate('cardView')}>
+                    {viewMode === 'grid' ? <Icons.List size={20} /> : <Icons.Grid size={18} />}
+                  </button>
+                  <button onClick={resetFilters} className="w-12 h-12 rounded-none clip-corner-tr bg-[#0f141a] text-red-400/70 hover:text-red-400 hover:bg-red-900/20 border border-white/10 hover:border-red-500/30 transition-all flex items-center justify-center shadow-lg group relative" title={translate('reset')}><Icons.Trash2 size={18} /><span className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></span></button>
                 </div>
                 
                 {showAdvanced && (
@@ -1741,8 +1755,8 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                       const instances = collection[tank.id] || [];
                       const isCollected = instances.length > 0;
                       return (
-                        <div key={tank.id} className={`flex items-center justify-between p-3 bg-[#0f141a]/90 border border-white/5 rounded-lg hover:border-emerald-500/30 transition-all ${isCollected ? 'border-l-4 border-l-emerald-500' : ''}`}>
-                            <div className="flex items-center gap-4">
+                        <div key={tank.id} className={`flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 bg-[#0f141a]/90 border border-white/5 rounded-lg hover:border-emerald-500/30 transition-all ${isCollected ? 'border-l-4 border-l-emerald-500' : ''}`}>
+                            <div className="flex items-center gap-4 w-full sm:w-auto">
                                 <span className={`text-xs font-bold px-2 py-1 rounded bg-slate-800 text-slate-400 min-w-[80px] text-center`}>{tData(tank.Nation)}</span>
                                 <div>
                                     <h4 className={`font-black text-lg ${isCollected ? 'text-emerald-400' : 'text-slate-300'}`}>{tank.Name}</h4>
@@ -1751,7 +1765,7 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                                     </div>
                                 </div>
                             </div>
-                            <div className="flex items-center gap-3">
+                            <div className="flex items-center gap-3 mt-3 sm:mt-0 w-full sm:w-auto justify-end">
                                 {isCollected ? (
                                     <div className="px-3 py-1 bg-emerald-900/30 border border-emerald-500/30 rounded text-emerald-400 text-xs font-bold">
                                         {instances.length} {translate('instances')}
@@ -1774,13 +1788,13 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
             <div className="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-300" onClick={() => setShowCompare(false)}>
               <div className="bg-slate-800/90 backdrop-blur-xl w-full max-w-6xl max-h-[95vh] rounded-3xl border border-emerald-500/20 shadow-2xl overflow-hidden flex flex-col animate-in zoom-in duration-300 ring-1 ring-white/10" onClick={e => e.stopPropagation()}>
                 <div className="p-6 border-b border-white/5 flex justify-between items-center bg-slate-900/50">
-                  <h2 className="text-2xl font-black text-white flex items-center gap-3"><Icons.Scale className="text-blue-400" /> {translate('compare')}</h2>
-                  <div className="flex gap-4">
-                    <button onClick={() => setCompareList([])} className="text-sm text-red-400 hover:text-red-300 transition-colors uppercase font-bold tracking-wider">{translate('reset')}</button>
-                    <button onClick={() => setShowCompare(false)} className="text-slate-400 hover:text-white transition-colors bg-slate-800 p-2 rounded-full"><Icons.X size={24} /></button>
+                  <h2 className="text-xl sm:text-2xl font-black text-white flex items-center gap-3"><Icons.Scale className="text-blue-400" /> {translate('compare')}</h2>
+                  <div className="flex gap-2 sm:gap-4">
+                    <button onClick={() => setCompareList([])} className="text-xs sm:text-sm text-red-400 hover:text-red-300 transition-colors uppercase font-bold tracking-wider">{translate('reset')}</button>
+                    <button onClick={() => setShowCompare(false)} className="text-slate-400 hover:text-white transition-colors bg-slate-800 p-2 rounded-full"><Icons.X className="w-5 h-5 sm:w-6 sm:h-6" /></button>
                   </div>
                 </div>
-                <div className="overflow-auto p-6 md:p-8 custom-scrollbar">
+                <div className="overflow-auto p-4 sm:p-8 custom-scrollbar">
                   {compareList.length === 0 ? (<div className="text-center py-20 text-slate-500"><p>{translate('selectTanks')}</p></div>) : (
                     <div className="min-w-[800px]"> 
                         <div className="mb-8 p-4 bg-[#0f141a] border border-white/5 rounded-2xl flex justify-center tech-border">
@@ -1887,7 +1901,7 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
             <p className="flex justify-center items-center gap-2">
               <span className="text-emerald-400 hover:text-emerald-300 transition-colors uppercase tracking-widest">{translate('credits')}</span>
               <span className="opacity-30">|</span>
-              <span className="opacity-50">v3.1 Reforged</span>
+              <span className="opacity-50">v2.13 Reforged</span>
             </p>
             
             {showBackToTop && (
