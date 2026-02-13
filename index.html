@@ -641,16 +641,18 @@ Tankora-72,Soviet Union,Modern,Event,Heavy,Medium,High,Medium,Fast,High,Medium,N
 T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Medium,Fast,High,Medium,No,No,No,No,No,No,No,No,No,No,No
 `;
 
-    // --- UTILS: ID Generation (Fixes data shifting issue) ---
-    const generateId = (name) => {
-        if (!name) return `unknown_${Math.random().toString(36).substr(2, 9)}`;
-        return name
-            .toLowerCase()
-            .replace(/[^a-z0-9]+/g, '_')
-            .replace(/^_+|_+$/g, '');
+    // --- UTILS ---
+    const generateId = (tank) => {
+        if (!tank || !tank.Name) return `unknown_${Math.random().toString(36).substr(2, 9)}`;
+        const rawId = `${tank.Name}_${tank.Nation}_${tank.Age}_${tank.Rarity}`;
+        return rawId.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '');
+    };
+    
+    const generateLegacyId = (name) => {
+        if (!name) return '';
+        return name.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '');
     };
 
-    // OPTIMIZATION: Parse CSV only once at script execution
     const parseCSV = (text) => {
       const lines = text.trim().split('\n');
       const detectSeparator = (str) => str.includes('\t') ? '\t' : ',';
@@ -671,21 +673,16 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
             else { current += char; }
           }
           result.push(current.trim());
-          
           const obj = {};
           headers.forEach((header, i) => { obj[header] = result[i] || ''; });
-          
-          // CRITICAL FIX: Use Name-based ID
-          obj.id = generateId(obj['Name']); 
-          
+          obj.id = generateId(obj); 
           return obj;
         });
     };
 
     const INITIAL_TANKS = parseCSV(rawCSV);
 
-    // --- HELPER COMPONENTS (DEFINED BEFORE USE) ---
-
+    // --- COMPONENTS ---
     const IconWrapper = ({ children, size = 24, className = "" }) => (
       <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>{children}</svg>
     );
@@ -780,7 +777,6 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                       new Notification("Tankora DB", { body: "TON WORK EST DISPO !!!" });
                   }
                   
-                  // Blinking title
                   if (!titleIntervalRef.current) {
                       let showMsg = true;
                       titleIntervalRef.current = setInterval(() => {
@@ -841,7 +837,6 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
         return `${m}:${s < 10 ? '0' : ''}${s}`;
       };
 
-      // Theme-based class computation
       const buttonClass = isRunning 
         ? 'bg-orange-500/20 text-orange-400 hover:bg-orange-500 hover:text-white'
         : `bg-${theme}-500 hover:bg-${theme}-400 text-white shadow-[0_0_10px_currentColor] shadow-${theme}-500`;
@@ -1562,11 +1557,39 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
               
               // Validate keys against current tank DB
               const validCollection = {};
-              const validIds = new Set(INITIAL_TANKS.map(t => t.id));
+              const currentIds = new Set(INITIAL_TANKS.map(t => t.id));
               
+              // Map legacy IDs (name only) to new IDs
+              // We create a map of "legacy_id" -> [list of matching new IDs]
+              // Example: "t_80" -> ["t_80_soviet_union_ww1_ww2_tier_ii", "t_80_soviet_union_modern_tier_iv"]
+              const legacyMap = {};
+              INITIAL_TANKS.forEach(tank => {
+                  const legId = generateLegacyId(tank.Name);
+                  if (!legacyMap[legId]) legacyMap[legId] = [];
+                  legacyMap[legId].push(tank.id);
+              });
+
               Object.keys(parsed).forEach(key => {
-                  if (validIds.has(key) || validIds.has(String(key))) {
+                  // Case 1: ID is valid and exists in current DB (New format already)
+                  if (currentIds.has(key)) {
                       validCollection[key] = parsed[key];
+                  } 
+                  // Case 2: ID is legacy (Old format), try to migrate
+                  else if (legacyMap[key]) {
+                      // If legacy ID matches multiple new IDs (like T-80), we give the item to ALL matching tanks
+                      // This is generous but prevents data loss. The user can then delete the one they don't want.
+                      // For T-80, this means they will get both the WW2 and Modern version if they had "t_80".
+                      legacyMap[key].forEach(newId => {
+                           // Merge with existing if any (unlikely during init but good practice)
+                           const existing = validCollection[newId] || [];
+                           validCollection[newId] = [...existing, ...parsed[key]];
+                      });
+                  }
+                  // Case 3: Legacy Index-based ID (Numeric) - FIX FOR PREVIOUS VERSION
+                  else if (!isNaN(key) && INITIAL_TANKS[parseInt(key)]) {
+                       const newId = INITIAL_TANKS[parseInt(key)].id;
+                       const existing = validCollection[newId] || [];
+                       validCollection[newId] = [...existing, ...parsed[key]];
                   }
               });
               
@@ -1726,7 +1749,6 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
           return matchSearch && matchNation && matchAge && matchRarity && matchOwnership && matchAdvanced;
         });
 
-        // Sorting logic remains same
         if (sortBy !== 'none') {
             result.sort((a, b) => {
                 if (sortBy === 'name_asc') return a.Name.localeCompare(b.Name);
