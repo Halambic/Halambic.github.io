@@ -97,29 +97,64 @@
         100% { left: 150%; }
     }
 
-    /* Prototype - Classified/Blueprint Style */
+    /* Prototype - PLASMA ACTIVE (Haute Visibilité, Mouvement Fluide) */
     .fx-holo-proto {
         position: relative;
-        border: 1px solid rgba(239, 68, 68, 0.6) !important; /* Red Border */
-        background-image: repeating-linear-gradient(
-            45deg,
-            rgba(239, 68, 68, 0.05),
-            rgba(239, 68, 68, 0.05) 10px,
-            transparent 10px,
-            transparent 20px
-        );
+        /* Bordure rouge solide et visible */
+        border: 1px solid #ef4444 !important;
+        
+        /* Fond: Plasma mouvant Rouge/Noir/Rouge Sombre */
+        background: linear-gradient(135deg, #1a0505 0%, #450a0a 25%, #000000 50%, #450a0a 75%, #1a0505 100%);
+        background-size: 400% 400%;
+        
+        /* Ombre portée rouge "Néon" permanente */
+        box-shadow: 0 0 15px rgba(220, 38, 38, 0.4);
+            
+        overflow: hidden;
+        /* Animation lente et fluide du fond */
+        animation: plasma-shift 15s ease infinite;
+        
+        /* FIX: Coin carré pour le badge */
+        clip-path: none !important;
+        border-radius: 6px;
+        z-index: 10;
     }
+
+    /* Masquer les éléments tech-border par défaut */
+    .fx-holo-proto.tech-border::before { clip-path: none !important; }
+    .fx-holo-proto.tech-border::after { display: none !important; }
+
+    @keyframes plasma-shift {
+        0% { background-position: 0% 50%; border-color: #ef4444; }
+        50% { background-position: 100% 50%; border-color: #b91c1c; }
+        100% { background-position: 0% 50%; border-color: #ef4444; }
+    }
+
+    /* Badge "TOP SECRET" - Haute Lisibilité */
     .fx-holo-proto::after {
-        content: '⚠ PROTO';
+        content: 'TOP SECRET';
         position: absolute;
-        top: 0; right: 0;
-        background: #ef4444;
-        color: black;
-        font-size: 8px;
-        font-weight: bold;
-        padding: 1px 4px;
-        clip-path: polygon(0 0, 100% 0, 100% 100%, 10px 100%);
+        top: 14px;
+        right: -30px;
+        
+        /* Fond rouge intense */
+        background-color: #991b1b;
+        
+        color: white;
+        font-family: "Black Ops One", cursive;
+        font-size: 8px; /* Un peu plus grand pour la lisibilité */
+        letter-spacing: 1px;
+        padding: 5px 30px;
+        transform: rotate(45deg);
         z-index: 20;
+        
+        /* Ombre forte pour détacher du fond coloré */
+        box-shadow: 0 0 10px rgba(0,0,0,0.9);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        
+        text-shadow: 0 1px 2px black;
+        white-space: nowrap;
+        pointer-events: none;
     }
 
     /* Event Pulse - Visible Amber Glow */
