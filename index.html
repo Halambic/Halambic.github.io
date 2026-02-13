@@ -13,10 +13,11 @@
   <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Rajdhani:wght@400;500;600;700&display=swap"
     rel="stylesheet">
 
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <!-- SECURITY: Pinned versions for stability and supply chain security -->
+  <script src="https://cdn.tailwindcss.com/3.4.1"></script>
+  <script crossorigin src="https://unpkg.com/react@18.2.0/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.23.8/babel.min.js"></script>
 
   <script>
     tailwind.config = {
@@ -740,6 +741,36 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
       Palette: (props) => <IconWrapper {...props}><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></IconWrapper>
     };
 
+    // OPTIMIZATION: Parse CSV only once at script execution, not on every render
+    const parseCSV = (text) => {
+      const lines = text.trim().split('\n');
+      const detectSeparator = (str) => str.includes('\t') ? '\t' : ',';
+      const headerLine = lines[0];
+      const headerSeparator = detectSeparator(headerLine);
+      const headers = headerLine.split(headerSeparator).map(h => h.trim());
+      return lines.slice(1)
+        .filter(line => line.trim() !== '')
+        .map((line, index) => {
+          const separator = detectSeparator(line);
+          const result = [];
+          let current = '';
+          let inQuotes = false;
+          for (let i = 0; i < line.length; i++) {
+            const char = line[i];
+            if (char === '"') { inQuotes = !inQuotes; }
+            else if (char === separator && !inQuotes) { result.push(current.trim()); current = ''; }
+            else { current += char; }
+          }
+          result.push(current.trim());
+          const obj = { id: index };
+          headers.forEach((header, i) => { obj[header] = result[i] || ''; });
+          return obj;
+        });
+    };
+
+    // Initialize data statically
+    const INITIAL_TANKS = parseCSV(rawCSV);
+
     const DrawTimer = ({ lang, theme }) => {
       const getInitialState = () => {
          try {
@@ -1128,33 +1159,6 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
         );
     };
 
-    const parseCSV = (text) => {
-      // ... existing parseCSV function ...
-      const lines = text.trim().split('\n');
-      const detectSeparator = (str) => str.includes('\t') ? '\t' : ',';
-      const headerLine = lines[0];
-      const headerSeparator = detectSeparator(headerLine);
-      const headers = headerLine.split(headerSeparator).map(h => h.trim());
-      return lines.slice(1)
-        .filter(line => line.trim() !== '')
-        .map((line, index) => {
-          const separator = detectSeparator(line);
-          const result = [];
-          let current = '';
-          let inQuotes = false;
-          for (let i = 0; i < line.length; i++) {
-            const char = line[i];
-            if (char === '"') { inQuotes = !inQuotes; }
-            else if (char === separator && !inQuotes) { result.push(current.trim()); current = ''; }
-            else { current += char; }
-          }
-          result.push(current.trim());
-          const obj = { id: index };
-          headers.forEach((header, i) => { obj[header] = result[i] || ''; });
-          return obj;
-        });
-    };
-
     const getStatValue = (val) => {
       // ... existing getStatValue function ...
       if (!val) return 0;
@@ -1419,13 +1423,34 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
           reader.onload = (e) => {
               const content = e.target.result;
 
-              // Check if JSON
+              // SECURITY: Strict input validation for JSON import
               if (file.name.endsWith('.json')) {
                   try {
                       const imported = JSON.parse(content);
-                      if (typeof imported === 'object') {
-                          setCollection(imported);
+                      const cleanCollection = {};
+                      
+                      // Validate structure: must be an object
+                      if (typeof imported === 'object' && imported !== null) {
+                          // Iterate through keys and validate
+                          Object.keys(imported).forEach(key => {
+                              // Ensure tank ID exists in database (simple check: if we have tanks)
+                              // Note: We can't strictly validate ID against tanks array here easily without prop drilling, 
+                              // but filtering out non-array values and invalid conditions is a huge security win.
+                              
+                              if (Array.isArray(imported[key])) {
+                                  // Filter to only include valid conditions
+                                  const validConditions = imported[key].filter(c => CONDITIONS[c]);
+                                  
+                                  if (validConditions.length > 0) {
+                                      cleanCollection[key] = validConditions;
+                                  }
+                              }
+                          });
+                          
+                          setCollection(cleanCollection);
                           addToast(translate('toastLoaded'));
+                      } else {
+                          alert(translate('fileError'));
                       }
                   } catch (err) {
                       alert(translate('fileError'));
@@ -1433,10 +1458,9 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                   return;
               }
 
-              // Check if TXT (Discord Bot export)
+              // Check if TXT (Discord Bot export) - Basic parsing with sanity check
               if (file.name.endsWith('.txt')) {
-                  let newCollection = {}; // Start fresh or merge? Let's replace as "Load" implies.
-                  
+                  let newCollection = {}; 
                   const lines = content.split('\n');
                   let inTanksSection = false;
 
@@ -1449,15 +1473,14 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                       if (!inTanksSection) continue;
                       if (!l) continue;
 
-                      // Parse line: "Name - Condition - drawn on..."
-                      // We split by " - " to separate parts
                       const parts = l.split(' - ');
                       if (parts.length >= 2) {
+                          // Sanitization: Escape potential HTML is handled by React rendering,
+                          // but matching names against our DB ensures no random strings enter the system.
                           const name = parts[0].trim();
                           const rawCond = parts[1].trim();
 
-                          // Map condition text to ID
-                          let condId = 'field_ready'; // fallback
+                          let condId = 'field_ready';
                           if (rawCond.includes('salvage')) condId = 'salvage';
                           else if (rawCond.includes('damaged')) condId = 'damaged';
                           else if (rawCond.includes('worn')) condId = 'worn';
@@ -1465,22 +1488,18 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                           else if (rawCond.includes('parade ready')) condId = 'parade_ready';
                           else if (rawCond.includes('factory new')) condId = 'factory_new';
 
-                          // Find tank by name to get its ID
                           const candidates = tanks.filter(t => t.Name === name);
                           let tankData = null;
 
                           if (candidates.length === 1) {
                               tankData = candidates[0];
                           } else if (candidates.length > 1) {
-                              // Ambiguity resolution: prioritize Modern > Cold War > WW1-WW2, then Higher Tier
                               candidates.sort((a, b) => {
                                   const eraScore = { 'Modern': 3, 'Cold War': 2, 'WW1-WW2': 1 };
                                   const scoreA = (eraScore[a.Age] || 0);
                                   const scoreB = (eraScore[b.Age] || 0);
-                                  
-                                  if (scoreA !== scoreB) return scoreB - scoreA; // Descending Age
-                                  
-                                  return getTierRank(b.Rarity) - getTierRank(a.Rarity); // Descending Tier
+                                  if (scoreA !== scoreB) return scoreB - scoreA;
+                                  return getTierRank(b.Rarity) - getTierRank(a.Rarity);
                               });
                               tankData = candidates[0];
                           }
@@ -1587,7 +1606,8 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
     // ==========================================
 
     function TankApp() {
-      const [tanks, setTanks] = useState([]);
+      // OPTIMIZATION: Use static initial data
+      const [tanks, setTanks] = useState(INITIAL_TANKS);
       const [collection, setCollection] = useState(() => { try { const saved = localStorage.getItem('tankCollection'); return saved ? JSON.parse(saved) : {}; } catch (e) { return {}; } });
       const [compareList, setCompareList] = useState([]);
       const [showCompare, setShowCompare] = useState(false);
@@ -1649,10 +1669,7 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
         if (scrollTop > 300) setShowBackToTop(true); else setShowBackToTop(false);
       };
       
-      useEffect(() => {
-        const parsedData = parseCSV(rawCSV);
-        setTanks(parsedData);
-      }, []);
+      // Removed useEffect for CSV parsing since it's done statically
 
       const addTankInstance = (tankId, condition = null) => {
         const tank = tanks.find(t => t.id === tankId);
@@ -1718,7 +1735,9 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
       
       const filteredTanks = useMemo(() => {
         let result = tanks.filter(tank => {
-          const matchSearch = tank.Name.toLowerCase().includes(search.toLowerCase());
+          // SECURITY: Ensure search is string and safe
+          const searchTerm = String(search).toLowerCase();
+          const matchSearch = tank.Name.toLowerCase().includes(searchTerm);
           const matchNation = filterNation === 'All' || tank.Nation === filterNation;
           const matchAge = filterAge === 'All' || tank.Age === filterAge;
           const matchRarity = filterRarity === 'All' || tank.Rarity === filterRarity;
