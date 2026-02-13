@@ -157,17 +157,93 @@
         pointer-events: none;
     }
 
-    /* Event Pulse - Visible Amber Glow */
+    /* Event - PRESTIGE COLLECTOR (Luxe, Brillant, Pas de pulsation) */
     .fx-holo-event {
         position: relative;
-        border-color: rgba(245, 158, 11, 0.8) !important; /* Amber-500 */
-        animation: event-glow 3s infinite ease-in-out;
-        z-index: 1; /* Ensure shadow is visible above neighbors if needed */
+        /* Bordure Or Ambré constante et fine */
+        border: 1px solid rgba(217, 119, 6, 0.6) !important;
+        
+        /* Fond: Noir profond avec légère teinte dorée en bas à droite */
+        background: radial-gradient(circle at 100% 100%, #451a03 0%, #0a0500 60%);
+        
+        box-shadow: 0 0 15px rgba(245, 158, 11, 0.1);
+        overflow: hidden;
+        
+        /* FIX: Coin carré pour le badge */
+        clip-path: none !important;
+        border-radius: 6px;
+        z-index: 10;
     }
 
-    @keyframes event-glow {
-        0%, 100% { box-shadow: 0 0 5px rgba(245, 158, 11, 0.2), inset 0 0 0 rgba(245, 158, 11, 0); }
-        50% { box-shadow: 0 0 25px rgba(245, 158, 11, 0.5), inset 0 0 20px rgba(245, 158, 11, 0.2); }
+    /* Masquer les éléments tech-border par défaut */
+    .fx-holo-event.tech-border::before { clip-path: none !important; }
+    .fx-holo-event.tech-border::after { display: none !important; }
+
+    /* Reflet de Luxe (Sheen) - Traverse la carte */
+    .fx-holo-event::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -150%;
+        width: 100%;
+        height: 100%;
+        /* Reflet blanc/or très net */
+        background: linear-gradient(
+            110deg,
+            transparent 40%,
+            rgba(251, 191, 36, 0.1) 45%,
+            rgba(255, 255, 255, 0.5) 50%, /* Eclat central */
+            rgba(251, 191, 36, 0.1) 55%,
+            transparent 60%
+        );
+        transform: skewX(-25deg);
+        /* Animation lente et majestueuse avec pause */
+        animation: prestige-sheen 6s infinite ease-in-out;
+        pointer-events: none;
+        z-index: 2;
+        mix-blend-mode: overlay;
+    }
+
+    @keyframes prestige-sheen {
+        0%, 30% { left: -150%; opacity: 0; }
+        40% { opacity: 1; }
+        60% { left: 150%; opacity: 1; }
+        100% { left: 150%; opacity: 0; }
+    }
+
+    /* Poussière d'Or Scintillante (Sparkles) */
+    .fx-holo-event .p-5 { /* Cibler le contenu pour l'arrière-plan */
+        position: relative;
+        z-index: 5;
+    }
+    
+    /* Badge "EVENT" - STYLE INVERSÉ (Or brillant / Texte sombre) */
+    .fx-holo-event::after {
+        content: 'EVENT';
+        position: absolute;
+        top: 14px;
+        right: -30px;
+        
+        /* Fond Or Métallique Dégradé */
+        background: linear-gradient(to bottom, #fcd34d 0%, #d97706 100%);
+        
+        /* Texte Brun Sombre pour contraste fort */
+        color: #451a03;
+        font-family: "Black Ops One", cursive;
+        font-size: 8px;
+        font-weight: 900;
+        letter-spacing: 2px;
+        padding: 5px 30px;
+        transform: rotate(45deg);
+        z-index: 20;
+        
+        /* Finition bijou */
+        box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        
+        text-shadow: none; /* Pas d'ombre sur le texte sombre */
+        white-space: nowrap;
+        pointer-events: none;
     }
 
     /* Table styles */
