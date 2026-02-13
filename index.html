@@ -13,7 +13,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Rajdhani:wght@400;500;600;700&display=swap"
     rel="stylesheet">
 
-  <!-- SECURITY: Pinned versions for stability and supply chain security -->
   <script src="https://cdn.tailwindcss.com/3.4.1"></script>
   <script crossorigin src="https://unpkg.com/react@18.2.0/umd/react.production.min.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
@@ -101,27 +100,16 @@
     /* Prototype - PLASMA ACTIVE (Haute Visibilité, Mouvement Fluide) */
     .fx-holo-proto {
         position: relative;
-        /* Bordure rouge solide et visible */
         border: 1px solid #ef4444 !important;
-        
-        /* Fond: Plasma mouvant Rouge/Noir/Rouge Sombre */
         background: linear-gradient(135deg, #1a0505 0%, #450a0a 25%, #000000 50%, #450a0a 75%, #1a0505 100%);
         background-size: 400% 400%;
-        
-        /* Ombre portée rouge "Néon" permanente */
         box-shadow: 0 0 15px rgba(220, 38, 38, 0.4);
-            
         overflow: hidden;
-        /* Animation lente et fluide du fond */
         animation: plasma-shift 15s ease infinite;
-        
-        /* FIX: Coin carré pour le badge */
         clip-path: none !important;
         border-radius: 6px;
         z-index: 10;
     }
-
-    /* Masquer les éléments tech-border par défaut */
     .fx-holo-proto.tech-border::before { clip-path: none !important; }
     .fx-holo-proto.tech-border::after { display: none !important; }
 
@@ -131,56 +119,40 @@
         100% { background-position: 0% 50%; border-color: #ef4444; }
     }
 
-    /* Badge "TOP SECRET" - Haute Lisibilité */
     .fx-holo-proto::after {
         content: 'TOP SECRET';
         position: absolute;
         top: 14px;
         right: -30px;
-        
-        /* Fond rouge intense */
         background-color: #991b1b;
-        
         color: white;
         font-family: "Black Ops One", cursive;
-        font-size: 8px; /* Un peu plus grand pour la lisibilité */
+        font-size: 8px;
         letter-spacing: 1px;
         padding: 5px 30px;
         transform: rotate(45deg);
         z-index: 20;
-        
-        /* Ombre forte pour détacher du fond coloré */
         box-shadow: 0 0 10px rgba(0,0,0,0.9);
         border: 1px solid rgba(255, 255, 255, 0.2);
-        
         text-shadow: 0 1px 2px black;
         white-space: nowrap;
         pointer-events: none;
     }
 
-    /* Event - PRESTIGE COLLECTOR (Luxe, Brillant, Pas de pulsation) */
+    /* Event - PRESTIGE COLLECTOR */
     .fx-holo-event {
         position: relative;
-        /* Bordure Or Ambré constante et fine */
         border: 1px solid rgba(217, 119, 6, 0.6) !important;
-        
-        /* Fond: Noir profond avec légère teinte dorée en bas à droite */
         background: radial-gradient(circle at 100% 100%, #451a03 0%, #0a0500 60%);
-        
         box-shadow: 0 0 15px rgba(245, 158, 11, 0.1);
         overflow: hidden;
-        
-        /* FIX: Coin carré pour le badge */
         clip-path: none !important;
         border-radius: 6px;
         z-index: 10;
     }
-
-    /* Masquer les éléments tech-border par défaut */
     .fx-holo-event.tech-border::before { clip-path: none !important; }
     .fx-holo-event.tech-border::after { display: none !important; }
 
-    /* Reflet de Luxe (Sheen) - Traverse la carte */
     .fx-holo-event::before {
         content: '';
         position: absolute;
@@ -188,17 +160,8 @@
         left: -150%;
         width: 100%;
         height: 100%;
-        /* Reflet blanc/or très net */
-        background: linear-gradient(
-            110deg,
-            transparent 40%,
-            rgba(251, 191, 36, 0.1) 45%,
-            rgba(255, 255, 255, 0.5) 50%, /* Eclat central */
-            rgba(251, 191, 36, 0.1) 55%,
-            transparent 60%
-        );
+        background: linear-gradient(110deg, transparent 40%, rgba(251, 191, 36, 0.1) 45%, rgba(255, 255, 255, 0.5) 50%, rgba(251, 191, 36, 0.1) 55%, transparent 60%);
         transform: skewX(-25deg);
-        /* Animation lente et majestueuse avec pause */
         animation: prestige-sheen 6s infinite ease-in-out;
         pointer-events: none;
         z-index: 2;
@@ -212,23 +175,12 @@
         100% { left: 150%; opacity: 0; }
     }
 
-    /* Poussière d'Or Scintillante (Sparkles) */
-    .fx-holo-event .p-5 { /* Cibler le contenu pour l'arrière-plan */
-        position: relative;
-        z-index: 5;
-    }
-    
-    /* Badge "EVENT" - STYLE INVERSÉ (Or brillant / Texte sombre) */
     .fx-holo-event::after {
         content: 'EVENT';
         position: absolute;
         top: 14px;
         right: -30px;
-        
-        /* Fond Or Métallique Dégradé */
         background: linear-gradient(to bottom, #fcd34d 0%, #d97706 100%);
-        
-        /* Texte Brun Sombre pour contraste fort */
         color: #451a03;
         font-family: "Black Ops One", cursive;
         font-size: 8px;
@@ -237,12 +189,9 @@
         padding: 5px 30px;
         transform: rotate(45deg);
         z-index: 20;
-        
-        /* Finition bijou */
         box-shadow: 0 2px 8px rgba(0,0,0,0.5);
         border: 1px solid rgba(255, 255, 255, 0.4);
-        
-        text-shadow: none; /* Pas d'ombre sur le texte sombre */
+        text-shadow: none;
         white-space: nowrap;
         pointer-events: none;
     }
@@ -261,7 +210,7 @@
   <div id="root" class="h-full w-full flex flex-col"></div>
 
   <script type="text/babel">
-    const { useState, useEffect, useMemo, useRef } = React;
+    const { useState, useEffect, useMemo, useRef, useCallback } = React;
 
     const CONDITIONS = {
       salvage: { id: 'salvage', rank: 0, color: 'bg-[#991b1b] text-white border-[#7f1d1d]' },
@@ -306,9 +255,6 @@
       { tier: 'Event', rate: 'Spécial', color: 'text-yellow-400' },
     ];
 
-    // ==========================================
-    // 2. DONNÉES CSV
-    // ==========================================
     const rawCSV = `Name,Nation,Age,Rarity,Armor,Firepower,Accuracy,Size,Mobility,Angled,Visibility,Autocannon,Stabilizer,Protected Ammo,Rangefinder,Autoloader,Night Vision,Thermal Vision,ERA,ATGM (P),ATGM (S),APS
 T-26 (twin-turreted),Soviet Union,WW1-WW2,Tier I,Very Light,Small Arms,Low,Small,Slow,Low,Low,No,No,No,No,No,No,No,No,No,No,No
 T-26,Soviet Union,WW1-WW2,Tier I,Very Light,Light,Medium,Small,Slow,Low,Low,No,No,No,No,No,No,No,No,No,No,No
@@ -694,9 +640,51 @@ M47 Patton 331,Austria,Cold War,Event,Medium,Medium,High,Medium,Normal,Medium,Me
 Tankora-72,Soviet Union,Modern,Event,Heavy,Medium,High,Medium,Fast,High,Medium,No,Yes,No,No,Yes,Yes,No,No,No,No,No
 T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Medium,Fast,High,Medium,No,No,No,No,No,No,No,No,No,No,No
 `;
-    // ==========================================
-    // 3. COMPOSANTS UTILITAIRES
-    // ==========================================
+
+    // --- UTILS: ID Generation (Fixes data shifting issue) ---
+    const generateId = (name) => {
+        if (!name) return `unknown_${Math.random().toString(36).substr(2, 9)}`;
+        return name
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, '_')
+            .replace(/^_+|_+$/g, '');
+    };
+
+    // OPTIMIZATION: Parse CSV only once at script execution
+    const parseCSV = (text) => {
+      const lines = text.trim().split('\n');
+      const detectSeparator = (str) => str.includes('\t') ? '\t' : ',';
+      const headerLine = lines[0];
+      const headerSeparator = detectSeparator(headerLine);
+      const headers = headerLine.split(headerSeparator).map(h => h.trim());
+      return lines.slice(1)
+        .filter(line => line.trim() !== '')
+        .map((line, index) => {
+          const separator = detectSeparator(line);
+          const result = [];
+          let current = '';
+          let inQuotes = false;
+          for (let i = 0; i < line.length; i++) {
+            const char = line[i];
+            if (char === '"') { inQuotes = !inQuotes; }
+            else if (char === separator && !inQuotes) { result.push(current.trim()); current = ''; }
+            else { current += char; }
+          }
+          result.push(current.trim());
+          
+          const obj = {};
+          headers.forEach((header, i) => { obj[header] = result[i] || ''; });
+          
+          // CRITICAL FIX: Use Name-based ID
+          obj.id = generateId(obj['Name']); 
+          
+          return obj;
+        });
+    };
+
+    const INITIAL_TANKS = parseCSV(rawCSV);
+
+    // --- HELPER COMPONENTS (DEFINED BEFORE USE) ---
 
     const IconWrapper = ({ children, size = 24, className = "" }) => (
       <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>{children}</svg>
@@ -740,36 +728,6 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
       ArrowUp: (props) => <IconWrapper {...props}><line x1="12" y1="19" x2="12" y2="5" /><polyline points="5 12 12 5 19 12" /></IconWrapper>,
       Palette: (props) => <IconWrapper {...props}><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></IconWrapper>
     };
-
-    // OPTIMIZATION: Parse CSV only once at script execution, not on every render
-    const parseCSV = (text) => {
-      const lines = text.trim().split('\n');
-      const detectSeparator = (str) => str.includes('\t') ? '\t' : ',';
-      const headerLine = lines[0];
-      const headerSeparator = detectSeparator(headerLine);
-      const headers = headerLine.split(headerSeparator).map(h => h.trim());
-      return lines.slice(1)
-        .filter(line => line.trim() !== '')
-        .map((line, index) => {
-          const separator = detectSeparator(line);
-          const result = [];
-          let current = '';
-          let inQuotes = false;
-          for (let i = 0; i < line.length; i++) {
-            const char = line[i];
-            if (char === '"') { inQuotes = !inQuotes; }
-            else if (char === separator && !inQuotes) { result.push(current.trim()); current = ''; }
-            else { current += char; }
-          }
-          result.push(current.trim());
-          const obj = { id: index };
-          headers.forEach((header, i) => { obj[header] = result[i] || ''; });
-          return obj;
-        });
-    };
-
-    // Initialize data statically
-    const INITIAL_TANKS = parseCSV(rawCSV);
 
     const DrawTimer = ({ lang, theme }) => {
       const getInitialState = () => {
@@ -1058,6 +1016,37 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
         </div>
       );
     };
+
+    const ThemeSelector = ({ currentTheme, onThemeChange, translate }) => {
+        const [isOpen, setIsOpen] = useState(false);
+        const themes = Object.keys(THEME_COLORS);
+        
+        return (
+            <div className="relative">
+                <button onClick={() => setIsOpen(!isOpen)} className="w-8 h-8 flex items-center justify-center bg-slate-800 border border-white/10 rounded-full hover:bg-slate-700 transition-colors">
+                    <div style={{color: THEME_COLORS[currentTheme].hex}}><Icons.Palette size={16} /></div>
+                </button>
+                
+                {isOpen && (
+                    <>
+                        <div className="fixed inset-0 z-40" onClick={() => setIsOpen(false)}></div>
+                        <div className="absolute top-full right-0 mt-2 bg-[#0f141a] border border-white/10 shadow-xl rounded-lg z-50 overflow-hidden min-w-[150px] animate-in fade-in slide-in-from-bottom">
+                            {themes.map(t => (
+                                <button 
+                                    key={t}
+                                    onClick={() => { onThemeChange(t); setIsOpen(false); }}
+                                    className={`w-full text-left px-4 py-3 text-xs font-bold uppercase tracking-wider flex items-center gap-3 hover:bg-slate-800 transition-colors ${currentTheme === t ? 'bg-slate-800' : ''}`}
+                                >
+                                    <div className="w-3 h-3 rounded-full" style={{backgroundColor: THEME_COLORS[t].hex}}></div>
+                                    <span className={currentTheme === t ? 'text-white' : 'text-slate-400'}>{translate(THEME_COLORS[t].label)}</span>
+                                </button>
+                            ))}
+                        </div>
+                    </>
+                )}
+            </div>
+        );
+    };
     
     const ToastContainer = ({ toasts, theme }) => {
         return (
@@ -1160,7 +1149,6 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
     };
 
     const getStatValue = (val) => {
-      // ... existing getStatValue function ...
       if (!val) return 0;
       const v = val.toLowerCase();
       if (v.includes('very high') || v.includes('very heavy') || v.includes('very fast')) return 100;
@@ -1172,7 +1160,6 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
     };
 
     const getStatColor = (val) => {
-      // ... existing getStatColor function ...
       if (val >= 80) return 'bg-green-500';
       if (val >= 60) return 'bg-emerald-400';
       if (val >= 40) return 'bg-yellow-400';
@@ -1181,7 +1168,6 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
     };
 
     const getRarityColor = (tier) => {
-       // ... existing getRarityColor function ...
       if (tier.includes('Tier I') && !tier.includes('II') && !tier.includes('III') && !tier.includes('IV') && !tier.includes('V')) return 'text-slate-300';
       if (tier.includes('Tier II') && !tier.includes('III')) return 'text-green-400';
       if (tier.includes('Tier III')) return 'text-blue-400';
@@ -1193,7 +1179,6 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
     };
     
     const getTierRank = (rarity) => {
-        // ... existing getTierRank function ...
         if (rarity.includes('Tier I') && !rarity.includes('II') && !rarity.includes('V')) return 1;
         if (rarity.includes('Tier II') && !rarity.includes('III')) return 2;
         if (rarity.includes('Tier III')) return 3;
@@ -1205,7 +1190,6 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
     };
 
     const getAgeRank = (age) => {
-        // ... existing getAgeRank function ...
         if (age === 'WW1-WW2') return 1;
         if (age === 'Cold War') return 2;
         if (age === 'Modern') return 3;
@@ -1213,19 +1197,15 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
     };
 
     const getNationRank = (nation) => {
-        // ... existing getNationRank function ...
         if (nation === 'United States of America') return 10;
-        // Group Germany
         if (nation === 'German Reich' || nation === 'Germany') return 20;
-        // Group USSR
         if (nation === 'Soviet Union' || nation === 'Russia') return 30;
         if (nation === 'United Kingdom') return 40;
         if (nation === 'France') return 50;
-        return 99; // Autres nations (Autriche, etc.) à la fin
+        return 99;
     };
 
     const translateData = (val, key = '', lang = 'fr') => {
-      // ... existing translateData function ...
       if (lang === 'fr' && ['Firepower', 'Accuracy', 'Mobility', 'Visibility', 'Size'].includes(key)) {
         const feminineMap = {
           "Very High": "Très élevée", "High": "Élevée", "Medium": "Moyenne", "Heavy": "Lourde", "Very Heavy": "Très lourde", "Very Light": "Très légère", "Light": "Légère", "Slow": "Lente", "Very Slow": "Très lente", "Normal": "Normale", "Small": "Petite", "Large": "Grande", "Very Large": "Très grande", "Small Arms": "Armes légères"
@@ -1238,9 +1218,7 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
       return val;
     };
 
-    // Updated to accept theme
     const StatBar = ({ label, value, rawValue, icon: Icon, lang, statKey }) => {
-      // ... existing StatBar logic ...
       const numValue = getStatValue(rawValue);
       const displayValue = lang === 'fr' ? translateData(rawValue, statKey, lang) : rawValue;
       const segments = Math.round(numValue / 10);
@@ -1260,7 +1238,6 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
     };
 
     const BooleanBadge = ({ label, value, lang }) => {
-      // ... existing BooleanBadge logic ...
       const isYes = value === 'Yes';
       if (!isYes) return null;
       return (
@@ -1270,41 +1247,7 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
       );
     };
     
-    // NEW: Theme Selector
-    const ThemeSelector = ({ currentTheme, onThemeChange, translate }) => {
-        const [isOpen, setIsOpen] = useState(false);
-        const themes = Object.keys(THEME_COLORS);
-        
-        return (
-            <div className="relative">
-                <button onClick={() => setIsOpen(!isOpen)} className="w-8 h-8 flex items-center justify-center bg-slate-800 border border-white/10 rounded-full hover:bg-slate-700 transition-colors">
-                    <div style={{color: THEME_COLORS[currentTheme].hex}}><Icons.Palette size={16} /></div>
-                </button>
-                
-                {isOpen && (
-                    <>
-                        <div className="fixed inset-0 z-40" onClick={() => setIsOpen(false)}></div>
-                        <div className="absolute top-full right-0 mt-2 bg-[#0f141a] border border-white/10 shadow-xl rounded-lg z-50 overflow-hidden min-w-[150px] animate-in fade-in slide-in-from-bottom">
-                            {themes.map(t => (
-                                <button 
-                                    key={t}
-                                    onClick={() => { onThemeChange(t); setIsOpen(false); }}
-                                    className={`w-full text-left px-4 py-3 text-xs font-bold uppercase tracking-wider flex items-center gap-3 hover:bg-slate-800 transition-colors ${currentTheme === t ? 'bg-slate-800' : ''}`}
-                                >
-                                    <div className="w-3 h-3 rounded-full" style={{backgroundColor: THEME_COLORS[t].hex}}></div>
-                                    <span className={currentTheme === t ? 'text-white' : 'text-slate-400'}>{translate(THEME_COLORS[t].label)}</span>
-                                </button>
-                            ))}
-                        </div>
-                    </>
-                )}
-            </div>
-        );
-    };
-    
-    // ==========================================
-    // 4. SUPPLY DROP MODAL
-    // ==========================================
+    // Supply Drop Modal
     const SupplyDropModal = ({ isOpen, onClose, onOpenDrop, isOpening, dropResult, lang }) => {
       if (!isOpen) return null;
       return (
@@ -1364,7 +1307,8 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
           counts[key].total++;
         });
         Object.keys(collection).forEach(id => {
-          const tank = tanks.find(t => t.id.toString() === id.toString());
+          // Changed comparison to be string-safe
+          const tank = tanks.find(t => String(t.id) === String(id));
           if (tank && tank[groupKey] && counts[tank[groupKey]]) {
              if (activeEra !== 'All' && tank.Age !== activeEra) return;
              counts[tank[groupKey]].owned++;
@@ -1608,7 +1552,28 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
     function TankApp() {
       // OPTIMIZATION: Use static initial data
       const [tanks, setTanks] = useState(INITIAL_TANKS);
-      const [collection, setCollection] = useState(() => { try { const saved = localStorage.getItem('tankCollection'); return saved ? JSON.parse(saved) : {}; } catch (e) { return {}; } });
+      
+      // AUTO-CLEANUP: Remove invalid IDs from collection on load
+      // This prevents UI crashes if an ID doesn't exist anymore or changed format
+      const [collection, setCollection] = useState(() => { 
+          try { 
+              const saved = localStorage.getItem('tankCollection'); 
+              const parsed = saved ? JSON.parse(saved) : {};
+              
+              // Validate keys against current tank DB
+              const validCollection = {};
+              const validIds = new Set(INITIAL_TANKS.map(t => t.id));
+              
+              Object.keys(parsed).forEach(key => {
+                  if (validIds.has(key) || validIds.has(String(key))) {
+                      validCollection[key] = parsed[key];
+                  }
+              });
+              
+              return validCollection;
+          } catch (e) { return {}; } 
+      });
+      
       const [compareList, setCompareList] = useState([]);
       const [showCompare, setShowCompare] = useState(false);
       const [viewTank, setViewTank] = useState(null);
@@ -1735,7 +1700,6 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
       
       const filteredTanks = useMemo(() => {
         let result = tanks.filter(tank => {
-          // SECURITY: Ensure search is string and safe
           const searchTerm = String(search).toLowerCase();
           const matchSearch = tank.Name.toLowerCase().includes(searchTerm);
           const matchNation = filterNation === 'All' || tank.Nation === filterNation;
