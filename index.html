@@ -1081,6 +1081,18 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                          {stats.map(stat => {
                              const description = STAT_DESCRIPTIONS[stat.key] ? STAT_DESCRIPTIONS[stat.key][lang] : '';
                              
+                             // Calculate comparison values
+                             const values = compareList.map(tank => getStatValue(tank[stat.key], stat.key));
+                             const maxValue = Math.max(...values);
+                             const minValue = Math.min(...values);
+                             const allEqual = maxValue === minValue;
+                             
+                             // Determine best target based on stat type
+                             // Size: Lower is better (Tiny). Others: Higher is better.
+                             const isLowBetter = stat.key === 'Size';
+                             const bestValue = isLowBetter ? minValue : maxValue;
+                             const worstValue = isLowBetter ? maxValue : minValue;
+                             
                              return (
                                  <tr key={stat.key} className="border-b border-white/5 hover:bg-white/5 transition-colors">
                                      <td className="p-3 font-medium text-slate-300 bg-slate-900/95 sticky left-0 z-10 border-r border-white/10 shadow-[2px_0_5px_rgba(0,0,0,0.5)]">
@@ -1090,15 +1102,30 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                                      </td>
                                      {compareList.map(tank => {
                                          const raw = tank[stat.key];
+                                         const val = getStatValue(raw, stat.key);
                                          const displayVal = lang === 'fr' ? translateData(raw, stat.key, lang) : raw;
                                          const realPercent = getRealStatValue(raw, stat.key);
                                          
+                                         // Logic for highlighting
+                                         const isBest = !allEqual && val === bestValue;
+                                         const isWorst = !allEqual && val === worstValue;
+                                         
+                                         let textClass = 'text-slate-300'; // Default
+                                         let scaleClass = '';
+                                         
+                                         if (isBest) {
+                                             textClass = 'text-emerald-400 font-black'; // Green for best
+                                             scaleClass = 'scale-110';
+                                         } else if (isWorst) {
+                                             textClass = 'text-red-400'; // Red for worst
+                                         }
+                                         
                                          return (
-                                             <td key={`${tank.id}-${stat.key}`} className="p-3 text-center align-middle cursor-help" title={description}>
-                                                 <div className="flex flex-col items-center">
-                                                     <span className="font-bold text-slate-300">{displayVal}</span>
+                                             <td key={`${tank.id}-${stat.key}`} className={`p-3 text-center align-middle cursor-help ${isBest ? 'bg-white/5' : ''}`} title={description}>
+                                                 <div className={`flex flex-col items-center transition-transform duration-300 origin-center ${scaleClass}`}>
+                                                     <span className={`font-bold ${textClass} transition-colors`}>{displayVal}</span>
                                                      {realPercent !== null && (
-                                                        <span className={`text-[10px] font-mono ${stat.key === 'Size' && realPercent > 0 ? 'text-red-400' : 'text-slate-500'}`}>
+                                                        <span className={`text-[10px] font-mono ${stat.key === 'Size' && realPercent > 0 ? 'text-red-400' : (isBest ? 'text-emerald-500' : 'text-slate-500')}`}>
                                                             {stat.key === 'Size' && realPercent > 0 ? '+' : ''}{realPercent}%
                                                         </span>
                                                      )}
@@ -2121,7 +2148,17 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
           )}
           
           <SupplyDropModal isOpen={showSupply} onClose={() => setShowSupply(false)} onOpenDrop={initiateSupplyDrop} isOpening={isOpeningDrop} dropResult={dropResult} lang={lang} />
-          <ProfileModal isOpen={showProfile} onClose={() => setShowProfile(false)} stats={{ total: Object.values(collection).reduce((acc, curr) => acc + curr.length, 0), unique: Object.keys(collection).length }} lang={lang} tanks={tanks} collection={collection} setCollection={setCollection} translate={translate} addToast={addToast} />
+          <ProfileModal 
+            isOpen={showProfile} 
+            onClose={() => setShowProfile(false)} 
+            stats={{ total: Object.values(collection).reduce((acc, curr) => acc + curr.length, 0), unique: Object.keys(collection).length }} 
+            lang={lang} 
+            tanks={tanks} 
+            collection={collection} 
+            setCollection={setCollection} 
+            translate={translate} 
+            addToast={addToast} 
+          />
           <footer className="py-2 text-center text-[10px] text-slate-600 border-t border-slate-800 bg-slate-900 border-b-4 border-b-slate-900">
             <p className="flex justify-center items-center gap-2">
               <span className="font-bold uppercase tracking-widest" style={{color: THEME_COLORS[theme].hex}}>{translate('credits')}</span>
