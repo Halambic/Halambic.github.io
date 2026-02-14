@@ -1,29 +1,44 @@
 <!DOCTYPE html>
 <html lang="fr" class="h-full">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Tankora DB</title>
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiMzNGQzOTkiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMiAxMmgyMHY2YTIgMiAwIDAgMS0yIDJINGEyIDIgMCAwIDEtMi0ydi02eiIvPjxwYXRoIGQ9Ik02IDEybDItNmg4bDIgNiIvPjxwYXRoIGQ9Ik0xOCA5aDQhaC00Ii8+PHBhdGggZD0iTTIgMTZoMjBoLTIwIi8+PC9zdmc+">
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiMzNGQzOTkiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMiAxMmgyMHY2YTIgMiAwIDAgMS0yIDJINGEyIDIgMCAwIDEtMi0ydi02eiIvPjxwYXRoIGQ9Ik02IDEybDItNmg4bDIgNiIvPjxwYXRoIGQ9Ik0xOCA5aDQhaC00Ii8+PHBhdGggZD0iTTIgMTZoMjBoLTIwIi8+PC9zdmc+">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Rajdhani:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+
   <script src="https://cdn.tailwindcss.com/3.4.1"></script>
   <script crossorigin src="https://unpkg.com/react@18.2.0/umd/react.production.min.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone@7.23.8/babel.min.js"></script>
+
   <script>
     tailwind.config = {
       theme: {
         extend: {
-          fontFamily: { sans: ['Rajdhani', 'sans-serif'], military: ['"Black Ops One"', 'cursive'] },
-          colors: { slate: { 850: '#151f32', 900: '#0f172a', 950: '#020617' }, military: { dark: '#0a0f14', panel: '#111822', accent: '#eab308' } },
+          fontFamily: {
+            sans: ['Rajdhani', 'sans-serif'],
+            military: ['"Black Ops One"', 'cursive'],
+          },
+          colors: {
+            slate: { 850: '#151f32', 900: '#0f172a', 950: '#020617' },
+            military: { dark: '#0a0f14', panel: '#111822', accent: '#eab308' }
+          },
           screens: { 'xs': '480px' },
-          backgroundImage: { 'hex-pattern': "url('data:image/svg+xml,%3Csvg width=\"24\" height=\"40\" viewBox=\"0 0 24 40\" xmlns=\"http://www.w3.org/2000/svg%3E%3Cpath d=\"M0 40c5.523 0 10-4.477 10-10V10c0-5.523-4.477-10-10-10s-10 4.477-10 10v20c0 5.523 4.477 10 10 10zM24 20c0 5.523-4.477 10-10 10S4 25.523 4 20s4.477-10 10-10 10 4.477 10 10z\" fill=\"%231e293b\" fill-opacity=\"0.05\" fill-rule=\"evenodd\"/%3E%3C/svg%3E')" }
+          backgroundImage: {
+            'hex-pattern': "url('data:image/svg+xml,%3Csvg width=\"24\" height=\"40\" viewBox=\"0 0 24 40\" xmlns=\"http://www.w3.org/2000/svg%3E%3Cpath d=\"M0 40c5.523 0 10-4.477 10-10V10c0-5.523-4.477-10-10-10s-10 4.477-10 10v20c0 5.523 4.477 10 10 10zM24 20c0 5.523-4.477 10-10 10S4 25.523 4 20s4.477-10 10-10 10 4.477 10 10z\" fill=\"%231e293b\" fill-opacity=\"0.05\" fill-rule=\"evenodd\"/%3E%3C/svg%3E')",
+          }
         }
       }
     }
   </script>
+
   <style>
     html, body { height: 100%; margin: 0; padding: 0; overflow: hidden; background-color: #05080a; background-image: radial-gradient(circle at 50% 0%, #1e293b 0%, transparent 70%), linear-gradient(to bottom, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.8) 100%), url('data:image/svg+xml,%3Csvg width=\"60\" height=\"60\" viewBox=\"0 0 60 60\" xmlns=\"http://www.w3.org/2000/svg%3E%3Cg fill=\"none\" fill-rule=\"evenodd\"%3E%3Cg fill=\"%23334155\" fill-opacity=\"0.08\"%3E%3Cpath d=\"M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E'); }
     .clip-corner-tr { clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 0 100%); }
@@ -36,8 +51,11 @@
     .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #64748b; }
     select.condition-select { -webkit-appearance: none; -moz-appearance: none; appearance: none; text-align-last: center; }
     .animate-in { animation-duration: 0.4s; animation-fill-mode: both; animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1); }
-    .fade-in { animation-name: fadeIn; } .zoom-in { animation-name: zoomIn; }
-    .slide-in-from-bottom { animation-name: slideUp; } .slide-in-from-left-2 { animation-name: slideLeft; } .slide-in-from-right-4 { animation-name: slideRight; }
+    .fade-in { animation-name: fadeIn; }
+    .zoom-in { animation-name: zoomIn; }
+    .slide-in-from-bottom { animation-name: slideUp; }
+    .slide-in-from-left-2 { animation-name: slideLeft; }
+    .slide-in-from-right-4 { animation-name: slideRight; }
     .scroll-smooth { scroll-behavior: smooth; }
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     @keyframes zoomIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
@@ -47,20 +65,25 @@
     .radar-path { stroke-dasharray: 1000; stroke-dashoffset: 1000; animation: dash 1.5s ease-out forwards; }
     @keyframes dash { to { stroke-dashoffset: 0; } }
     .scanline { position: fixed; left: 0; top: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0) 50%, rgba(0, 0, 0, 0.2) 50%, rgba(0, 0, 0, 0.2)); background-size: 100% 4px; pointer-events: none; z-index: 9999; opacity: 0.15; }
+    
+    /* FX VISUALS */
     .fx-holo-gold { position: relative; overflow: hidden; }
     .fx-holo-gold::before { content: ''; position: absolute; top: 0; left: -150%; width: 50%; height: 100%; background: linear-gradient(to right, transparent, rgba(255, 215, 0, 0.1), rgba(255, 255, 255, 0.4), rgba(255, 215, 0, 0.1), transparent); transform: skewX(-25deg); animation: sheen 4s infinite ease-in-out; pointer-events: none; z-index: 25; }
     @keyframes sheen { 0%, 70% { left: -150%; } 100% { left: 150%; } }
+
     .fx-holo-proto { position: relative; border: 1px solid #ef4444 !important; background: linear-gradient(135deg, #1a0505 0%, #450a0a 25%, #000000 50%, #450a0a 75%, #1a0505 100%); background-size: 400% 400%; box-shadow: 0 0 15px rgba(220, 38, 38, 0.4); overflow: hidden; animation: plasma-shift 15s ease infinite; clip-path: none !important; border-radius: 6px; z-index: 10; }
     .fx-holo-proto.tech-border::before { clip-path: none !important; }
     .fx-holo-proto.tech-border::after { display: none !important; }
     @keyframes plasma-shift { 0% { background-position: 0% 50%; border-color: #ef4444; } 50% { background-position: 100% 50%; border-color: #b91c1c; } 100% { background-position: 0% 50%; border-color: #ef4444; } }
     .fx-holo-proto::after { content: 'TOP SECRET'; position: absolute; top: 14px; right: -30px; background-color: #991b1b; color: white; font-family: "Black Ops One", cursive; font-size: 8px; letter-spacing: 1px; padding: 5px 30px; transform: rotate(45deg); z-index: 20; box-shadow: 0 0 10px rgba(0,0,0,0.9); border: 1px solid rgba(255, 255, 255, 0.2); text-shadow: 0 1px 2px black; white-space: nowrap; pointer-events: none; }
+
     .fx-holo-event { position: relative; border: 1px solid rgba(217, 119, 6, 0.6) !important; background: radial-gradient(circle at 100% 100%, #451a03 0%, #0a0500 60%); box-shadow: 0 0 15px rgba(245, 158, 11, 0.1); overflow: hidden; clip-path: none !important; border-radius: 6px; z-index: 10; }
     .fx-holo-event.tech-border::before { clip-path: none !important; }
     .fx-holo-event.tech-border::after { display: none !important; }
     .fx-holo-event::before { content: ''; position: absolute; top: 0; left: -150%; width: 100%; height: 100%; background: linear-gradient(110deg, transparent 40%, rgba(251, 191, 36, 0.1) 45%, rgba(255, 255, 255, 0.5) 50%, rgba(251, 191, 36, 0.1) 55%, transparent 60%); transform: skewX(-25deg); animation: prestige-sheen 6s infinite ease-in-out; pointer-events: none; z-index: 2; mix-blend-mode: overlay; }
     @keyframes prestige-sheen { 0%, 30% { left: -150%; opacity: 0; } 40% { opacity: 1; } 60% { left: 150%; opacity: 1; } 100% { left: 150%; opacity: 0; } }
     .fx-holo-event::after { content: 'EVENT'; position: absolute; top: 14px; right: -30px; background: linear-gradient(to bottom, #fcd34d 0%, #d97706 100%); color: #451a03; font-family: "Black Ops One", cursive; font-size: 8px; font-weight: 900; letter-spacing: 2px; padding: 5px 30px; transform: rotate(45deg); z-index: 20; box-shadow: 0 2px 8px rgba(0,0,0,0.5); border: 1px solid rgba(255, 255, 255, 0.4); text-shadow: none; white-space: nowrap; pointer-events: none; }
+
     .compare-table { width: 100%; border-collapse: separate; border-spacing: 0; }
     .compare-table th, .compare-table td { padding: 12px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.05); }
     .compare-table th:first-child, .compare-table td:first-child { text-align: left; padding-left: 16px; border-right: 1px solid rgba(255,255,255,0.05); background: rgba(15, 23, 42, 0.5); position: sticky; left: 0; z-index: 10; }
@@ -68,6 +91,7 @@
     .compare-table tr:hover td { background: rgba(255,255,255,0.02); }
   </style>
 </head>
+
 <body class="bg-transparent text-slate-100 font-sans tracking-wide overflow-hidden">
   <div class="scanline"></div>
   <div id="root" class="h-full w-full flex flex-col"></div>
@@ -76,24 +100,28 @@
     const { useState, useEffect, useMemo, useRef, useCallback } = React;
     
     // --- IMAGE HELPER ---
-    const IMAGE_EXCEPTIONS = {
-        "Centaur III": "centaur_mk_iii",
-        "Churchill Mk IX": "churchill_mk_ix",
-        "Jagdpanzer IV/70": "Jagdpanzer_IV70",
-        "Centurion Mk 5/2": "Centurion_Mk_52",
-        "Centurion Mk 6/2": "Centurion_Mk_62",
-        "Chieftain Mk 3/3": "Chieftain_Mk_33"
-    };
-
+    // Fonction robuste pour transformer le nom du char en chemin d'accès complet selon la structure :
+    // tanks/tanks/{Age}/{Nation}/{nom_formate}.png
     const getTankImg = (tank) => {
         if (!tank || !tank.Name) return 'https://placehold.co/600x400/0f172a/475569?text=NO+DATA';
-        if (IMAGE_EXCEPTIONS[tank.Name]) {
-             return `tanks/tanks/${tank.Age}/${tank.Nation}/${IMAGE_EXCEPTIONS[tank.Name]}.png`;
-        }
+
+        // Logique de nettoyage "douce" comme demandé :
+        // 1. Minuscule
+        // 2. Supprimer guillemets
+        // 3. Remplacer espace par _
+        // 4. Garder les caractères spéciaux (-, (), .)
+        
         let formattedName = tank.Name.toLowerCase();
+        
+        // Enlever les guillemets (") et les quotes (')
         formattedName = formattedName.replace(/["']/g, "");
-        formattedName = formattedName.replace(/\//g, "-");
+        
+        // Remplacer les espaces par des underscores
         formattedName = formattedName.split(' ').join('_');
+            
+        // Structure de dossiers spécifique demandée :
+        // tanks/tanks/{Age}/{Nation}/{image}
+        // Note: On garde les espaces dans Age et Nation car c'est le nom des dossiers sur le disque
         return `tanks/tanks/${tank.Age}/${tank.Nation}/${formattedName}.png`;
     };
 
@@ -113,6 +141,7 @@
         amber: { hex: '#f59e0b', label: 'themeDesert' }
     };
     
+    // STAT RULES DEFINED BY USER
     const STAT_RULES = {
         Mobility: { max: 35, map: { "Very Fast": 35, "Fast": 30, "Normal": 25, "Slow": 20, "Very Slow": 10 } },
         Accuracy: { max: 35, map: { "Very High": 35, "High": 30, "Medium": 25, "Low": 20, "Aucune": 0, "None": 0, "N/A": 0 } },
@@ -121,28 +150,84 @@
         Angled: { max: 25, map: { "High": 25, "Medium": 15, "Low": 5, "None": 0, "No": 0, "Yes": 15 } } 
     };
 
+    // CONTEXTUAL DESCRIPTIONS
     const STAT_DESCRIPTIONS = {
-        Armor: { fr: "Si Blindage = Puissance : 50% de pénétration. Si Blindage < Puissance : 100%. Si Blindage > Puissance : -10% de pénétration par rang.", en: "If Armor = Firepower: 50% pen chance. If Armor < Firepower: 100%. If Armor > Firepower: -10% pen chance per class." },
-        Firepower: { fr: "Si Puissance = Blindage : 50% de pénétration. Si Puissance > Blindage : 100%. Si Puissance < Blindage : -10% de pénétration par rang.", en: "If Firepower = Armor: 50% pen chance. If Firepower > Armor: 100%. If Firepower < Armor: -10% pen chance per class." },
-        Mobility: { fr: "Chance de base de se déplacer (relocate)", en: "Base chance of relocating" },
-        Accuracy: { fr: "Chance de base de toucher la cible", en: "Base chance of hitting target" },
-        Visibility: { fr: "Chance de base de repérer (spotting)", en: "Base chance of spotting" },
-        Size: { fr: "Modificateur de chance d'être touché (incoming hit)", en: "Incoming hit chance modifier" },
-        Angled: { fr: "Chance de ricochet (blindage incliné)", en: "Ricochet chance (armor angle)" }
+        Armor: {
+            fr: "Si Blindage = Puissance : 50% de pénétration. Si Blindage < Puissance : 100%. Si Blindage > Puissance : -10% de pénétration par rang.",
+            en: "If Armor = Firepower: 50% pen chance. If Armor < Firepower: 100%. If Armor > Firepower: -10% pen chance per class."
+        },
+        Firepower: {
+            fr: "Si Puissance = Blindage : 50% de pénétration. Si Puissance > Blindage : 100%. Si Puissance < Blindage : -10% de pénétration par rang.",
+            en: "If Firepower = Armor: 50% pen chance. If Firepower > Armor: 100%. If Firepower < Armor: -10% pen chance per class."
+        },
+        Mobility: {
+            fr: "Chance de base de se déplacer (relocate)",
+            en: "Base chance of relocating"
+        },
+        Accuracy: {
+            fr: "Chance de base de toucher la cible",
+            en: "Base chance of hitting target"
+        },
+        Visibility: {
+            fr: "Chance de base de repérer (spotting)",
+            en: "Base chance of spotting"
+        },
+        Size: {
+            fr: "Modificateur de chance d'être touché (incoming hit)",
+            en: "Incoming hit chance modifier"
+        },
+        Angled: {
+            fr: "Chance de ricochet (blindage incliné)",
+            en: "Ricochet chance (armor angle)"
+        }
     };
     
+    // TECH DESCRIPTIONS
     const TECH_DESCRIPTIONS = {
-        Stabilizer: { fr: "+10% de précision de base", en: "+10% base accuracy" },
-        Rangefinder: { fr: "+15% de précision de base, +5% de chance de toucher après un tir", en: "+15% base accuracy, +5% hit chance after firing" },
-        Autoloader: { fr: "+20% de chance de tirer à nouveau et augmente la précision après le premier tir", en: "+20% chance to fire again and increase hit accuracy after firing once" },
-        "Night Vision": { fr: "Supprime tous les malus de combat nocturne pour ce char", en: "Removes all debuffs affecting this tank from night battles" },
-        "Thermal Vision": { fr: "+20% de chance de repérage de base", en: "+20% base spot chance" },
-        APS: { fr: "50% de chance d'annuler un ATGM entrant", en: "All incoming ATGM's have a 50% chance of being negated" },
-        ERA: { fr: "La première pénétration subie en bataille est annulée", en: "First penetration in a battle is negated" },
-        "ATGM (P)": { fr: "Une fois tous les 3 tours, tire un ATGM à très haute précision et puissance", en: "Once every three turns, this tank fires an ATGM that has very high accuracy and very high firepower" },
-        "ATGM (S)": { fr: "Une fois tous les 5 tours, tire un ATGM à très haute précision et puissance", en: "Once every five turns, this tank fires an ATGM that has very high accuracy and very high firepower" },
-        "Protected Ammo": { fr: "Réduit les chances d'explosion des munitions", en: "Reduces ammo rack explosion chance" },
-        Autocannon: { fr: "Armement secondaire à tir rapide", en: "Rapid fire secondary weapon" }
+        Stabilizer: {
+            fr: "+10% de précision de base",
+            en: "+10% base accuracy"
+        },
+        Rangefinder: {
+            fr: "+15% de précision de base, +5% de chance de toucher après un tir",
+            en: "+15% base accuracy, +5% hit chance after firing"
+        },
+        Autoloader: {
+            fr: "+20% de chance de tirer à nouveau et augmente la précision après le premier tir",
+            en: "+20% chance to fire again and increase hit accuracy after firing once"
+        },
+        "Night Vision": {
+            fr: "Supprime tous les malus de combat nocturne pour ce char",
+            en: "Removes all debuffs affecting this tank from night battles"
+        },
+        "Thermal Vision": {
+            fr: "+20% de chance de repérage de base",
+            en: "+20% base spot chance"
+        },
+        APS: {
+            fr: "50% de chance d'annuler un ATGM entrant",
+            en: "All incoming ATGM's have a 50% chance of being negated"
+        },
+        ERA: {
+            fr: "La première pénétration subie en bataille est annulée",
+            en: "First penetration in a battle is negated"
+        },
+        "ATGM (P)": {
+            fr: "Une fois tous les 3 tours, tire un ATGM à très haute précision et puissance",
+            en: "Once every three turns, this tank fires an ATGM that has very high accuracy and very high firepower"
+        },
+        "ATGM (S)": {
+            fr: "Une fois tous les 5 tours, tire un ATGM à très haute précision et puissance",
+            en: "Once every five turns, this tank fires an ATGM that has very high accuracy and very high firepower"
+        },
+        "Protected Ammo": {
+             fr: "Réduit les chances d'explosion des munitions",
+             en: "Reduces ammo rack explosion chance"
+        },
+        Autocannon: {
+             fr: "Armement secondaire à tir rapide",
+             en: "Rapid fire secondary weapon"
+        }
     };
 
     const TRANSLATIONS = {
@@ -163,7 +248,13 @@
     };
 
     const FIXED_DROP_RATES = [
-      { tier: 'Tier I', rate: '51,97%', color: 'text-slate-300' }, { tier: 'Tier II', rate: '41,06%', color: 'text-green-400' }, { tier: 'Tier III', rate: '4,798%', color: 'text-blue-400' }, { tier: 'Tier IV', rate: '1,669%', color: 'text-purple-400' }, { tier: 'Tier V', rate: '0,4165%', color: 'text-orange-400' }, { tier: 'Prototype', rate: '0,0999%', color: 'text-red-500' }, { tier: 'Event', rate: 'Spécial', color: 'text-yellow-400' },
+      { tier: 'Tier I', rate: '51,97%', color: 'text-slate-300' },
+      { tier: 'Tier II', rate: '41,06%', color: 'text-green-400' },
+      { tier: 'Tier III', rate: '4,798%', color: 'text-blue-400' },
+      { tier: 'Tier IV', rate: '1,669%', color: 'text-purple-400' },
+      { tier: 'Tier V', rate: '0,4165%', color: 'text-orange-400' },
+      { tier: 'Prototype', rate: '0,0999%', color: 'text-red-500' },
+      { tier: 'Event', rate: 'Spécial', color: 'text-yellow-400' },
     ];
 
     const rawCSV = `Name,Nation,Age,Rarity,Armor,Firepower,Accuracy,Size,Mobility,Angled,Visibility,Autocannon,Stabilizer,Protected Ammo,Rangefinder,Autoloader,Night Vision,Thermal Vision,ERA,ATGM (P),ATGM (S),APS
