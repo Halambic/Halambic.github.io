@@ -155,6 +155,54 @@
             en: "Ricochet chance (armor angle)"
         }
     };
+    
+    // TECH DESCRIPTIONS
+    const TECH_DESCRIPTIONS = {
+        Stabilizer: {
+            fr: "+10% de précision de base",
+            en: "+10% base accuracy"
+        },
+        Rangefinder: {
+            fr: "+15% de précision de base, +5% de chance de toucher après un tir",
+            en: "+15% base accuracy, +5% hit chance after firing"
+        },
+        Autoloader: {
+            fr: "+20% de chance de tirer à nouveau et augmente la précision après le premier tir",
+            en: "+20% chance to fire again and increase hit accuracy after firing once"
+        },
+        "Night Vision": {
+            fr: "Supprime tous les malus de combat nocturne pour ce char",
+            en: "Removes all debuffs affecting this tank from night battles"
+        },
+        "Thermal Vision": {
+            fr: "+20% de chance de repérage de base",
+            en: "+20% base spot chance"
+        },
+        APS: {
+            fr: "50% de chance d'annuler un ATGM entrant",
+            en: "All incoming ATGM's have a 50% chance of being negated"
+        },
+        ERA: {
+            fr: "La première pénétration subie en bataille est annulée",
+            en: "First penetration in a battle is negated"
+        },
+        "ATGM (P)": {
+            fr: "Une fois tous les 3 tours, tire un ATGM à très haute précision et puissance",
+            en: "Once every three turns, this tank fires an ATGM that has very high accuracy and very high firepower"
+        },
+        "ATGM (S)": {
+            fr: "Une fois tous les 5 tours, tire un ATGM à très haute précision et puissance",
+            en: "Once every five turns, this tank fires an ATGM that has very high accuracy and very high firepower"
+        },
+        "Protected Ammo": {
+             fr: "Réduit les chances d'explosion des munitions",
+             en: "Reduces ammo rack explosion chance"
+        },
+        Autocannon: {
+             fr: "Armement secondaire à tir rapide",
+             en: "Rapid fire secondary weapon"
+        }
+    };
 
     const TRANSLATIONS = {
       fr: {
@@ -1065,7 +1113,7 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                          <tr className="bg-slate-800/50"><td colSpan={compareList.length + 1} className="p-2 text-xs font-bold text-slate-500 uppercase tracking-widest pl-4 sticky left-0 z-20 bg-slate-900/90 backdrop-blur-sm border-r border-white/10">Technologies</td></tr>
                          {techs.map(tech => (
                              <tr key={tech.key} className="border-b border-white/5 hover:bg-white/5 transition-colors">
-                                 <td className="p-3 font-medium text-slate-300 bg-slate-900/95 sticky left-0 z-10 border-r border-white/10 shadow-[2px_0_5px_rgba(0,0,0,0.5)]">
+                                 <td className="p-3 font-medium text-slate-300 bg-slate-900/95 sticky left-0 z-10 border-r border-white/10 shadow-[2px_0_5px_rgba(0,0,0,0.5)] cursor-help" title={TECH_DESCRIPTIONS[tech.key] ? TECH_DESCRIPTIONS[tech.key][lang] : ''}>
                                      <div className="flex items-center gap-2 h-full">
                                          <span className="truncate">{translate(tech.label)}</span>
                                      </div>
@@ -1206,16 +1254,23 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
       );
     };
 
-    const BooleanBadge = ({ label, value, lang }) => {
+    const BooleanBadge = ({ label, value, lang, techKey }) => {
       const isYes = value === 'Yes';
       if (!isYes) return null;
+      
+      const desc = TECH_DESCRIPTIONS[techKey] ? TECH_DESCRIPTIONS[techKey][lang] : '';
+      
       return (
-        <span className="inline-flex items-center gap-1 px-2 py-1 rounded bg-slate-700/50 border border-slate-600 text-[10px] text-slate-300">
+        <span 
+            title={desc}
+            className="inline-flex items-center gap-1 px-2 py-1 rounded bg-slate-700/50 border border-slate-600 text-[10px] text-slate-300 cursor-help"
+        >
           <Icons.Check size={10} className="text-green-400" /> {label}
         </span>
       );
     };
     
+    // ... [SupplyDropModal is unchanged]
     const SupplyDropModal = ({ isOpen, onClose, onOpenDrop, isOpening, dropResult, lang }) => {
       if (!isOpen) return null;
       return (
@@ -1257,6 +1312,7 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
       );
     };
 
+    // ... [ProfileModal is unchanged]
     const ProfileModal = ({ isOpen, onClose, stats, lang, tanks, collection, setCollection, translate, addToast }) => {
       const [activeEra, setActiveEra] = useState('All');
       
@@ -1901,7 +1957,7 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                             <div className="bg-slate-900/60 p-2 rounded border border-white/5 flex flex-col items-center justify-center text-center cursor-help" title={STAT_DESCRIPTIONS['Visibility'][lang]}><span className="text-[10px] text-slate-500 mb-1 truncate w-full">{translate('visibility')}</span><span className={`text-xs font-bold ${getStatColor(getStatValue(tank.Visibility, 'Visibility')).replace('bg-', 'text-')}`}>{lang === 'fr' ? translateData(tank.Visibility, 'Visibility', lang) : tank.Visibility}</span><span className="text-[9px] text-slate-600 font-mono mt-0.5">{getRealStatValue(tank.Visibility, 'Visibility') ? `${getRealStatValue(tank.Visibility, 'Visibility')}%` : ''}</span></div>
                           </div>
                           <div className="flex flex-wrap gap-1.5 mt-3">
-                            {[{ label: 'stabilizer', val: tank.Stabilizer }, { label: 'thermal', val: tank['Thermal Vision'] }, { label: 'era', val: tank.ERA }, { label: 'atgm_p', val: tank['ATGM (P)'] }, { label: 'atgm_s', val: tank['ATGM (S)'] }].map((tech, i) => (<BooleanBadge key={i} label={translate(tech.label)} value={tech.val} lang={lang} />))}
+                            {[{ label: 'stabilizer', val: tank.Stabilizer, key: 'Stabilizer' }, { label: 'thermal', val: tank['Thermal Vision'], key: 'Thermal Vision' }, { label: 'era', val: tank.ERA, key: 'ERA' }, { label: 'atgm_p', val: tank['ATGM (P)'], key: 'ATGM (P)' }, { label: 'atgm_s', val: tank['ATGM (S)'], key: 'ATGM (S)' }].map((tech, i) => (<BooleanBadge key={i} label={translate(tech.label)} value={tech.val} lang={lang} techKey={tech.key} />))}
                             {(tank.Autoloader === 'Yes' || tank.APS === 'Yes') && <div className="text-[10px] text-slate-500 ml-auto flex items-center gap-1">+ others</div>}
                           </div>
                         </div>
@@ -2036,8 +2092,8 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                       <h4 className="flex items-center gap-2 text-blue-400 font-bold uppercase text-xs tracking-wider mb-4 border-b border-white/5 pb-2"><Icons.Zap size={14} /> Équipements & Technologies</h4>
                       <div className="grid grid-cols-1 gap-2">
                         {[{ key: 'Stabilizer', label: 'stabilizer' }, { key: 'Thermal Vision', label: 'thermal' }, { key: 'Night Vision', label: 'nightVision' }, { key: 'ERA', label: 'era' }, { key: 'APS', label: 'aps' }, { key: 'Autoloader', label: 'autoloader' }, { key: 'Autocannon', label: 'autocannon' }, { key: 'Rangefinder', label: 'rangefinder' }, { key: 'Protected Ammo', label: 'protectedAmmo' }, { key: 'ATGM (P)', label: 'atgm_p' }, { key: 'ATGM (S)', label: 'atgm_s' }].map(item => (
-                          <div key={item.key} className={`flex justify-between items-center p-3 rounded-xl border transition-colors ${viewTank[item.key] === 'Yes' ? 'bg-slate-700/40 border-opacity-20' : 'bg-slate-900/30 border-white/5 opacity-60'}`} style={{borderColor: viewTank[item.key] === 'Yes' ? `${THEME_COLORS[theme].hex}33` : undefined}}>
-                            <span className="text-sm text-slate-300 font-medium">{translate(item.label)}</span>
+                          <div key={item.key} className={`flex justify-between items-center p-3 rounded-xl border transition-colors ${viewTank[item.key] === 'Yes' ? 'bg-slate-700/40 border-opacity-20' : 'bg-slate-900/30 border-white/5 opacity-60'}`} style={{borderColor: viewTank[item.key] === 'Yes' ? `${THEME_COLORS[theme].hex}33` : undefined}} title={TECH_DESCRIPTIONS[item.key] ? TECH_DESCRIPTIONS[item.key][lang] : ''}>
+                            <span className="text-sm text-slate-300 font-medium cursor-help">{translate(item.label)}</span>
                             {viewTank[item.key] === 'Yes' ? (<span className="bg-opacity-20 p-1 rounded-full" style={{backgroundColor: `${THEME_COLORS[theme].hex}33`, color: THEME_COLORS[theme].hex}}><Icons.Check size={14} strokeWidth={3} /></span>) : (<span className="text-slate-600"><Icons.X size={14} /></span>)}
                           </div>
                         ))}
