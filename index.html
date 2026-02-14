@@ -1,44 +1,29 @@
 <!DOCTYPE html>
 <html lang="fr" class="h-full">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Tankora DB</title>
-  <link rel="icon" type="image/svg+xml"
-    href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiMzNGQzOTkiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMiAxMmgyMHY2YTIgMiAwIDAgMS0yIDJINGEyIDIgMCAwIDEtMi0ydi02eiIvPjxwYXRoIGQ9Ik02IDEybDItNmg4bDIgNiIvPjxwYXRoIGQ9Ik0xOCA5aDQhaC00Ii8+PHBhdGggZD0iTTIgMTZoMjBoLTIwIi8+PC9zdmc+">
-
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiMzNGQzOTkiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMiAxMmgyMHY2YTIgMiAwIDAgMS0yIDJINGEyIDIgMCAwIDEtMi0ydi02eiIvPjxwYXRoIGQ9Ik02IDEybDItNmg4bDIgNiIvPjxwYXRoIGQ9Ik0xOCA5aDQhaC00Ii8+PHBhdGggZD0iTTIgMTZoMjBoLTIwIi8+PC9zdmc+">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Rajdhani:wght@400;500;600;700&display=swap"
-    rel="stylesheet">
-
+  <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com/3.4.1"></script>
   <script crossorigin src="https://unpkg.com/react@18.2.0/umd/react.production.min.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone@7.23.8/babel.min.js"></script>
-
   <script>
     tailwind.config = {
       theme: {
         extend: {
-          fontFamily: {
-            sans: ['Rajdhani', 'sans-serif'],
-            military: ['"Black Ops One"', 'cursive'],
-          },
-          colors: {
-            slate: { 850: '#151f32', 900: '#0f172a', 950: '#020617' },
-            military: { dark: '#0a0f14', panel: '#111822', accent: '#eab308' }
-          },
+          fontFamily: { sans: ['Rajdhani', 'sans-serif'], military: ['"Black Ops One"', 'cursive'] },
+          colors: { slate: { 850: '#151f32', 900: '#0f172a', 950: '#020617' }, military: { dark: '#0a0f14', panel: '#111822', accent: '#eab308' } },
           screens: { 'xs': '480px' },
-          backgroundImage: {
-            'hex-pattern': "url('data:image/svg+xml,%3Csvg width=\"24\" height=\"40\" viewBox=\"0 0 24 40\" xmlns=\"http://www.w3.org/2000/svg%3E%3Cpath d=\"M0 40c5.523 0 10-4.477 10-10V10c0-5.523-4.477-10-10-10s-10 4.477-10 10v20c0 5.523 4.477 10 10 10zM24 20c0 5.523-4.477 10-10 10S4 25.523 4 20s4.477-10 10-10 10 4.477 10 10z\" fill=\"%231e293b\" fill-opacity=\"0.05\" fill-rule=\"evenodd\"/%3E%3C/svg%3E')",
-          }
+          backgroundImage: { 'hex-pattern': "url('data:image/svg+xml,%3Csvg width=\"24\" height=\"40\" viewBox=\"0 0 24 40\" xmlns=\"http://www.w3.org/2000/svg%3E%3Cpath d=\"M0 40c5.523 0 10-4.477 10-10V10c0-5.523-4.477-10-10-10s-10 4.477-10 10v20c0 5.523 4.477 10 10 10zM24 20c0 5.523-4.477 10-10 10S4 25.523 4 20s4.477-10 10-10 10 4.477 10 10z\" fill=\"%231e293b\" fill-opacity=\"0.05\" fill-rule=\"evenodd\"/%3E%3C/svg%3E')" }
         }
       }
     }
   </script>
-
   <style>
     html, body { height: 100%; margin: 0; padding: 0; overflow: hidden; background-color: #05080a; background-image: radial-gradient(circle at 50% 0%, #1e293b 0%, transparent 70%), linear-gradient(to bottom, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.8) 100%), url('data:image/svg+xml,%3Csvg width=\"60\" height=\"60\" viewBox=\"0 0 60 60\" xmlns=\"http://www.w3.org/2000/svg%3E%3Cg fill=\"none\" fill-rule=\"evenodd\"%3E%3Cg fill=\"%23334155\" fill-opacity=\"0.08\"%3E%3Cpath d=\"M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E'); }
     .clip-corner-tr { clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 0 100%); }
@@ -51,11 +36,8 @@
     .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #64748b; }
     select.condition-select { -webkit-appearance: none; -moz-appearance: none; appearance: none; text-align-last: center; }
     .animate-in { animation-duration: 0.4s; animation-fill-mode: both; animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1); }
-    .fade-in { animation-name: fadeIn; }
-    .zoom-in { animation-name: zoomIn; }
-    .slide-in-from-bottom { animation-name: slideUp; }
-    .slide-in-from-left-2 { animation-name: slideLeft; }
-    .slide-in-from-right-4 { animation-name: slideRight; }
+    .fade-in { animation-name: fadeIn; } .zoom-in { animation-name: zoomIn; }
+    .slide-in-from-bottom { animation-name: slideUp; } .slide-in-from-left-2 { animation-name: slideLeft; } .slide-in-from-right-4 { animation-name: slideRight; }
     .scroll-smooth { scroll-behavior: smooth; }
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     @keyframes zoomIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
@@ -65,25 +47,20 @@
     .radar-path { stroke-dasharray: 1000; stroke-dashoffset: 1000; animation: dash 1.5s ease-out forwards; }
     @keyframes dash { to { stroke-dashoffset: 0; } }
     .scanline { position: fixed; left: 0; top: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0) 50%, rgba(0, 0, 0, 0.2) 50%, rgba(0, 0, 0, 0.2)); background-size: 100% 4px; pointer-events: none; z-index: 9999; opacity: 0.15; }
-    
-    /* FX VISUALS */
     .fx-holo-gold { position: relative; overflow: hidden; }
     .fx-holo-gold::before { content: ''; position: absolute; top: 0; left: -150%; width: 50%; height: 100%; background: linear-gradient(to right, transparent, rgba(255, 215, 0, 0.1), rgba(255, 255, 255, 0.4), rgba(255, 215, 0, 0.1), transparent); transform: skewX(-25deg); animation: sheen 4s infinite ease-in-out; pointer-events: none; z-index: 25; }
     @keyframes sheen { 0%, 70% { left: -150%; } 100% { left: 150%; } }
-
     .fx-holo-proto { position: relative; border: 1px solid #ef4444 !important; background: linear-gradient(135deg, #1a0505 0%, #450a0a 25%, #000000 50%, #450a0a 75%, #1a0505 100%); background-size: 400% 400%; box-shadow: 0 0 15px rgba(220, 38, 38, 0.4); overflow: hidden; animation: plasma-shift 15s ease infinite; clip-path: none !important; border-radius: 6px; z-index: 10; }
     .fx-holo-proto.tech-border::before { clip-path: none !important; }
     .fx-holo-proto.tech-border::after { display: none !important; }
     @keyframes plasma-shift { 0% { background-position: 0% 50%; border-color: #ef4444; } 50% { background-position: 100% 50%; border-color: #b91c1c; } 100% { background-position: 0% 50%; border-color: #ef4444; } }
     .fx-holo-proto::after { content: 'TOP SECRET'; position: absolute; top: 14px; right: -30px; background-color: #991b1b; color: white; font-family: "Black Ops One", cursive; font-size: 8px; letter-spacing: 1px; padding: 5px 30px; transform: rotate(45deg); z-index: 20; box-shadow: 0 0 10px rgba(0,0,0,0.9); border: 1px solid rgba(255, 255, 255, 0.2); text-shadow: 0 1px 2px black; white-space: nowrap; pointer-events: none; }
-
     .fx-holo-event { position: relative; border: 1px solid rgba(217, 119, 6, 0.6) !important; background: radial-gradient(circle at 100% 100%, #451a03 0%, #0a0500 60%); box-shadow: 0 0 15px rgba(245, 158, 11, 0.1); overflow: hidden; clip-path: none !important; border-radius: 6px; z-index: 10; }
     .fx-holo-event.tech-border::before { clip-path: none !important; }
     .fx-holo-event.tech-border::after { display: none !important; }
     .fx-holo-event::before { content: ''; position: absolute; top: 0; left: -150%; width: 100%; height: 100%; background: linear-gradient(110deg, transparent 40%, rgba(251, 191, 36, 0.1) 45%, rgba(255, 255, 255, 0.5) 50%, rgba(251, 191, 36, 0.1) 55%, transparent 60%); transform: skewX(-25deg); animation: prestige-sheen 6s infinite ease-in-out; pointer-events: none; z-index: 2; mix-blend-mode: overlay; }
     @keyframes prestige-sheen { 0%, 30% { left: -150%; opacity: 0; } 40% { opacity: 1; } 60% { left: 150%; opacity: 1; } 100% { left: 150%; opacity: 0; } }
     .fx-holo-event::after { content: 'EVENT'; position: absolute; top: 14px; right: -30px; background: linear-gradient(to bottom, #fcd34d 0%, #d97706 100%); color: #451a03; font-family: "Black Ops One", cursive; font-size: 8px; font-weight: 900; letter-spacing: 2px; padding: 5px 30px; transform: rotate(45deg); z-index: 20; box-shadow: 0 2px 8px rgba(0,0,0,0.5); border: 1px solid rgba(255, 255, 255, 0.4); text-shadow: none; white-space: nowrap; pointer-events: none; }
-
     .compare-table { width: 100%; border-collapse: separate; border-spacing: 0; }
     .compare-table th, .compare-table td { padding: 12px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.05); }
     .compare-table th:first-child, .compare-table td:first-child { text-align: left; padding-left: 16px; border-right: 1px solid rgba(255,255,255,0.05); background: rgba(15, 23, 42, 0.5); position: sticky; left: 0; z-index: 10; }
@@ -91,13 +68,34 @@
     .compare-table tr:hover td { background: rgba(255,255,255,0.02); }
   </style>
 </head>
-
 <body class="bg-transparent text-slate-100 font-sans tracking-wide overflow-hidden">
   <div class="scanline"></div>
   <div id="root" class="h-full w-full flex flex-col"></div>
 
   <script type="text/babel">
     const { useState, useEffect, useMemo, useRef, useCallback } = React;
+    
+    // --- IMAGE HELPER ---
+    const IMAGE_EXCEPTIONS = {
+        "Centaur III": "centaur_mk_iii",
+        "Churchill Mk IX": "churchill_mk_ix",
+        "Jagdpanzer IV/70": "Jagdpanzer_IV70",
+        "Centurion Mk 5/2": "Centurion_Mk_52",
+        "Centurion Mk 6/2": "Centurion_Mk_62",
+        "Chieftain Mk 3/3": "Chieftain_Mk_33"
+    };
+
+    const getTankImg = (tank) => {
+        if (!tank || !tank.Name) return 'https://placehold.co/600x400/0f172a/475569?text=NO+DATA';
+        if (IMAGE_EXCEPTIONS[tank.Name]) {
+             return `tanks/tanks/${tank.Age}/${tank.Nation}/${IMAGE_EXCEPTIONS[tank.Name]}.png`;
+        }
+        let formattedName = tank.Name.toLowerCase();
+        formattedName = formattedName.replace(/["']/g, "");
+        formattedName = formattedName.replace(/\//g, "-");
+        formattedName = formattedName.split(' ').join('_');
+        return `tanks/tanks/${tank.Age}/${tank.Nation}/${formattedName}.png`;
+    };
 
     const CONDITIONS = {
       salvage: { id: 'salvage', rank: 0, color: 'bg-[#991b1b] text-white border-[#7f1d1d]' },
@@ -114,8 +112,7 @@
         blue: { hex: '#3b82f6', label: 'themeNATO' },
         amber: { hex: '#f59e0b', label: 'themeDesert' }
     };
-
-    // STAT RULES DEFINED BY USER
+    
     const STAT_RULES = {
         Mobility: { max: 35, map: { "Very Fast": 35, "Fast": 30, "Normal": 25, "Slow": 20, "Very Slow": 10 } },
         Accuracy: { max: 35, map: { "Very High": 35, "High": 30, "Medium": 25, "Low": 20, "Aucune": 0, "None": 0, "N/A": 0 } },
@@ -124,84 +121,28 @@
         Angled: { max: 25, map: { "High": 25, "Medium": 15, "Low": 5, "None": 0, "No": 0, "Yes": 15 } } 
     };
 
-    // CONTEXTUAL DESCRIPTIONS
     const STAT_DESCRIPTIONS = {
-        Armor: {
-            fr: "Si Blindage = Puissance : 50% de pénétration. Si Blindage < Puissance : 100%. Si Blindage > Puissance : -10% de pénétration par rang.",
-            en: "If Armor = Firepower: 50% pen chance. If Armor < Firepower: 100%. If Armor > Firepower: -10% pen chance per class."
-        },
-        Firepower: {
-            fr: "Si Puissance = Blindage : 50% de pénétration. Si Puissance > Blindage : 100%. Si Puissance < Blindage : -10% de pénétration par rang.",
-            en: "If Firepower = Armor: 50% pen chance. If Firepower > Armor: 100%. If Firepower < Armor: -10% pen chance per class."
-        },
-        Mobility: {
-            fr: "Chance de base de se déplacer (relocate)",
-            en: "Base chance of relocating"
-        },
-        Accuracy: {
-            fr: "Chance de base de toucher la cible",
-            en: "Base chance of hitting target"
-        },
-        Visibility: {
-            fr: "Chance de base de repérer (spotting)",
-            en: "Base chance of spotting"
-        },
-        Size: {
-            fr: "Modificateur de chance d'être touché (incoming hit)",
-            en: "Incoming hit chance modifier"
-        },
-        Angled: {
-            fr: "Chance de ricochet (blindage incliné)",
-            en: "Ricochet chance (armor angle)"
-        }
+        Armor: { fr: "Si Blindage = Puissance : 50% de pénétration. Si Blindage < Puissance : 100%. Si Blindage > Puissance : -10% de pénétration par rang.", en: "If Armor = Firepower: 50% pen chance. If Armor < Firepower: 100%. If Armor > Firepower: -10% pen chance per class." },
+        Firepower: { fr: "Si Puissance = Blindage : 50% de pénétration. Si Puissance > Blindage : 100%. Si Puissance < Blindage : -10% de pénétration par rang.", en: "If Firepower = Armor: 50% pen chance. If Firepower > Armor: 100%. If Firepower < Armor: -10% pen chance per class." },
+        Mobility: { fr: "Chance de base de se déplacer (relocate)", en: "Base chance of relocating" },
+        Accuracy: { fr: "Chance de base de toucher la cible", en: "Base chance of hitting target" },
+        Visibility: { fr: "Chance de base de repérer (spotting)", en: "Base chance of spotting" },
+        Size: { fr: "Modificateur de chance d'être touché (incoming hit)", en: "Incoming hit chance modifier" },
+        Angled: { fr: "Chance de ricochet (blindage incliné)", en: "Ricochet chance (armor angle)" }
     };
     
-    // TECH DESCRIPTIONS
     const TECH_DESCRIPTIONS = {
-        Stabilizer: {
-            fr: "+10% de précision de base",
-            en: "+10% base accuracy"
-        },
-        Rangefinder: {
-            fr: "+15% de précision de base, +5% de chance de toucher après un tir",
-            en: "+15% base accuracy, +5% hit chance after firing"
-        },
-        Autoloader: {
-            fr: "+20% de chance de tirer à nouveau et augmente la précision après le premier tir",
-            en: "+20% chance to fire again and increase hit accuracy after firing once"
-        },
-        "Night Vision": {
-            fr: "Supprime tous les malus de combat nocturne pour ce char",
-            en: "Removes all debuffs affecting this tank from night battles"
-        },
-        "Thermal Vision": {
-            fr: "+20% de chance de repérage de base",
-            en: "+20% base spot chance"
-        },
-        APS: {
-            fr: "50% de chance d'annuler un ATGM entrant",
-            en: "All incoming ATGM's have a 50% chance of being negated"
-        },
-        ERA: {
-            fr: "La première pénétration subie en bataille est annulée",
-            en: "First penetration in a battle is negated"
-        },
-        "ATGM (P)": {
-            fr: "Une fois tous les 3 tours, tire un ATGM à très haute précision et puissance",
-            en: "Once every three turns, this tank fires an ATGM that has very high accuracy and very high firepower"
-        },
-        "ATGM (S)": {
-            fr: "Une fois tous les 5 tours, tire un ATGM à très haute précision et puissance",
-            en: "Once every five turns, this tank fires an ATGM that has very high accuracy and very high firepower"
-        },
-        "Protected Ammo": {
-             fr: "Réduit les chances d'explosion des munitions",
-             en: "Reduces ammo rack explosion chance"
-        },
-        Autocannon: {
-             fr: "Armement secondaire à tir rapide",
-             en: "Rapid fire secondary weapon"
-        }
+        Stabilizer: { fr: "+10% de précision de base", en: "+10% base accuracy" },
+        Rangefinder: { fr: "+15% de précision de base, +5% de chance de toucher après un tir", en: "+15% base accuracy, +5% hit chance after firing" },
+        Autoloader: { fr: "+20% de chance de tirer à nouveau et augmente la précision après le premier tir", en: "+20% chance to fire again and increase hit accuracy after firing once" },
+        "Night Vision": { fr: "Supprime tous les malus de combat nocturne pour ce char", en: "Removes all debuffs affecting this tank from night battles" },
+        "Thermal Vision": { fr: "+20% de chance de repérage de base", en: "+20% base spot chance" },
+        APS: { fr: "50% de chance d'annuler un ATGM entrant", en: "All incoming ATGM's have a 50% chance of being negated" },
+        ERA: { fr: "La première pénétration subie en bataille est annulée", en: "First penetration in a battle is negated" },
+        "ATGM (P)": { fr: "Une fois tous les 3 tours, tire un ATGM à très haute précision et puissance", en: "Once every three turns, this tank fires an ATGM that has very high accuracy and very high firepower" },
+        "ATGM (S)": { fr: "Une fois tous les 5 tours, tire un ATGM à très haute précision et puissance", en: "Once every five turns, this tank fires an ATGM that has very high accuracy and very high firepower" },
+        "Protected Ammo": { fr: "Réduit les chances d'explosion des munitions", en: "Reduces ammo rack explosion chance" },
+        Autocannon: { fr: "Armement secondaire à tir rapide", en: "Rapid fire secondary weapon" }
     };
 
     const TRANSLATIONS = {
@@ -222,13 +163,7 @@
     };
 
     const FIXED_DROP_RATES = [
-      { tier: 'Tier I', rate: '51,97%', color: 'text-slate-300' },
-      { tier: 'Tier II', rate: '41,06%', color: 'text-green-400' },
-      { tier: 'Tier III', rate: '4,798%', color: 'text-blue-400' },
-      { tier: 'Tier IV', rate: '1,669%', color: 'text-purple-400' },
-      { tier: 'Tier V', rate: '0,4165%', color: 'text-orange-400' },
-      { tier: 'Prototype', rate: '0,0999%', color: 'text-red-500' },
-      { tier: 'Event', rate: 'Spécial', color: 'text-yellow-400' },
+      { tier: 'Tier I', rate: '51,97%', color: 'text-slate-300' }, { tier: 'Tier II', rate: '41,06%', color: 'text-green-400' }, { tier: 'Tier III', rate: '4,798%', color: 'text-blue-400' }, { tier: 'Tier IV', rate: '1,669%', color: 'text-purple-400' }, { tier: 'Tier V', rate: '0,4165%', color: 'text-orange-400' }, { tier: 'Prototype', rate: '0,0999%', color: 'text-red-500' }, { tier: 'Event', rate: 'Spécial', color: 'text-yellow-400' },
     ];
 
     const rawCSV = `Name,Nation,Age,Rarity,Armor,Firepower,Accuracy,Size,Mobility,Angled,Visibility,Autocannon,Stabilizer,Protected Ammo,Rangefinder,Autoloader,Night Vision,Thermal Vision,ERA,ATGM (P),ATGM (S),APS
@@ -1291,9 +1226,9 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
       return (
         <span 
             title={desc}
-            className="inline-flex items-center gap-1 px-2 py-1 rounded bg-slate-700/50 border border-slate-600 text-[10px] text-slate-300 cursor-help"
+            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-800/80 border border-white/10 text-[11px] font-semibold text-slate-300 cursor-help hover:bg-slate-700 transition-colors shadow-sm"
         >
-          <Icons.Check size={10} className="text-green-400" /> {label}
+          <Icons.Check size={12} className="text-green-400" /> {label}
         </span>
       );
     };
@@ -1328,7 +1263,11 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                   <div className="absolute inset-0 bg-emerald-500/20 blur-xl rounded-full"></div>
                   <div className="tech-border bg-slate-900 p-6 rounded-2xl relative z-10 border border-emerald-500/50">
                     <span className="text-[10px] uppercase font-bold text-slate-400 mb-2 bg-slate-900 px-2 py-0.5 rounded-full block w-max mx-auto border border-white/10">{dropResult.Nation}</span>
-                    <h3 className="text-2xl sm:text-3xl font-black text-white mb-2">{dropResult.Name}</h3>
+                    <div className="relative w-full aspect-video rounded-lg overflow-hidden mb-4 border border-white/10 bg-black">
+                         <img src={getTankImg(dropResult)} alt={dropResult.Name} className="w-full h-full object-cover" onError={(e) => {e.target.onerror = null; e.target.src = 'https://placehold.co/600x400/1e293b/475569?text=TOP+SECRET';}} />
+                         <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent"></div>
+                    </div>
+                    <h3 className="text-2xl sm:text-3xl font-black text-white mb-2 relative z-10">{dropResult.Name}</h3>
                     <span className={`text-xs px-2 py-1 rounded font-bold border ${dropResult.Rarity.includes('Tier I') ? 'text-slate-400 border-slate-600' : 'text-yellow-400 border-yellow-500/50'}`}>{dropResult.Rarity}</span>
                   </div>
                 </div>
@@ -1953,48 +1892,67 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                     return (
                       <div key={tank.id} className={`group relative bg-[#0f141a]/90 backdrop-blur-sm tech-border clip-corner-tr transition-all duration-300 hover:-translate-y-1 ${fxClass} ${isCollected ? '' : ''} ${isComparing ? 'ring-1 ring-blue-500 shadow-blue-500/20' : ''}`} style={{boxShadow: isCollected ? `0 0 20px ${THEME_COLORS[theme].hex}1A` : undefined}}>
                         <div className={`absolute left-0 top-0 bottom-0 w-1 z-20 ${isCollected ? '' : 'bg-slate-800'}`} style={{background: isCollected ? `linear-gradient(to bottom, ${THEME_COLORS[theme].hex}, ${THEME_COLORS[theme].hex}AA)` : undefined, boxShadow: isCollected ? `0 0 10px ${THEME_COLORS[theme].hex}` : undefined}}></div>
-                        <div className="p-5 pb-0 relative z-10">
-                          <div className="flex justify-between items-start gap-4">
-                            <div className="flex-1 min-w-0">
-                              <div className="flex items-center gap-2 mb-1"><span className="text-[10px] tracking-widest uppercase text-slate-400 font-bold bg-slate-900/50 px-2 py-0.5 rounded border border-white/5">{tData(tank.Nation)}</span></div>
-                              <h3 className="font-black text-xl leading-snug text-slate-100 group-hover:text-white transition-colors line-clamp-2 drop-shadow-sm" title={tank.Name}>{tank.Name}</h3>
-                              <div className="flex flex-wrap gap-2 mt-3 text-xs"><span className="flex items-center px-2 py-1 rounded bg-slate-700/50 text-slate-300 border border-white/5">{tData(tank.Age)}</span><span className={`flex items-center px-2 py-1 rounded font-bold border ${tank.Rarity.includes('Tier I') && !tank.Rarity.includes('II') && !tank.Rarity.includes('V') ? 'bg-slate-700/50 text-slate-400 border-white/5' : 'bg-gradient-to-r from-yellow-600/20 to-orange-600/20 text-orange-300 border-orange-500/20'}`}>{tank.Rarity}</span></div>
-                            </div>
-                            <div className="flex flex-col gap-2">
-                              <button onClick={() => addTankInstance(tank.id)} className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 shadow-lg active:scale-95 ${isCollected ? 'text-white hover:brightness-110' : 'bg-slate-700 text-slate-400 hover:text-white'}`} style={{background: isCollected ? `linear-gradient(to bottom right, ${THEME_COLORS[theme].hex}, ${THEME_COLORS[theme].hex}CC)` : undefined, boxShadow: isCollected ? `0 0 10px ${THEME_COLORS[theme].hex}66` : undefined}} title={translate('addAnother')}><Icons.Plus size={20} /></button>
-                              <button onClick={() => setViewTank(tank)} className="w-10 h-10 rounded-full flex items-center justify-center bg-slate-700/50 text-slate-400 hover:text-white hover:bg-blue-600 transition-all hover:shadow-lg hover:shadow-blue-900/30" title={translate('details')}><Icons.Eye size={18} /></button>
-                              {isCollected && (<div className="w-10 h-10 rounded-full flex items-center justify-center bg-opacity-20 border border-opacity-30 shadow-inner" style={{backgroundColor: `${THEME_COLORS[theme].hex}20`, borderColor: `${THEME_COLORS[theme].hex}40`}}><span className="font-bold text-sm" style={{color: THEME_COLORS[theme].hex}}>x{instances.length}</span></div>)}
-                            </div>
-                          </div>
-                        </div>
-                        {isCollected && (
-                          <div className="px-5 mt-4 max-h-28 overflow-y-auto custom-scrollbar space-y-2">
-                            {instances.map((condition, idx) => (
-                              <div key={idx} className="flex gap-2 items-center animate-in fade-in slide-in-from-left-2 duration-300">
-                                <div className="relative flex-grow">
-                                  <select value={condition} onChange={(e) => updateInstanceCondition(tank.id, idx, e.target.value)} className={`w-full text-[10px] font-bold uppercase tracking-wider py-1.5 pl-2 pr-6 rounded border cursor-pointer outline-none transition-all appearance-none ${CONDITIONS[condition] ? CONDITIONS[condition].color : 'bg-slate-700'}`}>{Object.values(CONDITIONS).map(c => (<option key={c.id} value={c.id} className="bg-slate-800 text-slate-200">{translate(c.id)}</option>))}</select>
-                                  <div className="absolute right-2 top-1.5 pointer-events-none opacity-50 mixed-blend-overlay">▼</div>
+                        
+                        {/* Image Section */}
+                        <div className="relative w-full h-48 bg-black overflow-hidden border-b border-white/5">
+                            <img 
+                                src={getTankImg(tank)} 
+                                alt={tank.Name} 
+                                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                onError={(e) => {
+                                    e.target.onerror = null; 
+                                    e.target.src = 'https://placehold.co/600x400/0f172a/475569?text=NO+DATA';
+                                }}
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-[#0f141a] via-transparent to-transparent opacity-90"></div>
+                            
+                            <div className="absolute top-3 left-3 right-3 flex justify-between items-start z-30">
+                                <span className="text-[10px] tracking-widest uppercase text-slate-300 font-bold bg-black/60 backdrop-blur-sm px-2 py-0.5 rounded border border-white/10 shadow-lg">{tData(tank.Nation)}</span>
+                                <div className="flex flex-col gap-2">
+                                  <button onClick={() => addTankInstance(tank.id)} className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 shadow-lg active:scale-95 ${isCollected ? 'text-white hover:brightness-110' : 'bg-black/60 text-slate-400 hover:text-white backdrop-blur-sm border border-white/10'}`} style={{background: isCollected ? `linear-gradient(to bottom right, ${THEME_COLORS[theme].hex}, ${THEME_COLORS[theme].hex}CC)` : undefined}} title={translate('addAnother')}><Icons.Plus size={16} /></button>
+                                  {isCollected && (<div className="w-8 h-8 rounded-full flex items-center justify-center bg-black/80 border border-white/20 shadow-inner backdrop-blur-md"><span className="font-bold text-xs" style={{color: THEME_COLORS[theme].hex}}>x{instances.length}</span></div>)}
                                 </div>
-                                <button onClick={() => removeTankInstance(tank.id, idx)} className="p-1.5 text-slate-500 hover:text-red-400 hover:bg-red-500/20 transition-colors rounded-md" title={translate('removeInstance')}><Icons.Trash2 size={14} /></button>
-                              </div>
-                            ))}
+                            </div>
+                        </div>
+
+                        <div className="p-5 pt-2 relative z-10 -mt-6">
+                          <div className="flex justify-between items-end gap-4 mb-3">
+                            <div className="flex-1 min-w-0">
+                              <h3 className="font-black text-xl leading-snug text-white group-hover:text-emerald-400 transition-colors line-clamp-2 drop-shadow-md" title={tank.Name}>{tank.Name}</h3>
+                              <div className="flex flex-wrap gap-2 mt-1 text-xs"><span className="flex items-center px-1.5 py-0.5 rounded bg-slate-800 text-slate-400 border border-white/5 text-[10px]">{tData(tank.Age)}</span><span className={`flex items-center px-1.5 py-0.5 rounded font-bold border text-[10px] ${tank.Rarity.includes('Tier I') && !tank.Rarity.includes('II') && !tank.Rarity.includes('V') ? 'bg-slate-800 text-slate-400 border-white/5' : 'bg-yellow-900/30 text-yellow-500 border-yellow-500/30'}`}>{tank.Rarity}</span></div>
+                            </div>
+                            <button onClick={() => setViewTank(tank)} className="w-8 h-8 rounded-full flex items-center justify-center bg-slate-800 text-slate-400 hover:text-white hover:bg-blue-600 transition-all border border-white/5 shadow-lg" title={translate('details')}><Icons.Eye size={16} /></button>
                           </div>
-                        )}
-                        <div className="p-5 pt-4 space-y-3 flex-grow">
-                          <div className="h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent mb-4"></div>
-                          <StatBar label={translate('armor')} rawValue={tank.Armor} icon={Icons.Shield} lang={lang} statKey="Armor" />
-                          <StatBar label={translate('firepower')} rawValue={tank.Firepower} icon={Icons.Crosshair} lang={lang} statKey="Firepower" />
-                          <StatBar label={translate('mobility')} rawValue={tank.Mobility} icon={Icons.Zap} lang={lang} statKey="Mobility" />
-                          <div className="grid grid-cols-3 gap-2 mt-4">
+                        
+                          {isCollected && (
+                            <div className="mb-4 max-h-20 overflow-y-auto custom-scrollbar space-y-1.5 bg-black/20 p-2 rounded-lg border border-white/5">
+                                {instances.map((condition, idx) => (
+                                <div key={idx} className="flex gap-2 items-center animate-in fade-in slide-in-from-left-2 duration-300">
+                                    <div className="relative flex-grow">
+                                    <select value={condition} onChange={(e) => updateInstanceCondition(tank.id, idx, e.target.value)} className={`w-full text-[9px] font-bold uppercase tracking-wider py-1 pl-2 pr-4 rounded border-none cursor-pointer outline-none transition-all appearance-none ${CONDITIONS[condition] ? CONDITIONS[condition].color : 'bg-slate-700'}`}>{Object.values(CONDITIONS).map(c => (<option key={c.id} value={c.id} className="bg-slate-800 text-slate-200">{translate(c.id)}</option>))}</select>
+                                    </div>
+                                    <button onClick={() => removeTankInstance(tank.id, idx)} className="text-slate-600 hover:text-red-400 transition-colors" title={translate('removeInstance')}><Icons.Trash2 size={12} /></button>
+                                </div>
+                                ))}
+                            </div>
+                          )}
+
+                          <div className="space-y-2">
+                            <StatBar label={translate('armor')} rawValue={tank.Armor} icon={Icons.Shield} lang={lang} statKey="Armor" />
+                            <StatBar label={translate('firepower')} rawValue={tank.Firepower} icon={Icons.Crosshair} lang={lang} statKey="Firepower" />
+                            <StatBar label={translate('mobility')} rawValue={tank.Mobility} icon={Icons.Zap} lang={lang} statKey="Mobility" />
+                            <div className="grid grid-cols-3 gap-2 mt-4">
                             <div className="bg-slate-900/60 p-2 rounded border border-white/5 flex flex-col items-center justify-center text-center cursor-help" title={STAT_DESCRIPTIONS['Accuracy'][lang]}><span className="text-[10px] text-slate-500 mb-1 truncate w-full">{translate('accuracy')}</span><span className={`text-xs font-bold ${getStatColor(getStatValue(tank.Accuracy, 'Accuracy')).replace('bg-', 'text-')}`}>{lang === 'fr' ? translateData(tank.Accuracy, 'Accuracy', lang) : tank.Accuracy}</span><span className="text-[9px] text-slate-600 font-mono mt-0.5">{getRealStatValue(tank.Accuracy, 'Accuracy') ? `${getRealStatValue(tank.Accuracy, 'Accuracy')}%` : ''}</span></div>
                             <div className="bg-slate-900/60 p-2 rounded border border-white/5 flex flex-col items-center justify-center text-center cursor-help" title={STAT_DESCRIPTIONS['Angled'][lang]}><span className="text-[10px] text-slate-500 mb-1 truncate w-full">{translate('angled')}</span><span className={`text-xs font-bold ${getStatColor(getStatValue(tank.Angled, 'Angled')).replace('bg-', 'text-')}`}>{lang === 'fr' ? translateData(tank.Angled, 'Angled', lang) : tank.Angled}</span><span className="text-[9px] text-slate-600 font-mono mt-0.5">{getRealStatValue(tank.Angled, 'Angled') ? `${getRealStatValue(tank.Angled, 'Angled')}%` : ''}</span></div>
                             <div className="bg-slate-900/60 p-2 rounded border border-white/5 flex flex-col items-center justify-center text-center cursor-help" title={STAT_DESCRIPTIONS['Visibility'][lang]}><span className="text-[10px] text-slate-500 mb-1 truncate w-full">{translate('visibility')}</span><span className={`text-xs font-bold ${getStatColor(getStatValue(tank.Visibility, 'Visibility')).replace('bg-', 'text-')}`}>{lang === 'fr' ? translateData(tank.Visibility, 'Visibility', lang) : tank.Visibility}</span><span className="text-[9px] text-slate-600 font-mono mt-0.5">{getRealStatValue(tank.Visibility, 'Visibility') ? `${getRealStatValue(tank.Visibility, 'Visibility')}%` : ''}</span></div>
                           </div>
-                          <div className="flex flex-wrap gap-1.5 mt-3">
+                            <div className="flex flex-wrap gap-1.5 mt-3">
                             {[{ label: 'stabilizer', val: tank.Stabilizer, key: 'Stabilizer' }, { label: 'thermal', val: tank['Thermal Vision'], key: 'Thermal Vision' }, { label: 'era', val: tank.ERA, key: 'ERA' }, { label: 'atgm_p', val: tank['ATGM (P)'], key: 'ATGM (P)' }, { label: 'atgm_s', val: tank['ATGM (S)'], key: 'ATGM (S)' }].map((tech, i) => (<BooleanBadge key={i} label={translate(tech.label)} value={tech.val} lang={lang} techKey={tech.key} />))}
                             {(tank.Autoloader === 'Yes' || tank.APS === 'Yes') && <div className="text-[10px] text-slate-500 ml-auto flex items-center gap-1">+ others</div>}
                           </div>
+                          </div>
                         </div>
+
                         <div className="px-5 py-3 border-t border-white/5 bg-slate-900/40 flex justify-between items-center mt-auto group-hover:bg-slate-900/60 transition-colors">
                           <button onClick={() => toggleCompare(tank)} className={`text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5 transition-all active:scale-95 ${isComparing ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/30' : 'text-blue-400 bg-blue-500/10 hover:bg-blue-500/20'}`}>{isComparing ? <Icons.Check size={12} strokeWidth={3} /> : <Icons.Scale size={14} />}{isComparing ? translate('selected') : translate('compare')}</button>
                           <span className="text-[10px] uppercase tracking-wider text-slate-500 font-medium bg-slate-800 px-2 py-1 rounded border border-white/5 flex items-center gap-1 cursor-help" title={STAT_DESCRIPTIONS['Size'][lang]}>
@@ -2014,10 +1972,13 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                       return (
                         <div key={tank.id} className={`flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 bg-[#0f141a]/90 border border-white/5 rounded-lg hover:border-opacity-30 transition-all ${isCollected ? 'border-l-4' : ''}`} style={{borderColor: isCollected ? THEME_COLORS[theme].hex : undefined}}>
                             <div className="flex items-center gap-4 w-full sm:w-auto">
-                                <span className={`text-xs font-bold px-2 py-1 rounded bg-slate-800 text-slate-400 min-w-[80px] text-center`}>{tData(tank.Nation)}</span>
+                                <div className="w-16 h-12 bg-black rounded overflow-hidden border border-white/10 flex-shrink-0">
+                                     <img src={getTankImg(tank)} alt="" className="w-full h-full object-cover opacity-80" onError={(e) => {e.target.onerror = null; e.target.src = 'https://placehold.co/100x100/0f172a/475569?text=IMG';}}/>
+                                </div>
                                 <div>
-                                    <h4 className={`font-black text-lg`} style={{color: isCollected ? THEME_COLORS[theme].hex : '#cbd5e1'}}>{tank.Name}</h4>
-                                    <div className="flex gap-2 text-[10px] text-slate-500 uppercase tracking-wider">
+                                    <h4 className={`font-black text-lg leading-none mb-1`} style={{color: isCollected ? THEME_COLORS[theme].hex : '#cbd5e1'}}>{tank.Name}</h4>
+                                    <div className="flex gap-2 text-[10px] text-slate-500 uppercase tracking-wider items-center">
+                                        <span className="bg-slate-800 px-1.5 rounded">{tData(tank.Nation)}</span>
                                         <span>{tData(tank.Age)}</span> • <span>{tank.Rarity}</span>
                                     </div>
                                 </div>
@@ -2107,6 +2068,17 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                 <div className="overflow-y-auto p-8 custom-scrollbar">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div className="space-y-6">
+                      <div className="relative w-full aspect-video rounded-xl overflow-hidden border border-white/10 bg-black">
+                           <img 
+                                src={getTankImg(viewTank)} 
+                                alt={viewTank.Name} 
+                                className="w-full h-full object-cover"
+                                onError={(e) => {
+                                    e.target.onerror = null; 
+                                    e.target.src = 'https://placehold.co/800x500/0f172a/475569?text=NO+DATA';
+                                }}
+                            />
+                      </div>
                       <div>
                         <h4 className="flex items-center gap-2 font-bold uppercase text-xs tracking-wider mb-4 border-b border-white/5 pb-2" style={{color: THEME_COLORS[theme].hex}}><Icons.Database size={14} /> Statistiques Principales</h4>
                         <div className="space-y-4">
