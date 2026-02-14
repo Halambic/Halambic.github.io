@@ -127,12 +127,12 @@
     // CONTEXTUAL DESCRIPTIONS
     const STAT_DESCRIPTIONS = {
         Armor: {
-            fr: "Si Puissance = Blindage : 50% de pénétration. Si Puissance > Blindage : 100% de pénétration. -10% par rang inférieur.",
-            en: "If Firepower = Armor: 50% chance of pen. If Firepower > Armor: 100% chance of pen. -10% for each lower class."
+            fr: "Si Blindage = Puissance : 50% de pénétration. Si Blindage < Puissance : 100%. Si Blindage > Puissance : -10% de pénétration par rang.",
+            en: "If Armor = Firepower: 50% pen chance. If Armor < Firepower: 100%. If Armor > Firepower: -10% pen chance per class."
         },
         Firepower: {
-            fr: "Comparé au Blindage ennemi : Égal = 50% de pénétration, Supérieur = 100%, Inférieur = -10% par rang.",
-            en: "Compared to Armor: Equal = 50% chance of pen, Greater = 100%, Lesser = -10% per class."
+            fr: "Si Puissance = Blindage : 50% de pénétration. Si Puissance > Blindage : 100%. Si Puissance < Blindage : -10% de pénétration par rang.",
+            en: "If Firepower = Armor: 50% pen chance. If Firepower > Armor: 100%. If Firepower < Armor: -10% pen chance per class."
         },
         Mobility: {
             fr: "Chance de base de se déplacer (relocate)",
@@ -994,7 +994,8 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
              { label: 'mobility', key: 'Mobility' },
              { label: 'accuracy', key: 'Accuracy' },
              { label: 'visibility', key: 'Visibility' },
-             { label: 'angled', key: 'Angled' }
+             { label: 'angled', key: 'Angled' },
+             { label: 'size', key: 'Size' }
         ];
 
         const techs = [
@@ -1006,7 +1007,8 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
              { key: 'Autoloader', label: 'autoloader' },
              { key: 'Rangefinder', label: 'rangefinder' },
              { key: 'Protected Ammo', label: 'protectedAmmo' },
-             { key: 'ATGM (P)', label: 'atgm_p' }
+             { key: 'ATGM (P)', label: 'atgm_p' },
+             { key: 'ATGM (S)', label: 'atgm_s' }
         ];
 
         return (
@@ -1029,21 +1031,30 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                      <tbody>
                          <tr className="bg-slate-800/50"><td colSpan={compareList.length + 1} className="p-2 text-xs font-bold text-slate-500 uppercase tracking-widest pl-4 sticky left-0 z-20 bg-slate-900/90 backdrop-blur-sm border-r border-white/10">Performance</td></tr>
                          {stats.map(stat => {
+                             const description = STAT_DESCRIPTIONS[stat.key] ? STAT_DESCRIPTIONS[stat.key][lang] : '';
+                             
                              return (
                                  <tr key={stat.key} className="border-b border-white/5 hover:bg-white/5 transition-colors">
-                                     <td className="p-3 font-medium text-slate-300 bg-slate-900/95 sticky left-0 z-10 border-r border-white/10 flex items-center gap-2 shadow-[2px_0_5px_rgba(0,0,0,0.5)]">
-                                         <span className="truncate">{translate(stat.label)}</span>
+                                     <td className="p-3 font-medium text-slate-300 bg-slate-900/95 sticky left-0 z-10 border-r border-white/10 shadow-[2px_0_5px_rgba(0,0,0,0.5)]">
+                                         <div className="flex items-center gap-2 h-full">
+                                            <span className="truncate">{translate(stat.label)}</span>
+                                         </div>
                                      </td>
                                      {compareList.map(tank => {
                                          const raw = tank[stat.key];
-                                         const val = getStatValue(raw, stat.key);
                                          const displayVal = lang === 'fr' ? translateData(raw, stat.key, lang) : raw;
+                                         const realPercent = getRealStatValue(raw, stat.key);
                                          
                                          return (
-                                             <td key={`${tank.id}-${stat.key}`} className="p-3 text-center align-middle">
-                                                 <span className="font-bold text-slate-300">
-                                                     {displayVal}
-                                                 </span>
+                                             <td key={`${tank.id}-${stat.key}`} className="p-3 text-center align-middle cursor-help" title={description}>
+                                                 <div className="flex flex-col items-center">
+                                                     <span className="font-bold text-slate-300">{displayVal}</span>
+                                                     {realPercent !== null && (
+                                                        <span className={`text-[10px] font-mono ${stat.key === 'Size' && realPercent > 0 ? 'text-red-400' : 'text-slate-500'}`}>
+                                                            {stat.key === 'Size' && realPercent > 0 ? '+' : ''}{realPercent}%
+                                                        </span>
+                                                     )}
+                                                 </div>
                                              </td>
                                          );
                                      })}
@@ -1055,7 +1066,9 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                          {techs.map(tech => (
                              <tr key={tech.key} className="border-b border-white/5 hover:bg-white/5 transition-colors">
                                  <td className="p-3 font-medium text-slate-300 bg-slate-900/95 sticky left-0 z-10 border-r border-white/10 shadow-[2px_0_5px_rgba(0,0,0,0.5)]">
-                                     <span className="truncate">{translate(tech.label)}</span>
+                                     <div className="flex items-center gap-2 h-full">
+                                         <span className="truncate">{translate(tech.label)}</span>
+                                     </div>
                                  </td>
                                  {compareList.map(tank => (
                                      <td key={`${tank.id}-${tech.key}`} className="p-3 text-center align-middle">
@@ -1888,7 +1901,7 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                             <div className="bg-slate-900/60 p-2 rounded border border-white/5 flex flex-col items-center justify-center text-center cursor-help" title={STAT_DESCRIPTIONS['Visibility'][lang]}><span className="text-[10px] text-slate-500 mb-1 truncate w-full">{translate('visibility')}</span><span className={`text-xs font-bold ${getStatColor(getStatValue(tank.Visibility, 'Visibility')).replace('bg-', 'text-')}`}>{lang === 'fr' ? translateData(tank.Visibility, 'Visibility', lang) : tank.Visibility}</span><span className="text-[9px] text-slate-600 font-mono mt-0.5">{getRealStatValue(tank.Visibility, 'Visibility') ? `${getRealStatValue(tank.Visibility, 'Visibility')}%` : ''}</span></div>
                           </div>
                           <div className="flex flex-wrap gap-1.5 mt-3">
-                            {[{ label: 'stabilizer', val: tank.Stabilizer }, { label: 'thermal', val: tank['Thermal Vision'] }, { label: 'era', val: tank.ERA }, { label: 'atgm_p', val: tank['ATGM (P)'] }].map((tech, i) => (<BooleanBadge key={i} label={translate(tech.label)} value={tech.val} lang={lang} />))}
+                            {[{ label: 'stabilizer', val: tank.Stabilizer }, { label: 'thermal', val: tank['Thermal Vision'] }, { label: 'era', val: tank.ERA }, { label: 'atgm_p', val: tank['ATGM (P)'] }, { label: 'atgm_s', val: tank['ATGM (S)'] }].map((tech, i) => (<BooleanBadge key={i} label={translate(tech.label)} value={tech.val} lang={lang} />))}
                             {(tank.Autoloader === 'Yes' || tank.APS === 'Yes') && <div className="text-[10px] text-slate-500 ml-auto flex items-center gap-1">+ others</div>}
                           </div>
                         </div>
