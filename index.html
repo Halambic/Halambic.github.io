@@ -705,6 +705,8 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
       Palette: (props) => <IconWrapper {...props}><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></IconWrapper>
     };
 
+    // ... [DrawTimer is unchanged] ...
+
     const DrawTimer = ({ lang, theme }) => {
       const getInitialState = () => {
          try {
@@ -854,6 +856,7 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
       );
     };
 
+    // ... [RadarChart is unchanged] ...
     const RadarChart = ({ data, size = 200, color }) => {
       const center = size / 2;
       const radius = size * 0.4;
@@ -923,6 +926,7 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
       );
     };
 
+    // ... [PieChart is unchanged] ...
     const PieChart = ({ data }) => {
         const total = data.reduce((acc, curr) => acc + curr.value, 0);
         let currentAngle = 0;
@@ -952,6 +956,7 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
         );
     };
 
+    // ... [FilterDropdown is unchanged] ...
     const FilterDropdown = ({ value, onChange, options, icon: Icon, placeholder, theme }) => {
       const [isOpen, setIsOpen] = useState(false);
       return (
@@ -991,6 +996,7 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
       );
     };
 
+    // ... [ThemeSelector is unchanged] ...
     const ThemeSelector = ({ currentTheme, onThemeChange, translate }) => {
         const [isOpen, setIsOpen] = useState(false);
         const themes = Object.keys(THEME_COLORS);
@@ -1022,6 +1028,7 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
         );
     };
     
+    // ... [ToastContainer is unchanged] ...
     const ToastContainer = ({ toasts, theme }) => {
         return (
             <div className="fixed bottom-4 right-4 z-[100] flex flex-col gap-2 pointer-events-none max-w-[90vw]">
@@ -1053,6 +1060,7 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
              { key: 'ERA', label: 'era' },
              { key: 'APS', label: 'aps' },
              { key: 'Autoloader', label: 'autoloader' },
+             { key: 'Autocannon', label: 'autocannon' },
              { key: 'Rangefinder', label: 'rangefinder' },
              { key: 'Protected Ammo', label: 'protectedAmmo' },
              { key: 'ATGM (P)', label: 'atgm_p' },
@@ -1085,10 +1093,9 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                              const values = compareList.map(tank => getStatValue(tank[stat.key], stat.key));
                              const maxValue = Math.max(...values);
                              const minValue = Math.min(...values);
-                             const allEqual = maxValue === minValue;
+                             const allEqual = values.every(v => v === values[0]);
                              
-                             // Determine best target based on stat type
-                             // Size: Lower is better (Tiny). Others: Higher is better.
+                             // Determine best/worst based on stat type
                              const isLowBetter = stat.key === 'Size';
                              const bestValue = isLowBetter ? minValue : maxValue;
                              const worstValue = isLowBetter ? maxValue : minValue;
@@ -1106,22 +1113,22 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                                          const displayVal = lang === 'fr' ? translateData(raw, stat.key, lang) : raw;
                                          const realPercent = getRealStatValue(raw, stat.key);
                                          
-                                         // Logic for highlighting
+                                         // Logic for highlighting - using fixed colors instead of theme
                                          const isBest = !allEqual && val === bestValue;
                                          const isWorst = !allEqual && val === worstValue;
                                          
-                                         let textClass = 'text-slate-300'; // Default
+                                         let textClass = 'text-slate-300';
                                          let scaleClass = '';
                                          
                                          if (isBest) {
-                                             textClass = 'text-emerald-400 font-black'; // Green for best
+                                             textClass = 'text-emerald-400 font-black'; // Fixed green
                                              scaleClass = 'scale-110';
                                          } else if (isWorst) {
-                                             textClass = 'text-red-400'; // Red for worst
+                                             textClass = 'text-red-400'; // Fixed red
                                          }
                                          
                                          return (
-                                             <td key={`${tank.id}-${stat.key}`} className={`p-3 text-center align-middle cursor-help ${isBest ? 'bg-white/5' : ''}`} title={description}>
+                                             <td key={`${tank.id}-${stat.key}`} className={`p-3 text-center align-middle cursor-help ${isBest ? 'bg-emerald-500/5' : ''}`} title={description}>
                                                  <div className={`flex flex-col items-center transition-transform duration-300 origin-center ${scaleClass}`}>
                                                      <span className={`font-bold ${textClass} transition-colors`}>{displayVal}</span>
                                                      {realPercent !== null && (
@@ -1140,15 +1147,15 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                          <tr className="bg-slate-800/50"><td colSpan={compareList.length + 1} className="p-2 text-xs font-bold text-slate-500 uppercase tracking-widest pl-4 sticky left-0 z-20 bg-slate-900/90 backdrop-blur-sm border-r border-white/10">Technologies</td></tr>
                          {techs.map(tech => (
                              <tr key={tech.key} className="border-b border-white/5 hover:bg-white/5 transition-colors">
-                                 <td className="p-3 font-medium text-slate-300 bg-slate-900/95 sticky left-0 z-10 border-r border-white/10 shadow-[2px_0_5px_rgba(0,0,0,0.5)] cursor-help" title={TECH_DESCRIPTIONS[tech.key] ? TECH_DESCRIPTIONS[tech.key][lang] : ''}>
+                                 <td className="p-3 font-medium text-slate-300 bg-slate-900/95 sticky left-0 z-10 border-r border-white/10 shadow-[2px_0_5px_rgba(0,0,0,0.5)]">
                                      <div className="flex items-center gap-2 h-full">
                                          <span className="truncate">{translate(tech.label)}</span>
                                      </div>
                                  </td>
                                  {compareList.map(tank => (
-                                     <td key={`${tank.id}-${tech.key}`} className="p-3 text-center align-middle">
+                                     <td key={`${tank.id}-${tech.key}`} className="p-3 text-center align-middle cursor-help" title={TECH_DESCRIPTIONS[tech.key] ? TECH_DESCRIPTIONS[tech.key][lang] : ''}>
                                          {tank[tech.key] === 'Yes' ? 
-                                             <span className={`inline-flex justify-center items-center w-6 h-6 rounded-full bg-${theme}-500/20 text-${theme}-400`}><Icons.Check size={14} strokeWidth={3}/></span> 
+                                             <span className={`inline-flex justify-center items-center w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400`}><Icons.Check size={14} strokeWidth={3}/></span> 
                                              : <span className="text-slate-700">-</span>
                                          }
                                      </td>
