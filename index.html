@@ -40,7 +40,7 @@
   </script>
 
   <style>
-    html, body { height: 100%; margin: 0; padding: 0; overflow: hidden; background-color: #05080a; background-image: radial-gradient(circle at 50% 0%, #1e293b 0%, transparent 70%), linear-gradient(to bottom, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.8) 100%), url('data:image/svg+xml,%3Csvg width=\"60\" height=\"60\" viewBox=\"0 0 60 60\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cg fill=\"none\" fill-rule=\"evenodd\"%3E%3Cg fill=\"%23334155\" fill-opacity=\"0.08\"%3E%3Cpath d=\"M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E'); }
+    html, body { height: 100%; margin: 0; padding: 0; overflow: hidden; background-color: #05080a; background-image: radial-gradient(circle at 50% 0%, #1e293b 0%, transparent 70%), linear-gradient(to bottom, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.8) 100%), url('data:image/svg+xml,%3Csvg width=\"60\" height=\"60\" viewBox=\"0 0 60 60\" xmlns=\"http://www.w3.org/2000/svg%3E%3Cg fill=\"none\" fill-rule=\"evenodd\"%3E%3Cg fill=\"%23334155\" fill-opacity=\"0.08\"%3E%3Cpath d=\"M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E'); }
     .clip-corner-tr { clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 0 100%); }
     .tech-border { position: relative; }
     .tech-border::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; border: 1px solid rgba(255, 255, 255, 0.05); clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 0 100%); pointer-events: none; z-index: 10; }
@@ -1464,7 +1464,13 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                           else if (rawCond.includes('parade ready')) condId = 'parade_ready';
                           else if (rawCond.includes('factory new')) condId = 'factory_new';
 
-                          const candidates = tanks.filter(t => t.Name === name);
+                          // FIX: Handle quotes in imported names vs DB names (parser strips quotes)
+                          const cleanImportName = name.replace(/"/g, '');
+                          let candidates = tanks.filter(t => t.Name === name);
+                          if (candidates.length === 0) {
+                              candidates = tanks.filter(t => t.Name.replace(/"/g, '') === cleanImportName);
+                          }
+
                           let tankData = null;
 
                           if (candidates.length === 1) {
