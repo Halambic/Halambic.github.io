@@ -27,22 +27,12 @@
             military: ['"Black Ops One"', 'cursive'],
           },
           colors: {
-            slate: {
-              850: '#151f32',
-              900: '#0f172a',
-              950: '#020617',
-            },
-            military: {
-              dark: '#0a0f14',
-              panel: '#111822',
-              accent: '#eab308'
-            }
+            slate: { 850: '#151f32', 900: '#0f172a', 950: '#020617' },
+            military: { dark: '#0a0f14', panel: '#111822', accent: '#eab308' }
           },
-          screens: {
-            'xs': '480px',
-          },
+          screens: { 'xs': '480px' },
           backgroundImage: {
-            'hex-pattern': "url('data:image/svg+xml,%3Csvg width=\"24\" height=\"40\" viewBox=\"0 0 24 40\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cpath d=\"M0 40c5.523 0 10-4.477 10-10V10c0-5.523-4.477-10-10-10s-10 4.477-10 10v20c0 5.523 4.477 10 10 10zM24 20c0 5.523-4.477 10-10 10S4 25.523 4 20s4.477-10 10-10 10 4.477 10 10z\" fill=\"%231e293b\" fill-opacity=\"0.05\" fill-rule=\"evenodd\"/%3E%3C/svg%3E')",
+            'hex-pattern': "url('data:image/svg+xml,%3Csvg width=\"24\" height=\"40\" viewBox=\"0 0 24 40\" xmlns=\"http://www.w3.org/2000/svg%3E%3Cpath d=\"M0 40c5.523 0 10-4.477 10-10V10c0-5.523-4.477-10-10-10s-10 4.477-10 10v20c0 5.523 4.477 10 10 10zM24 20c0 5.523-4.477 10-10 10S4 25.523 4 20s4.477-10 10-10 10 4.477 10 10z\" fill=\"%231e293b\" fill-opacity=\"0.05\" fill-rule=\"evenodd\"/%3E%3C/svg%3E')",
           }
         }
       }
@@ -76,127 +66,24 @@
     @keyframes dash { to { stroke-dashoffset: 0; } }
     .scanline { position: fixed; left: 0; top: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0) 50%, rgba(0, 0, 0, 0.2) 50%, rgba(0, 0, 0, 0.2)); background-size: 100% 4px; pointer-events: none; z-index: 9999; opacity: 0.15; }
     
-    /* --- FX VISUALS UPDATED --- */
-    /* Tier V Gold Sheen - 4s Duration */
-    .fx-holo-gold {
-        position: relative;
-        overflow: hidden;
-    }
-    .fx-holo-gold::before {
-        content: '';
-        position: absolute;
-        top: 0; left: -150%; width: 50%; height: 100%;
-        background: linear-gradient(to right, transparent, rgba(255, 215, 0, 0.1), rgba(255, 255, 255, 0.4), rgba(255, 215, 0, 0.1), transparent);
-        transform: skewX(-25deg);
-        animation: sheen 4s infinite ease-in-out;
-        pointer-events: none;
-        z-index: 25;
-    }
-    @keyframes sheen {
-        0%, 70% { left: -150%; }
-        100% { left: 150%; }
-    }
+    /* FX VISUALS */
+    .fx-holo-gold { position: relative; overflow: hidden; }
+    .fx-holo-gold::before { content: ''; position: absolute; top: 0; left: -150%; width: 50%; height: 100%; background: linear-gradient(to right, transparent, rgba(255, 215, 0, 0.1), rgba(255, 255, 255, 0.4), rgba(255, 215, 0, 0.1), transparent); transform: skewX(-25deg); animation: sheen 4s infinite ease-in-out; pointer-events: none; z-index: 25; }
+    @keyframes sheen { 0%, 70% { left: -150%; } 100% { left: 150%; } }
 
-    /* Prototype - PLASMA ACTIVE (Haute Visibilité, Mouvement Fluide) */
-    .fx-holo-proto {
-        position: relative;
-        border: 1px solid #ef4444 !important;
-        background: linear-gradient(135deg, #1a0505 0%, #450a0a 25%, #000000 50%, #450a0a 75%, #1a0505 100%);
-        background-size: 400% 400%;
-        box-shadow: 0 0 15px rgba(220, 38, 38, 0.4);
-        overflow: hidden;
-        animation: plasma-shift 15s ease infinite;
-        clip-path: none !important;
-        border-radius: 6px;
-        z-index: 10;
-    }
+    .fx-holo-proto { position: relative; border: 1px solid #ef4444 !important; background: linear-gradient(135deg, #1a0505 0%, #450a0a 25%, #000000 50%, #450a0a 75%, #1a0505 100%); background-size: 400% 400%; box-shadow: 0 0 15px rgba(220, 38, 38, 0.4); overflow: hidden; animation: plasma-shift 15s ease infinite; clip-path: none !important; border-radius: 6px; z-index: 10; }
     .fx-holo-proto.tech-border::before { clip-path: none !important; }
     .fx-holo-proto.tech-border::after { display: none !important; }
+    @keyframes plasma-shift { 0% { background-position: 0% 50%; border-color: #ef4444; } 50% { background-position: 100% 50%; border-color: #b91c1c; } 100% { background-position: 0% 50%; border-color: #ef4444; } }
+    .fx-holo-proto::after { content: 'TOP SECRET'; position: absolute; top: 14px; right: -30px; background-color: #991b1b; color: white; font-family: "Black Ops One", cursive; font-size: 8px; letter-spacing: 1px; padding: 5px 30px; transform: rotate(45deg); z-index: 20; box-shadow: 0 0 10px rgba(0,0,0,0.9); border: 1px solid rgba(255, 255, 255, 0.2); text-shadow: 0 1px 2px black; white-space: nowrap; pointer-events: none; }
 
-    @keyframes plasma-shift {
-        0% { background-position: 0% 50%; border-color: #ef4444; }
-        50% { background-position: 100% 50%; border-color: #b91c1c; }
-        100% { background-position: 0% 50%; border-color: #ef4444; }
-    }
-
-    .fx-holo-proto::after {
-        content: 'TOP SECRET';
-        position: absolute;
-        top: 14px;
-        right: -30px;
-        background-color: #991b1b;
-        color: white;
-        font-family: "Black Ops One", cursive;
-        font-size: 8px;
-        letter-spacing: 1px;
-        padding: 5px 30px;
-        transform: rotate(45deg);
-        z-index: 20;
-        box-shadow: 0 0 10px rgba(0,0,0,0.9);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        text-shadow: 0 1px 2px black;
-        white-space: nowrap;
-        pointer-events: none;
-    }
-
-    /* Event - PRESTIGE COLLECTOR */
-    .fx-holo-event {
-        position: relative;
-        border: 1px solid rgba(217, 119, 6, 0.6) !important;
-        background: radial-gradient(circle at 100% 100%, #451a03 0%, #0a0500 60%);
-        box-shadow: 0 0 15px rgba(245, 158, 11, 0.1);
-        overflow: hidden;
-        clip-path: none !important;
-        border-radius: 6px;
-        z-index: 10;
-    }
+    .fx-holo-event { position: relative; border: 1px solid rgba(217, 119, 6, 0.6) !important; background: radial-gradient(circle at 100% 100%, #451a03 0%, #0a0500 60%); box-shadow: 0 0 15px rgba(245, 158, 11, 0.1); overflow: hidden; clip-path: none !important; border-radius: 6px; z-index: 10; }
     .fx-holo-event.tech-border::before { clip-path: none !important; }
     .fx-holo-event.tech-border::after { display: none !important; }
+    .fx-holo-event::before { content: ''; position: absolute; top: 0; left: -150%; width: 100%; height: 100%; background: linear-gradient(110deg, transparent 40%, rgba(251, 191, 36, 0.1) 45%, rgba(255, 255, 255, 0.5) 50%, rgba(251, 191, 36, 0.1) 55%, transparent 60%); transform: skewX(-25deg); animation: prestige-sheen 6s infinite ease-in-out; pointer-events: none; z-index: 2; mix-blend-mode: overlay; }
+    @keyframes prestige-sheen { 0%, 30% { left: -150%; opacity: 0; } 40% { opacity: 1; } 60% { left: 150%; opacity: 1; } 100% { left: 150%; opacity: 0; } }
+    .fx-holo-event::after { content: 'EVENT'; position: absolute; top: 14px; right: -30px; background: linear-gradient(to bottom, #fcd34d 0%, #d97706 100%); color: #451a03; font-family: "Black Ops One", cursive; font-size: 8px; font-weight: 900; letter-spacing: 2px; padding: 5px 30px; transform: rotate(45deg); z-index: 20; box-shadow: 0 2px 8px rgba(0,0,0,0.5); border: 1px solid rgba(255, 255, 255, 0.4); text-shadow: none; white-space: nowrap; pointer-events: none; }
 
-    .fx-holo-event::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -150%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(110deg, transparent 40%, rgba(251, 191, 36, 0.1) 45%, rgba(255, 255, 255, 0.5) 50%, rgba(251, 191, 36, 0.1) 55%, transparent 60%);
-        transform: skewX(-25deg);
-        animation: prestige-sheen 6s infinite ease-in-out;
-        pointer-events: none;
-        z-index: 2;
-        mix-blend-mode: overlay;
-    }
-
-    @keyframes prestige-sheen {
-        0%, 30% { left: -150%; opacity: 0; }
-        40% { opacity: 1; }
-        60% { left: 150%; opacity: 1; }
-        100% { left: 150%; opacity: 0; }
-    }
-
-    .fx-holo-event::after {
-        content: 'EVENT';
-        position: absolute;
-        top: 14px;
-        right: -30px;
-        background: linear-gradient(to bottom, #fcd34d 0%, #d97706 100%);
-        color: #451a03;
-        font-family: "Black Ops One", cursive;
-        font-size: 8px;
-        font-weight: 900;
-        letter-spacing: 2px;
-        padding: 5px 30px;
-        transform: rotate(45deg);
-        z-index: 20;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.5);
-        border: 1px solid rgba(255, 255, 255, 0.4);
-        text-shadow: none;
-        white-space: nowrap;
-        pointer-events: none;
-    }
-
-    /* Table styles */
     .compare-table { width: 100%; border-collapse: separate; border-spacing: 0; }
     .compare-table th, .compare-table td { padding: 12px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.05); }
     .compare-table th:first-child, .compare-table td:first-child { text-align: left; padding-left: 16px; border-right: 1px solid rgba(255,255,255,0.05); background: rgba(15, 23, 42, 0.5); position: sticky; left: 0; z-index: 10; }
@@ -228,14 +115,55 @@
         amber: { hex: '#f59e0b', label: 'themeDesert' }
     };
 
+    // STAT RULES DEFINED BY USER
+    const STAT_RULES = {
+        Mobility: { max: 35, map: { "Very Fast": 35, "Fast": 30, "Normal": 25, "Slow": 20, "Very Slow": 10 } },
+        Accuracy: { max: 35, map: { "Very High": 35, "High": 30, "Medium": 25, "Low": 20, "Aucune": 0, "None": 0, "N/A": 0 } },
+        Visibility: { max: 50, map: { "Very High": 50, "High": 40, "Medium": 30, "Low": 20 } },
+        Size: { max: 20, min: -20, map: { "Very Large": 20, "Large": 10, "Medium": 0, "Small": -10, "Tiny": -20 } },
+        Angled: { max: 25, map: { "High": 25, "Medium": 15, "Low": 5, "None": 0, "No": 0, "Yes": 15 } } 
+    };
+
+    // CONTEXTUAL DESCRIPTIONS
+    const STAT_DESCRIPTIONS = {
+        Armor: {
+            fr: "Si Puissance = Blindage : 50% de pénétration. Si Puissance > Blindage : 100% de pénétration. -10% par rang inférieur.",
+            en: "If Firepower = Armor: 50% chance of pen. If Firepower > Armor: 100% chance of pen. -10% for each lower class."
+        },
+        Firepower: {
+            fr: "Comparé au Blindage ennemi : Égal = 50% de pénétration, Supérieur = 100%, Inférieur = -10% par rang.",
+            en: "Compared to Armor: Equal = 50% chance of pen, Greater = 100%, Lesser = -10% per class."
+        },
+        Mobility: {
+            fr: "Chance de base de se déplacer (relocate)",
+            en: "Base chance of relocating"
+        },
+        Accuracy: {
+            fr: "Chance de base de toucher la cible",
+            en: "Base chance of hitting target"
+        },
+        Visibility: {
+            fr: "Chance de base de repérer (spotting)",
+            en: "Base chance of spotting"
+        },
+        Size: {
+            fr: "Modificateur de chance d'être touché (incoming hit)",
+            en: "Incoming hit chance modifier"
+        },
+        Angled: {
+            fr: "Chance de ricochet (blindage incliné)",
+            en: "Ricochet chance (armor angle)"
+        }
+    };
+
     const TRANSLATIONS = {
       fr: {
-        appTitle: "Tankora DB", garage: "Garage", compare: "Comparer", details: "Détails", dropRates: "Taux de drop", dropProbability: "Probabilités d'obtention", searchPlaceholder: "Rechercher...", allNations: "Toutes nations", allAges: "Toutes époques", allTiers: "Tous tiers", collected: "Acquis", myTanks: "Mes chars", noResults: "Aucun char ne correspond à ces critères.", checkSpelling: "Essayez de vérifier l'orthographe.", bestFull: "Meilleur", addToGarage: "Ajouter au garage", removeFromGarage: "Retirer du garage", selected: "Sélectionné", size: "Taille", reset: "Réinitialiser", condition: "État", instances: "ex.", totalVehicles: "Véhicules total", uniqueModels: "Modèles uniques", addAnother: "Ajouter", credits: <React.Fragment>All rights reserved to the creator of the Discord bot <span className={`font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-white uppercase tracking-widest hover:brightness-110 transition-colors`}>Qwirdle</span></React.Fragment>, supplyDrop: "Ravitaillement", openSupply: "Ouvrir caisse", statsReport: "Rapport de Progression", statsWW2Only: "Stats PGM-SGM", timerReady: "J'AI WORK !", timerRunning: "PROCHAIN", timerCancel: "Annuler", filterStatus: "Statut", statusAll: "Tous les chars", statusOwned: "Acquis", statusMissing: "Manquants", statusDuplicates: "Doublons", salvage: "Salvage (Épave)", damaged: "Damaged (Endommagé)", worn: "Worn (Usé)", field_ready: "Field Ready (Opérationnel)", parade_ready: "Parade Ready (Défilé)", factory_new: "Factory New (Neuf)", armor: "Blindage", firepower: "Puissance de feu", mobility: "Mobilité", accuracy: "Précision", visibility: "Visibilité", stabilizer: "Stabilisateur", thermal: "Thermique", nightVision: "Vision nocturne", era: "ERA", aps: "APS", autoloader: "Chargeur auto", autocannon: "Autocannon", protectedAmmo: "Munitions protégées", rangefinder: "Télémètre", atgm_p: "ATGM (P)", atgm_s: "ATGM (S)", characteristic: "Caractéristique", nation: "Nation", age: "Époque", rarity: "Tier/Rareté", remove: "Retirer", yes: "Oui", no: "Non", selectTanks: "Sélectionnez des chars pour commencer la comparaison.", dropNote: "Taux officiels définis pour le jeu.",
+        appTitle: "Tankora DB", garage: "Garage", compare: "Comparer", details: "Détails", dropRates: "Taux de drop", dropProbability: "Probabilités d'obtention", searchPlaceholder: "Rechercher...", allNations: "Toutes nations", allAges: "Toutes époques", allTiers: "Tous tiers", collected: "Acquis", myTanks: "Mes chars", noResults: "Aucun char ne correspond à ces critères.", checkSpelling: "Essayez de vérifier l'orthographe.", bestFull: "Meilleur", addToGarage: "Ajouter au garage", removeFromGarage: "Retirer du garage", selected: "Sélectionné", size: "Taille", reset: "Réinitialiser", condition: "État", instances: "ex.", totalVehicles: "Véhicules total", uniqueModels: "Modèles uniques", addAnother: "Ajouter", credits: <React.Fragment>All rights reserved to the creator of the Discord bot <span className={`font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-white uppercase tracking-widest hover:brightness-110 transition-colors`}>Qwirdle</span></React.Fragment>, supplyDrop: "Ravitaillement", openSupply: "Ouvrir caisse", statsReport: "Rapport de Progression", statsWW2Only: "Stats PGM-SGM", timerReady: "J'AI WORK !", timerRunning: "PROCHAIN", timerCancel: "Annuler", filterStatus: "Statut", statusAll: "Tous les chars", statusOwned: "Acquis", statusMissing: "Manquants", statusDuplicates: "Doublons", salvage: "Salvage (Épave)", damaged: "Damaged (Endommagé)", worn: "Worn (Usé)", field_ready: "Field Ready (Opérationnel)", parade_ready: "Parade Ready (Défilé)", factory_new: "Factory New (Neuf)", armor: "Blindage", firepower: "Puissance de feu", mobility: "Mobilité", accuracy: "Précision", visibility: "Visibilité", angled: "Angle (Blindage)", stabilizer: "Stabilisateur", thermal: "Thermique", nightVision: "Vision nocturne", era: "ERA", aps: "APS", autoloader: "Chargeur auto", autocannon: "Autocannon", protectedAmmo: "Munitions protégées", rangefinder: "Télémètre", atgm_p: "ATGM (P)", atgm_s: "ATGM (S)", characteristic: "Caractéristique", nation: "Nation", age: "Époque", rarity: "Tier/Rareté", remove: "Retirer", yes: "Oui", no: "Non", selectTanks: "Sélectionnez des chars pour commencer la comparaison.", dropNote: "Taux officiels définis pour le jeu.",
         viewMode: "Vue", compactView: "Liste", cardView: "Cartes", exportData: "Sauvegarder", importData: "Charger", fileError: "Fichier invalide", dataManagement: "Gestion des données", sortBy: "Trier par", sortNameAsc: "Nom (A-Z)", sortNameDesc: "Nom (Z-A)", sortTierAsc: "Tier (Croissant)", sortTierDesc: "Tier (Décroissant)", sortNation: "Nation", advancedFilters: "Filtres Avancés", toastSaved: "Sauvegarde effectuée !", toastLoaded: "Sauvegarde chargée !", toastAdded: "ajouté au garage !", toastRemoved: "retiré du garage.", distribution: "Répartition par Nation", cleanDuplicates: "Nettoyer doublons", confirmClean: "Êtes-vous sûr de vouloir supprimer tous les doublons ? Seul le meilleur état de chaque char sera conservé.", cleanSuccess: "Doublons nettoyés avec succès !",
         theme: "Thème", themeStandard: "Standard (Émeraude)", themeSoviet: "Soviétique (Rouge)", themeNATO: "OTAN (Bleu)", themeDesert: "Désert (Ambre)"
       },
       en: {
-        appTitle: "Tankora DB", garage: "Garage", compare: "Compare", details: "Details", dropRates: "Drop Rates", dropProbability: "Drop Probability", searchPlaceholder: "Search for a tank...", allNations: "All nations", allAges: "All ages", allTiers: "All tiers", collected: "Collected", myTanks: "My tanks", noResults: "No tanks match these criteria.", checkSpelling: "Try checking your spelling.", addToGarage: "Add to garage", removeFromGarage: "Remove from garage", selected: "Selected", size: "Size", reset: "Reset", condition: "Condition", instances: "ex.", totalVehicles: "Total vehicles", uniqueModels: "Unique models", addAnother: "Add", credits: <React.Fragment>All rights reserved to the creator of the Discord bot <span className={`font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-white uppercase tracking-widest hover:brightness-110 transition-colors`}>Qwirdle</span></React.Fragment>, supplyDrop: "Supply Drop", openSupply: "Open Crate", statsReport: "Progression Report", timerReady: "I WORKED!", timerRunning: "NEXT", timerCancel: "Cancel", filterStatus: "Status", statusAll: "All tanks", statusOwned: "Collected", statusMissing: "Missing", statusDuplicates: "Duplicates", salvage: "Salvage", damaged: "Damaged", worn: "Worn", field_ready: "Field Ready", parade_ready: "Parade Ready", factory_new: "Factory New", armor: "Armor", firepower: "Firepower", mobility: "Mobility", accuracy: "Accuracy", visibility: "Visibility", stabilizer: "Stabilizer", thermal: "Thermal", nightVision: "Night vision", era: "ERA", aps: "APS", autoloader: "Autoloader", autocannon: "Autocannon", protectedAmmo: "Protected ammo", rangefinder: "Rangefinder", atgm_p: "ATGM (P)", atgm_s: "ATGM (S)", characteristic: "Characteristic", nation: "Nation", age: "Age", rarity: "Tier/rarity", remove: "Remove", yes: "Yes", no: "No", selectTanks: "Select tanks to start comparing.", dropNote: "Official drop rates defined for the game.",
+        appTitle: "Tankora DB", garage: "Garage", compare: "Compare", details: "Details", dropRates: "Drop Rates", dropProbability: "Drop Probability", searchPlaceholder: "Search for a tank...", allNations: "All nations", allAges: "All ages", allTiers: "All tiers", collected: "Collected", myTanks: "My tanks", noResults: "No tanks match these criteria.", checkSpelling: "Try checking your spelling.", addToGarage: "Add to garage", removeFromGarage: "Remove from garage", selected: "Selected", size: "Size", reset: "Reset", condition: "Condition", instances: "ex.", totalVehicles: "Total vehicles", uniqueModels: "Unique models", addAnother: "Add", credits: <React.Fragment>All rights reserved to the creator of the Discord bot <span className={`font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-white uppercase tracking-widest hover:brightness-110 transition-colors`}>Qwirdle</span></React.Fragment>, supplyDrop: "Supply Drop", openSupply: "Open Crate", statsReport: "Progression Report", timerReady: "I WORKED!", timerRunning: "NEXT", timerCancel: "Cancel", filterStatus: "Status", statusAll: "All tanks", statusOwned: "Collected", statusMissing: "Missing", statusDuplicates: "Duplicates", salvage: "Salvage", damaged: "Damaged", worn: "Worn", field_ready: "Field Ready", parade_ready: "Parade Ready", factory_new: "Factory New", armor: "Armor", firepower: "Firepower", mobility: "Mobility", accuracy: "Accuracy", visibility: "Visibility", angled: "Armor Angle", stabilizer: "Stabilizer", thermal: "Thermal", nightVision: "Night vision", era: "ERA", aps: "APS", autoloader: "Autoloader", autocannon: "Autocannon", protectedAmmo: "Protected ammo", rangefinder: "Rangefinder", atgm_p: "ATGM (P)", atgm_s: "ATGM (S)", characteristic: "Characteristic", nation: "Nation", age: "Age", rarity: "Tier/rarity", remove: "Remove", yes: "Yes", no: "No", selectTanks: "Select tanks to start comparing.", dropNote: "Official drop rates defined for the game.",
         viewMode: "View", compactView: "List", cardView: "Cards", exportData: "Save", importData: "Load", fileError: "Invalid file", dataManagement: "Data Management", sortBy: "Sort by", sortNameAsc: "Name (A-Z)", sortNameDesc: "Name (Z-A)", sortTierAsc: "Tier (Low to High)", sortTierDesc: "Tier (High to Low)", sortNation: "Nation", advancedFilters: "Advanced Filters", toastSaved: "Save successful!", toastLoaded: "Save loaded!", toastAdded: "added to garage!", toastRemoved: "removed from garage.", distribution: "Nation Distribution", cleanDuplicates: "Clean Duplicates", confirmClean: "Are you sure you want to remove all duplicates? Only the best condition of each tank will be kept.", cleanSuccess: "Duplicates cleaned successfully!",
         theme: "Theme", themeStandard: "Standard (Emerald)", themeSoviet: "Soviet (Red)", themeNATO: "NATO (Blue)", themeDesert: "Desert (Amber)"
       }
@@ -640,7 +568,6 @@ M47 Patton 331,Austria,Cold War,Event,Medium,Medium,High,Medium,Normal,Medium,Me
 Tankora-72,Soviet Union,Modern,Event,Heavy,Medium,High,Medium,Fast,High,Medium,No,Yes,No,No,Yes,Yes,No,No,No,No,No
 T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Medium,Fast,High,Medium,No,No,No,No,No,No,No,No,No,No,No
 `;
-
     // --- UTILS ---
     const generateId = (tank) => {
         if (!tank || !tank.Name) return `unknown_${Math.random().toString(36).substr(2, 9)}`;
@@ -675,6 +602,10 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
           result.push(current.trim());
           const obj = {};
           headers.forEach((header, i) => { obj[header] = result[i] || ''; });
+          
+          // Data patch for missing columns if any
+          if (!obj.Angled) obj.Angled = 'Medium';
+          
           obj.id = generateId(obj); 
           return obj;
         });
@@ -1056,14 +987,14 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
         );
     };
     
-    // NEW COMPARISON TABLE COMPONENT - NEUTRAL STYLE
     const ComparisonTable = ({ compareList, getStatValue, getStatColor, translate, tData, lang, theme }) => {
         const stats = [
              { label: 'armor', key: 'Armor' },
              { label: 'firepower', key: 'Firepower' },
              { label: 'mobility', key: 'Mobility' },
              { label: 'accuracy', key: 'Accuracy' },
-             { label: 'visibility', key: 'Visibility' }
+             { label: 'visibility', key: 'Visibility' },
+             { label: 'angled', key: 'Angled' }
         ];
 
         const techs = [
@@ -1096,7 +1027,6 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                          </tr>
                      </thead>
                      <tbody>
-                         {/* STATS */}
                          <tr className="bg-slate-800/50"><td colSpan={compareList.length + 1} className="p-2 text-xs font-bold text-slate-500 uppercase tracking-widest pl-4 sticky left-0 z-20 bg-slate-900/90 backdrop-blur-sm border-r border-white/10">Performance</td></tr>
                          {stats.map(stat => {
                              return (
@@ -1105,8 +1035,9 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                                          <span className="truncate">{translate(stat.label)}</span>
                                      </td>
                                      {compareList.map(tank => {
-                                         const val = getStatValue(tank[stat.key]);
-                                         const displayVal = lang === 'fr' ? translateData(tank[stat.key], stat.key, lang) : tank[stat.key];
+                                         const raw = tank[stat.key];
+                                         const val = getStatValue(raw, stat.key);
+                                         const displayVal = lang === 'fr' ? translateData(raw, stat.key, lang) : raw;
                                          
                                          return (
                                              <td key={`${tank.id}-${stat.key}`} className="p-3 text-center align-middle">
@@ -1120,7 +1051,6 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                              );
                          })}
 
-                         {/* TECHS */}
                          <tr className="bg-slate-800/50"><td colSpan={compareList.length + 1} className="p-2 text-xs font-bold text-slate-500 uppercase tracking-widest pl-4 sticky left-0 z-20 bg-slate-900/90 backdrop-blur-sm border-r border-white/10">Technologies</td></tr>
                          {techs.map(tech => (
                              <tr key={tech.key} className="border-b border-white/5 hover:bg-white/5 transition-colors">
@@ -1143,14 +1073,34 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
         );
     };
 
-    const getStatValue = (val) => {
+    const getRealStatValue = (val, type) => {
+        if (!val) return 0;
+        if (STAT_RULES[type] && STAT_RULES[type].map[val] !== undefined) {
+            return STAT_RULES[type].map[val];
+        }
+        return null;
+    };
+
+    const getStatValue = (val, type) => {
       if (!val) return 0;
+      
+      if (STAT_RULES[type]) {
+          const rule = STAT_RULES[type];
+          const realVal = rule.map[val];
+          if (realVal !== undefined) {
+              if (type === 'Size') {
+                  return ((realVal + 20) / 40) * 100;
+              }
+              return (realVal / rule.max) * 100;
+          }
+      }
+
       const v = val.toLowerCase();
       if (v.includes('very high') || v.includes('very heavy') || v.includes('very fast')) return 100;
-      if (v.includes('high') || v.includes('heavy') || v.includes('fast')) return 75;
-      if (v.includes('medium') || v.includes('normal')) return 50;
-      if (v.includes('low') || v.includes('light') || v.includes('slow')) return 25;
-      if (v.includes('very low') || v.includes('very light') || v.includes('small arms') || v.includes('tiny')) return 10;
+      if (v.includes('high') || v.includes('heavy') || v.includes('fast')) return 80;
+      if (v.includes('medium') || v.includes('normal')) return 60;
+      if (v.includes('low') || v.includes('light') || v.includes('slow')) return 40;
+      if (v.includes('very low') || v.includes('very light') || v.includes('small arms') || v.includes('tiny')) return 20;
       return 0;
     };
 
@@ -1214,19 +1164,30 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
     };
 
     const StatBar = ({ label, value, rawValue, icon: Icon, lang, statKey }) => {
-      const numValue = getStatValue(rawValue);
+      const numValue = getStatValue(rawValue, statKey);
       const displayValue = lang === 'fr' ? translateData(rawValue, statKey, lang) : rawValue;
-      const segments = Math.round(numValue / 10);
+      const realPercent = getRealStatValue(rawValue, statKey);
+      
+      const showPercent = realPercent !== null;
+      const percentSign = statKey === 'Size' && realPercent > 0 ? '+' : '';
+      const percentText = showPercent ? `(${percentSign}${realPercent}%)` : '';
+      
+      const description = STAT_DESCRIPTIONS[statKey] ? STAT_DESCRIPTIONS[statKey][lang] : '';
+      const tooltipText = description ? `${label}: ${description}` : label;
+
       return (
-        <div className="mb-2.5">
-          <div className="flex justify-between items-center text-[10px] text-slate-400 mb-1 uppercase tracking-wider font-semibold">
+        <div className="mb-2.5" title={tooltipText}>
+          <div className="flex justify-between items-center text-[10px] text-slate-400 mb-1 uppercase tracking-wider font-semibold cursor-help">
             <span className="flex items-center gap-1.5"><Icon size={12} className="text-slate-500" /> {label}</span>
-            <span className="font-bold text-slate-200">{displayValue}</span>
+            <span className="font-bold text-slate-200">
+                {displayValue} <span className="text-slate-500 ml-1 font-mono">{percentText}</span>
+            </span>
           </div>
-          <div className="h-2 w-full bg-slate-800/50 flex gap-0.5 p-0.5 border border-white/5 rounded-sm">
-            {[...Array(10)].map((_, i) => (
-              <div key={i} className={`flex-1 rounded-[1px] transition-all duration-500 ${i < segments ? getStatColor(numValue) : 'bg-slate-700/20'}`} style={{ opacity: i < segments ? 1 : 0.3 }}></div>
-            ))}
+          <div className="h-2 w-full bg-slate-800/50 flex gap-0.5 p-0.5 border border-white/5 rounded-sm overflow-hidden">
+             <div 
+                className={`h-full rounded-[1px] transition-all duration-1000 ease-out ${getStatColor(numValue)}`} 
+                style={{ width: `${Math.max(5, numValue)}%` }}
+             ></div>
           </div>
         </div>
       );
@@ -1242,7 +1203,6 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
       );
     };
     
-    // Supply Drop Modal
     const SupplyDropModal = ({ isOpen, onClose, onOpenDrop, isOpening, dropResult, lang }) => {
       if (!isOpen) return null;
       return (
@@ -1284,9 +1244,6 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
       );
     };
 
-    // ==========================================
-    // 4. PROFILE MODAL
-    // ==========================================
     const ProfileModal = ({ isOpen, onClose, stats, lang, tanks, collection, setCollection, translate, addToast }) => {
       const [activeEra, setActiveEra] = useState('All');
       
@@ -1302,7 +1259,6 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
           counts[key].total++;
         });
         Object.keys(collection).forEach(id => {
-          // Changed comparison to be string-safe
           const tank = tanks.find(t => String(t.id) === String(id));
           if (tank && tank[groupKey] && counts[tank[groupKey]]) {
              if (activeEra !== 'All' && tank.Age !== activeEra) return;
@@ -1316,7 +1272,6 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
       const ageStats = getGroupStats('Age').sort((a, b) => getAgeRank(a.label) - getAgeRank(b.label));
       const tierStats = getGroupStats('Rarity').sort((a, b) => getTierRank(a.label) - getTierRank(b.label));
       
-      // Data for Pie Chart
       const pieData = nationStats.slice(0, 5).map((stat, i) => ({
           label: translateData(stat.label, '', lang),
           value: stat.owned,
@@ -1329,7 +1284,6 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
             Object.keys(collection).forEach(key => {
                 const instances = collection[key];
                 if (instances && instances.length > 0) {
-                    // Find best condition based on rank
                     const best = instances.reduce((prev, current) => {
                         return (CONDITIONS[current].rank > CONDITIONS[prev].rank) ? current : prev;
                     });
@@ -1362,42 +1316,30 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
           reader.onload = (e) => {
               const content = e.target.result;
 
-              // SECURITY: Strict input validation for JSON import
               if (file.name.endsWith('.json')) {
                   try {
                       const imported = JSON.parse(content);
                       const cleanCollection = {};
-                      
-                      // Validate structure: must be an object
                       if (typeof imported === 'object' && imported !== null) {
-                          // Iterate through keys and validate
                           Object.keys(imported).forEach(key => {
-                              // Ensure tank ID exists in database (simple check: if we have tanks)
-                              // Note: We can't strictly validate ID against tanks array here easily without prop drilling, 
-                              // but filtering out non-array values and invalid conditions is a huge security win.
-                              
                               if (Array.isArray(imported[key])) {
-                                  // Filter to only include valid conditions
                                   const validConditions = imported[key].filter(c => CONDITIONS[c]);
-                                  
                                   if (validConditions.length > 0) {
                                       cleanCollection[key] = validConditions;
                                   }
                               }
                           });
-                          
                           setCollection(cleanCollection);
                           addToast(translate('toastLoaded'));
                       } else {
-                          alert(translate('fileError'));
+                          addToast(translate('fileError'));
                       }
                   } catch (err) {
-                      alert(translate('fileError'));
+                      addToast(translate('fileError'));
                   }
                   return;
               }
 
-              // Check if TXT (Discord Bot export) - Basic parsing with sanity check
               if (file.name.endsWith('.txt')) {
                   let newCollection = {}; 
                   const lines = content.split('\n');
@@ -1414,8 +1356,6 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
 
                       const parts = l.split(' - ');
                       if (parts.length >= 2) {
-                          // Sanitization: Escape potential HTML is handled by React rendering,
-                          // but matching names against our DB ensures no random strings enter the system.
                           const name = parts[0].trim();
                           const rawCond = parts[1].trim();
 
@@ -1457,7 +1397,7 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                   return;
               }
               
-              alert(translate('fileError'));
+              addToast(translate('fileError'));
           };
           reader.readAsText(file);
       };
@@ -1479,7 +1419,6 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                 </div>
               </div>
               
-              {/* PIE CHART */}
               {stats.unique > 0 && (
                   <div className="mb-6 w-full flex flex-col items-center">
                       <h4 className="text-[10px] text-slate-500 uppercase font-bold mb-2">{translate('distribution')}</h4>
@@ -1540,28 +1479,15 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
       )
     };
 
-    // ==========================================
-    // 5. APPLICATION
-    // ==========================================
-
     function TankApp() {
-      // OPTIMIZATION: Use static initial data
       const [tanks, setTanks] = useState(INITIAL_TANKS);
       
-      // AUTO-CLEANUP: Remove invalid IDs from collection on load
-      // This prevents UI crashes if an ID doesn't exist anymore or changed format
       const [collection, setCollection] = useState(() => { 
           try { 
               const saved = localStorage.getItem('tankCollection'); 
               const parsed = saved ? JSON.parse(saved) : {};
-              
-              // Validate keys against current tank DB
               const validCollection = {};
               const currentIds = new Set(INITIAL_TANKS.map(t => t.id));
-              
-              // Map legacy IDs (name only) to new IDs
-              // We create a map of "legacy_id" -> [list of matching new IDs]
-              // Example: "t_80" -> ["t_80_soviet_union_ww1_ww2_tier_ii", "t_80_soviet_union_modern_tier_iv"]
               const legacyMap = {};
               INITIAL_TANKS.forEach(tank => {
                   const legId = generateLegacyId(tank.Name);
@@ -1570,29 +1496,19 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
               });
 
               Object.keys(parsed).forEach(key => {
-                  // Case 1: ID is valid and exists in current DB (New format already)
                   if (currentIds.has(key)) {
                       validCollection[key] = parsed[key];
-                  } 
-                  // Case 2: ID is legacy (Old format), try to migrate
-                  else if (legacyMap[key]) {
-                      // If legacy ID matches multiple new IDs (like T-80), we give the item to ALL matching tanks
-                      // This is generous but prevents data loss. The user can then delete the one they don't want.
-                      // For T-80, this means they will get both the WW2 and Modern version if they had "t_80".
+                  } else if (legacyMap[key]) {
                       legacyMap[key].forEach(newId => {
-                           // Merge with existing if any (unlikely during init but good practice)
                            const existing = validCollection[newId] || [];
                            validCollection[newId] = [...existing, ...parsed[key]];
                       });
-                  }
-                  // Case 3: Legacy Index-based ID (Numeric) - FIX FOR PREVIOUS VERSION
-                  else if (!isNaN(key) && INITIAL_TANKS[parseInt(key)]) {
+                  } else if (!isNaN(key) && INITIAL_TANKS[parseInt(key)]) {
                        const newId = INITIAL_TANKS[parseInt(key)].id;
                        const existing = validCollection[newId] || [];
                        validCollection[newId] = [...existing, ...parsed[key]];
                   }
               });
-              
               return validCollection;
           } catch (e) { return {}; } 
       });
@@ -1603,15 +1519,11 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
       const [showDropRates, setShowDropRates] = useState(false);
       const [lang, setLang] = useState('fr');
       const [theme, setTheme] = useState(() => localStorage.getItem('tankoraTheme') || 'emerald');
-
-      // New State for Features
       const [showSupply, setShowSupply] = useState(false);
       const [isOpeningDrop, setIsOpeningDrop] = useState(false);
       const [dropResult, setDropResult] = useState(null);
       const [showProfile, setShowProfile] = useState(false);
-      
       const [visualsEnabled, setVisualsEnabled] = useState(true);
-
       const [visibleCount, setVisibleCount] = useState(20);
       const [viewMode, setViewMode] = useState('grid');
       const [sortBy, setSortBy] = useState('none');
@@ -1626,8 +1538,8 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
           autocannon: false,
           rangefinder: false,
           protectedAmmo: false,
-          missile: false, // ATGM (P)
-          missile_s: false // ATGM (S)
+          missile: false,
+          missile_s: false 
       });
       const [toasts, setToasts] = useState([]);
       const [showBackToTop, setShowBackToTop] = useState(false);
@@ -1656,8 +1568,6 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
         if (scrollHeight - scrollTop <= clientHeight * 1.5) { setVisibleCount(prev => prev + 20); } 
         if (scrollTop > 300) setShowBackToTop(true); else setShowBackToTop(false);
       };
-      
-      // Removed useEffect for CSV parsing since it's done statically
 
       const addTankInstance = (tankId, condition = null) => {
         const tank = tanks.find(t => t.id === tankId);
@@ -1715,7 +1625,17 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
           setSortBy('none');
       };
       useEffect(() => { const scanline = document.querySelector('.scanline'); if (scanline) scanline.style.display = visualsEnabled ? 'block' : 'none'; }, [visualsEnabled]);
-      const toggleCompare = (tank) => { if (compareList.find(t => t.Name === tank.Name)) { setCompareList(compareList.filter(t => t.Name !== tank.Name)); } else { if (compareList.length < 4) { setCompareList([...compareList, tank]); } else { alert(lang === 'fr' ? "Maximum 4 chars." : "Max 4 tanks."); } } };
+      const toggleCompare = (tank) => { 
+        if (compareList.find(t => t.Name === tank.Name)) { 
+          setCompareList(compareList.filter(t => t.Name !== tank.Name)); 
+        } else { 
+          if (compareList.length < 4) { 
+            setCompareList([...compareList, tank]); 
+          } else { 
+            addToast(lang === 'fr' ? "Maximum 4 chars." : "Max 4 tanks."); 
+          } 
+        } 
+      };
       
       const uniqueNations = useMemo(() => { const nations = new Set(tanks.map(t => t.Nation).filter(n => n && !n.match(/\d/) && n.length < 30)); return ['All', ...[...nations].sort()]; }, [tanks]);
       const uniqueAges = useMemo(() => { const ages = new Set(tanks.map(t => t.Age).filter(a => a && !a.match(/\d{3,}/) && a.length < 20)); return ['All', ...[...ages].sort()]; }, [tanks]);
@@ -1922,7 +1842,6 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                     const isCollected = instances.length > 0;
                     const isComparing = compareList.find(t => t.Name === tank.Name);
                     
-                    // Determine VFX class based on rarity
                     let fxClass = '';
                     if (tank.Rarity.includes('Tier V')) fxClass = 'fx-holo-gold';
                     if (tank.Rarity.includes('Prototype')) fxClass = 'fx-holo-proto';
@@ -1963,9 +1882,10 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                           <StatBar label={translate('armor')} rawValue={tank.Armor} icon={Icons.Shield} lang={lang} statKey="Armor" />
                           <StatBar label={translate('firepower')} rawValue={tank.Firepower} icon={Icons.Crosshair} lang={lang} statKey="Firepower" />
                           <StatBar label={translate('mobility')} rawValue={tank.Mobility} icon={Icons.Zap} lang={lang} statKey="Mobility" />
-                          <div className="grid grid-cols-2 gap-2 mt-4">
-                            <div className="bg-slate-900/60 p-2 rounded border border-white/5 flex flex-col items-center justify-center text-center"><span className="text-[10px] text-slate-500 mb-1">{translate('accuracy')}</span><span className={`text-xs font-bold ${getStatColor(getStatValue(tank.Accuracy)).replace('bg-', 'text-')}`}>{lang === 'fr' ? translateData(tank.Accuracy, 'Accuracy', lang) : tank.Accuracy}</span></div>
-                            <div className="bg-slate-900/60 p-2 rounded border border-white/5 flex flex-col items-center justify-center text-center"><span className="text-[10px] text-slate-500 mb-1">{translate('visibility')}</span><span className={`text-xs font-bold ${getStatColor(getStatValue(tank.Visibility)).replace('bg-', 'text-')}`}>{lang === 'fr' ? translateData(tank.Visibility, 'Visibility', lang) : tank.Visibility}</span></div>
+                          <div className="grid grid-cols-3 gap-2 mt-4">
+                            <div className="bg-slate-900/60 p-2 rounded border border-white/5 flex flex-col items-center justify-center text-center cursor-help" title={STAT_DESCRIPTIONS['Accuracy'][lang]}><span className="text-[10px] text-slate-500 mb-1 truncate w-full">{translate('accuracy')}</span><span className={`text-xs font-bold ${getStatColor(getStatValue(tank.Accuracy, 'Accuracy')).replace('bg-', 'text-')}`}>{lang === 'fr' ? translateData(tank.Accuracy, 'Accuracy', lang) : tank.Accuracy}</span><span className="text-[9px] text-slate-600 font-mono mt-0.5">{getRealStatValue(tank.Accuracy, 'Accuracy') ? `${getRealStatValue(tank.Accuracy, 'Accuracy')}%` : ''}</span></div>
+                            <div className="bg-slate-900/60 p-2 rounded border border-white/5 flex flex-col items-center justify-center text-center cursor-help" title={STAT_DESCRIPTIONS['Angled'][lang]}><span className="text-[10px] text-slate-500 mb-1 truncate w-full">{translate('angled')}</span><span className={`text-xs font-bold ${getStatColor(getStatValue(tank.Angled, 'Angled')).replace('bg-', 'text-')}`}>{lang === 'fr' ? translateData(tank.Angled, 'Angled', lang) : tank.Angled}</span><span className="text-[9px] text-slate-600 font-mono mt-0.5">{getRealStatValue(tank.Angled, 'Angled') ? `${getRealStatValue(tank.Angled, 'Angled')}%` : ''}</span></div>
+                            <div className="bg-slate-900/60 p-2 rounded border border-white/5 flex flex-col items-center justify-center text-center cursor-help" title={STAT_DESCRIPTIONS['Visibility'][lang]}><span className="text-[10px] text-slate-500 mb-1 truncate w-full">{translate('visibility')}</span><span className={`text-xs font-bold ${getStatColor(getStatValue(tank.Visibility, 'Visibility')).replace('bg-', 'text-')}`}>{lang === 'fr' ? translateData(tank.Visibility, 'Visibility', lang) : tank.Visibility}</span><span className="text-[9px] text-slate-600 font-mono mt-0.5">{getRealStatValue(tank.Visibility, 'Visibility') ? `${getRealStatValue(tank.Visibility, 'Visibility')}%` : ''}</span></div>
                           </div>
                           <div className="flex flex-wrap gap-1.5 mt-3">
                             {[{ label: 'stabilizer', val: tank.Stabilizer }, { label: 'thermal', val: tank['Thermal Vision'] }, { label: 'era', val: tank.ERA }, { label: 'atgm_p', val: tank['ATGM (P)'] }].map((tech, i) => (<BooleanBadge key={i} label={translate(tech.label)} value={tech.val} lang={lang} />))}
@@ -1974,7 +1894,10 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                         </div>
                         <div className="px-5 py-3 border-t border-white/5 bg-slate-900/40 flex justify-between items-center mt-auto group-hover:bg-slate-900/60 transition-colors">
                           <button onClick={() => toggleCompare(tank)} className={`text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5 transition-all active:scale-95 ${isComparing ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/30' : 'text-blue-400 bg-blue-500/10 hover:bg-blue-500/20'}`}>{isComparing ? <Icons.Check size={12} strokeWidth={3} /> : <Icons.Scale size={14} />}{isComparing ? translate('selected') : translate('compare')}</button>
-                          <span className="text-[10px] uppercase tracking-wider text-slate-500 font-medium bg-slate-800 px-2 py-1 rounded border border-white/5">{tData(tank.Size, 'Size')}</span>
+                          <span className="text-[10px] uppercase tracking-wider text-slate-500 font-medium bg-slate-800 px-2 py-1 rounded border border-white/5 flex items-center gap-1 cursor-help" title={STAT_DESCRIPTIONS['Size'][lang]}>
+                              {tData(tank.Size, 'Size')}
+                              {getRealStatValue(tank.Size, 'Size') !== null && <span className={`text-[9px] ${getRealStatValue(tank.Size, 'Size') > 0 ? 'text-red-400' : 'text-green-400'}`}>({getRealStatValue(tank.Size, 'Size') > 0 ? '+' : ''}{getRealStatValue(tank.Size, 'Size')}%)</span>}
+                          </span>
                         </div>
                       </div>
                     );
@@ -2036,7 +1959,7 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                                 const colors = ['#10b981', '#3b82f6', '#f59e0b', '#ef4444'];
                                 return (
                                   <div key={tank.id} className="absolute inset-0 flex justify-center items-center pointer-events-none">
-                                    <RadarChart size={280} color={colors[idx]} data={[{ label: 'ARM', value: getStatValue(tank.Armor) }, { label: 'FPOW', value: getStatValue(tank.Firepower) }, { label: 'ACC', value: getStatValue(tank.Accuracy) }, { label: 'MOB', value: getStatValue(tank.Mobility) }, { label: 'VIS', value: getStatValue(tank.Visibility) }]} />
+                                    <RadarChart size={280} color={colors[idx]} data={[{ label: 'ARM', value: getStatValue(tank.Armor, 'Armor') }, { label: 'FPOW', value: getStatValue(tank.Firepower, 'Firepower') }, { label: 'ACC', value: getStatValue(tank.Accuracy, 'Accuracy') }, { label: 'MOB', value: getStatValue(tank.Mobility, 'Mobility') }, { label: 'VIS', value: getStatValue(tank.Visibility, 'Visibility') }]} />
                                   </div>
                                 )
                               })}
@@ -2087,12 +2010,13 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                           <StatBar label={translate('armor')} rawValue={viewTank.Armor} icon={Icons.Shield} lang={lang} statKey="Armor" />
                           <StatBar label={translate('firepower')} rawValue={viewTank.Firepower} icon={Icons.Crosshair} lang={lang} statKey="Firepower" />
                           <StatBar label={translate('mobility')} rawValue={viewTank.Mobility} icon={Icons.Zap} lang={lang} statKey="Mobility" />
+                          <StatBar label={translate('angled')} rawValue={viewTank.Angled} icon={Icons.Target} lang={lang} statKey="Angled" />
                           <StatBar label={translate('accuracy')} rawValue={viewTank.Accuracy} icon={Icons.Target} lang={lang} statKey="Accuracy" />
                           <StatBar label={translate('visibility')} rawValue={viewTank.Visibility} icon={Icons.Eye} lang={lang} statKey="Visibility" />
                         </div>
-                        <div className="flex justify-center mt-6 mb-2"><RadarChart size={240} color={THEME_COLORS[theme].hex} data={[{ label: 'ARM', value: getStatValue(viewTank.Armor) }, { label: 'FPOW', value: getStatValue(viewTank.Firepower) }, { label: 'ACC', value: getStatValue(viewTank.Accuracy) }, { label: 'MOB', value: getStatValue(viewTank.Mobility) }, { label: 'VIS', value: getStatValue(viewTank.Visibility) }]} /></div>
+                        <div className="flex justify-center mt-6 mb-2"><RadarChart size={240} color={THEME_COLORS[theme].hex} data={[{ label: 'ARM', value: getStatValue(viewTank.Armor, 'Armor') }, { label: 'FPOW', value: getStatValue(viewTank.Firepower, 'Firepower') }, { label: 'ACC', value: getStatValue(viewTank.Accuracy, 'Accuracy') }, { label: 'MOB', value: getStatValue(viewTank.Mobility, 'Mobility') }, { label: 'VIS', value: getStatValue(viewTank.Visibility, 'Visibility') }]} /></div>
                       </div>
-                      <div className="bg-slate-900/50 p-4 rounded-2xl border border-white/5"><div className="flex justify-between items-center text-sm text-slate-300"><span>{translate('size')}</span><span className="font-bold text-white bg-slate-700 px-3 py-1 rounded-full">{tData(viewTank.Size, 'Size')}</span></div></div>
+                      <div className="bg-slate-900/50 p-4 rounded-2xl border border-white/5"><div className="flex justify-between items-center text-sm text-slate-300"><span>{translate('size')}</span><span className="font-bold text-white bg-slate-700 px-3 py-1 rounded-full flex items-center gap-2 cursor-help" title={STAT_DESCRIPTIONS['Size'][lang]}>{tData(viewTank.Size, 'Size')} {getRealStatValue(viewTank.Size, 'Size') !== null && <span className={`text-xs ${getRealStatValue(viewTank.Size, 'Size') > 0 ? 'text-red-400' : 'text-green-400'}`}>({getRealStatValue(viewTank.Size, 'Size') > 0 ? '+' : ''}{getRealStatValue(viewTank.Size, 'Size')}%)</span>}</span></div></div>
                       {collection[viewTank.id] && collection[viewTank.id].length > 0 && (<div className="bg-opacity-10 border border-opacity-20 p-4 rounded-2xl" style={{backgroundColor: `${THEME_COLORS[theme].hex}1A`, borderColor: `${THEME_COLORS[theme].hex}33`}}><h5 className="text-xs font-bold uppercase mb-3 flex items-center gap-2" style={{color: THEME_COLORS[theme].hex}}><Icons.Check size={14} /> {translate('collected')} (x{collection[viewTank.id].length})</h5><div className="flex flex-wrap gap-2">{collection[viewTank.id].map((cond, idx) => (<span key={idx} className={`px-2 py-1 rounded text-xs border font-medium ${CONDITIONS[cond] ? CONDITIONS[cond].color : ''}`}>{translate(cond)}</span>))}</div></div>)}
                     </div>
                     <div>
