@@ -100,8 +100,9 @@
     const { useState, useEffect, useMemo, useRef, useCallback } = React;
     
     // --- CONFIGURATION CLOUDINARY ---
-    const CLOUDINARY_CLOUD_NAME = "dulmuirvj"; 
-    const CLOUDINARY_FOLDER = "Tankora/tanks";
+    // Ancienne config (conservée pour référence ou supprimable)
+    // const CLOUDINARY_CLOUD_NAME = "dulmuirvj"; 
+    // const CLOUDINARY_FOLDER = "Tankora/tanks";
 
     // --- IMAGE HELPER ---
     
@@ -117,20 +118,19 @@
     const getTankImg = (tank) => {
         if (!tank || !tank.Name) return 'https://placehold.co/600x400/0f172a/475569?text=NO+DATA';
 
-        let imageUrl = '';
+        const baseUrl = "https://res.cloudinary.com/dulmuirvj/image/upload/v1771192570/";
+        let formattedName = tank.Name;
         
         if (IMAGE_EXCEPTIONS[tank.Name]) {
-             imageUrl = `https://res.cloudinary.com/${CLOUDINARY_CLOUD_NAME}/image/upload/${CLOUDINARY_FOLDER}/${tank.Age}/${tank.Nation}/${IMAGE_EXCEPTIONS[tank.Name]}.png`;
+             formattedName = IMAGE_EXCEPTIONS[tank.Name];
         } else {
-            let formattedName = tank.Name;
-            formattedName = formattedName.replace(/["']/g, "");
+            // Nettoyage standard du nom pour correspondre au format de fichier
+            formattedName = formattedName.replace(/["'()]/g, "");
             formattedName = formattedName.replace(/\//g, "");
             formattedName = formattedName.split(' ').join('_');
-            
-            imageUrl = `https://res.cloudinary.com/${CLOUDINARY_CLOUD_NAME}/image/upload/${CLOUDINARY_FOLDER}/${tank.Age}/${tank.Nation}/${formattedName}.png`;
         }
 
-        return imageUrl;
+        return `${baseUrl}${formattedName}.png`;
     };
 
     const CONDITIONS = {
