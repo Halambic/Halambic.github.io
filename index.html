@@ -101,7 +101,7 @@
     
     // --- CONFIGURATION CLOUDINARY ---
     const CLOUDINARY_CLOUD_NAME = "dulmuirvj"; 
-    const CLOUDINARY_FOLDER = ""; // VIDE POUR ACCES A LA RACINE
+    const CLOUDINARY_FOLDER = "Tankora/tanks";
 
     // --- IMAGE HELPER ---
     
@@ -117,18 +117,20 @@
     const getTankImg = (tank) => {
         if (!tank || !tank.Name) return 'https://placehold.co/600x400/0f172a/475569?text=NO+DATA';
 
-        let formattedName = "";
+        let imageUrl = '';
         
         if (IMAGE_EXCEPTIONS[tank.Name]) {
-             formattedName = IMAGE_EXCEPTIONS[tank.Name];
+             imageUrl = `https://res.cloudinary.com/${CLOUDINARY_CLOUD_NAME}/image/upload/${CLOUDINARY_FOLDER}/${tank.Age}/${tank.Nation}/${IMAGE_EXCEPTIONS[tank.Name]}.png`;
         } else {
-             // Respect de la casse, espaces -> _, pas de slashs/guillemets
-             formattedName = tank.Name.replace(/["']/g, "").replace(/\//g, "").split(' ').join('_');
+            let formattedName = tank.Name;
+            formattedName = formattedName.replace(/["']/g, "");
+            formattedName = formattedName.replace(/\//g, "");
+            formattedName = formattedName.split(' ').join('_');
+            
+            imageUrl = `https://res.cloudinary.com/${CLOUDINARY_CLOUD_NAME}/image/upload/${CLOUDINARY_FOLDER}/${tank.Age}/${tank.Nation}/${formattedName}.png`;
         }
-        
-        // URL à la RACINE du dossier d'upload
-        // https://res.cloudinary.com/dulmuirvj/image/upload/M1_Abrams.png
-        return `https://res.cloudinary.com/${CLOUDINARY_CLOUD_NAME}/image/upload/${formattedName}.png`;
+
+        return imageUrl;
     };
 
     const CONDITIONS = {
@@ -147,7 +149,6 @@
         amber: { hex: '#f59e0b', label: 'themeDesert' }
     };
     
-    // ... [STAT_RULES and STAT_DESCRIPTIONS remain the same] ...
     const STAT_RULES = {
         Mobility: { max: 35, map: { "Very Fast": 35, "Fast": 30, "Normal": 25, "Slow": 20, "Very Slow": 10 } },
         Accuracy: { max: 35, map: { "Very High": 35, "High": 30, "Medium": 25, "Low": 20, "Aucune": 0, "None": 0, "N/A": 0 } },
@@ -157,82 +158,27 @@
     };
 
     const STAT_DESCRIPTIONS = {
-        Armor: {
-            fr: "Si Blindage = Puissance : 50% de pénétration. Si Blindage < Puissance : 100%. Si Blindage > Puissance : -10% de pénétration par rang.",
-            en: "If Armor = Firepower: 50% pen chance. If Armor < Firepower: 100%. If Armor > Firepower: -10% pen chance per class."
-        },
-        Firepower: {
-            fr: "Si Puissance = Blindage : 50% de pénétration. Si Puissance > Blindage : 100%. Si Puissance < Blindage : -10% de pénétration par rang.",
-            en: "If Firepower = Armor: 50% pen chance. If Firepower > Armor: 100%. If Firepower < Armor: -10% pen chance per class."
-        },
-        Mobility: {
-            fr: "Chance de base de se déplacer (relocate)",
-            en: "Base chance of relocating"
-        },
-        Accuracy: {
-            fr: "Chance de base de toucher la cible",
-            en: "Base chance of hitting target"
-        },
-        Visibility: {
-            fr: "Chance de base de repérer (spotting)",
-            en: "Base chance of spotting"
-        },
-        Size: {
-            fr: "Modificateur de chance d'être touché (incoming hit)",
-            en: "Incoming hit chance modifier"
-        },
-        Angled: {
-            fr: "Chance de ricochet (blindage incliné)",
-            en: "Ricochet chance (armor angle)"
-        }
+        Armor: { fr: "Si Blindage = Puissance : 50% de pénétration. Si Blindage < Puissance : 100%. Si Blindage > Puissance : -10% de pénétration par rang.", en: "If Armor = Firepower: 50% pen chance. If Armor < Firepower: 100%. If Armor > Firepower: -10% pen chance per class." },
+        Firepower: { fr: "Si Puissance = Blindage : 50% de pénétration. Si Puissance > Blindage : 100%. Si Puissance < Blindage : -10% de pénétration par rang.", en: "If Firepower = Armor: 50% pen chance. If Firepower > Armor: 100%. If Firepower < Armor: -10% pen chance per class." },
+        Mobility: { fr: "Chance de base de se déplacer (relocate)", en: "Base chance of relocating" },
+        Accuracy: { fr: "Chance de base de toucher la cible", en: "Base chance of hitting target" },
+        Visibility: { fr: "Chance de base de repérer (spotting)", en: "Base chance of spotting" },
+        Size: { fr: "Modificateur de chance d'être touché (incoming hit)", en: "Incoming hit chance modifier" },
+        Angled: { fr: "Chance de ricochet (blindage incliné)", en: "Ricochet chance (armor angle)" }
     };
     
-    // TECH DESCRIPTIONS
     const TECH_DESCRIPTIONS = {
-        Stabilizer: {
-            fr: "+10% de précision de base",
-            en: "+10% base accuracy"
-        },
-        Rangefinder: {
-            fr: "+15% de précision de base, +5% de chance de toucher après un tir",
-            en: "+15% base accuracy, +5% hit chance after firing"
-        },
-        Autoloader: {
-            fr: "+20% de chance de tirer à nouveau et augmente la précision après le premier tir",
-            en: "+20% chance to fire again and increase hit accuracy after firing once"
-        },
-        "Night Vision": {
-            fr: "Supprime tous les malus de combat nocturne pour ce char",
-            en: "Removes all debuffs affecting this tank from night battles"
-        },
-        "Thermal Vision": {
-            fr: "+20% de chance de repérage de base",
-            en: "+20% base spot chance"
-        },
-        APS: {
-            fr: "50% de chance d'annuler un ATGM entrant",
-            en: "All incoming ATGM's have a 50% chance of being negated"
-        },
-        ERA: {
-            fr: "La première pénétration subie en bataille est annulée",
-            en: "First penetration in a battle is negated"
-        },
-        "ATGM (P)": {
-            fr: "Une fois tous les 3 tours, tire un ATGM à très haute précision et puissance",
-            en: "Once every three turns, this tank fires an ATGM that has very high accuracy and very high firepower"
-        },
-        "ATGM (S)": {
-            fr: "Une fois tous les 5 tours, tire un ATGM à très haute précision et puissance",
-            en: "Once every five turns, this tank fires an ATGM that has very high accuracy and very high firepower"
-        },
-        "Protected Ammo": {
-             fr: "Réduit les chances d'explosion des munitions",
-             en: "Reduces ammo rack explosion chance"
-        },
-        Autocannon: {
-             fr: "Armement secondaire à tir rapide",
-             en: "Rapid fire secondary weapon"
-        }
+        Stabilizer: { fr: "+10% de précision de base", en: "+10% base accuracy" },
+        Rangefinder: { fr: "+15% de précision de base, +5% de chance de toucher après un tir", en: "+15% base accuracy, +5% hit chance after firing" },
+        Autoloader: { fr: "+20% de chance de tirer à nouveau et augmente la précision après le premier tir", en: "+20% chance to fire again and increase hit accuracy after firing once" },
+        "Night Vision": { fr: "Supprime tous les malus de combat nocturne pour ce char", en: "Removes all debuffs affecting this tank from night battles" },
+        "Thermal Vision": { fr: "+20% de chance de repérage de base", en: "+20% base spot chance" },
+        APS: { fr: "50% de chance d'annuler un ATGM entrant", en: "All incoming ATGM's have a 50% chance of being negated" },
+        ERA: { fr: "La première pénétration subie en bataille est annulée", en: "First penetration in a battle is negated" },
+        "ATGM (P)": { fr: "Une fois tous les 3 tours, tire un ATGM à très haute précision et puissance", en: "Once every three turns, this tank fires an ATGM that has very high accuracy and very high firepower" },
+        "ATGM (S)": { fr: "Une fois tous les 5 tours, tire un ATGM à très haute précision et puissance", en: "Once every five turns, this tank fires an ATGM that has very high accuracy and very high firepower" },
+        "Protected Ammo": { fr: "Réduit les chances d'explosion des munitions", en: "Reduces ammo rack explosion chance" },
+        Autocannon: { fr: "Armement secondaire à tir rapide", en: "Rapid fire secondary weapon" }
     };
 
     const TRANSLATIONS = {
@@ -1684,9 +1630,6 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
       const [filterAge, setFilterAge] = useState('All');
       const [filterRarity, setFilterRarity] = useState('All');
       const [ownershipFilter, setOwnershipFilter] = useState('all');
-      
-      // AJOUT DU STATE DEBUG
-      const [debugMode, setDebugMode] = useState(false);
 
       const addToast = (message) => {
           const id = Date.now();
@@ -1888,16 +1831,6 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                   </div>
                   <ThemeSelector currentTheme={theme} onThemeChange={setTheme} translate={translate} />
                   <DrawTimer lang={lang} theme={theme} />
-                  
-                  {/* BOUTON DEBUG */}
-                  <button 
-                    onClick={() => setDebugMode(!debugMode)} 
-                    className={`text-[10px] font-bold px-2 py-1 rounded border transition-all ${debugMode ? 'bg-red-900/50 text-red-300 border-red-500 animate-pulse' : 'bg-slate-800 text-slate-500 border-white/10 hover:text-slate-300'}`}
-                    title="Afficher les URLs des images pour diagnostic"
-                  >
-                    🔧 DEBUG
-                  </button>
-
                   <button onClick={() => setShowDropRates(true)} className="bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white p-2.5 rounded-full flex items-center justify-center transition-all border border-white/10 hover:border-white/20 hover:shadow-lg hover:shadow-purple-500/20 active:scale-95" title={translate('dropRates')}><Icons.Percent size={20} /></button>
                   {compareList.length > 0 && (<button onClick={() => setShowCompare(true)} className="bg-blue-600 hover:bg-blue-500 text-white px-5 py-2.5 rounded-full flex items-center gap-2 text-sm font-semibold transition-all hover:shadow-[0_0_20px_rgba(37,99,235,0.5)] active:scale-95 animate-pulse"><Icons.Scale size={18} /> {translate('compare')} <span className="bg-white/20 px-1.5 py-0.5 rounded text-xs">{compareList.length}</span></button>)}
                 </div>
@@ -1986,7 +1919,6 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                     const instances = collection[tank.id] || [];
                     const isCollected = instances.length > 0;
                     const isComparing = compareList.find(t => t.Name === tank.Name);
-                    const imgUrl = getTankImg(tank);
                     
                     let fxClass = '';
                     if (tank.Rarity.includes('Tier V')) fxClass = 'fx-holo-gold';
@@ -2000,7 +1932,7 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                         {/* Image Section */}
                         <div className="relative w-full h-48 bg-black overflow-hidden border-b border-white/5">
                             <img 
-                                src={imgUrl} 
+                                src={getTankImg(tank)} 
                                 alt={tank.Name} 
                                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                                 onError={(e) => {
@@ -2018,13 +1950,6 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                                 </div>
                             </div>
                         </div>
-
-                        {/* DEBUG MODE DISPLAY */}
-                        {debugMode && (
-                          <div className="bg-red-900/90 text-white text-[8px] p-2 break-all font-mono border-b border-red-500 z-50 relative">
-                             URL: {imgUrl}
-                          </div>
-                        )}
 
                         <div className="p-5 pt-2 relative z-10 -mt-6">
                           <div className="flex justify-between items-end gap-4 mb-3">
