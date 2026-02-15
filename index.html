@@ -99,30 +99,36 @@
   <script type="text/babel">
     const { useState, useEffect, useMemo, useRef, useCallback } = React;
     
+    // --- CONFIGURATION CLOUDINARY ---
+    const CLOUDINARY_CLOUD_NAME = "dulmuirvj"; 
+    const CLOUDINARY_FOLDER = ""; // VIDE POUR ACCES A LA RACINE
+
     // --- IMAGE HELPER ---
-    // Fonction robuste pour transformer le nom du char en chemin d'accès complet selon la structure :
-    // tanks/tanks/{Age}/{Nation}/{nom_formate}.png
+    
+    const IMAGE_EXCEPTIONS = {
+        "Centaur III": "centaur_mk_iii",
+        "Churchill Mk IX": "churchill_mk_ix",
+        "Jagdpanzer IV/70": "Jagdpanzer_IV70",
+        "Centurion Mk 5/2": "Centurion_Mk_52",
+        "Centurion Mk 6/2": "Centurion_Mk_62",
+        "Chieftain Mk 3/3": "Chieftain_Mk_33"
+    };
+
     const getTankImg = (tank) => {
         if (!tank || !tank.Name) return 'https://placehold.co/600x400/0f172a/475569?text=NO+DATA';
 
-        // Logique de nettoyage "douce" comme demandé :
-        // 1. Minuscule
-        // 2. Supprimer guillemets
-        // 3. Remplacer espace par _
-        // 4. Garder les caractères spéciaux (-, (), .)
+        let formattedName = "";
         
-        let formattedName = tank.Name.toLowerCase();
+        if (IMAGE_EXCEPTIONS[tank.Name]) {
+             formattedName = IMAGE_EXCEPTIONS[tank.Name];
+        } else {
+             // Respect de la casse, espaces -> _, pas de slashs/guillemets
+             formattedName = tank.Name.replace(/["']/g, "").replace(/\//g, "").split(' ').join('_');
+        }
         
-        // Enlever les guillemets (") et les quotes (')
-        formattedName = formattedName.replace(/["']/g, "");
-        
-        // Remplacer les espaces par des underscores
-        formattedName = formattedName.split(' ').join('_');
-            
-        // Structure de dossiers spécifique demandée :
-        // tanks/tanks/{Age}/{Nation}/{image}
-        // Note: On garde les espaces dans Age et Nation car c'est le nom des dossiers sur le disque
-        return `tanks/tanks/${tank.Age}/${tank.Nation}/${formattedName}.png`;
+        // URL à la RACINE du dossier d'upload
+        // https://res.cloudinary.com/dulmuirvj/image/upload/M1_Abrams.png
+        return `https://res.cloudinary.com/${CLOUDINARY_CLOUD_NAME}/image/upload/${formattedName}.png`;
     };
 
     const CONDITIONS = {
@@ -141,7 +147,7 @@
         amber: { hex: '#f59e0b', label: 'themeDesert' }
     };
     
-    // STAT RULES DEFINED BY USER
+    // ... [STAT_RULES and STAT_DESCRIPTIONS remain the same] ...
     const STAT_RULES = {
         Mobility: { max: 35, map: { "Very Fast": 35, "Fast": 30, "Normal": 25, "Slow": 20, "Very Slow": 10 } },
         Accuracy: { max: 35, map: { "Very High": 35, "High": 30, "Medium": 25, "Low": 20, "Aucune": 0, "None": 0, "N/A": 0 } },
@@ -150,7 +156,6 @@
         Angled: { max: 25, map: { "High": 25, "Medium": 15, "Low": 5, "None": 0, "No": 0, "Yes": 15 } } 
     };
 
-    // CONTEXTUAL DESCRIPTIONS
     const STAT_DESCRIPTIONS = {
         Armor: {
             fr: "Si Blindage = Puissance : 50% de pénétration. Si Blindage < Puissance : 100%. Si Blindage > Puissance : -10% de pénétration par rang.",
@@ -248,13 +253,7 @@
     };
 
     const FIXED_DROP_RATES = [
-      { tier: 'Tier I', rate: '51,97%', color: 'text-slate-300' },
-      { tier: 'Tier II', rate: '41,06%', color: 'text-green-400' },
-      { tier: 'Tier III', rate: '4,798%', color: 'text-blue-400' },
-      { tier: 'Tier IV', rate: '1,669%', color: 'text-purple-400' },
-      { tier: 'Tier V', rate: '0,4165%', color: 'text-orange-400' },
-      { tier: 'Prototype', rate: '0,0999%', color: 'text-red-500' },
-      { tier: 'Event', rate: 'Spécial', color: 'text-yellow-400' },
+      { tier: 'Tier I', rate: '51,97%', color: 'text-slate-300' }, { tier: 'Tier II', rate: '41,06%', color: 'text-green-400' }, { tier: 'Tier III', rate: '4,798%', color: 'text-blue-400' }, { tier: 'Tier IV', rate: '1,669%', color: 'text-purple-400' }, { tier: 'Tier V', rate: '0,4165%', color: 'text-orange-400' }, { tier: 'Prototype', rate: '0,0999%', color: 'text-red-500' }, { tier: 'Event', rate: 'Spécial', color: 'text-yellow-400' },
     ];
 
     const rawCSV = `Name,Nation,Age,Rarity,Armor,Firepower,Accuracy,Size,Mobility,Angled,Visibility,Autocannon,Stabilizer,Protected Ammo,Rangefinder,Autoloader,Night Vision,Thermal Vision,ERA,ATGM (P),ATGM (S),APS
@@ -1685,6 +1684,9 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
       const [filterAge, setFilterAge] = useState('All');
       const [filterRarity, setFilterRarity] = useState('All');
       const [ownershipFilter, setOwnershipFilter] = useState('all');
+      
+      // AJOUT DU STATE DEBUG
+      const [debugMode, setDebugMode] = useState(false);
 
       const addToast = (message) => {
           const id = Date.now();
@@ -1886,6 +1888,16 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                   </div>
                   <ThemeSelector currentTheme={theme} onThemeChange={setTheme} translate={translate} />
                   <DrawTimer lang={lang} theme={theme} />
+                  
+                  {/* BOUTON DEBUG */}
+                  <button 
+                    onClick={() => setDebugMode(!debugMode)} 
+                    className={`text-[10px] font-bold px-2 py-1 rounded border transition-all ${debugMode ? 'bg-red-900/50 text-red-300 border-red-500 animate-pulse' : 'bg-slate-800 text-slate-500 border-white/10 hover:text-slate-300'}`}
+                    title="Afficher les URLs des images pour diagnostic"
+                  >
+                    🔧 DEBUG
+                  </button>
+
                   <button onClick={() => setShowDropRates(true)} className="bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white p-2.5 rounded-full flex items-center justify-center transition-all border border-white/10 hover:border-white/20 hover:shadow-lg hover:shadow-purple-500/20 active:scale-95" title={translate('dropRates')}><Icons.Percent size={20} /></button>
                   {compareList.length > 0 && (<button onClick={() => setShowCompare(true)} className="bg-blue-600 hover:bg-blue-500 text-white px-5 py-2.5 rounded-full flex items-center gap-2 text-sm font-semibold transition-all hover:shadow-[0_0_20px_rgba(37,99,235,0.5)] active:scale-95 animate-pulse"><Icons.Scale size={18} /> {translate('compare')} <span className="bg-white/20 px-1.5 py-0.5 rounded text-xs">{compareList.length}</span></button>)}
                 </div>
@@ -1974,6 +1986,7 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                     const instances = collection[tank.id] || [];
                     const isCollected = instances.length > 0;
                     const isComparing = compareList.find(t => t.Name === tank.Name);
+                    const imgUrl = getTankImg(tank);
                     
                     let fxClass = '';
                     if (tank.Rarity.includes('Tier V')) fxClass = 'fx-holo-gold';
@@ -1987,7 +2000,7 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                         {/* Image Section */}
                         <div className="relative w-full h-48 bg-black overflow-hidden border-b border-white/5">
                             <img 
-                                src={getTankImg(tank)} 
+                                src={imgUrl} 
                                 alt={tank.Name} 
                                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                                 onError={(e) => {
@@ -2005,6 +2018,13 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                                 </div>
                             </div>
                         </div>
+
+                        {/* DEBUG MODE DISPLAY */}
+                        {debugMode && (
+                          <div className="bg-red-900/90 text-white text-[8px] p-2 break-all font-mono border-b border-red-500 z-50 relative">
+                             URL: {imgUrl}
+                          </div>
+                        )}
 
                         <div className="p-5 pt-2 relative z-10 -mt-6">
                           <div className="flex justify-between items-end gap-4 mb-3">
