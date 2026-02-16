@@ -99,11 +99,6 @@
   <script type="text/babel">
     const { useState, useEffect, useMemo, useRef, useCallback } = React;
     
-    // --- CONFIGURATION CLOUDINARY ---
-    // Ancienne config (conservée pour référence ou supprimable)
-    // const CLOUDINARY_CLOUD_NAME = "dulmuirvj"; 
-    // const CLOUDINARY_FOLDER = "Tankora/tanks";
-
     // --- IMAGE HELPER ---
     
     const IMAGE_EXCEPTIONS = {
@@ -133,6 +128,11 @@
 
     const getTankImg = (tank) => {
         if (!tank || !tank.Name) return 'https://placehold.co/600x400/0f172a/475569?text=NO+DATA';
+
+        // Exception spécifique pour le T-80 Tier IV
+        if (tank.Name === "T-80" && tank.Rarity.includes("Tier IV")) {
+            return "https://res.cloudinary.com/dulmuirvj/image/upload/v1771243245/T-80_.png";
+        }
 
         const baseUrl = "https://res.cloudinary.com/dulmuirvj/image/upload/v1771192570/";
         let formattedName = tank.Name;
