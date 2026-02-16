@@ -65,6 +65,7 @@
     .radar-path { stroke-dasharray: 1000; stroke-dashoffset: 1000; animation: dash 1.5s ease-out forwards; }
     @keyframes dash { to { stroke-dashoffset: 0; } }
     .scanline { position: fixed; left: 0; top: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0) 50%, rgba(0, 0, 0, 0.2) 50%, rgba(0, 0, 0, 0.2)); background-size: 100% 4px; pointer-events: none; z-index: 9999; opacity: 0.15; }
+    .optimized-card { content-visibility: auto; contain-intrinsic-size: 420px; }
     
     /* FX VISUALS */
     .fx-holo-gold { position: relative; overflow: hidden; }
@@ -1621,7 +1622,7 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
       const [dropResult, setDropResult] = useState(null);
       const [showProfile, setShowProfile] = useState(false);
       const [visualsEnabled, setVisualsEnabled] = useState(true);
-      const [visibleCount, setVisibleCount] = useState(20);
+      const [visibleCount, setVisibleCount] = useState(40);
       const [viewMode, setViewMode] = useState('grid');
       const [sortBy, setSortBy] = useState('none');
       const [showAdvanced, setShowAdvanced] = useState(false);
@@ -1659,10 +1660,11 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
       useEffect(() => { try { localStorage.setItem('tankCollection', JSON.stringify(collection)); } catch (e) {} }, [collection]);
       useEffect(() => { localStorage.setItem('tankoraTheme', theme); }, [theme]);
       
-      useEffect(() => { setVisibleCount(20); if (scrollContainerRef.current) { scrollContainerRef.current.scrollTop = 0; } }, [search, filterNation, filterAge, filterRarity, ownershipFilter, sortBy, advancedFilters]);
+      useEffect(() => { setVisibleCount(40); if (scrollContainerRef.current) { scrollContainerRef.current.scrollTop = 0; } }, [search, filterNation, filterAge, filterRarity, ownershipFilter, sortBy, advancedFilters]);
+      
       const handleScroll = (e) => { 
         const { scrollTop, scrollHeight, clientHeight } = e.target; 
-        if (scrollHeight - scrollTop <= clientHeight * 1.5) { setVisibleCount(prev => prev + 20); } 
+        if (scrollHeight - scrollTop <= clientHeight * 2.5) { setVisibleCount(prev => Math.min(prev + 40, filteredTanks.length)); } 
         if (scrollTop > 300) setShowBackToTop(true); else setShowBackToTop(false);
       };
 
@@ -1813,6 +1815,15 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
           setAdvancedFilters(prev => ({...prev, [key]: !prev[key]}));
       };
 
+      // PRELOAD EFFECT
+      useEffect(() => {
+        const tanksToPreload = filteredTanks.slice(visibleCount, visibleCount + 40);
+        tanksToPreload.forEach(tank => {
+            const img = new Image();
+            img.src = getTankImg(tank);
+        });
+      }, [visibleCount, filteredTanks]);
+
       return (
         <div className="h-full flex flex-col bg-slate-900 text-slate-100 font-sans transition-colors duration-500">
           <ToastContainer toasts={toasts} theme={theme} />
@@ -1946,7 +1957,7 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
 
                     return (
                       // Ajout de "flex flex-col h-full" pour forcer la hauteur et l'alignement du footer
-                      <div key={tank.id} className={`group relative bg-[#0f141a]/90 backdrop-blur-sm tech-border clip-corner-tr transition-all duration-300 hover:-translate-y-1 flex flex-col h-full ${fxClass} ${isCollected ? '' : ''} ${isComparing ? 'ring-1 ring-blue-500 shadow-blue-500/20' : ''}`} style={{boxShadow: isCollected ? `0 0 20px ${THEME_COLORS[theme].hex}1A` : undefined}}>
+                      <div key={tank.id} className={`group relative bg-[#0f141a]/90 backdrop-blur-sm tech-border clip-corner-tr transition-all duration-300 hover:-translate-y-1 flex flex-col h-full optimized-card ${fxClass} ${isCollected ? '' : ''} ${isComparing ? 'ring-1 ring-blue-500 shadow-blue-500/20' : ''}`} style={{boxShadow: isCollected ? `0 0 20px ${THEME_COLORS[theme].hex}1A` : undefined}}>
                         <div className={`absolute left-0 top-0 bottom-0 w-1 z-20 ${isCollected ? '' : 'bg-slate-800'}`} style={{background: isCollected ? `linear-gradient(to bottom, ${THEME_COLORS[theme].hex}, ${THEME_COLORS[theme].hex}AA)` : undefined, boxShadow: isCollected ? `0 0 10px ${THEME_COLORS[theme].hex}` : undefined}}></div>
                         
                         {/* Image Section */}
@@ -1954,6 +1965,8 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                             <img 
                                 src={getTankImg(tank)} 
                                 alt={tank.Name} 
+                                loading="lazy"
+                                decoding="async"
                                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                                 onError={(e) => {
                                     e.target.onerror = null; 
