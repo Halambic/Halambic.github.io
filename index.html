@@ -112,7 +112,23 @@
         "Jagdpanzer IV/70": "Jagdpanzer_IV70",
         "Centurion Mk 5/2": "Centurion_Mk_52",
         "Centurion Mk 6/2": "Centurion_Mk_62",
-        "Chieftain Mk 3/3": "Chieftain_Mk_33"
+        "Chieftain Mk 3/3": "Chieftain_Mk_33",
+        "T-26 (twin-turreted)": "T-26_twin-turreted",
+        "M4A3E2 Jumbo (75)": "M4A3E2_Jumbo__75",
+        "M4A3E2 Jumbo (76)": "M4A3E2_Jumbo__76",
+        "Panzer 35 (t)": "Panzer_35__t",
+        "Marder III (Sd.Kfz.139)": "Marder_III__Sd.Kfz.139",
+        "Tiger II (early)": "Tiger_II__early",
+        "Tiger II (late)": "Tiger_II__late",
+        "Schützenpanzer Lang HS.30 (106mm)": "Schützenpanzer_Lang_HS.30__106mm",
+        "M1296 (ICVD)": "M1296__ICVD",
+        "Marder 1 A1(+)": "Marder_1_A1",
+        "Marder 1 A1(-)": "Marder_1_A1_-",
+        "Flammwagen auf Panzerkampfwagen B-2 (f)": "Flammwagen_auf_Panzerkampfwagen_B-2__f",
+        "7.5 cm PaK auf Geschützwagen FCM(f)": "7.5_cm_PaK_auf_Geschützwagen_FCM_f",
+        "10.5 cm leFH 16 (Sf.) auf Geschützwagen FCM 36(f)": "10.5_cm_leFH_16__Sf.__auf_Geschützwagen_FCM_36_f",
+        "Char B1 bis (Eure)": "Char_B1_Bis__Eure",
+        "T-34 Model 1943 (Fallen Heroes)": "T-34_Model_1943__Fallen_Heroes"
     };
 
     const getTankImg = (tank) => {
@@ -121,13 +137,16 @@
         const baseUrl = "https://res.cloudinary.com/dulmuirvj/image/upload/v1771192570/";
         let formattedName = tank.Name;
         
+        // Vérification prioritaire dans la liste des exceptions
         if (IMAGE_EXCEPTIONS[tank.Name]) {
              formattedName = IMAGE_EXCEPTIONS[tank.Name];
         } else {
-            // Nettoyage standard du nom pour correspondre au format de fichier
-            formattedName = formattedName.replace(/["'()]/g, "");
-            formattedName = formattedName.replace(/\//g, "");
-            formattedName = formattedName.split(' ').join('_');
+            // Logique standard pour la majorité des fichiers (ex: M4(105) Sherman -> M4_105__Sherman)
+            // 1. Supprimer les guillemets (simples et doubles)
+            formattedName = formattedName.replace(/["']/g, "");
+            
+            // 2. Remplacer TOUS les caractères spéciaux (parenthèses, plus, virgules, slashs, espaces) par des underscores (_)
+            formattedName = formattedName.replace(/[()+,/ ]/g, "_");
         }
 
         return `${baseUrl}${formattedName}.png`;
