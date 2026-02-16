@@ -1945,7 +1945,8 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                     if (tank.Rarity.includes('Event')) fxClass = 'fx-holo-event';
 
                     return (
-                      <div key={tank.id} className={`group relative bg-[#0f141a]/90 backdrop-blur-sm tech-border clip-corner-tr transition-all duration-300 hover:-translate-y-1 ${fxClass} ${isCollected ? '' : ''} ${isComparing ? 'ring-1 ring-blue-500 shadow-blue-500/20' : ''}`} style={{boxShadow: isCollected ? `0 0 20px ${THEME_COLORS[theme].hex}1A` : undefined}}>
+                      // Ajout de "flex flex-col h-full" pour forcer la hauteur et l'alignement du footer
+                      <div key={tank.id} className={`group relative bg-[#0f141a]/90 backdrop-blur-sm tech-border clip-corner-tr transition-all duration-300 hover:-translate-y-1 flex flex-col h-full ${fxClass} ${isCollected ? '' : ''} ${isComparing ? 'ring-1 ring-blue-500 shadow-blue-500/20' : ''}`} style={{boxShadow: isCollected ? `0 0 20px ${THEME_COLORS[theme].hex}1A` : undefined}}>
                         <div className={`absolute left-0 top-0 bottom-0 w-1 z-20 ${isCollected ? '' : 'bg-slate-800'}`} style={{background: isCollected ? `linear-gradient(to bottom, ${THEME_COLORS[theme].hex}, ${THEME_COLORS[theme].hex}AA)` : undefined, boxShadow: isCollected ? `0 0 10px ${THEME_COLORS[theme].hex}` : undefined}}></div>
                         
                         {/* Image Section */}
