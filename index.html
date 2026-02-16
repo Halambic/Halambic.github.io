@@ -1577,6 +1577,37 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
       )
     };
 
+    const ImageViewerModal = ({ tank, onClose, lang }) => {
+      if (!tank) return null;
+      const [rot, setRot] = useState({ x: 0, y: 0 });
+      
+      const handleMove = (e) => {
+        const { innerWidth, innerHeight } = window;
+        const x = (e.clientX - innerWidth / 2) / 25; 
+        const y = (e.clientY - innerHeight / 2) / 25;
+        setRot({ x: -y, y: x });
+      };
+
+      return (
+        <div className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-md flex flex-col items-center justify-center cursor-zoom-out animate-in fade-in duration-200" onClick={onClose} onMouseMove={handleMove}>
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-emerald-500 to-transparent opacity-50"></div>
+            <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-emerald-500 to-transparent opacity-50"></div>
+            
+            <div className="relative flex flex-col items-center transition-transform duration-100 ease-out" style={{ transform: `perspective(1000px) rotateX(${rot.x}deg) rotateY(${rot.y}deg) scale(1.1)`, transformStyle: 'preserve-3d' }} onClick={(e) => e.stopPropagation()}>
+                <div className="absolute inset-0 bg-emerald-500/10 blur-[80px] rounded-full pointer-events-none"></div>
+                <img src={getTankImg(tank)} alt={tank.Name} className="max-w-[85vw] max-h-[60vh] object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)] rounded mx-auto" />
+                <div className="text-center mt-8 pointer-events-none max-w-[90vw]" style={{transform: 'translateZ(30px)'}}>
+                    <h2 className="text-3xl md:text-5xl font-military text-white uppercase tracking-wider drop-shadow-lg break-words leading-tight">{tank.Name}</h2>
+                    <div className="flex flex-wrap items-center justify-center gap-3 mt-4">
+                        <span className="text-emerald-400 font-mono tracking-widest text-base md:text-lg bg-black/50 px-3 py-1 rounded border border-emerald-500/30">{tank.Nation}</span>
+                        <span className="text-slate-400 font-mono tracking-widest text-base md:text-lg bg-black/50 px-3 py-1 rounded border border-white/10">{tank.Rarity}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+      );
+    };
+
     function TankApp() {
       const [tanks, setTanks] = useState(INITIAL_TANKS);
       
@@ -1614,6 +1645,7 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
       const [compareList, setCompareList] = useState([]);
       const [showCompare, setShowCompare] = useState(false);
       const [viewTank, setViewTank] = useState(null);
+      const [zoomedTank, setZoomedTank] = useState(null);
       const [showDropRates, setShowDropRates] = useState(false);
       const [lang, setLang] = useState('fr');
       const [theme, setTheme] = useState(() => localStorage.getItem('tankoraTheme') || 'emerald');
@@ -1961,24 +1993,24 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                         <div className={`absolute left-0 top-0 bottom-0 w-1 z-20 ${isCollected ? '' : 'bg-slate-800'}`} style={{background: isCollected ? `linear-gradient(to bottom, ${THEME_COLORS[theme].hex}, ${THEME_COLORS[theme].hex}AA)` : undefined, boxShadow: isCollected ? `0 0 10px ${THEME_COLORS[theme].hex}` : undefined}}></div>
                         
                         {/* Image Section */}
-                        <div className="relative w-full h-48 bg-black overflow-hidden border-b border-white/5">
+                        <div className="relative w-full h-48 bg-black overflow-hidden border-b border-white/5 cursor-pointer" onClick={(e) => { e.stopPropagation(); setZoomedTank(tank); }}>
                             <img 
                                 src={getTankImg(tank)} 
                                 alt={tank.Name} 
                                 loading="lazy"
                                 decoding="async"
-                                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 cursor-zoom-in"
                                 onError={(e) => {
                                     e.target.onerror = null; 
                                     e.target.src = 'https://placehold.co/600x400/0f172a/475569?text=NO+DATA';
                                 }}
                             />
-                            <div className="absolute inset-0 bg-gradient-to-t from-[#0f141a] via-transparent to-transparent opacity-90"></div>
+                            <div className="absolute inset-0 bg-gradient-to-t from-[#0f141a] via-transparent to-transparent opacity-90 pointer-events-none"></div>
                             
-                            <div className="absolute top-3 left-3 right-3 flex justify-between items-start z-30">
+                            <div className="absolute top-3 left-3 right-3 flex justify-between items-start z-30 pointer-events-none">
                                 <span className="text-[10px] tracking-widest uppercase text-slate-300 font-bold bg-black/60 backdrop-blur-sm px-2 py-0.5 rounded border border-white/10 shadow-lg">{tData(tank.Nation)}</span>
-                                <div className="flex flex-col gap-2">
-                                  <button onClick={() => addTankInstance(tank.id)} className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 shadow-lg active:scale-95 ${isCollected ? 'text-white hover:brightness-110' : 'bg-black/60 text-slate-400 hover:text-white backdrop-blur-sm border border-white/10'}`} style={{background: isCollected ? `linear-gradient(to bottom right, ${THEME_COLORS[theme].hex}, ${THEME_COLORS[theme].hex}CC)` : undefined}} title={translate('addAnother')}><Icons.Plus size={16} /></button>
+                                <div className="flex flex-col gap-2 pointer-events-auto">
+                                  <button onClick={(e) => { e.stopPropagation(); addTankInstance(tank.id); }} className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 shadow-lg active:scale-95 ${isCollected ? 'text-white hover:brightness-110' : 'bg-black/60 text-slate-400 hover:text-white backdrop-blur-sm border border-white/10'}`} style={{background: isCollected ? `linear-gradient(to bottom right, ${THEME_COLORS[theme].hex}, ${THEME_COLORS[theme].hex}CC)` : undefined}} title={translate('addAnother')}><Icons.Plus size={16} /></button>
                                   {isCollected && (<div className="w-8 h-8 rounded-full flex items-center justify-center bg-black/80 border border-white/20 shadow-inner backdrop-blur-md"><span className="font-bold text-xs" style={{color: THEME_COLORS[theme].hex}}>x{instances.length}</span></div>)}
                                 </div>
                             </div>
@@ -1987,7 +2019,7 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                         <div className="p-5 pt-2 relative z-10 -mt-6">
                           <div className="flex justify-between items-end gap-4 mb-3">
                             <div className="flex-1 min-w-0">
-                              <h3 className="font-black text-xl leading-snug text-white group-hover:text-emerald-400 transition-colors line-clamp-2 drop-shadow-md" title={tank.Name}>{tank.Name}</h3>
+                              <h3 className="font-black text-xl leading-snug text-white group-hover:text-emerald-400 transition-colors line-clamp-2 drop-shadow-md cursor-pointer" title={tank.Name} onClick={() => setViewTank(tank)}>{tank.Name}</h3>
                               <div className="flex flex-wrap gap-2 mt-1 text-xs"><span className="flex items-center px-1.5 py-0.5 rounded bg-slate-800 text-slate-400 border border-white/5 text-[10px]">{tData(tank.Age)}</span><span className={`flex items-center px-1.5 py-0.5 rounded font-bold border text-[10px] ${tank.Rarity.includes('Tier I') && !tank.Rarity.includes('II') && !tank.Rarity.includes('V') ? 'bg-slate-800 text-slate-400 border-white/5' : 'bg-yellow-900/30 text-yellow-500 border-yellow-500/30'}`}>{tank.Rarity}</span></div>
                             </div>
                             <button onClick={() => setViewTank(tank)} className="w-8 h-8 rounded-full flex items-center justify-center bg-slate-800 text-slate-400 hover:text-white hover:bg-blue-600 transition-all border border-white/5 shadow-lg" title={translate('details')}><Icons.Eye size={16} /></button>
@@ -2041,11 +2073,11 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                       return (
                         <div key={tank.id} className={`flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 bg-[#0f141a]/90 border border-white/5 rounded-lg hover:border-opacity-30 transition-all ${isCollected ? 'border-l-4' : ''}`} style={{borderColor: isCollected ? THEME_COLORS[theme].hex : undefined}}>
                             <div className="flex items-center gap-4 w-full sm:w-auto">
-                                <div className="w-16 h-12 bg-black rounded overflow-hidden border border-white/10 flex-shrink-0">
-                                     <img src={getTankImg(tank)} alt="" className="w-full h-full object-cover opacity-80" onError={(e) => {e.target.onerror = null; e.target.src = 'https://placehold.co/100x100/0f172a/475569?text=IMG';}}/>
+                                <div className="w-16 h-12 bg-black rounded overflow-hidden border border-white/10 flex-shrink-0 cursor-pointer" onClick={() => setZoomedTank(tank)}>
+                                     <img src={getTankImg(tank)} alt="" className="w-full h-full object-cover opacity-80 hover:opacity-100 transition-opacity" onError={(e) => {e.target.onerror = null; e.target.src = 'https://placehold.co/100x100/0f172a/475569?text=IMG';}}/>
                                 </div>
                                 <div>
-                                    <h4 className={`font-black text-lg leading-none mb-1`} style={{color: isCollected ? THEME_COLORS[theme].hex : '#cbd5e1'}}>{tank.Name}</h4>
+                                    <h4 className={`font-black text-lg leading-none mb-1 cursor-pointer hover:text-white`} style={{color: isCollected ? THEME_COLORS[theme].hex : '#cbd5e1'}} onClick={() => setViewTank(tank)}>{tank.Name}</h4>
                                     <div className="flex gap-2 text-[10px] text-slate-500 uppercase tracking-wider items-center">
                                         <span className="bg-slate-800 px-1.5 rounded">{tData(tank.Nation)}</span>
                                         <span>{tData(tank.Age)}</span> • <span>{tank.Rarity}</span>
@@ -2137,11 +2169,11 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
                 <div className="overflow-y-auto p-8 custom-scrollbar">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div className="space-y-6">
-                      <div className="relative w-full aspect-video rounded-xl overflow-hidden border border-white/10 bg-black">
+                      <div className="relative w-full aspect-video rounded-xl overflow-hidden border border-white/10 bg-black cursor-pointer" onClick={() => setZoomedTank(viewTank)}>
                            <img 
                                 src={getTankImg(viewTank)} 
                                 alt={viewTank.Name} 
-                                className="w-full h-full object-cover"
+                                className="w-full h-full object-cover cursor-zoom-in"
                                 onError={(e) => {
                                     e.target.onerror = null; 
                                     e.target.src = 'https://placehold.co/800x500/0f172a/475569?text=NO+DATA';
@@ -2179,6 +2211,8 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
               </div>
             </div>
           )}
+          
+          {zoomedTank && <ImageViewerModal tank={zoomedTank} onClose={() => setZoomedTank(null)} lang={lang} />}
 
           {showDropRates && (
             <div className="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-300" onClick={() => setShowDropRates(false)}>
