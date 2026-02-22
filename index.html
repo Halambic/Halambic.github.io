@@ -590,25 +590,46 @@
       {
         version: "2.16",
         date: "2026-02-22",
-        changes: [
-          "Ajout de 3 nouvelles nations: Empire du Japon, Japon, Australie.",
-          "Ajout de 46 nouveaux véhicules (Japon, USA, Australie).",
-          "Correction du défilement tactile sur les appareils mobiles.",
-          "Mise à jour des règles d'affichage d'images (Ha-Go, Type 74, TKX, M1A1 '73 Easting).",
-          "Ajustement du T-80 PGM-SGM pour éviter les conflits de sauvegarde avec sa version moderne.",
-          "La rareté du BMP-2M 'Berezhok' a été corrigée au Tier II."
-        ]
+        changes: {
+          fr: [
+            "Ajout des nouveaux % de chance de drop.",
+            "Ajout de 3 nouvelles nations: Empire du Japon, Japon, Australie.",
+            "Ajout de 46 nouveaux véhicules (Japon, USA, Australie).",
+            "Correction du défilement tactile sur les appareils mobiles.",
+            "Mise à jour des règles d'affichage d'images (Ha-Go, Type 74, TKX, M1A1 '73 Easting).",
+            "Ajustement du T-80 PGM-SGM pour éviter les conflits de sauvegarde avec sa version moderne.",
+            "La rareté du BMP-2M 'Berezhok' a été corrigée au Tier II."
+          ],
+          en: [
+            "Added new drop chance percentages.",
+            "Added 3 new nations: Empire of Japan, Japan, Australia.",
+            "Added 46 new vehicles (Japan, USA, Australia).",
+            "Fixed touch scrolling on mobile devices.",
+            "Updated image display rules (Ha-Go, Type 74, TKX, M1A1 '73 Easting).",
+            "Adjusted WW1-WW2 T-80 ID to prevent save conflicts with its modern variant.",
+            "Corrected the rarity of the BMP-2M 'Berezhok' to Tier II."
+          ]
+        }
       },
       {
         version: "2.15",
         date: "2026-02-16",
-        changes: [
-          "Added Patch Notes feature.",
-          "Updated German Reich flag to correct 1935-1945 version.",
-          "Fixed flag display issues (OpaqueResponseBlocking).",
-          "Replaced text nations with flags on all cards.",
-          "Added flags to modal headers and tooltips."
-        ]
+        changes: {
+          fr: [
+            "Ajout de la fonctionnalité de Notes de Mise à Jour.",
+            "Mise à jour du drapeau du Reich allemand vers la version 1935-1945.",
+            "Correction des problèmes d'affichage de drapeaux (OpaqueResponseBlocking).",
+            "Remplacement du texte des nations par des drapeaux sur toutes les cartes.",
+            "Ajout des drapeaux dans les en-têtes et les infobulles."
+          ],
+          en: [
+            "Added Patch Notes feature.",
+            "Updated German Reich flag to correct 1935-1945 version.",
+            "Fixed flag display issues (OpaqueResponseBlocking).",
+            "Replaced text nations with flags on all cards.",
+            "Added flags to modal headers and tooltips."
+          ]
+        }
       }
     ];
 
@@ -2075,7 +2096,7 @@ M1A1 Abrams '73 Easting',United States of America,Modern,Event,Heavy,Heavy,Very 
 
 
 
-    const PatchNotesModal = ({ isOpen, onClose, translate }) => {
+    const PatchNotesModal = ({ isOpen, onClose, translate, lang }) => {
       if (!isOpen) return null;
       return (
         <div className="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-300" onClick={onClose}>
@@ -2094,7 +2115,7 @@ M1A1 Abrams '73 Easting',United States of America,Modern,Event,Heavy,Heavy,Very 
                       <span className="text-xs text-slate-500 font-mono">{note.date}</span>
                     </div>
                     <ul className="space-y-1">
-                      {note.changes.map((change, i) => (
+                      {(note.changes[lang] || note.changes.en || []).map((change, i) => (
                         <li key={i} className="text-sm text-slate-300 flex items-start gap-2">
                           <span className="text-blue-500 mt-1.5 w-1 h-1 rounded-full bg-blue-500 shrink-0"></span>
                           <span>{change}</span>
@@ -2740,7 +2761,7 @@ M1A1 Abrams '73 Easting',United States of America,Modern,Event,Heavy,Heavy,Very 
 
 
 
-          <PatchNotesModal isOpen={showPatchNotes} onClose={() => setShowPatchNotes(false)} translate={translate} />
+          <PatchNotesModal isOpen={showPatchNotes} onClose={() => setShowPatchNotes(false)} translate={translate} lang={lang} />
           <SupplyDropModal isOpen={showSupply} onClose={() => setShowSupply(false)} onOpenDrop={initiateSupplyDrop} isOpening={isOpeningDrop} dropResult={dropResult} lang={lang} />
           <ProfileModal
             isOpen={showProfile}
