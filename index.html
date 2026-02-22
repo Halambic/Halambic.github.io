@@ -84,6 +84,12 @@
       z-index: 11;
     }
 
+    .custom-scrollbar {
+      -webkit-overflow-scrolling: touch;
+      touch-action: pan-y;
+      overscroll-behavior-y: contain;
+    }
+
     .custom-scrollbar::-webkit-scrollbar {
       width: 8px;
       height: 8px;
@@ -465,7 +471,14 @@
       "7.5 cm PaK auf Geschützwagen FCM(f)": "7.5_cm_PaK_auf_Geschützwagen_FCM_f",
       "10.5 cm leFH 16 (Sf.) auf Geschützwagen FCM 36(f)": "10.5_cm_leFH_16__Sf.__auf_Geschützwagen_FCM_36_f",
       "Char B1 bis (Eure)": "Char_B1_Bis__Eure",
-      "T-34 Model 1943 (Fallen Heroes)": "T-34_Model_1943__Fallen_Heroes"
+      "T-34 Model 1943 (Fallen Heroes)": "T-34_Model_1943__Fallen_Heroes",
+      "Type 95 Ha-Go (early)": "Type_95_Ha-Go__early",
+      "Type 95 Ha-Go (Hokuman)": "Type_95_Ha-Go__Hokuman",
+      "Type 95 Ha-Go (later)": "Type_95_Ha-Go__later",
+      "Type 74 (E)": "Type_74__E",
+      "Type 74 (G)": "Type_74__G",
+      "TKX (P)": "TKX__P",
+      "M1A1 Abrams '73 Easting'": "M1A1_Abrams__73_Easting"
     };
 
     const getTankImg = (tank) => {
@@ -556,7 +569,7 @@
     };
 
     const DATA_VALUE_MAP_FR = {
-      "Soviet Union": "Union soviétique", "German Reich": "Reich allemand", "United States of America": "États-Unis", "United Kingdom": "Royaume-Uni", "France": "France", "Germany": "Allemagne", "Austria": "Autriche", "Russia": "Russie", "Modern": "Moderne", "Cold War": "Guerre froide", "WW1-WW2": "PGM-SGM", "Very High": "Très élevé", "High": "Élevé", "Medium": "Moyen", "Low": "Faible", "Very Low": "Très faible", "Small Arms": "Armes légères", "Very Light": "Très légère", "Light": "Léger", "Heavy": "Lourd", "Very Heavy": "Très lourde", "Fast": "Rapide", "Very Fast": "Très rapide", "Slow": "Lent", "Very Slow": "Très lent", "Small": "Petit", "Large": "Grand", "Very Large": "Très grand", "Tiny": "Minuscule", "Normal": "Normal", "None": "Aucun", "Yes": "Oui", "No": "Non"
+      "Soviet Union": "Union soviétique", "German Reich": "Reich allemand", "United States of America": "États-Unis", "United Kingdom": "Royaume-Uni", "France": "France", "Germany": "Allemagne", "Austria": "Autriche", "Russia": "Russie", "Empire of Japan": "Empire du Japon", "Japan": "Japon", "Australia": "Australie", "Modern": "Moderne", "Cold War": "Guerre froide", "WW1-WW2": "PGM-SGM", "Very High": "Très élevé", "High": "Élevé", "Medium": "Moyen", "Low": "Faible", "Very Low": "Très faible", "Small Arms": "Armes légères", "Very Light": "Très légère", "Light": "Léger", "Heavy": "Lourd", "Very Heavy": "Très lourde", "Fast": "Rapide", "Very Fast": "Très rapide", "Slow": "Lent", "Very Slow": "Très lent", "Small": "Petit", "Large": "Grand", "Very Large": "Très grand", "Tiny": "Minuscule", "Normal": "Normal", "None": "Aucun", "Yes": "Oui", "No": "Non"
     };
 
     const FLAGS = {
@@ -567,10 +580,25 @@
       "France": "https://upload.wikimedia.org/wikipedia/en/c/c3/Flag_of_France.svg",
       "Germany": "https://upload.wikimedia.org/wikipedia/en/b/ba/Flag_of_Germany.svg",
       "Austria": "https://upload.wikimedia.org/wikipedia/commons/4/41/Flag_of_Austria.svg",
-      "Russia": "https://upload.wikimedia.org/wikipedia/en/f/f3/Flag_of_Russia.svg"
+      "Russia": "https://upload.wikimedia.org/wikipedia/en/f/f3/Flag_of_Russia.svg",
+      "Empire of Japan": "https://upload.wikimedia.org/wikipedia/commons/0/06/War_flag_of_the_Imperial_Japanese_Army.svg",
+      "Japan": "https://upload.wikimedia.org/wikipedia/en/9/9e/Flag_of_Japan.svg",
+      "Australia": "https://upload.wikimedia.org/wikipedia/commons/b/b9/Flag_of_Australia.svg"
     };
 
     const PATCH_NOTES = [
+      {
+        version: "2.16",
+        date: "2026-02-22",
+        changes: [
+          "Ajout de 3 nouvelles nations: Empire du Japon, Japon, Australie.",
+          "Ajout de 46 nouveaux véhicules (Japon, USA, Australie).",
+          "Correction du défilement tactile sur les appareils mobiles.",
+          "Mise à jour des règles d'affichage d'images (Ha-Go, Type 74, TKX, M1A1 '73 Easting).",
+          "Ajustement du T-80 PGM-SGM pour éviter les conflits de sauvegarde avec sa version moderne.",
+          "La rareté du BMP-2M 'Berezhok' a été corrigée au Tier II."
+        ]
+      },
       {
         version: "2.15",
         date: "2026-02-16",
@@ -603,7 +631,7 @@
     };
 
     const FIXED_DROP_RATES = [
-      { tier: 'Tier I', rate: '51,97%', color: 'text-slate-300' }, { tier: 'Tier II', rate: '41,06%', color: 'text-green-400' }, { tier: 'Tier III', rate: '4,798%', color: 'text-blue-400' }, { tier: 'Tier IV', rate: '1,669%', color: 'text-purple-400' }, { tier: 'Tier V', rate: '0,4165%', color: 'text-orange-400' }, { tier: 'Prototype', rate: '0,0999%', color: 'text-red-500' }, { tier: 'Event', rate: 'Spécial', color: 'text-yellow-400' },
+      { tier: 'Tier I', rate: '52%', color: 'text-slate-300' }, { tier: 'Tier II', rate: '34%', color: 'text-green-400' }, { tier: 'Tier III', rate: '11%', color: 'text-blue-400' }, { tier: 'Tier IV', rate: '2.3%', color: 'text-purple-400' }, { tier: 'Tier V', rate: '0.6%', color: 'text-orange-400' }, { tier: 'Prototype', rate: '0.1%', color: 'text-red-500' }, { tier: 'Event', rate: 'Spécial', color: 'text-yellow-400' },
     ];
 
     const rawCSV = `Name,Nation,Age,Rarity,Armor,Firepower,Accuracy,Size,Mobility,Angled,Visibility,Autocannon,Stabilizer,Protected Ammo,Rangefinder,Autoloader,Night Vision,Thermal Vision,ERA,ATGM (P),ATGM (S),APS
@@ -618,7 +646,7 @@ T-50,Soviet Union,WW1-WW2,Tier III,Light,Light,Medium,Small,Fast,High,Medium,No,
 T-40,Soviet Union,WW1-WW2,Tier I,Very Light,Very Light,Low,Small,Normal,None,Low,No,No,No,No,No,No,No,No,No,No,No
 T-60,Soviet Union,WW1-WW2,Tier II,Light,Very Light,Low,Small,Normal,Medium,Low,Yes,No,No,No,No,No,No,No,No,No,No
 T-70,Soviet Union,WW1-WW2,Tier III,Light,Light,Low,Small,Normal,High,Low,No,No,No,No,No,No,No,No,No,No,No
-T-80,Soviet Union,WW1-WW2,Tier II,Light,Light,Medium,Small,Normal,High,Medium,No,No,No,No,No,No,No,No,No,No,No
+T-80-WW,Soviet Union,WW1-WW2,Tier II,Light,Light,Medium,Small,Normal,High,Medium,No,No,No,No,No,No,No,No,No,No,No
 T-34 Model 1940,Soviet Union,WW1-WW2,Tier II,Medium,Medium,Medium,Medium,Fast,High,Low,No,No,No,No,No,No,No,No,No,No,No
 T-34 Model 1941,Soviet Union,WW1-WW2,Tier III,Medium,Medium,High,Medium,Fast,High,Medium,No,No,No,No,No,No,No,No,No,No,No
 T-34 Model 1942,Soviet Union,WW1-WW2,Tier III,Medium,Medium,High,Medium,Fast,High,Medium,No,No,No,No,No,No,No,No,No,No,No
@@ -850,7 +878,7 @@ BMP-1D,Soviet Union,Modern,Tier I,Very Light,Very Light,Low,Small,Fast,Medium,Me
 BMP-1AM Basurmanin,Russia,Modern,Tier I,Very Light,Very Light,Low,Small,Fast,Medium,Medium,Yes,Yes,No,No,No,Yes,No,No,No,Yes,No
 BMP-2,Soviet Union,Modern,Tier I,Very Light,Very Light,Low,Small,Fast,Medium,Medium,Yes,Yes,No,No,No,Yes,No,No,No,Yes,No
 BMP-2M,Russia,Modern,Tier I,Very Light,Light,Low,Small,Fast,Medium,High,Yes,Yes,No,Yes,No,Yes,Yes,No,No,Yes,No
-BMP-2M "Berezhok",Russia,Modern,Tier I,Very Light,Light,Low,Small,Fast,Medium,High,Yes,Yes,No,Yes,No,Yes,Yes,No,No,Yes,No
+BMP-2M "Berezhok",Russia,Modern,Tier II,Very Light,Light,Low,Small,Fast,Medium,High,Yes,Yes,No,Yes,No,Yes,Yes,No,No,Yes,No
 BMP-3,Soviet Union,Modern,Tier II,Very Light,Very Light,Low,Small,Very Fast,Low,High,Yes,Yes,No,Yes,Yes,Yes,Yes,No,No,Yes,No
 BMP-3M,Russia,Modern,Tier III,Very Light,Very Light,Low,Small,Very Fast,Low,High,Yes,Yes,No,Yes,Yes,Yes,Yes,Yes,No,Yes,No
 BRM-3K "Rys",Russia,Modern,Tier II,Very Light,Light,Low,Small,Very Fast,Low,Very High,Yes,Yes,No,Yes,Yes,Yes,Yes,No,No,No,No
@@ -990,6 +1018,53 @@ Char B1 bis (Eure),France,WW1-WW2,Event,Heavy,Medium,Medium,Large,Slow,Medium,Me
 M47 Patton 331,Austria,Cold War,Event,Medium,Medium,High,Medium,Normal,Medium,Medium,No,No,No,No,No,No,No,No,No,No,No
 Tankora-72,Soviet Union,Modern,Event,Heavy,Medium,High,Medium,Fast,High,Medium,No,Yes,No,No,Yes,Yes,No,No,No,No,No
 T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Medium,Fast,High,Medium,No,No,No,No,No,No,No,No,No,No,No
+Type 97 Te-Ke,Empire of Japan,WW1-WW2,Tier I,Very Light,Very Light,Low,Small,Normal,Low,Medium,No,No,Yes,No,No,No,No,No,No,No,No
+Type 95 Ha-Go (early),Empire of Japan,WW1-WW2,Tier I,Very Light,Very Light,Low,Small,Normal,Low,Low,No,No,Yes,No,No,No,No,No,No,No,No
+Type 95 Ha-Go (Hokuman),Empire of Japan,WW1-WW2,Tier I,Very Light,Very Light,Low,Small,Normal,Low,Low,No,No,Yes,No,No,No,No,No,No,No,No
+Type 95 Ha-Go (later),Empire of Japan,WW1-WW2,Tier I,Very Light,Very Light,Low,Small,Normal,Low,Low,No,No,Yes,No,No,No,No,No,No,No,No
+Type 4 Ke-Nu,Empire of Japan,WW1-WW2,Tier I,Very Light,Very Light,Low,Small,Normal,Low,Low,No,No,Yes,No,No,No,No,No,No,No,No
+Type 89A I-Go Ko,Empire of Japan,WW1-WW2,Tier I,Very Light,Very Light,Low,Medium,Slow,None,Low,No,No,Yes,No,No,No,No,No,No,No,No
+Type 89B I-Go Otsu,Empire of Japan,WW1-WW2,Tier I,Very Light,Very Light,Low,Medium,Slow,None,Low,No,No,Yes,No,No,No,No,No,No,No,No
+Type 98B Ke-Ni Otsu,Empire of Japan,WW1-WW2,Tier I,Very Light,Light,Low,Tiny,Normal,Low,Low,No,No,Yes,No,No,No,No,No,No,No,No
+Type 2 Ke-To,Empire of Japan,WW1-WW2,Tier I,Very Light,Light,Low,Tiny,Normal,Low,Low,No,No,Yes,No,No,No,No,No,No,No,No
+Type 2 Ka-Mi,Empire of Japan,WW1-WW2,Tier I,Very Light,Light,Low,Small,Normal,Medium,Low,No,No,Yes,No,No,No,No,No,No,No,No
+Type 97 Chi-Ha,Empire of Japan,WW1-WW2,Tier I,Light,Very Light,Low,Small,Normal,Low,Low,No,No,Yes,No,No,No,No,No,No,No,No
+Type 3 Ka-Chi,Empire of Japan,WW1-WW2,Tier II,Light,Medium,Low,Large,Slow,High,Medium,No,No,Yes,No,No,No,No,No,No,No,No
+Type 2 Ho-I,Empire of Japan,WW1-WW2,Tier II,Medium,Light,Low,Medium,Normal,Low,Low,No,No,No,No,No,No,No,No,No,No,No
+Type 97 Chi-Ha Kai,Empire of Japan,WW1-WW2,Tier II,Light,Medium,Medium,Medium,Normal,Medium,Low,No,No,Yes,No,No,No,No,No,No,No,No
+Type 1 Chi-He,Empire of Japan,WW1-WW2,Tier II,Medium,Medium,Medium,Medium,Normal,Low,Low,No,No,Yes,No,No,No,No,No,No,No,No
+Type 1 Ho-Ni I,Empire of Japan,WW1-WW2,Tier II,Light,Medium,High,Medium,Normal,Low,High,No,No,No,No,No,No,No,No,No,No,No
+Type 2 Ho-Ni II,Empire of Japan,WW1-WW2,Tier II,Light,Heavy,High,Medium,Normal,Low,High,No,No,No,No,No,No,No,No,No,No,No
+Type 3 Ho-Ni III,Empire of Japan,WW1-WW2,Tier II,Light,Medium,High,Medium,Normal,Low,High,No,No,No,No,No,No,No,No,No,No,No
+Type 97 Chi-Ha 120mm Short,Empire of Japan,WW1-WW2,Tier II,Light,Medium,Low,Medium,Normal,Low,Low,No,No,No,No,No,No,No,No,No,No,No
+Type 3 Chi-Nu,Empire of Japan,WW1-WW2,Tier III,Medium,Medium,High,Medium,Normal,Low,Medium,No,No,No,No,No,No,No,No,No,No,No
+Type 5 Na-To,Empire of Japan,WW1-WW2,Tier III,Very Light,Heavy,High,Large,Normal,None,High,No,No,No,No,No,No,No,No,No,No,No
+Type 4 Chi-To,Empire of Japan,WW1-WW2,Tier IV,Medium,Heavy,High,Medium,Normal,Low,Medium,No,No,No,No,No,No,No,No,No,No,No
+Type 5 Chi-Ri,Empire of Japan,WW1-WW2,Prototype,Medium,Heavy,High,Large,Normal,Medium,High,No,No,No,No,No,No,No,No,No,No,No
+Type 60 SPRG,Japan,Cold War,Tier II,Very Light,Heavy,Low,Tiny,Fast,None,Medium,No,No,No,No,No,No,No,No,No,No,No
+Type 61,Japan,Cold War,Tier III,Light,Heavy,High,Medium,Normal,Low,Medium,No,No,No,No,No,No,No,No,No,No,No
+Type 60 ATM,Japan,Cold War,Tier III,Light,N/A,N/A,Medium,Normal,Low,Medium,No,No,No,No,No,No,No,No,No,Yes,No
+ST-A3,Japan,Cold War,Prototype,Light,Heavy,High,Medium,Normal,Low,Medium,No,No,No,No,No,No,No,No,No,No,No
+Type 74,Japan,Modern,Tier I,Medium,Medium,Medium,Medium,Normal,Low,Medium,No,No,Yes,No,Yes,No,Yes,No,No,No,No
+Type 87 IFV,Japan,Modern,Tier I,Very Light,Light,Low,Small,Very Fast,Low,Very High,No,Yes,No,No,No,No,Yes,No,No,No,No
+Type 74 (E),Japan,Modern,Tier II,Medium,Heavy,High,Medium,Normal,Low,Medium,No,No,Yes,No,Yes,No,Yes,No,No,No,No
+Type 74 (G),Japan,Modern,Tier III,Medium,Heavy,High,Medium,Normal,Low,High,No,No,Yes,No,Yes,No,Yes,Yes,No,No,No
+Type 16,Japan,Modern,Tier III,Light,Heavy,High,Large,Very Fast,High,High,No,No,Yes,No,Yes,No,Yes,Yes,No,No,No
+Type 89 IFV,Japan,Modern,Tier III,Light,Light,Low,Medium,Fast,Medium,High,No,Yes,Yes,No,Yes,No,Yes,Yes,No,No,No
+Type 90,Japan,Modern,Tier IV,Heavy,Heavy,Very High,Medium,Fast,Medium,Very High,No,No,Yes,No,Yes,Yes,Yes,Yes,No,No,No
+Type 10,Japan,Modern,Tier V,Heavy,Very Heavy,Very High,Medium,Fast,Medium,Very High,No,No,Yes,No,Yes,Yes,Yes,Yes,No,No,No
+TKX (P),Japan,Modern,Prototype,Heavy,Very Heavy,Very High,Medium,Fast,Medium,Very High,No,No,Yes,No,Yes,Yes,Yes,Yes,No,No,No
+LVT(A)-1,United States of America,WW1-WW2,Tier I,Very Light,Very Light,Medium,Large,Normal,Medium,Medium,No,No,No,No,No,No,No,No,No,No,No
+LVT(A)-4,United States of America,WW1-WW2,Tier I,Very Light,Medium,Low,Large,Normal,Medium,High,No,No,No,No,No,No,No,No,No,No,No
+LVT(A)-5,United States of America,WW1-WW2,Tier I,Very Light,Medium,Medium,Large,Normal,Medium,High,No,No,Yes,No,No,No,No,No,No,No,No
+M3 Satan,United States of America,WW1-WW2,Tier I,Very Light,Very Light,Low,Small,Fast,Low,Medium,Yes,No,Yes,No,No,No,No,No,No,No,No
+M4A3R5 Sherman,United States of America,WW1-WW2,Tier II,Medium,Very Light,Low,Medium,Normal,Medium,High,Yes,No,No,Yes,No,No,No,No,No,No,No
+M4 Crocodile,United States of America,WW1-WW2,Tier II,Medium,Medium,Medium,Medium,Normal,Medium,High,No,No,Yes,No,No,No,No,No,No,No,No
+AC1 Sentinel,Australia,WW1-WW2,Tier II,Light,Light,Medium,Medium,Normal,Medium,High,No,No,No,No,No,No,No,No,No,No,No
+Matilda Frog,Australia,WW1-WW2,Tier I,Medium,Very Light,Low,Medium,Very Slow,Medium,High,Yes,No,No,No,No,No,No,No,No,No,No
+M1A2 SEPv1 Abrams,United States of America,Modern,Tier V,Heavy,Very Heavy,Very High,Very Large,Fast,Medium,Very High,No,No,Yes,No,Yes,No,Yes,Yes,Yes,No,No
+M1A2 SEPv2 Abrams,United States of America,Modern,Tier V,Heavy,Very Heavy,Very High,Very Large,Fast,Medium,Very High,No,No,Yes,No,Yes,No,Yes,Yes,Yes,No,No
+M1A1 Abrams '73 Easting',United States of America,Modern,Event,Heavy,Heavy,Very High,Large,Very Fast,Medium,High,No,Yes,No,Yes,No,Yes,Yes,No,No,No,No
 `;
     // --- UTILS ---
     const generateId = (tank) => {
@@ -1030,6 +1105,12 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
           if (!obj.Angled) obj.Angled = 'Medium';
 
           obj.id = generateId(obj);
+
+          obj.originalName = obj.Name;
+          if (obj.Name === 'T-80-WW') {
+            obj.Name = 'T-80';
+          }
+
           return obj;
         });
     };
@@ -1845,9 +1926,9 @@ T-34 Model 1943 (Fallen Heroes),Soviet Union,WW1-WW2,Event,Medium,Medium,High,Me
 
                 // FIX: Handle quotes in imported names vs DB names (parser strips quotes)
                 const cleanImportName = name.replace(/"/g, '');
-                let candidates = tanks.filter(t => t.Name === name);
+                let candidates = tanks.filter(t => t.Name === name || t.originalName === name);
                 if (candidates.length === 0) {
-                  candidates = tanks.filter(t => t.Name.replace(/"/g, '') === cleanImportName);
+                  candidates = tanks.filter(t => t.Name.replace(/"/g, '') === cleanImportName || (t.originalName && t.originalName.replace(/"/g, '') === cleanImportName));
                 }
 
                 let tankData = null;
