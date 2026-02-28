@@ -1859,10 +1859,10 @@ M1A1 Abrams '73 Easting',United States of America,Modern,Event,Heavy,Heavy,Very 
       const ageStats = getGroupStats('Age').sort((a, b) => getAgeRank(a.label) - getAgeRank(b.label));
       const tierStats = getGroupStats('Rarity').sort((a, b) => getTierRank(a.label) - getTierRank(b.label));
 
-      const pieData = nationStats.slice(0, 5).map((stat, i) => ({
+      const pieData = nationStats.filter(stat => stat.owned > 0).map((stat, i) => ({
         label: translateData(stat.label, '', lang),
         value: stat.owned,
-        color: ['#10b981', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6'][i] || '#64748b'
+        color: ['#10b981', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#0ea5e9', '#84cc16', '#f97316', '#a855f7', '#14b8a6', '#eab308'][i % 12] || '#64748b'
       }));
 
       const handleCleanDuplicates = () => {
@@ -2009,7 +2009,7 @@ M1A1 Abrams '73 Easting',United States of America,Modern,Event,Heavy,Heavy,Very 
               <span className="font-mono font-bold text-sm text-emerald-400">{stats.unique}</span>
             </div>
           </div>
-          {stats.unique > 0 && (
+          {pieData.length > 0 && (
             <div className="mb-6 w-full flex flex-col items-center">
               <h4 className="text-[10px] text-slate-500 uppercase font-bold mb-2">{translate('distribution')}</h4>
               <PieChart data={pieData} />
@@ -2127,7 +2127,7 @@ M1A1 Abrams '73 Easting',United States of America,Modern,Event,Heavy,Heavy,Very 
                   <span className="font-mono font-bold text-sm text-emerald-400">{stats.unique}</span>
                 </div>
               </div>
-              {stats.unique > 0 && (
+              {pieData.length > 0 && (
                 <div className="mb-6 w-full flex flex-col items-center">
                   <h4 className="text-[10px] text-slate-500 uppercase font-bold mb-2">{translate('distribution')}</h4>
                   <PieChart data={pieData} />
