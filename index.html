@@ -1213,6 +1213,7 @@ M1A1 Abrams '73 Easting',United States of America,Modern,Event,Heavy,Heavy,Very 
       const [timeLeft, setTimeLeft] = useState(initialState.time);
       const [isRunning, setIsRunning] = useState(initialState.running);
       const [soundEnabled, setSoundEnabled] = useState(() => localStorage.getItem('soundEnabled') !== 'false');
+      const [volume, setVolume] = useState(() => parseFloat(localStorage.getItem('timerVolume') || '0.5'));
       const audioRef = useRef(null);
       const titleIntervalRef = useRef(null);
 
@@ -1221,6 +1222,12 @@ M1A1 Abrams '73 Easting',United States of America,Modern,Event,Heavy,Heavy,Very 
           Notification.requestPermission();
         }
       }, []);
+
+      useEffect(() => {
+        if (audioRef.current) {
+          audioRef.current.volume = volume;
+        }
+      }, [volume]);
 
       useEffect(() => {
         if (!isRunning) return;
@@ -1298,6 +1305,21 @@ M1A1 Abrams '73 Easting',United States of America,Modern,Event,Heavy,Heavy,Very 
         const newState = !soundEnabled;
         setSoundEnabled(newState);
         localStorage.setItem('soundEnabled', newState);
+        if (newState && volume === 0) {
+          handleVolumeChange(0.5);
+        }
+      };
+
+      const handleVolumeChange = (newVolume) => {
+        setVolume(newVolume);
+        localStorage.setItem('timerVolume', newVolume.toString());
+        if (newVolume === 0 && soundEnabled) {
+          setSoundEnabled(false);
+          localStorage.setItem('soundEnabled', 'false');
+        } else if (newVolume > 0 && !soundEnabled) {
+          setSoundEnabled(true);
+          localStorage.setItem('soundEnabled', 'true');
+        }
       };
 
       const formatTime = (seconds) => {
@@ -1313,12 +1335,45 @@ M1A1 Abrams '73 Easting',United States of America,Modern,Event,Heavy,Heavy,Very 
       const textClass = isRunning ? 'text-orange-400 animate-pulse' : `text-${theme}-400`;
 
       return (
-        <div className="flex items-center gap-2 bg-slate-800/80 rounded-full border border-white/10 p-1 pr-4 shadow-inner ml-2 relative group">
+        <div className="flex items-center gap-2 bg-slate-800/80 rounded-full border border-white/10 p-1 pr-4 shadow-inner ml-2 relative">
           <audio ref={audioRef} src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" preload="auto"></audio>
 
-          <button onClick={toggleSound} className="w-8 h-8 flex items-center justify-center text-slate-400 hover:text-white transition-colors" title={soundEnabled ? "Mute" : "Unmute"}>
-            {soundEnabled ? <Icons.Volume2 size={14} /> : <Icons.VolumeX size={14} />}
-          </button>
+          <div className="relative flex items-center group/volume z-50">
+            <button onClick={toggleSound} className="w-8 h-8 flex items-center justify-center text-slate-400 hover:text-white transition-colors" title={soundEnabled ? "Mute" : "Unmute"}>
+              {soundEnabled ? <Icons.Volume2 size={14} /> : <Icons.VolumeX size={14} />}
+            </button>
+
+            {/* Overlay invisible pour étendre la zone de survol entre le bouton et le menu */}
+            <div className="absolute top-full left-1/2 -translate-x-1/2 w-32 h-4 bg-transparent z-40 hidden group-hover/volume:block"></div>
+
+            <div className="absolute top-[calc(100%+8px)] left-1/2 -translate-x-1/2 p-3 bg-slate-900 border border-white/10 rounded-xl shadow-2xl opacity-0 invisible group-hover/volume:opacity-100 group-hover/volume:visible transition-all duration-200 flex flex-col items-center gap-3 min-w-[140px] pointer-events-none group-hover/volume:pointer-events-auto origin-top before:content-[''] before:absolute before:-top-2 before:left-1/2 before:-translate-x-1/2 before:border-4 before:border-transparent before:border-b-white/10 z-50">
+              <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center justify-between w-full">
+                <span>Volume</span>
+                <span className="text-blue-400">{Math.round(volume * 100)}%</span>
+              </div>
+              <input
+                type="range"
+                min="0"
+                max="1"
+                step="0.05"
+                value={volume}
+                onChange={(e) => handleVolumeChange(parseFloat(e.target.value))}
+                className="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-500 outline-none"
+              />
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (audioRef.current) {
+                    audioRef.current.currentTime = 0;
+                    audioRef.current.play().catch(e => console.log(e));
+                  }
+                }}
+                className="w-full text-[10px] font-bold uppercase tracking-wider bg-slate-800 hover:bg-slate-700 text-slate-300 py-1.5 rounded transition-colors border border-white/5 active:scale-95 flex justify-center items-center gap-1"
+              >
+                <Icons.Volume2 size={12} /> Test
+              </button>
+            </div>
+          </div>
 
           <button
             onClick={isRunning ? cancelTimer : startTimer}
