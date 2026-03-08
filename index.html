@@ -464,7 +464,6 @@
       "Centurion Mk 5/2": "Centurion_Mk_52",
       "Centurion Mk 6/2": "Centurion_Mk_62",
       "Chieftain Mk 3/3": "Chieftain_Mk_33",
-      "T-26 (twin-turreted)": "T-26_twin-turreted",
       "M4A3E2 Jumbo (75)": "M4A3E2_Jumbo__75",
       "M4A3E2 Jumbo (76)": "M4A3E2_Jumbo__76",
       "Panzer 35 (t)": "Panzer_35__t",
@@ -492,28 +491,29 @@
     const getTankImg = (tank) => {
       if (!tank || !tank.Name) return 'https://placehold.co/600x400/0f172a/475569?text=NO+DATA';
 
-      // Exception spécifique pour le T-80 Tier IV
-      if (tank.Name === "T-80" && tank.Rarity.includes("Tier IV")) {
-        return "https://res.cloudinary.com/dulmuirvj/image/upload/v1771243245/T-80_.png";
+      // Exception spécifique pour le T-80 Tier IV & Tier II
+      if (tank.Name === "T-80" && tank.Rarity && tank.Rarity.includes("Tier IV")) {
+        return `https://ik.imagekit.io/zmtjm8kok/tanks/${encodeURIComponent(tank.Age)}/${encodeURIComponent(tank.Nation)}/T-80_.png`;
+      }
+      if (tank.Name === "T-80-WW" || (tank.Name === "T-80" && tank.Age === "WW1-WW2")) {
+        return `https://ik.imagekit.io/zmtjm8kok/tanks/WW1-WW2/Soviet%20Union/T-80-WW.png`;
       }
 
       if (tank.Name === "M48A3 Patton 'Jungle Fighter'") {
-        return "https://res.cloudinary.com/dulmuirvj/image/upload/v1772796553/M48A3_Patton_Jungle_Fighter.webp";
+        return `https://ik.imagekit.io/zmtjm8kok/tanks/${encodeURIComponent(tank.Age)}/${encodeURIComponent(tank.Nation)}/M48A3_Patton_Jungle_Fighter.webp`;
       }
 
-      const baseUrl = "https://res.cloudinary.com/dulmuirvj/image/upload/v1771192570/";
+      const agePath = tank.Age ? encodeURIComponent(tank.Age) : 'Unknown_Age';
+      const nationPath = tank.Nation ? encodeURIComponent(tank.Nation) : 'Unknown_Nation';
+      const baseUrl = `https://ik.imagekit.io/zmtjm8kok/tanks/${agePath}/${nationPath}/`;
       let formattedName = tank.Name;
 
       // Vérification prioritaire dans la liste des exceptions
       if (IMAGE_EXCEPTIONS[tank.Name]) {
         formattedName = IMAGE_EXCEPTIONS[tank.Name];
       } else {
-        // Logique standard pour la majorité des fichiers (ex: M4(105) Sherman -> M4_105__Sherman)
-        // 1. Supprimer les guillemets (simples et doubles)
-        formattedName = formattedName.replace(/["']/g, "");
-
-        // 2. Remplacer TOUS les caractères spéciaux (parenthèses, plus, virgules, slashs, espaces) par des underscores (_)
-        formattedName = formattedName.replace(/[()+,/ ]/g, "_");
+        // Remplace uniquement les espaces par des underscores
+        formattedName = formattedName.replace(/ /g, "_");
       }
 
       return `${baseUrl}${formattedName}.png`;
