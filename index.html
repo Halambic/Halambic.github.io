@@ -458,26 +458,23 @@
     // --- IMAGE HELPER ---
 
     const IMAGE_EXCEPTIONS = {
+      // Anciennes exceptions manuelles
       "Centaur III": "centaur_mk_iii",
       "Churchill Mk IX": "churchill_mk_ix",
       "Jagdpanzer IV/70": "Jagdpanzer_IV70",
       "Centurion Mk 5/2": "Centurion_Mk_52",
       "Centurion Mk 6/2": "Centurion_Mk_62",
       "Chieftain Mk 3/3": "Chieftain_Mk_33",
-      "M4A3E2 Jumbo (75)": "M4A3E2_Jumbo__75",
-      "M4A3E2 Jumbo (76)": "M4A3E2_Jumbo__76",
-      "Panzer 35 (t)": "Panzer_35__t",
+      "Panzer 35 (t)": "Panzer_35_(t)",
       "Marder III (Sd.Kfz.139)": "Marder_III__Sd.Kfz.139",
       "Tiger II (early)": "Tiger_II__early",
       "Tiger II (late)": "Tiger_II__late",
       "Schützenpanzer Lang HS.30 (106mm)": "Schützenpanzer_Lang_HS.30__106mm",
       "M1296 (ICVD)": "M1296__ICVD",
-      "Marder 1 A1(+)": "Marder_1_A1",
       "Marder 1 A1(-)": "Marder_1_A1_-",
       "Flammwagen auf Panzerkampfwagen B-2 (f)": "Flammwagen_auf_Panzerkampfwagen_B-2__f",
       "7.5 cm PaK auf Geschützwagen FCM(f)": "7.5_cm_PaK_auf_Geschützwagen_FCM_f",
       "10.5 cm leFH 16 (Sf.) auf Geschützwagen FCM 36(f)": "10.5_cm_leFH_16__Sf.__auf_Geschützwagen_FCM_36_f",
-      "Char B1 bis (Eure)": "Char_B1_Bis__Eure",
       "T-34 Model 1943 (Fallen Heroes)": "T-34_Model_1943__Fallen_Heroes",
       "Type 95 Ha-Go (early)": "Type_95_Ha-Go__early",
       "Type 95 Ha-Go (Hokuman)": "Type_95_Ha-Go__Hokuman",
@@ -485,22 +482,37 @@
       "Type 74 (E)": "Type_74__E",
       "Type 74 (G)": "Type_74__G",
       "TKX (P)": "TKX__P",
-      "M1A1 Abrams '73 Easting'": "M1A1_Abrams__73_Easting"
+
+      // Nouvelles URL strictes basées sur les liens ImageKit fournis
+      "Object 279": "object_279",
+      "T114": "t114",
+      "Object 640": "object_640",
+      "HSTVL": "hstvl",
+      "Char B1 bis": "Char_B1_Bis",
+      "Char B1 ter": "Char_B1_Ter",
+      "Challenger 2 Black Night": "challenger_2_black_night",
+      "Char B1 bis (Eure)": "Char_B1_Bis_(Eure)",
+      "M47 Patton 331": "m47_patton_331",
+      "Type 89A I-Go Ko": "Type_89A_I-Go_Kō",
+      "M1A1 Abrams '73 Easting'": "M1A1_Abrams_(73_Easting)"
     };
 
     const getTankImg = (tank) => {
       if (!tank || !tank.Name) return 'https://placehold.co/600x400/0f172a/475569?text=NO+DATA';
 
-      // Exception spécifique pour le T-80 Tier IV & Tier II
+      // Exception spécifique pour le T-80 Tier IV (moderne)
       if (tank.Name === "T-80" && tank.Rarity && tank.Rarity.includes("Tier IV")) {
         return `https://ik.imagekit.io/zmtjm8kok/tanks/${encodeURIComponent(tank.Age)}/${encodeURIComponent(tank.Nation)}/T-80_.png`;
       }
+
+      // Le T-80-WW (WW1-WW2) a été renommé sur ImageKit
       if (tank.Name === "T-80-WW" || (tank.Name === "T-80" && tank.Age === "WW1-WW2")) {
         return `https://ik.imagekit.io/zmtjm8kok/tanks/WW1-WW2/Soviet%20Union/T-80-WW.png`;
       }
 
+      // Exception spécifique pour Jungle Fighter (.webp avec espaces URL-encodés)
       if (tank.Name === "M48A3 Patton 'Jungle Fighter'") {
-        return `https://ik.imagekit.io/zmtjm8kok/tanks/${encodeURIComponent(tank.Age)}/${encodeURIComponent(tank.Nation)}/M48A3_Patton_Jungle_Fighter.webp`;
+        return `https://ik.imagekit.io/zmtjm8kok/tanks/${encodeURIComponent(tank.Age)}/${encodeURIComponent(tank.Nation)}/M48A3%20Patton%20'Jungle%20Fighter'.webp`;
       }
 
       const agePath = tank.Age ? encodeURIComponent(tank.Age) : 'Unknown_Age';
@@ -512,11 +524,18 @@
       if (IMAGE_EXCEPTIONS[tank.Name]) {
         formattedName = IMAGE_EXCEPTIONS[tank.Name];
       } else {
-        // Remplace uniquement les espaces par des underscores
+        // Remplacement uniquement des espaces par des underscores (logique Qwirdle stricte)
         formattedName = formattedName.replace(/ /g, "_");
       }
 
-      return `${baseUrl}${formattedName}.png`;
+      // Mais on n'encode pas le "+" du Marder 1 A1(+) sinon ça génère un %2B qui n'est pas ce que l'URL explicite montre
+      // On encode tout sauf les caractères valides qui étaient déjà dans le nom ImageKit original listé
+      function customEncode(str) {
+        return encodeURIComponent(str).replace(/%2B/g, '+');
+      }
+
+      const encodedName = customEncode(formattedName);
+      return `${baseUrl}${encodedName}.png`;
     };
 
     const CONDITIONS = {
@@ -2108,7 +2127,7 @@ M1A1 Abrams '73 Easting',United States of America,Modern,Event,Heavy,Heavy,Very 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div>
                 <h4 className="text-xs uppercase font-bold text-slate-500 mb-3 flex items-center gap-2"><Icons.Info size={14} /> {lang === 'fr' ? 'Par Époque' : 'By Era'}</h4>
-                <div className="space-y-3">{ageStats.map((stat, i) => (<div key={i}><div className="flex justify-between text-[10px] uppercase font-bold text-slate-400 mb-1"><span>{translateData(stat.label, '', lang)}</span><span>{stat.percent}%</span></div><div className="h-1.5 w-full bg-slate-900 rounded-full overflow-hidden border border-white/5"><div className="h-full bg-blue-500" style={{ width: `${stat.percent}%` }}></div></div></div>))}</div>
+                <div className="space-y-3">{ageStats.map((stat, i) => (<div key={i}><div className="flex justify-between text-[10px] uppercase font-bold text-slate-400 mb-1"><span>{translateData(stat.label, '', lang)}</span><span><span className="font-mono mr-2">{stat.owned}/{stat.total}</span><span className="text-blue-400">{stat.percent}%</span></span></div><div className="h-1.5 w-full bg-slate-900 rounded-full overflow-hidden border border-white/5"><div className="h-full bg-blue-500" style={{ width: `${stat.percent}%` }}></div></div></div>))}</div>
               </div>
               <div>
                 <h4 className="text-xs uppercase font-bold text-slate-500 mb-3 flex items-center gap-2"><Icons.Target size={14} /> {lang === 'fr' ? 'Par Tier' : 'By Tier'}</h4>
