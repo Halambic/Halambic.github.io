@@ -2047,9 +2047,15 @@ M1A1 Abrams '73 Easting',United States of America,Modern,Event,Heavy,Heavy,Very 
 
                 // FIX: Handle quotes in imported names vs DB names (parser strips quotes)
                 const cleanImportName = name.replace(/"/g, '');
+                // Normalize unicode (strips accents/macrons) for fuzzy matching: "Kō" -> "Ko"
+                const normalize = (s) => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/"/g, '');
                 let candidates = tanks.filter(t => t.Name === name || t.originalName === name);
                 if (candidates.length === 0) {
                   candidates = tanks.filter(t => t.Name.replace(/"/g, '') === cleanImportName || (t.originalName && t.originalName.replace(/"/g, '') === cleanImportName));
+                }
+                if (candidates.length === 0) {
+                  const normalizedImport = normalize(name);
+                  candidates = tanks.filter(t => normalize(t.Name) === normalizedImport || (t.originalName && normalize(t.originalName) === normalizedImport));
                 }
 
                 let tankData = null;
