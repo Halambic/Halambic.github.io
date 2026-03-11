@@ -502,7 +502,12 @@
 
       // Exception spécifique pour le T-80 Tier IV (moderne)
       if (tank.Name === "T-80" && tank.Rarity && tank.Rarity.includes("Tier IV")) {
-        return `https://ik.imagekit.io/zmtjm8kok/tanks/${encodeURIComponent(tank.Age)}/${encodeURIComponent(tank.Nation)}/T-80_.png`;
+        return `https://ik.imagekit.io/zmtjm8kok/tanks/Modern/Soviet%20Union/T-80.png?updatedAt=1772971124077`;
+      }
+
+      // Exception spécifique pour le 4,7 cm PaK(t) auf Panzerkampfwagen 35R(f) ohne Turm
+      if (tank.Name === "4,7 cm PaK(t) auf Panzerkampfwagen 35R(f) ohne Turm") {
+        return `https://ik.imagekit.io/zmtjm8kok/tanks/WW1-WW2/German%20Reich/4,7_cm_PaK(t)_auf_Panzerkampfwagen_35R(f)_ohne_Turm.png?updatedAt=1772971125430`;
       }
 
       // Le T-80-WW (WW1-WW2) a été renommé sur ImageKit
