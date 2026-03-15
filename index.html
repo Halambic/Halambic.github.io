@@ -515,7 +515,7 @@
       }
 
       // Exception spécifique pour Jungle Fighter (.webp avec espaces URL-encodés)
-      if (tank.Name === "M48A3 Patton \"Jungle Fighter\"") {
+      if (tank.Name === "M48A3 Patton 'Jungle Fighter'") {
         return `https://ik.imagekit.io/zmtjm8kok/tanks/${encodeURIComponent(tank.Age)}/${encodeURIComponent(tank.Nation)}/M48A3 Patton (Jungle Fighter).webp?updatedAt=1773509917251`;
       }
 
@@ -527,6 +527,11 @@
       // Exception spécifique pour le T-72M Übergangsversion
       if (tank.Name === "T-72M Übergangsversion") {
         return `https://ik.imagekit.io/zmtjm8kok/tanks/Modern/East%20Germany/T-72M_Ubergangsversion.png?updatedAt=1773507919097`;
+      }
+
+      // Exception spécifique pour le M26 "Super Pershing"
+      if (tank.Name === "M26 \"Super Pershing\"") {
+        return `https://ik.imagekit.io/zmtjm8kok/tanks/WW1-WW2/United%20States%20of%20America/M26_Super_Pershing.png?updatedAt=1772971129687`;
       }
 
       const agePath = tank.Age ? encodeURIComponent(tank.Age) : 'Unknown_Age';
@@ -763,7 +768,7 @@ M3 GMC,United States of America,WW1-WW2,Tier II,Very Light,Medium,High,Medium,Fa
 90 mm GMC M36,United States of America,WW1-WW2,Tier IV,Light,Heavy,Very High,Medium,Normal,Medium,High,No,No,No,No,No,No,No,No,No,No,No,No
 M18 GMC,United States of America,WW1-WW2,Tier IV,Very Light,Heavy,High,Small,Very Fast,None,High,No,No,No,No,No,No,No,No,No,No,No,No
 M26 Pershing,United States of America,WW1-WW2,Tier V,Heavy,Heavy,Very High,Large,Normal,Medium,High,No,No,No,No,No,No,No,No,No,No,No,No
-M26 "Super Pershing",United States of America,WW1-WW2,Tier V,Very Heavy,Heavy,High,Large,Normal,Medium,High,No,No,No,No,No,No,No,No,No,No,No,No
+"M26 ""Super Pershing""",United States of America,WW1-WW2,Tier V,Very Heavy,Heavy,High,Large,Normal,Medium,High,No,No,No,No,No,No,No,No,No,No,No,No
 Carden Loyd Tankette,United Kingdom,WW1-WW2,Tier I,Unarmored,Small Arms,Low,Tiny,Normal,Low,Low,No,No,No,No,No,No,No,No,No,No,No,No
 Light Tank Mk IV,United Kingdom,WW1-WW2,Tier I,Very Light,Small Arms,Low,Small,Normal,Low,Low,No,No,No,No,No,No,No,No,No,No,No,No
 Light Tank Mk V,United Kingdom,WW1-WW2,Tier I,Very Light,Small Arms,Low,Small,Normal,Low,Low,No,No,No,No,No,No,No,No,No,No,No,No
@@ -1151,7 +1156,7 @@ Vespa 150 TAP,France,Cold War,Tier III,Unarmored,Heavy,Medium,Tiny,Fast,None,Ver
 Churchill Mk X,United Kingdom,WW1-WW2,Tier IV,Very Heavy,Medium,Medium,Large,Very Slow,Low,High,No,No,No,No,No,No,No,No,No,No,No,No
 Type 98A Ke-Ni,Empire of Japan,WW1-WW2,Tier I,Very Light,Very Light,Low,Tiny,Normal,Low,Low,No,No,Yes,No,No,No,No,No,No,No,No,No
 M1A1 Abrams '73 Easting',United States of America,Modern,Event,Heavy,Heavy,Very High,Large,Fast,Medium,High,No,No,Yes,Yes,Yes,No,Yes,Yes,No,No,No,No
-"M48A3 Patton ""Jungle Fighter""",United States of America,Cold War,Event,Heavy,Heavy,High,Medium,Slow,Medium,Medium,No,No,No,No,No,No,No,No,No,No,No,No
+M48A3 Patton 'Jungle Fighter',United States of America,Cold War,Event,Heavy,Heavy,High,Medium,Slow,Medium,Medium,No,No,No,No,No,No,No,No,No,No,No,No
     `;
     // --- UTILS ---
     const generateId = (tank) => {
@@ -2099,18 +2104,15 @@ M1A1 Abrams '73 Easting',United States of America,Modern,Event,Heavy,Heavy,Very 
                 else if (rawCond.includes('parade ready')) condId = 'parade_ready';
                 else if (rawCond.includes('factory new')) condId = 'factory_new';
 
-                // FIX: Handle quotes in imported names vs DB names (parser strips quotes)
-                const cleanImportName = name.replace(/"/g, '');
-                // Normalize unicode (strips accents/macrons) for fuzzy matching: "Kō" -> "Ko"
-                const normalize = (s) => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/"/g, '');
-                let candidates = tanks.filter(t => t.Name === name || t.originalName === name);
-                if (candidates.length === 0) {
-                  candidates = tanks.filter(t => t.Name.replace(/"/g, '') === cleanImportName || (t.originalName && t.originalName.replace(/"/g, '') === cleanImportName));
-                }
-                if (candidates.length === 0) {
-                  const normalizedImport = normalize(name);
-                  candidates = tanks.filter(t => normalize(t.Name) === normalizedImport || (t.originalName && normalize(t.originalName) === normalizedImport));
-                }
+                // FIX: Robust matching for names (ignore quotes, case, and accents)
+                const normalize = (s) => s.normalize('NFD')
+                  .replace(/[\u0300-\u036f]/g, '')
+                  .replace(/["']/g, '')
+                  .trim()
+                  .toLowerCase();
+
+                const normalizedImport = normalize(name);
+                let candidates = tanks.filter(t => normalize(t.Name) === normalizedImport || (t.originalName && normalize(t.originalName) === normalizedImport));
 
                 let tankData = null;
 
