@@ -515,7 +515,7 @@
       }
 
       // Exception spécifique pour Jungle Fighter (.webp avec espaces URL-encodés)
-      if (tank.Name === "M48A3 Patton (Jungle Fighter)") {
+      if (tank.Name === "M48A3 Patton \"Jungle Fighter\"") {
         return `https://ik.imagekit.io/zmtjm8kok/tanks/${encodeURIComponent(tank.Age)}/${encodeURIComponent(tank.Nation)}/M48A3 Patton (Jungle Fighter).webp?updatedAt=1773509917251`;
       }
 
@@ -1144,14 +1144,14 @@ M113A1 MRV,Australia,Modern,Tier I,Unarmored,Light,Low,Small,Normal,None,Medium,
 Leopard AS1,Australia,Modern,Tier II,Light,Medium,High,Medium,Normal,Medium,High,No,No,Yes,No,No,No,Yes,No,No,No,No,No
 SU-122-54,Soviet Union,Cold War,Tier III,Medium,Heavy,Very High,Small,Normal,Medium,High,No,No,No,No,No,No,No,No,No,No,No,No
 PT-76E,Russia,Modern,Tier I,Very Light,Light,Medium,Small,Normal,Low,Low,No,Yes,Yes,No,Yes,No,Yes,No,No,No,No,No
-ZSU-57-2,Soviet Union,Cold War,Tier III,Unarmored,Medium,High,Medium,Normal,Medium,High,No,Yes,No,No,,,,,,No,No,No
+ZSU-57-2,Soviet Union,Cold War,Tier III,Unarmored,Medium,High,Medium,Normal,Medium,High,No,Yes,No,No,No,No,No,No,No,No,No,No
 M42 Duster,United States of America,Cold War,Tier I,Light,Light,Medium,Small,Fast,Low,Very High,No,Yes,No,No,No,No,No,No,No,No,No,No
 M19 MGMC,United States of America,Cold War,Tier I,Light,Light,Medium,Small,Normal,Low,Very High,No,Yes,No,No,No,No,No,No,No,No,No,No
 Vespa 150 TAP,France,Cold War,Tier III,Unarmored,Heavy,Medium,Tiny,Fast,None,Very High,No,No,No,No,No,No,No,No,No,No,No,No
 Churchill Mk X,United Kingdom,WW1-WW2,Tier IV,Very Heavy,Medium,Medium,Large,Very Slow,Low,High,No,No,No,No,No,No,No,No,No,No,No,No
 Type 98A Ke-Ni,Empire of Japan,WW1-WW2,Tier I,Very Light,Very Light,Low,Tiny,Normal,Low,Low,No,No,Yes,No,No,No,No,No,No,No,No,No
-M1A1 Abrams (73 Easting),United States of America,Modern,Event,Heavy,Heavy,Very High,Large,Fast,Medium,High,No,No,Yes,Yes,Yes,No,Yes,Yes,No,No,No,No
-M48A3 Patton (Jungle Fighter),United States of America,Cold War,Event,Heavy,Heavy,High,Medium,Slow,Medium,Medium,No,No,No,No,No,No,No,No,No,No,No,No
+M1A1 Abrams '73 Easting',United States of America,Modern,Event,Heavy,Heavy,Very High,Large,Fast,Medium,High,No,No,Yes,Yes,Yes,No,Yes,Yes,No,No,No,No
+"M48A3 Patton ""Jungle Fighter""",United States of America,Cold War,Event,Heavy,Heavy,High,Medium,Slow,Medium,Medium,No,No,No,No,No,No,No,No,No,No,No,No
     `;
     // --- UTILS ---
     const generateId = (tank) => {
@@ -1180,9 +1180,20 @@ M48A3 Patton (Jungle Fighter),United States of America,Cold War,Event,Heavy,Heav
           let inQuotes = false;
           for (let i = 0; i < line.length; i++) {
             const char = line[i];
-            if (char === '"') { inQuotes = !inQuotes; }
-            else if (char === separator && !inQuotes) { result.push(current.trim()); current = ''; }
-            else { current += char; }
+            const nextChar = line[i + 1];
+            if (char === '"') {
+              if (inQuotes && nextChar === '"') {
+                current += '"';
+                i++;
+              } else {
+                inQuotes = !inQuotes;
+              }
+            } else if (char === separator && !inQuotes) {
+              result.push(current.trim());
+              current = '';
+            } else {
+              current += char;
+            }
           }
           result.push(current.trim());
           const obj = {};
