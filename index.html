@@ -519,8 +519,8 @@
         return `https://ik.imagekit.io/zmtjm8kok/tanks/${encodeURIComponent(tank.Age)}/${encodeURIComponent(tank.Nation)}/M48A3 Patton (Jungle Fighter).webp?updatedAt=1773509917251`;
       }
 
-      // Exception spécifique pour BMP-1A1 (Nation mismatch Germany vs Ost Germany)
-      if (tank.Name === "BMP-1A1") {
+      // Exception spécifique pour BMP-1A1 Ost (Nation mismatch Germany vs Ost Germany)
+      if (tank.Name === "BMP-1A1 Ost") {
         return `https://ik.imagekit.io/zmtjm8kok/tanks/Modern/Germany/BMP-1A1.png?updatedAt=1773509791419`;
       }
 
