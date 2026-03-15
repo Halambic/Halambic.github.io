@@ -519,9 +519,14 @@
         return `https://ik.imagekit.io/zmtjm8kok/tanks/${encodeURIComponent(tank.Age)}/${encodeURIComponent(tank.Nation)}/M48A3 Patton (Jungle Fighter).webp?updatedAt=1773509917251`;
       }
 
-      // Exception spécifique pour BMP-1A1 Ost (Nation mismatch Germany vs Ost Germany)
+      // Exception spécifique pour le BMP-1A1 Ost (Nation mismatch Germany vs Ost Germany)
       if (tank.Name === "BMP-1A1 Ost") {
         return `https://ik.imagekit.io/zmtjm8kok/tanks/Modern/Germany/BMP-1A1.png?updatedAt=1773509791419`;
+      }
+
+      // Exception spécifique pour le T-72M Übergangsversion
+      if (tank.Name === "T-72M Übergangsversion") {
+        return `https://ik.imagekit.io/zmtjm8kok/tanks/Modern/East%20Germany/T-72M_Ubergangsversion.png?updatedAt=1773507919097`;
       }
 
       const agePath = tank.Age ? encodeURIComponent(tank.Age) : 'Unknown_Age';
@@ -1123,6 +1128,7 @@ M4A3R5 Sherman,United States of America,WW1-WW2,Tier II,Medium,Very Light,Low,Me
 M4 Crocodile,United States of America,WW1-WW2,Tier II,Medium,Medium,Medium,Medium,Slow,Medium,Medium,No,No,No,Yes,No,No,No,No,No,No,No,No
 AC1 Sentinel,Australia,WW1-WW2,Tier II,Medium,Medium,Medium,Medium,Normal,Medium,Medium,No,No,No,No,No,No,No,No,No,No,No,No
 Matilda Frog,Australia,WW1-WW2,Tier I,Medium,Very Light,Low,Medium,Very Slow,Medium,Low,Yes,Yes,No,No,No,No,No,No,No,No,No,No
+M1A2 SEPv1 Abrams,United States of America,Modern,Tier V,Heavy,Very Heavy,Very High,Very Large,Fast,Medium,Very High,No,No,Yes,No,Yes,No,Yes,Yes,Level 1,No,No,No
 M1A2 SEPv2 Abrams,United States of America,Modern,Tier V,Heavy,Very Heavy,Very High,Very Large,Fast,Medium,Very High,No,No,Yes,No,Yes,No,Yes,Yes,Level 1,No,No,No
 T-34-85M,East Germany,Cold War,Tier I,Light,Medium,Low,Medium,Normal,Medium,Low,No,No,No,No,No,No,Yes,No,No,No,No,No
 T-54Z,East Germany,Cold War,Tier II,Heavy,Medium,High,Medium,Slow,Medium,Medium,No,No,No,No,No,No,Yes,No,No,No,No,No
