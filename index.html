@@ -400,53 +400,50 @@
   #landing .err { color: #ff6464; font-size: 12px; margin-top: 10px; min-height: 14px; }
 
   #room-code-badge {
-    position: fixed;
-    top: 12px;
-    right: 14px;
-    background: rgba(15, 16, 36, 0.94);
+    background: rgba(20, 20, 42, 0.55);
     border: 1px solid #ffd44d;
-    border-radius: 10px;
-    padding: 10px 16px;
+    border-radius: 8px;
+    padding: 8px 12px;
     font-size: 11px;
     color: #b8b8d0;
-    z-index: 50;
     display: none;
-    text-align: right;
-    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.45);
+    text-align: center;
+    margin-bottom: 10px;
   }
   #room-code-badge.show { display: block; }
   #room-code-badge .label {
-    font-size: 10px;
+    font-size: 9px;
     color: #888;
     text-transform: uppercase;
     letter-spacing: 1.5px;
   }
   #room-code-badge .code {
-    font-size: 38px;
+    font-size: 28px;
     font-weight: 700;
     color: #ffd44d;
-    letter-spacing: 6px;
+    letter-spacing: 5px;
     line-height: 1;
-    margin: 2px 0 6px;
+    margin: 2px 0 5px;
     font-family: 'JetBrains Mono', 'Menlo', monospace;
-    text-shadow: 0 0 14px rgba(255, 212, 77, 0.25);
+    text-shadow: 0 0 12px rgba(255, 212, 77, 0.2);
   }
   #room-code-badge .url {
     color: #9ab0ff;
     text-decoration: none;
-    font-size: 13px;
+    font-size: 10px;
     word-break: break-all;
     display: block;
+    line-height: 1.3;
   }
   #room-code-badge .url:hover { color: #ccd4ff; }
   #room-code-badge .copy {
     background: #2a3a8a;
     color: #fff;
     border: none;
-    padding: 4px 11px;
-    margin-top: 7px;
+    padding: 3px 10px;
+    margin-top: 6px;
     border-radius: 4px;
-    font-size: 10px;
+    font-size: 9px;
     cursor: pointer;
     font-family: inherit;
     text-transform: uppercase;
@@ -461,6 +458,12 @@
 <div id="main">
   <div id="grids"></div>
   <div id="sidebar">
+    <div id="room-code-badge">
+      <div class="label">Rejoindre</div>
+      <div class="code">—</div>
+      <a class="url" href="#" target="_blank" rel="noopener"></a>
+      <button class="copy">copier le lien</button>
+    </div>
     <div id="round-info">
       <div id="round-state">en attente</div>
       <div id="round-detail">2+ joueurs requis</div>
@@ -527,13 +530,6 @@
     <div class="stats" id="winner-stats"></div>
     <div class="recap" id="winner-recap"></div>
   </div>
-</div>
-
-<div id="room-code-badge">
-  <div class="label">Rejoindre</div>
-  <div class="code">—</div>
-  <a class="url" href="#" target="_blank" rel="noopener"></a>
-  <button class="copy">copier le lien</button>
 </div>
 
 <div id="landing">
