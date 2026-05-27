@@ -481,31 +481,30 @@
     </div>
     <div id="commands-panel">
       <div class="group">
-        <h3>Rejoindre</h3>
-        <div class="row"><span class="cmd">join</span><span class="desc">entrer dans la partie</span></div>
-        <div class="row"><span class="cmd">leave</span><span class="desc">quitter (forfait)</span></div>
-      </div>
-      <div class="group">
         <h3>Déplacer</h3>
-        <div class="row"><span class="cmd">d [N]</span><span class="desc">de 1 (ou N) case(s) à droite</span></div>
-        <div class="row"><span class="cmd">g [N]</span><span class="desc">de 1 (ou N) case(s) à gauche</span></div>
+        <div class="row"><span class="cmd">← →</span><span class="desc">gauche / droite</span></div>
       </div>
       <div class="group">
         <h3>Tourner</h3>
-        <div class="row"><span class="cmd">rd</span><span class="desc">sens horaire</span></div>
-        <div class="row"><span class="cmd">rg</span><span class="desc">sens anti-horaire</span></div>
-        <div class="row"><span class="cmd">flip</span><span class="desc">180°</span></div>
+        <div class="row"><span class="cmd">↑ / Z</span><span class="desc">sens horaire</span></div>
+        <div class="row"><span class="cmd">X / W</span><span class="desc">sens anti-horaire</span></div>
+        <div class="row"><span class="cmd">Shift</span><span class="desc">180°</span></div>
       </div>
       <div class="group">
         <h3>Poser</h3>
-        <div class="row"><span class="cmd">t</span><span class="desc">chute instantanée</span></div>
+        <div class="row"><span class="cmd">↓</span><span class="desc">soft drop</span></div>
+        <div class="row"><span class="cmd">Espace</span><span class="desc">hard drop (lock direct)</span></div>
       </div>
       <div class="group">
         <h3>Ciblage</h3>
-        <div class="row"><span class="cmd">cible rng</span><span class="desc">au hasard</span></div>
-        <div class="row"><span class="cmd">cible atk</span><span class="desc">contre-attaque</span></div>
-        <div class="row"><span class="cmd">cible ko</span><span class="desc">achève les faibles</span></div>
-        <div class="row"><span class="cmd">cible top</span><span class="desc">défie les badges</span></div>
+        <div class="row"><span class="cmd">1</span><span class="desc">au hasard</span></div>
+        <div class="row"><span class="cmd">2</span><span class="desc">contre-attaque</span></div>
+        <div class="row"><span class="cmd">3</span><span class="desc">achève les faibles</span></div>
+        <div class="row"><span class="cmd">4</span><span class="desc">défie les badges</span></div>
+      </div>
+      <div class="group">
+        <h3>Autre</h3>
+        <div class="row"><span class="cmd">M</span><span class="desc">mute / unmute son</span></div>
       </div>
     </div>
   </div>
@@ -2205,14 +2204,13 @@ function updateRoundState(now) {
 }
 
 const TIPS = [
-  'tape <code>join</code> pour entrer dans la partie',
-  'déplace : <code>d</code> / <code>g</code> (+ nombre, ex <code>d 3</code>)',
-  'rotation : <code>rd</code>, <code>rg</code>, <code>flip</code>',
-  'chute instantanée : <code>t</code>',
-  'contre-attaque : <code>cible atk</code>',
-  'achève les faibles : <code>cible ko</code>',
-  'défie le top : <code>cible top</code>',
-  'forfait : <code>leave</code>',
+  'déplace : <code>←</code> <code>→</code>',
+  'rotation : <code>↑</code> ou <code>Z</code> (horaire), <code>X</code> (anti)',
+  'flip 180° : <code>Shift</code>',
+  'soft drop : <code>↓</code> · hard drop : <code>Espace</code>',
+  'ciblage : <code>1</code> rng · <code>2</code> contre · <code>3</code> KO · <code>4</code> top',
+  'mute son : <code>M</code>',
+  'ferme l\'onglet pour quitter la partie',
 ];
 let tipIdx = 0;
 let tipLastChange = 0;
