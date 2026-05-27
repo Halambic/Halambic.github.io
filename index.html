@@ -1217,6 +1217,7 @@ class Board {
     this.badge = null;
     this.alive = false;
     this.piece = null;
+    this.pieceSeq = 0;
     this.pieceQueue = [];
     this.score = 0;
     this.kos = 0;
@@ -1255,6 +1256,7 @@ class Board {
     this.fillQueue();
     const key = this.pieceQueue.shift();
     const p = PIECES[key];
+    this.pieceSeq++;
     this.piece = {
       shape: p.shape.map(r => r.slice()),
       color: p.color,
@@ -1778,6 +1780,7 @@ class Board {
   }
 
   serialize() {
+    if (!this.user) return { u: null };
     let g = '';
     for (let r = 0; r < ROWS; r++) {
       for (let c = 0; c < COLS; c++) {
@@ -1798,6 +1801,7 @@ class Board {
       a: this.alive ? 1 : 0,
       g,
       p,
+      ps: this.pieceSeq,
       z: this.pieceQueue.slice(0, 4),
       sc: this.score,
       k: this.kos,
@@ -1809,7 +1813,7 @@ class Board {
     };
   }
 
-  applyState(snap) {
+  applyState(snap, keepOwnPiece = false) {
     const wasUser = this.user;
     this.user = snap.u || null;
     this.badge = snap.b || null;
@@ -1828,17 +1832,26 @@ class Board {
       }
       this.grid = newGrid;
     }
+    const snapSeq = snap.ps | 0;
+    const localSeq = this.pieceSeq | 0;
     if (snap.p) {
-      const sameKey = this.piece && this.piece.color === snap.p.c && this.piece.x === snap.p.x && this.piece.y === snap.p.y;
-      this.piece = {
-        shape: snap.p.s,
-        color: snap.p.c,
-        x: snap.p.x,
-        y: snap.p.y,
-        spawnAt: sameKey && this.piece ? this.piece.spawnAt : (performance.now() - SPAWN_ANIM_MS),
-      };
+      const sameSeq = snapSeq === localSeq;
+      if (keepOwnPiece && sameSeq && this.piece) {
+        // garde la prédiction locale (position/rotation), n'écrase pas avec le state stale du host
+      } else {
+        const sameKey = this.piece && this.piece.color === snap.p.c && this.piece.x === snap.p.x && this.piece.y === snap.p.y;
+        this.piece = {
+          shape: snap.p.s,
+          color: snap.p.c,
+          x: snap.p.x,
+          y: snap.p.y,
+          spawnAt: sameKey && this.piece ? this.piece.spawnAt : (performance.now() - SPAWN_ANIM_MS),
+        };
+        this.pieceSeq = snapSeq;
+      }
     } else {
       this.piece = null;
+      this.pieceSeq = snapSeq;
     }
     this.pieceQueue = snap.z || [];
     this.score = snap.sc | 0;
@@ -2643,7 +2656,8 @@ function applyStateSnapshot(snap) {
     for (let i = 0; i < SLOTS && i < snap.bs.length; i++) {
       if (snap.bs[i]) {
         const wasUser = boards[i].user;
-        boards[i].applyState(snap.bs[i]);
+        const isOwn = !!(myName && snap.bs[i].u === myName);
+        boards[i].applyState(snap.bs[i], isOwn);
         if (!wasUser && boards[i].user) userToSlot.set(boards[i].user, i);
         if (wasUser && !boards[i].user) userToSlot.delete(wasUser);
       }
@@ -2873,8 +2887,10 @@ function chooseBestMove(board) {
   return best;
 }
 
+const BOT_PLANS_PER_TICK = 3;
 setInterval(() => {
   if (!isHost() || !autoplayOn || roundState.state !== 'running') return;
+  let plansComputed = 0;
   for (const b of bots) {
     const slot = userToSlot.get(b);
     if (slot === undefined) continue;
@@ -2882,7 +2898,9 @@ setInterval(() => {
     if (!board.alive || !board.piece) continue;
     let plan = botPlans.get(b);
     if (!plan || plan.piece !== board.piece) {
+      if (plansComputed >= BOT_PLANS_PER_TICK) continue;
       plan = chooseBestMove(board);
+      plansComputed++;
       if (!plan) continue;
       plan.piece = board.piece;
       plan.rotDone = 0;
