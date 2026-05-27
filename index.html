@@ -2019,6 +2019,7 @@ function sendGarbage(fromSlot, amount) {
     target.spawnFXPopup(`← ${shortName(sender.user)} +${amount}`, '#ff6464', 0.78, 0.7);
     sender.spawnFXPopup(`→ ${shortName(target.user)} ${amount}`, '#ffaa44', 0.78, 0.7);
   }
+  if (isHost()) broadcastEvent({ t: 'attack', f: fromSlot, to: target.slot, a: amount });
 }
 
 const attackProjectiles = [];
@@ -2251,7 +2252,7 @@ function updateRoundInfo() {
     const remaining = Math.max(0, Math.ceil((roundState.countdownEndAt - performance.now()) / 1000));
     stateEl.textContent = 'démarrage';
     detailEl.textContent = `${remaining}s`;
-    counterEl.textContent = `${active} joueur${active > 1 ? 's' : ''} · tapez join pour rejoindre`;
+    counterEl.textContent = `${active} joueur${active > 1 ? 's' : ''}`;
   } else if (roundState.state === 'running') {
     stateEl.textContent = `Round ${roundState.number}`;
     detailEl.textContent = `${alive} en vie`;
@@ -2477,11 +2478,6 @@ function handleChat(user, message, badge = null) {
   const cmd = parseCommand(message);
   if (cmd) applyInput(user, cmd, badge);
 }
-
-function handleChat(user, message, badge = null) {
-  const cmd = parseCommand(message);
-  if (cmd) applyInput(user, cmd, badge);
-}
 window.simulateChat = (user, msg, badge = null) => handleChat(user, msg, badge);
 
 const params = new URLSearchParams(window.location.search);
@@ -2627,15 +2623,6 @@ function joinAsPlayer(code, name, badge = null) {
   showRoomCodeBadge();
 }
 
-function leaveRoom() {
-  if (!room) return;
-  try { room.leave(); } catch(e) {}
-  room = null;
-  netRole = 'landing';
-  peerToUser.clear();
-  userToPeer.clear();
-}
-
 function serializeFullState() {
   const now = performance.now();
   return {
@@ -2777,24 +2764,6 @@ sfxLock = function() { _sfxLock(); if (isHost()) broadcastEvent({ t: 'sfx', n: '
 sfxLines = function(n) { _sfxLines(n); if (isHost()) broadcastEvent({ t: 'sfx', n: 'lines', v: n }); };
 sfxKO = function() { _sfxKO(); if (isHost()) broadcastEvent({ t: 'sfx', n: 'ko' }); };
 sfxJoin = function() { _sfxJoin(); if (isHost()) broadcastEvent({ t: 'sfx', n: 'join' }); };
-
-const _sendGarbage = sendGarbage;
-sendGarbage = function(fromSlot, amount) {
-  const sender = boards[fromSlot];
-  const allTargets = boards.filter(b => b.slot !== fromSlot && b.alive && b.user);
-  if (allTargets.length === 0) return;
-  const pool = pickTarget(sender, allTargets);
-  const target = pool[Math.floor(Math.random() * pool.length)];
-  target.pendingGarbage += amount;
-  target.lastAttacker = fromSlot;
-  target.recentAttackers.set(fromSlot, performance.now());
-  spawnAttackProjectiles(sender, target, amount);
-  if (amount >= GARBAGE_POPUP_THRESHOLD) {
-    target.spawnFXPopup(`← ${shortName(sender.user)} +${amount}`, '#ff6464', 0.78, 0.7);
-    sender.spawnFXPopup(`→ ${shortName(target.user)} ${amount}`, '#ffaa44', 0.78, 0.7);
-  }
-  if (isHost()) broadcastEvent({ t: 'attack', f: fromSlot, to: target.slot, a: amount });
-};
 
 const _BoardSpawnFX = Board.prototype.spawnFXPopup;
 Board.prototype.spawnFXPopup = function(text, color, yFrac, size) {
