@@ -297,6 +297,15 @@
     max-width: 460px;
   }
   #dev-panel.show { display: flex; }
+  #dev-status {
+    width: 100%;
+    font-size: 10px;
+    color: #88ddff;
+    padding: 4px 4px 2px;
+    font-family: 'JetBrains Mono', monospace;
+    border-bottom: 1px solid #2a2a4a;
+    margin-bottom: 4px;
+  }
   #dev-panel button {
     background: #1e1e36;
     border: 1px solid #3a3a5e;
@@ -500,6 +509,7 @@
 </div>
 <div id="dev-panel">
   <span class="label">DEV</span>
+  <div id="dev-status">role: — | peers: — | host: —</div>
   <button data-act="add1">+1 bot</button>
   <button data-act="add5">+5 bots</button>
   <button data-act="add15">+15 bots</button>
@@ -2383,6 +2393,11 @@ function parseCommand(msg) {
 function applyInput(user, cmd, badge = null) {
   if (!cmd) return;
 
+  if (cmd.type === 'dev') {
+    if (typeof cmd.act === 'string') runDevAction(cmd.act);
+    return;
+  }
+
   if (badge) {
     userBadges.set(user, badge);
     const s = userToSlot.get(user);
@@ -2507,6 +2522,7 @@ function startHost() {
   const { gi } = setupRoomActions();
 
   gi((cmd, peerId) => {
+    console.log('[host] received cmd from', peerId.slice(0, 6), cmd);
     if (!cmd) return;
     let user = peerToUser.get(peerId);
     if (cmd.type === 'join' && cmd.name) {
@@ -2517,7 +2533,7 @@ function startHost() {
       sendStateSnapshot([peerId]);
       return;
     }
-    if (!user) return;
+    if (!user) { console.warn('[host] cmd from unknown peer', peerId.slice(0, 6)); return; }
     applyInput(user, cmd);
   });
 
@@ -2720,8 +2736,10 @@ function showRoomCodeBadge() {
 }
 
 function sendCmdToHost(cmd) {
-  if (!isClient() || !sendInput || !hostPeerId) return;
-  try { sendInput(cmd, hostPeerId); } catch(e) { console.warn('sendInput error', e); }
+  if (!isClient()) { console.warn('[client] not a client, skipped', cmd); return; }
+  if (!sendInput || !hostPeerId) { console.warn('[client] no host yet, skipped', cmd, 'hostPeerId:', hostPeerId); return; }
+  console.log('[client] sending to host', hostPeerId.slice(0, 6), cmd);
+  try { sendInput(cmd, hostPeerId); } catch(e) { console.warn('[client] sendInput error', e); }
 }
 
 const _sfxLock = sfxLock;
@@ -2757,160 +2775,175 @@ Board.prototype.spawnFXPopup = function(text, color, yFrac, size) {
   if (isHost()) broadcastEvent({ t: 'popup', s: this.slot, txt: text, c: color, y: yFrac, sz: size });
 };
 
-// === DEV PANEL (bots, autoplay, AI) ===
+// === DEV TOOLS (bots, autoplay, AI) — host-side ===
+let botCounter = 0;
+const bots = new Set();
+let autoplayOn = false;
+const botPlans = new Map();
+
+function addBots(n) {
+  for (let i = 0; i < n; i++) {
+    botCounter++;
+    const name = `bot_${botCounter}`;
+    bots.add(name);
+    handleChat(name, 'join');
+  }
+}
+function clearBots() {
+  for (const b of [...bots]) {
+    const slot = userToSlot.get(b);
+    if (slot !== undefined) releaseSlot(slot);
+    const qi = joinQueue.indexOf(b);
+    if (qi >= 0) joinQueue.splice(qi, 1);
+    userBadges.delete(b);
+    botPlans.delete(b);
+  }
+  bots.clear();
+}
+function koOneBot() {
+  for (const b of bots) {
+    const slot = userToSlot.get(b);
+    if (slot !== undefined && boards[slot].alive) {
+      boards[slot].gameOver();
+      return;
+    }
+  }
+}
+function randomGarbage() {
+  const alive = boards.filter(b => b.alive && b.user);
+  if (alive.length === 0) return;
+  const target = alive[Math.floor(Math.random() * alive.length)];
+  target.pendingGarbage += 5;
+}
+
+function evaluateGrid(grid) {
+  const heights = new Array(COLS).fill(0);
+  for (let c = 0; c < COLS; c++) {
+    for (let r = 0; r < ROWS; r++) {
+      if (grid[r][c]) { heights[c] = ROWS - r; break; }
+    }
+  }
+  let holes = 0;
+  for (let c = 0; c < COLS; c++) {
+    const top = ROWS - heights[c];
+    for (let r = top + 1; r < ROWS; r++) {
+      if (!grid[r][c]) holes++;
+    }
+  }
+  let bumpiness = 0;
+  for (let c = 0; c < COLS - 1; c++) {
+    bumpiness += Math.abs(heights[c] - heights[c + 1]);
+  }
+  const aggHeight = heights.reduce((a, b) => a + b, 0);
+  let lines = 0;
+  for (let r = 0; r < ROWS; r++) {
+    if (grid[r].every(c => c)) lines++;
+  }
+  return lines * 0.76 - aggHeight * 0.51 - holes * 0.36 - bumpiness * 0.18;
+}
+
+function chooseBestMove(board) {
+  const piece = board.piece;
+  if (!piece) return null;
+  let bestScore = -Infinity;
+  let best = null;
+  let shape = piece.shape;
+  for (let rot = 0; rot < 4; rot++) {
+    for (let col = -2; col <= COLS - 1; col++) {
+      if (board.collides(shape, col, 0)) continue;
+      let y = 0;
+      while (!board.collides(shape, col, y + 1)) y++;
+      const grid = board.grid.map(r => r.slice());
+      for (let r = 0; r < shape.length; r++) {
+        for (let c = 0; c < shape[r].length; c++) {
+          if (shape[r][c]) {
+            const ny = y + r, nx = col + c;
+            if (ny >= 0 && ny < ROWS && nx >= 0 && nx < COLS) grid[ny][nx] = 'x';
+          }
+        }
+      }
+      const score = evaluateGrid(grid);
+      if (score > bestScore) {
+        bestScore = score;
+        best = { rot, col };
+      }
+    }
+    shape = rotateMatrix(shape, 1);
+  }
+  return best;
+}
+
+setInterval(() => {
+  if (!isHost() || !autoplayOn || roundState.state !== 'running') return;
+  for (const b of bots) {
+    const slot = userToSlot.get(b);
+    if (slot === undefined) continue;
+    const board = boards[slot];
+    if (!board.alive || !board.piece) continue;
+    let plan = botPlans.get(b);
+    if (!plan || plan.piece !== board.piece) {
+      plan = chooseBestMove(board);
+      if (!plan) continue;
+      plan.piece = board.piece;
+      plan.rotDone = 0;
+      botPlans.set(b, plan);
+    }
+    const p = board.piece;
+    if (plan.rotDone < plan.rot) {
+      handleChat(b, 'rotad');
+      plan.rotDone++;
+    } else if (p.x < plan.col) {
+      handleChat(b, `droite ${plan.col - p.x}`);
+    } else if (p.x > plan.col) {
+      handleChat(b, `gauche ${p.x - plan.col}`);
+    } else {
+      handleChat(b, 'tombe');
+    }
+  }
+}, 220);
+
+function runDevAction(act) {
+  console.log('[dev] runDevAction', act, 'isHost:', isHost(), 'role:', netRole, 'active:', boards.filter(b => b.user).length);
+  if (act === 'add1') addBots(1);
+  else if (act === 'add5') addBots(5);
+  else if (act === 'add15') addBots(15);
+  else if (act === 'autoplay') autoplayOn = !autoplayOn;
+  else if (act === 'skipcd') {
+    if (roundState.state === 'countdown') roundState.countdownEndAt = performance.now();
+  }
+  else if (act === 'kobot') koOneBot();
+  else if (act === 'garbage') randomGarbage();
+  else if (act === 'resetstats') { userStats = {}; saveStats(); }
+  else if (act === 'clearbots') clearBots();
+  console.log('[dev] after runDevAction', act, 'active:', boards.filter(b => b.user).length, 'bots set:', [...bots]);
+}
+
+// === DEV PANEL UI ===
 if (params.get('dev') === '1') {
   const devPanel = document.getElementById('dev-panel');
   devPanel.classList.add('show');
-  let botCounter = 0;
-  const bots = new Set();
-  let autoplayOn = false;
 
-  function addBots(n) {
-    for (let i = 0; i < n; i++) {
-      botCounter++;
-      const name = `bot_${botCounter}`;
-      bots.add(name);
-      handleChat(name, 'join');
-    }
-  }
-  function clearBots() {
-    for (const b of [...bots]) {
-      const slot = userToSlot.get(b);
-      if (slot !== undefined) releaseSlot(slot);
-      const qi = joinQueue.indexOf(b);
-      if (qi >= 0) joinQueue.splice(qi, 1);
-      userBadges.delete(b);
-      botPlans.delete(b);
-    }
-    bots.clear();
-  }
-  function koOneBot() {
-    for (const b of bots) {
-      const slot = userToSlot.get(b);
-      if (slot !== undefined && boards[slot].alive) {
-        boards[slot].gameOver();
-        return;
-      }
-    }
-  }
-  function randomGarbage() {
-    const alive = boards.filter(b => b.alive && b.user);
-    if (alive.length === 0) return;
-    const target = alive[Math.floor(Math.random() * alive.length)];
-    target.pendingGarbage += 5;
-  }
-
-  const botPlans = new Map();
-
-  function evaluateGrid(grid) {
-    const heights = new Array(COLS).fill(0);
-    for (let c = 0; c < COLS; c++) {
-      for (let r = 0; r < ROWS; r++) {
-        if (grid[r][c]) { heights[c] = ROWS - r; break; }
-      }
-    }
-    let holes = 0;
-    for (let c = 0; c < COLS; c++) {
-      const top = ROWS - heights[c];
-      for (let r = top + 1; r < ROWS; r++) {
-        if (!grid[r][c]) holes++;
-      }
-    }
-    let bumpiness = 0;
-    for (let c = 0; c < COLS - 1; c++) {
-      bumpiness += Math.abs(heights[c] - heights[c + 1]);
-    }
-    const aggHeight = heights.reduce((a, b) => a + b, 0);
-    let lines = 0;
-    for (let r = 0; r < ROWS; r++) {
-      if (grid[r].every(c => c)) lines++;
-    }
-    return lines * 0.76 - aggHeight * 0.51 - holes * 0.36 - bumpiness * 0.18;
-  }
-
-  function chooseBestMove(board) {
-    const piece = board.piece;
-    if (!piece) return null;
-    let bestScore = -Infinity;
-    let best = null;
-    let shape = piece.shape;
-    for (let rot = 0; rot < 4; rot++) {
-      const w = shape[0].length;
-      for (let col = -2; col <= COLS - 1; col++) {
-        if (board.collides(shape, col, 0)) continue;
-        let y = 0;
-        while (!board.collides(shape, col, y + 1)) y++;
-        const grid = board.grid.map(r => r.slice());
-        for (let r = 0; r < shape.length; r++) {
-          for (let c = 0; c < shape[r].length; c++) {
-            if (shape[r][c]) {
-              const ny = y + r, nx = col + c;
-              if (ny >= 0 && ny < ROWS && nx >= 0 && nx < COLS) grid[ny][nx] = 'x';
-            }
-          }
-        }
-        const score = evaluateGrid(grid);
-        if (score > bestScore) {
-          bestScore = score;
-          best = { rot, col };
-        }
-      }
-      shape = rotateMatrix(shape, 1);
-    }
-    return best;
-  }
-
+  const devStatus = document.getElementById('dev-status');
   setInterval(() => {
-    if (!autoplayOn || roundState.state !== 'running') return;
-    for (const b of bots) {
-      const slot = userToSlot.get(b);
-      if (slot === undefined) continue;
-      const board = boards[slot];
-      if (!board.alive || !board.piece) continue;
-      let plan = botPlans.get(b);
-      if (!plan || plan.piece !== board.piece) {
-        plan = chooseBestMove(board);
-        if (!plan) continue;
-        plan.piece = board.piece;
-        plan.rotDone = 0;
-        botPlans.set(b, plan);
-      }
-      const p = board.piece;
-      if (plan.rotDone < plan.rot) {
-        handleChat(b, 'rotad');
-        plan.rotDone++;
-      } else if (p.x < plan.col) {
-        handleChat(b, `droite ${plan.col - p.x}`);
-      } else if (p.x > plan.col) {
-        handleChat(b, `gauche ${p.x - plan.col}`);
-      } else {
-        handleChat(b, 'tombe');
-      }
-    }
-  }, 220);
+    if (!devStatus) return;
+    let peersCount = '—';
+    try { if (room && room.getPeers) peersCount = Object.keys(room.getPeers()).length; } catch(e) {}
+    const activeCount = boards.filter(b => b.user).length;
+    devStatus.textContent = `role:${netRole} peers:${peersCount} host:${hostPeerId ? hostPeerId.slice(0, 6) : '—'} actifs:${activeCount} room:${roomCode || '—'} round:${roundState.state}`;
+  }, 300);
 
   devPanel.addEventListener('click', (e) => {
     const act = e.target.dataset.act;
     if (!act) return;
-    if (act === 'add1') addBots(1);
-    else if (act === 'add5') addBots(5);
-    else if (act === 'add15') addBots(15);
-    else if (act === 'autoplay') {
-      autoplayOn = !autoplayOn;
-      e.target.classList.toggle('on', autoplayOn);
+    if (act === 'resetstats' && !confirm('Reset toutes les stats cumulées ?')) return;
+    if (act === 'autoplay') e.target.classList.toggle('on');
+    if (isHost()) {
+      runDevAction(act);
+    } else if (isClient()) {
+      sendCmdToHost({ type: 'dev', act });
+    } else {
+      runDevAction(act);
     }
-    else if (act === 'skipcd') {
-      if (roundState.state === 'countdown') roundState.countdownEndAt = performance.now();
-    }
-    else if (act === 'kobot') koOneBot();
-    else if (act === 'garbage') randomGarbage();
-    else if (act === 'resetstats') {
-      if (confirm('Reset toutes les stats cumulées ?')) {
-        userStats = {};
-        saveStats();
-      }
-    }
-    else if (act === 'clearbots') clearBots();
   });
 }
 
