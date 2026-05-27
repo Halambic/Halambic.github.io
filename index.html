@@ -1208,6 +1208,7 @@ class Board {
     this.canvas = canvas;
     this.ctx = canvas.getContext('2d');
     this.headerEls = headerEls;
+    this.pieceSeq = 0;
     this.reset();
   }
 
@@ -1217,7 +1218,6 @@ class Board {
     this.badge = null;
     this.alive = false;
     this.piece = null;
-    this.pieceSeq = 0;
     this.pieceQueue = [];
     this.score = 0;
     this.kos = 0;
@@ -2188,7 +2188,13 @@ function updateRoundState(now) {
       roundState.number++;
       roundState.winner = null;
       for (const b of boards) {
-        if (b.user) b.assignUser(b.user, b.badge);
+        if (!b.user) continue;
+        const stillHere = bots.has(b.user) || userToPeer.has(b.user);
+        if (stillHere) {
+          b.assignUser(b.user, b.badge);
+        } else {
+          releaseSlot(b.slot);
+        }
       }
       while (joinQueue.length) {
         const freeSlot = boards.findIndex(b => !b.user);
