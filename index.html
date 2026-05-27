@@ -3131,11 +3131,52 @@ function loop() {
       b.render();
     }
   }
+  updateGridLayout();
   updateRoundInfo();
   updateLeaderboard();
   renderAttacks(dt);
   requestAnimationFrame(loop);
 }
+
+let lastGridLayoutKey = '';
+function updateGridLayout() {
+  const userBoards = boards.filter(b => b.user);
+  const userCount = userBoards.length;
+  const displayCount = Math.max(2, userCount);
+  let cols, rows;
+  if (displayCount <= 2) { cols = 2; rows = 1; }
+  else if (displayCount <= 3) { cols = 3; rows = 1; }
+  else if (displayCount <= 4) { cols = 2; rows = 2; }
+  else if (displayCount <= 6) { cols = 3; rows = 2; }
+  else if (displayCount <= 9) { cols = 3; rows = 3; }
+  else if (displayCount <= 12) { cols = 4; rows = 3; }
+  else { cols = 4; rows = 4; }
+
+  const key = `${cols}x${rows}|${userCount}`;
+  if (key === lastGridLayoutKey) return;
+  lastGridLayoutKey = key;
+
+  const gridsEl = document.getElementById('grids');
+  gridsEl.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+  gridsEl.style.gridTemplateRows = `repeat(${rows}, 1fr)`;
+
+  const extraNeeded = Math.max(0, displayCount - userCount);
+  let emptiesShown = 0;
+  for (let i = 0; i < SLOTS; i++) {
+    const b = boards[i];
+    let visible;
+    if (b.user) {
+      visible = true;
+    } else if (emptiesShown < extraNeeded) {
+      visible = true;
+      emptiesShown++;
+    } else {
+      visible = false;
+    }
+    b.headerEls.root.style.display = visible ? '' : 'none';
+  }
+}
+
 loop();
 </script>
 </body>
