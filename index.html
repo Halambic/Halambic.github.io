@@ -3046,7 +3046,12 @@ function showLanding() {
   nameInput.value = loadStoredName();
   const urlCode = params.get('room') || '';
   codeInput.value = urlCode.toUpperCase();
-  if (urlCode) codeInput.disabled = true;
+  if (urlCode) {
+    codeInput.disabled = true;
+    document.getElementById('btn-host').style.display = 'none';
+    const hint = el.querySelector('.hint');
+    if (hint) hint.innerHTML = '↑ Z X ← ↓ → · espace · 1 2 3 4 pour cibler · M mute son';
+  }
   setTimeout(() => (urlCode ? nameInput : nameInput).focus(), 50);
 
   const hideLanding = () => el.classList.remove('show');
