@@ -1855,6 +1855,7 @@ class Board {
           spawnAt: sameKey && this.piece ? this.piece.spawnAt : (performance.now() - SPAWN_ANIM_MS),
         };
         this.pieceSeq = snapSeq;
+        this.lastGravity = performance.now();
       }
     } else {
       this.piece = null;
