@@ -2993,7 +2993,12 @@ function dispatchLocalCmd(cmd) {
   sendCmdToHost(cmd);
 }
 
-const TARGET_KEYS = { '1': 'random', '2': 'attackers', '3': 'kos', '4': 'badges' };
+const TARGET_KEYS = {
+  Digit1: 'random',   Numpad1: 'random',
+  Digit2: 'attackers', Numpad2: 'attackers',
+  Digit3: 'kos',      Numpad3: 'kos',
+  Digit4: 'badges',   Numpad4: 'badges',
+};
 
 function keyToCmd(e) {
   if (e.repeat && (e.key === ' ' || e.code === 'Space' || e.key === 'Shift')) return null;
@@ -3009,7 +3014,7 @@ function keyToCmd(e) {
     case ' ':          return { type: 'drop' };
   }
   if (e.code === 'Space') return { type: 'drop' };
-  const tgt = TARGET_KEYS[e.key];
+  const tgt = TARGET_KEYS[e.code];
   if (tgt) return { type: 'target', mode: tgt };
   if (e.key === 'm' || e.key === 'M') { document.getElementById('muteBtn')?.click(); return null; }
   return null;
