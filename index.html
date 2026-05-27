@@ -569,6 +569,7 @@ const KO_GRACE_MS = 2500;
 const CLEAR_ANIM_MS = 380;
 const OVER_DISPLAY_MS = 8000;
 const SPAWN_ANIM_MS = 180;
+const LOCK_DELAY_MS = 500;
 
 // Scoring & damage tables, indexed by number of lines cleared (0..4)
 const LINE_SCORES = [0, 100, 300, 500, 800];
@@ -1213,6 +1214,7 @@ class Board {
     this.badge = null;
     this.alive = false;
     this.piece = null;
+    this.lockTimer = null;
     this.pieceQueue = [];
     this.score = 0;
     this.kos = 0;
@@ -1449,12 +1451,18 @@ class Board {
 
   tickGravity(now) {
     if (!this.alive || !this.piece) return;
-    if (now - this.lastGravity < currentGravityMs()) return;
-    this.lastGravity = now;
-    if (!this.collides(this.piece.shape, this.piece.x, this.piece.y + 1)) {
-      this.piece.y++;
+    const canFall = !this.collides(this.piece.shape, this.piece.x, this.piece.y + 1);
+    if (canFall) {
+      this.lockTimer = null;
+      if (now - this.lastGravity >= currentGravityMs()) {
+        this.lastGravity = now;
+        this.piece.y++;
+      }
     } else {
-      this.lock();
+      if (this.lockTimer === null) this.lockTimer = now;
+      if (now - this.lockTimer >= LOCK_DELAY_MS) {
+        this.lock();
+      }
     }
   }
 
@@ -1462,10 +1470,13 @@ class Board {
     if (!this.alive || !this.piece) return;
     const step = dx > 0 ? 1 : -1;
     let moves = Math.abs(dx);
+    let moved = false;
     while (moves-- > 0) {
       if (this.collides(this.piece.shape, this.piece.x + step, this.piece.y)) break;
       this.piece.x += step;
+      moved = true;
     }
+    if (moved) this.lockTimer = null;
   }
 
   rotate(dir) {
@@ -1476,6 +1487,7 @@ class Board {
       if (!this.collides(newShape, this.piece.x + k, this.piece.y)) {
         this.piece.shape = newShape;
         this.piece.x += k;
+        this.lockTimer = null;
         return;
       }
     }
