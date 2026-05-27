@@ -1,1 +1,1 @@
-interactive database for the Discord bot "Tankora"
+interactive bloc royal 16 players
