@@ -2971,12 +2971,9 @@ function predictCmd(cmd) {
   const slot = userToSlot.get(myName);
   if (slot === undefined) return;
   const b = boards[slot];
-  if (!b || !b.alive) {
-    if (cmd.type === 'target' && b) b.targetingMode = cmd.mode;
-    return;
-  }
-  if (cmd.type === 'target') { b.targetingMode = cmd.mode; return; }
-  if (!b.piece) return;
+  if (cmd.type === 'target') { if (b) b.targetingMode = cmd.mode; return; }
+  if (roundState.state !== 'running') return;
+  if (!b || !b.alive || !b.piece) return;
   if (cmd.type === 'move') b.move(cmd.dx);
   else if (cmd.type === 'rotate') b.rotate(cmd.dir);
   else if (cmd.type === 'softdrop') {
