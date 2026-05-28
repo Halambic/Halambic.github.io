@@ -3127,9 +3127,6 @@ function loop() {
         b.tickGravity(now);
       }
       b.updateFX(dt);
-      if (running && b.user && !b.alive && b.koAt && now - b.koAt > KO_GRACE_MS) {
-        releaseSlot(b.slot);
-      }
       b.render();
     }
     updateRoundState(now);
@@ -3157,6 +3154,7 @@ function loop() {
 
 let lastGridLayoutKey = '';
 function updateGridLayout() {
+  if (roundState.state === 'running') return;
   const userBoards = boards.filter(b => b.user);
   const userCount = userBoards.length;
   const displayCount = Math.max(2, userCount);
