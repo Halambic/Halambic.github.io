@@ -210,12 +210,22 @@
   .board-header {
     display: flex;
     justify-content: space-between;
+    align-items: baseline;
     gap: 4px;
-    font-size: 11px;
+    font-size: 12px;
     margin-bottom: 3px;
     color: #ccc;
   }
-  .board-header .user { font-weight: bold; color: #ffcc44; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .board-header .user {
+    font-weight: bold;
+    color: #ffcc44;
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 16px;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.6);
+  }
   .board-header .user.sub { color: var(--c-sub); }
   .board-header .user.vip { color: var(--c-vip); }
   .board-header .user.mod { color: var(--c-mod); }
@@ -1353,9 +1363,10 @@ class Board {
       this.pendingGarbage -= cancelled;
       toSend -= cancelled;
     }
-    if (toSend > 0) sendGarbage(this.slot, toSend);
+    const roundRunning = roundState && roundState.state === 'running';
+    if (toSend > 0 && roundRunning) sendGarbage(this.slot, toSend);
 
-    if (this.alive) this.spawnPiece();
+    if (this.alive && roundRunning) this.spawnPiece();
   }
 
   applyPendingGarbage() {
@@ -1509,10 +1520,13 @@ class Board {
       this.canvas.width = cw;
       this.canvas.height = ch;
     }
-    const cell = Math.floor(Math.min(cw / (COLS + 2), ch / ROWS));
+    const PREVIEW_RESERVE = 3.2;
+    const LEFT_RESERVE = 1.2;
+    const cell = Math.floor(Math.min(cw / (COLS + LEFT_RESERVE + PREVIEW_RESERVE), ch / ROWS));
     const boardW = cell * COLS;
     const boardH = cell * ROWS;
-    let ox = Math.floor((cw - boardW) / 2);
+    const usedW = boardW + cell * (LEFT_RESERVE + PREVIEW_RESERVE);
+    let ox = Math.floor((cw - usedW) / 2 + cell * LEFT_RESERVE);
     let oy = Math.floor((ch - boardH) / 2);
     const ctx = this.ctx;
 
@@ -1677,8 +1691,8 @@ class Board {
       ctx.fillText(String(this.pendingGarbage), gx - 1, oy);
     }
 
-    const previewSize = cell * 0.55;
-    const previewX = ox + boardW + Math.max(4, Math.floor(cell * 0.4));
+    const previewSize = cell * 0.7;
+    const previewX = ox + boardW + Math.max(4, Math.floor(cell * 0.35));
     const previewY = oy;
     if (this.pieceQueue.length > 0) {
       ctx.fillStyle = 'rgba(255,255,255,0.35)';
@@ -2668,11 +2682,27 @@ function applyStateSnapshot(snap) {
     joinQueue.push(...snap.q);
     updateQueueDisplay();
   }
+  maybeAutoRejoin(snap);
   if (prevState !== 'over' && roundState.state === 'over') {
     renderWinnerCard();
   } else if (prevState === 'over' && roundState.state !== 'over') {
     document.getElementById('winner-overlay')?.classList.remove('show');
   }
+}
+
+let lastAutoRejoinAt = 0;
+const AUTO_REJOIN_COOLDOWN_MS = 3000;
+function maybeAutoRejoin(snap) {
+  if (!isClient() || !myName || !hostPeerId) return;
+  if (roundState.state !== 'waiting' && roundState.state !== 'countdown') return;
+  const inSlot = snap.bs && snap.bs.some(b => b && b.u === myName);
+  const inQueue = snap.q && snap.q.includes(myName);
+  if (inSlot || inQueue) return;
+  const now = performance.now();
+  if (now - lastAutoRejoinAt < AUTO_REJOIN_COOLDOWN_MS) return;
+  lastAutoRejoinAt = now;
+  console.log('[client] auto re-join (no slot/queue found in snapshot)');
+  sendInput({ type: 'join', name: myName, badge: myBadge }, hostPeerId);
 }
 
 function sendStateSnapshot(targets) {
@@ -3092,8 +3122,8 @@ function loop() {
   if (isHost()) {
     const running = roundState.state === 'running';
     for (const b of boards) {
+      b.processPendingClears(now);
       if (running) {
-        b.processPendingClears(now);
         b.tickGravity(now);
       }
       b.updateFX(dt);
