@@ -2454,9 +2454,11 @@ function applyInput(user, cmd, badge = null) {
     const slot = userToSlot.get(user);
     if (slot !== undefined) {
       const board = boards[slot];
-      if (roundState.state === 'running' && board.alive) {
-        board.lastAttacker = null;
-        board.gameOver();
+      if (roundState.state === 'running') {
+        if (board.alive) {
+          board.lastAttacker = null;
+          board.gameOver();
+        }
       } else {
         releaseSlot(slot);
       }
@@ -2585,9 +2587,12 @@ function startHost() {
     const slot = userToSlot.get(user);
     if (slot !== undefined) {
       const b = boards[slot];
-      if (roundState.state === 'running' && b.alive) {
-        b.lastAttacker = null;
-        b.gameOver();
+      if (roundState.state === 'running') {
+        if (b.alive) {
+          b.lastAttacker = null;
+          b.gameOver();
+        }
+        // sinon (déjà KO) : on garde le slot jusqu'à over→waiting, où stillHere=false libérera proprement
       } else {
         releaseSlot(slot);
       }
